@@ -1,3 +1,6 @@
+.container
+    padding: 20px
+
 .board
     display: flex
     flex-wrap: wrap
@@ -6,11 +9,17 @@
     margin: 0 auto
     margin-top: 20px
     border: green solid 10px
-    &__white, &__black
-        width: 80px
-        height: 80px
-        line-height: 80px
-        text-align: center
-    &__black
-        background: #503605
-        color: white
+
+.white, .black
+    width: 80px
+    height: 80px
+    text-align: center
+
+.black
+    background: #503605
+    color: white
+    
+.piece
+    width: 50px
+    height: 50px
+    cursor: pointer
