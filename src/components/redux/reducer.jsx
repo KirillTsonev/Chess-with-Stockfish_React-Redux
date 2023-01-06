@@ -3,7 +3,8 @@ const initialState = {
     color: "white",
     time: "",
     difficulty: "",
-    options: false
+    options: false,
+    activePiece: "",
 }
 
 function boardReducer(state = initialState, action) {
@@ -22,6 +23,11 @@ function boardReducer(state = initialState, action) {
             return {
                 ...state,
                 color: "black"
+            }
+        case "activePiece":
+            return {
+                ...state,
+                activePiece: action.payload,
             }
         default:
             return state
