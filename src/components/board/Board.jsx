@@ -11,11 +11,11 @@ import blackBishop from "../../images/blackBishop.png"
 import whitePawn from "../../images/whitePawn.png"
 import blackPawn from "../../images/blackPawn.png"
 
+import store from "../redux/store"
+
 import { useSelector } from "react-redux"
 import { useState } from "react"
 import { useEffect } from "react"
-
-import store from "../redux/store"
 
 import "./board.sass"
 
@@ -26,6 +26,9 @@ const Board = () => {
     const [occupiedSquares, setOccupiedSquares] = useState([])
     const [playerSquares, setPlayerSquares] = useState([])
     const [enemySquares, setEnemySquares] = useState([])
+    const [knightLimit, setKnightLimit] = useState([])
+    const [playerKnight1, setPlayerKnight1] = useState([0, 0])
+    const [playerKnight2, setPlayerKnight2] = useState([0, 0])
 
     const selectColor = state => state.color
     const selectBoard = state => state.board
@@ -44,10 +47,7 @@ const Board = () => {
         delete board.pkw
     }
 
-    // console.log(board)//////////////////////////////////////////////////////////////////////
-    // console.log(Object.values(board))
-    
-    useEffect(() => {
+    const recordBoard = () => {
         const asArray = Object.entries(board)
         const filteredEnemy = asArray.filter(([key, value]) => value < 20)
         const justEnemy = Object.fromEntries(filteredEnemy)
@@ -57,7 +57,25 @@ const Board = () => {
         setOccupiedSquares(Object.values(board))
         setPlayerSquares(Object.values(justPlayer))
         setEnemySquares(Object.values(justEnemy))
+    }
+    
+    useEffect(() => {
+        recordBoard()
+
+        const arrKnightLimit = []
+
+        for (let i = 1; i < 58; i += 8) {
+            arrKnightLimit.push(i)
+            arrKnightLimit.push(i + 1)
+            arrKnightLimit.push(i + 6)
+            arrKnightLimit.push(i + 7)
+            setKnightLimit(arrKnightLimit)
+        }
     }, [])
+
+    useEffect(() => {
+        recordBoard()
+    }, [pieceSquare])
 
     const onPieceClick = (piece, i) => {
         if (playerSquares.includes(i)) {
@@ -65,13 +83,24 @@ const Board = () => {
                 setActiveSquares([i - 8, i - 16])
             }
             if (piece === "knight") {
-                const arr = [i - 17, i - 15, i - 6, i + 10, i + 17, i + 15, i + 6, i - 10]
-                for (const number of arr) {
-                    if (playerSquares.includes(number)) {
-                        setActiveSquares(arr.filter(x => x !== number))
-                        console.log(number)
+                if (!knightLimit.includes(board.pk1) || !knightLimit.includes(board.pk2)) {
+                    let arr = [i - 17, i - 15, i - 6, i + 10, i + 17, i + 15, i + 6, i - 10]
+                    for (const number of arr) {
+                        if (occupiedSquares.includes(number)) {
+                            arr = arr.filter(x => x !== number)
+                            setActiveSquares(arr)
+                        }
+                    }
+                } else {
+                    let arr = [i - 17, i - 15, i - 6, i + 10, i + 17, i + 15, i + 6]
+                    for (const number of arr) {
+                        if (occupiedSquares.includes(number)) {
+                            arr = arr.filter(x => x !== number)
+                            setActiveSquares(arr)
+                        }
                     }
                 }
+
             }
             setPieceSquare(i)
             setActivePiece(piece)
@@ -82,10 +111,32 @@ const Board = () => {
         }
     }
 
+    const moveKnight = (i) => {
+        switch (i) {
+            case 41:
+                setPlayerKnight1([playerKnight1[0] - 80, playerKnight1[1] - 160])
+                setActiveSquares([])
+                setPieceSquare(null)
+                store.dispatch({
+                    type: "player/moveKnight1",
+                    payload: i
+                })
+                recordBoard()
+                break;
+            case 43:
+                return "translate(80px, -160px)";
+            default:
+                break;
+        }
+    }
+
     const onSquareClick = (i) => {
         if ((!activeSquares.includes(i) && pieceSquare && !occupiedSquares.includes(i)) || i === pieceSquare) {
             setActiveSquares([])
             setPieceSquare(null)
+        }
+        if (activePiece === "knight" && activeSquares.includes(i)) {
+            moveKnight(i)
         }
     }
 
@@ -159,7 +210,8 @@ const Board = () => {
                     {color === "white" && i + 57 === 60 ? <img className="piece" src={whiteQueen} alt="White Queen"></img> : null}
                     {color === "white" && (i + 57 === 57 || i + 57 === 64) ? <img className="piece" src={whiteRook} alt="White Rook"></img> : null}
                     {color === "white" && (i + 57 === 59 || i + 57 === 62) ? <img className="piece" src={whiteBishop} alt="White Bishop"></img> : null}
-                    {color === "white" && (i + 57 === 58 || i + 57 === 63) ? <img className="piece" src={whiteKnight} alt="White Knight" onClick={(e) => onPieceClick("knight", i + 57, e)}></img> : null}
+                    {color === "white" && (i + 57 === 58) ? <img className="piece" src={whiteKnight} alt="White Knight" onClick={(e) => onPieceClick("knight", board.pk1, e)} style={{transform: `translate(${playerKnight1[0]}px, ${playerKnight1[1]}px)`}}></img> : null}
+                    {color === "white" && (i + 57 === 63) ? <img className="piece" src={whiteKnight} alt="White Knight" onClick={(e) => onPieceClick("knight", board.pk2, e)} style={{transform: `translate(${playerKnight2[0]}px, ${playerKnight2[1]}px)`}}></img> : null}
                     {color === "black" && i + 57 === 60 ? <img className="piece" src={blackKing} alt="Black King"></img> : null}
                     {color === "black" && i + 57 === 61 ? <img className="piece" src={blackQueen} alt="Black Queen"></img> : null}
                     {color === "black" && (i + 57 === 57 || i + 57 === 64) ? <img className="piece" src={blackRook} alt="Black Rook"></img> : null}
