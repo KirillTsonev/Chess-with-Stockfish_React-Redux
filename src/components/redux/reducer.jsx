@@ -67,12 +67,20 @@ function boardReducer(state = initialState, action) {
         //         ...state,
         //         activePiece: action.payload,
         //     }
-        case "player/moveKnight1":
+        case "playerKnight1":
             return {
                 ...state,
                 board: {
                     ...state.board,
                     pk1: action.payload
+                },
+            }
+        case "playerKnight2":
+            return {
+                ...state,
+                board: {
+                    ...state.board,
+                    pk2: action.payload
                 },
             }
         default:

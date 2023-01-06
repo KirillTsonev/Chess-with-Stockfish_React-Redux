@@ -51,7 +51,8 @@ const Board = () => {
         const asArray = Object.entries(board)
         const filteredEnemy = asArray.filter(([key, value]) => value < 20)
         const justEnemy = Object.fromEntries(filteredEnemy)
-        const filteredPlayer = asArray.filter(([key, value]) => value > 40)
+        const player = /p/
+        const filteredPlayer = asArray.filter(([key, value]) => player.test(key))
         const justPlayer = Object.fromEntries(filteredPlayer)
 
         setOccupiedSquares(Object.values(board))
@@ -77,30 +78,38 @@ const Board = () => {
         recordBoard()
     }, [pieceSquare])
 
+    const onSquareClick = (i) => {
+        // if ((!activeSquares.includes(i) && pieceSquare && !occupiedSquares.includes(i)) || i === pieceSquare) {
+        //     setActiveSquares([])
+        //     setPieceSquare(null)
+        //     setActivePiece("")
+        // }
+        if ((!activeSquares.includes(i) && pieceSquare && !occupiedSquares.includes(i)) || i === pieceSquare) {
+            setActiveSquares([])
+            setPieceSquare(null)
+            setActivePiece("")
+        }
+        if (activePiece === "playerKnight1" && activeSquares.includes(i)) {
+            moveKnight(i, playerKnight1, "playerKnight1", setPlayerKnight1)
+        } else if (activePiece === "playerKnight2" && activeSquares.includes(i)) {
+            moveKnight(i, playerKnight2 ,"playerKnight2", setPlayerKnight2)
+        }
+        console.log(i)
+    }
+
     const onPieceClick = (piece, i) => {
         if (playerSquares.includes(i)) {
             if (piece === "pawn") {
                 setActiveSquares([i - 8, i - 16])
             }
-            if (piece === "knight") {
-                if (!knightLimit.includes(board.pk1) || !knightLimit.includes(board.pk2)) {
-                    let arr = [i - 17, i - 15, i - 6, i + 10, i + 17, i + 15, i + 6, i - 10]
-                    for (const number of arr) {
-                        if (occupiedSquares.includes(number)) {
-                            arr = arr.filter(x => x !== number)
-                            setActiveSquares(arr)
-                        }
-                    }
-                } else {
-                    let arr = [i - 17, i - 15, i - 6, i + 10, i + 17, i + 15, i + 6]
-                    for (const number of arr) {
-                        if (occupiedSquares.includes(number)) {
-                            arr = arr.filter(x => x !== number)
-                            setActiveSquares(arr)
-                        }
+            if (piece === "playerKnight1" || piece === "playerKnight2") {
+                let arr = [i - 17, i - 15, i - 10, i - 6, i + 6, i + 10, i + 15, i + 17]
+                for (const number of arr) {
+                    if (occupiedSquares.includes(number)) {
+                        arr = arr.filter(x => x !== number)
+                        setActiveSquares(arr)
                     }
                 }
-
             }
             setPieceSquare(i)
             setActivePiece(piece)
@@ -111,32 +120,98 @@ const Board = () => {
         }
     }
 
-    const moveKnight = (i) => {
-        switch (i) {
-            case 41:
-                setPlayerKnight1([playerKnight1[0] - 80, playerKnight1[1] - 160])
+    const moveKnight = (i, piece, string, setter) => {
+        switch (pieceSquare - i) {
+            case -17:
+                setter([piece[0] + 80, piece[1] + 160])
                 setActiveSquares([])
                 setPieceSquare(null)
+                setActivePiece("")
                 store.dispatch({
-                    type: "player/moveKnight1",
+                    type: string,
                     payload: i
                 })
                 recordBoard()
                 break;
-            case 43:
-                return "translate(80px, -160px)";
+            case -15:
+                setter([piece[0] - 80, piece[1] + 160])
+                setActiveSquares([])
+                setPieceSquare(null)
+                setActivePiece("")
+                store.dispatch({
+                    type: string,
+                    payload: i
+                })
+                recordBoard()
+                break;
+            case -10:
+                setter([piece[0] + 160, piece[1] + 80])
+                setActiveSquares([])
+                setPieceSquare(null)
+                setActivePiece("")
+                store.dispatch({
+                    type: string,
+                    payload: i
+                })
+                recordBoard()
+                break;
+            case -6:
+                setter([piece[0] - 160, piece[1] + 80])
+                setActiveSquares([])
+                setPieceSquare(null)
+                setActivePiece("")
+                store.dispatch({
+                    type: string,
+                    payload: i
+                })
+                recordBoard()
+                break;
+            case 6:
+                setter([piece[0] + 160, piece[1] - 80])
+                setActiveSquares([])
+                setPieceSquare(null)
+                setActivePiece("")
+                store.dispatch({
+                    type: string,
+                    payload: i
+                })
+                recordBoard()
+                break;
+            case 10:
+                setter([piece[0] - 160, piece[1] - 80])
+                setActiveSquares([])
+                setPieceSquare(null)
+                setActivePiece("")
+                store.dispatch({
+                    type: string,
+                    payload: i
+                })
+                recordBoard()
+                break;
+            case 15:
+                setter([piece[0] + 80, piece[1] - 160])
+                setActiveSquares([])
+                setPieceSquare(null)
+                setActivePiece("")
+                store.dispatch({
+                    type: string,
+                    payload: i
+                })
+                recordBoard()
+                break;
+            case 17:
+                setter([piece[0] - 80, piece[1] - 160])
+                setActiveSquares([])
+                setPieceSquare(null)
+                setActivePiece("")
+                store.dispatch({
+                    type: string,
+                    payload: i
+                })
+                recordBoard()
+                break;
             default:
                 break;
-        }
-    }
-
-    const onSquareClick = (i) => {
-        if ((!activeSquares.includes(i) && pieceSquare && !occupiedSquares.includes(i)) || i === pieceSquare) {
-            setActiveSquares([])
-            setPieceSquare(null)
-        }
-        if (activePiece === "knight" && activeSquares.includes(i)) {
-            moveKnight(i)
         }
     }
 
@@ -175,48 +250,81 @@ const Board = () => {
                     {color === "black" && (i + 1 === 3 || i + 1 === 6) ? <img className="piece" src={whiteBishop} alt="White Bishop"></img> : null}
                     {color === "black" && (i + 1 === 2 || i + 1 === 7) ? <img className="piece" src={whiteKnight} alt="White Knight"></img> : null}
                 </div>)}
+
                 {arr2.map((a, i) => <div key={i + 9} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 9 === pieceSquare ? "highlight" : null}`} onClick={() => onSquareClick(i + 9)}>
                     {i + 9}
                     {activeSquares.includes(i + 9) ? <div className="activeSquare"></div> : null}
                     {color === "white" ? <img className="piece" src={blackPawn} alt="Black Pawn" onClick={() => onPieceClick("pawn", i + 9)}></img> : null}
                     {color === "black" ? <img className="piece" src={whitePawn} alt="White Pawn"></img> : null}
                 </div>)}
+
                 {arr3.map((a, i) => <div key={i + 17} className={`${i % 2 === 0 ? "white" : "black"} ${i + 17 === pieceSquare ? "highlight" : null}`} onClick={() => onSquareClick(i + 17)}>
                     {i + 17}
                     {activeSquares.includes(i + 17) ? <div className="activeSquare"></div> : null}
                 </div>)}
+
                 {arr4.map((a, i) => <div key={i + 25} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 25 === pieceSquare ? "highlight" : null}`} onClick={() => onSquareClick(i + 25)}>
                     {i + 25}
                     {activeSquares.includes(i + 25) ? <div className="activeSquare"></div> : null}
                 </div>)}
+
                 {arr5.map((a, i) => <div key={i + 33} className={`${i % 2 === 0 ? "white" : "black"} ${i + 33 === pieceSquare ? "highlight" : null}`} onClick={() => onSquareClick(i + 33)}>
                     {i + 33}
                     {activeSquares.includes(i + 33) ? <div className="activeSquare"></div> : null}
                 </div>)}
+
                 {arr6.map((a, i) => <div key={i + 41} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 41 === pieceSquare ? "highlight" : null}`} onClick={() => onSquareClick(i + 41)}>
                     {i + 41}
                     {activeSquares.includes(i + 41) ? <div className="activeSquare"></div> : null}
                 </div>)}
+
                 {arr7.map((a, i) => <div key={i + 49} className={`${i % 2 === 0 ? "white" : "black"} ${i + 49 === pieceSquare ? "highlight" : null}`} onClick={() => onSquareClick(i + 49)}>
                     {i + 49}
                     {activeSquares.includes(i + 49) ? <div className="activeSquare"></div> : null}
                     {color === "white" ? <img className="piece" src={whitePawn} alt="White Pawn" onClick={() => onPieceClick("pawn", i + 49)}></img> : null}
                     {color === "black" ? <img className="piece" src={blackPawn} alt="Black Pawn"></img> : null}
                 </div>)}
-                {arr8.map((a, i) => <div key={i + 57} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 57 === pieceSquare ? "highlight" : null}`} onClick={() => onSquareClick(i + 57)}>
+
+                {arr8.map((a, i) => <div key={i + 57} onClick={() => onSquareClick(i + 57)} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 57 === pieceSquare ? "highlight" : null}`} >
                     {i + 57}
                     {activeSquares.includes(i + 57) ? <div className="activeSquare"></div> : null}
                     {color === "white" && i + 57 === 61 ? <img className="piece" src={whiteKing} alt="White King"></img> : null}
                     {color === "white" && i + 57 === 60 ? <img className="piece" src={whiteQueen} alt="White Queen"></img> : null}
                     {color === "white" && (i + 57 === 57 || i + 57 === 64) ? <img className="piece" src={whiteRook} alt="White Rook"></img> : null}
                     {color === "white" && (i + 57 === 59 || i + 57 === 62) ? <img className="piece" src={whiteBishop} alt="White Bishop"></img> : null}
-                    {color === "white" && (i + 57 === 58) ? <img className="piece" src={whiteKnight} alt="White Knight" onClick={(e) => onPieceClick("knight", board.pk1, e)} style={{transform: `translate(${playerKnight1[0]}px, ${playerKnight1[1]}px)`}}></img> : null}
-                    {color === "white" && (i + 57 === 63) ? <img className="piece" src={whiteKnight} alt="White Knight" onClick={(e) => onPieceClick("knight", board.pk2, e)} style={{transform: `translate(${playerKnight2[0]}px, ${playerKnight2[1]}px)`}}></img> : null}
+
+                    {color === "white" && (i + 57 === 58) ? <div className="piece" style={{transform: `translate(${playerKnight1[0]}px, ${playerKnight1[1]}px)`}}>
+                        <img src={whiteKnight}
+                            alt="White Knight" 
+                            onClick={() => onPieceClick("playerKnight1", board.pk1)}>
+                        </img>
+                    </div> : null}
+
+                    {color === "white" && (i + 57 === 63) ? <div className="piece" style={{transform: `translate(${playerKnight2[0]}px, ${playerKnight2[1]}px)`}}>
+                        <img src={whiteKnight} 
+                            alt="White Knight" 
+                            onClick={() => onPieceClick("playerKnight2", board.pk2)}>
+                        </img>
+                    </div> : null}
+
                     {color === "black" && i + 57 === 60 ? <img className="piece" src={blackKing} alt="Black King"></img> : null}
                     {color === "black" && i + 57 === 61 ? <img className="piece" src={blackQueen} alt="Black Queen"></img> : null}
                     {color === "black" && (i + 57 === 57 || i + 57 === 64) ? <img className="piece" src={blackRook} alt="Black Rook"></img> : null}
                     {color === "black" && (i + 57 === 59 || i + 57 === 62) ? <img className="piece" src={blackBishop} alt="Black Bishop"></img> : null}
-                    {color === "black" && (i + 57 === 58 || i + 57 === 63) ? <img className="piece" src={blackKnight} alt="Black Knight"></img> : null}
+
+                    {color === "black" && (i + 57 === 58) ? <div className="piece" style={{transform: `translate(${playerKnight1[0]}px, ${playerKnight1[1]}px)`}}>
+                        <img src={blackKnight}
+                            alt="Black Knight" 
+                            onClick={() => onPieceClick("playerKnight1", board.pk1)}>
+                        </img>
+                    </div> : null}
+
+                    {color === "black" && (i + 57 === 63) ? <div className="piece" style={{transform: `translate(${playerKnight2[0]}px, ${playerKnight2[1]}px)`}}>
+                        <img src={blackKnight} 
+                            alt="Black Knight" 
+                            onClick={() => onPieceClick("playerKnight2", board.pk2)}>
+                        </img>
+                    </div> : null}
                 </div>)}
             </div>
         )
