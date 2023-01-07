@@ -5,6 +5,8 @@ const initialState = {
     difficulty: "",
     options: false,
     activePiece: "",
+    oldSquare: null,
+    newSquare: null,
     board: {
         or1: 1,
         ok1: 2,
@@ -89,6 +91,7 @@ function boardReducer(state = initialState, action) {
             }
         case "color/white":
             const { oqw, okw, pqb, pkb, ...boardRest1 } = state.board
+
             return {
                 ...state,
                 color: "white",
@@ -98,6 +101,7 @@ function boardReducer(state = initialState, action) {
             }
         case "color/black":
             const { oqb, okb, pqw, pkw, ...boardRest2 } = state.board
+
             return {
                 ...state,
                 color: "black",
@@ -105,25 +109,49 @@ function boardReducer(state = initialState, action) {
                     ...boardRest2,
                 },
             }
-        // case "activePiece":
-        //     return {
-        //         ...state,
-        //         activePiece: action.payload,
-        //     }
-        case "playerKnight1":
+        case "activePiece":
+            return {
+                ...state,
+                activePiece: action.payload,
+            }
+        case "oldSquare":
+            return {
+                ...state,
+                oldSquare: action.payload,
+            }
+        case "newSquare":
+            return {
+                ...state,
+                newSquare: action.payload,
+            }
+        case "pk1":
+            const asArray1 = Object.entries(state.board)
+            const swapElements1 = (array, index1, index2) => {
+                [array[index1 - 1], array[index2 - 1]] = [array[index2 - 1], array[index1 - 1]];
+            };
+            swapElements1(asArray1, state.oldSquare, state.newSquare)
+            asArray1[state.oldSquare - 1][1] = state.oldSquare
+            asArray1[state.newSquare - 1][1] = state.newSquare
+            const swapped1 = Object.fromEntries(asArray1)
+
             return {
                 ...state,
                 board: {
-                    ...state.board,
-                    pk1: action.payload
+                    ...swapped1
                 },
             }
-        case "playerKnight2":
+        case "pk2":
+            const asArray2 = Object.entries(state.board)
+            const swapElements2 = (array, index1, index2) => {
+                [array[index1 - 1], array[index2 - 1]] = [array[index2 - 1], array[index1 - 1]];
+            };
+            swapElements2(asArray2, state.oldSquare, state.newSquare)
+            const swapped2 = Object.fromEntries(asArray2)
+
             return {
                 ...state,
                 board: {
-                    ...state.board,
-                    pk2: action.payload
+                    ...swapped2
                 },
             }
         default:
