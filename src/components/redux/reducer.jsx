@@ -9,10 +9,10 @@ const initialState = {
         or1: 1,
         ok1: 2,
         ob1: 3,
-        okw: 4,
+        // okw: 4,
         oqb: 4,
         okb: 5,
-        oqw: 5,
+        // oqw: 5,
         ob2: 6,
         ok2: 7,
         or2: 8,
@@ -67,10 +67,10 @@ const initialState = {
         pr1: 57,
         pk1: 58,
         pb1: 59,
-        pkb: 60,
+        // pkb: 60,
         pqw: 60,
         pkw: 61,
-        pqb: 61,
+        // pqb: 61,
         pb2: 62,
         pk2: 63,
         pr2: 64,
@@ -88,14 +88,22 @@ function boardReducer(state = initialState, action) {
                 options: false
             }
         case "color/white":
+            const { oqw, okw, pqb, pkb, ...boardRest1 } = state.board
             return {
                 ...state,
-                color: "white"
+                color: "white",
+                board: {
+                    ...boardRest1,
+                },
             }
         case "color/black":
+            const { oqb, okb, pqw, pkw, ...boardRest2 } = state.board
             return {
                 ...state,
-                color: "black"
+                color: "black",
+                board: {
+                    ...boardRest2,
+                },
             }
         // case "activePiece":
         //     return {

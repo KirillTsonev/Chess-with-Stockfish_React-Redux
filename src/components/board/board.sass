@@ -1,6 +1,6 @@
 .container
     padding: 20px
-    // position: relative
+    position: relative
 
 .board
     display: flex
@@ -27,14 +27,11 @@
 
 .piece
     // position: absolute
-    width: 50px
-    height: 50px
+    padding: 7px 10px 13px 10px
+    width: 60px
+    height: 60px
     cursor: pointer
     transition: all .3s
-    img
-        width: 50px
-        height: 50px
-        transition: all .3s
 
 .activeSquare
     height: 30px
@@ -45,18 +42,42 @@
 .highlight
     background: #ce3f1780
 
-// .piecesGrid
-//     position: absolute
-//     width: 640px
-//     height: 640px
-//     left: calc(50% - 320px)
-//     top: 50px
-//     pointer-events: auto
+.piecesGrid
+    position: absolute
+    width: 640px
+    height: 640px
+    left: calc(50% - 320px)
+    top: 50px
+    display: flex
+    flex-wrap: wrap
 
 // .playerKnight1
-//     display: flex
-//     justify-content: center
-//     align-items: center
 //     position: absolute
 //     bottom: 0
 //     left: 80px
+
+// .playerKnight2
+//     position: absolute
+//     bottom: 0
+//     right: 80px
+
+.movementGrid
+    position: absolute
+    width: 640px
+    height: 640px
+    left: calc(50% - 320px)
+    top: 50px
+    display: flex
+    flex-wrap: wrap
+
+    color: orange
+    font-size: 30px
+    user-select: none
+    font-weight: 700
+
+.movementSquare
+    width: 80px
+    height: 80px
+    display: flex
+    justify-content: center
+    align-items: center
