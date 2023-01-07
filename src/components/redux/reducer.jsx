@@ -146,6 +146,8 @@ function boardReducer(state = initialState, action) {
                 [array[index1 - 1], array[index2 - 1]] = [array[index2 - 1], array[index1 - 1]];
             };
             swapElements2(asArray2, state.oldSquare, state.newSquare)
+            asArray2[state.oldSquare - 1][1] = state.oldSquare
+            asArray2[state.newSquare - 1][1] = state.newSquare
             const swapped2 = Object.fromEntries(asArray2)
 
             return {
