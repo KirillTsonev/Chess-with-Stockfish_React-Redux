@@ -611,19 +611,19 @@ const Board = () => {
                 setPieceSquare(null)
                 store.dispatch({
                     type: string,
-                    payload: i
+                    // payload: i
                 })
                 recordBoard()
                 break;
             case 17:
-                setter([piece[0] - 80, piece[1] - 160])
+                // setter([piece[0] - 80, piece[1] - 160])
                 store.dispatch({
                     type: "newSquare",
                     payload: i
                 })
                 store.dispatch({
                     type: string,
-                    payload: string
+                    // payload: string
                 })
                 // setPlayerKnight1([0, 0])
                 recordBoard()
