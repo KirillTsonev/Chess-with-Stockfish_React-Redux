@@ -20,33 +20,33 @@ import { useState, useEffect, useRef } from "react"
 import "./board.sass"
 
 const Board = () => {
-    // const [activePiece, setActivePiece] = useState("")
+    const [activeStatePiece, setActiveStatePiece] = useState("")
     const [moveSquares, setMoveSquares] = useState([])
     const [pieceSquare, setPieceSquare] = useState(null)
     const [occupiedSquares, setOccupiedSquares] = useState([])
     const [emptySquares, setEmptySquares] = useState([])
     const [playerSquares, setPlayerSquares] = useState([])
     const [enemySquares, setEnemySquares] = useState([])
-    // const [knightLimit, setKnightLimit] = useState([])
-    const [playerKnight1, setPlayerKnight1] = useState([0, 0])
-    const [playerKnight2, setPlayerKnight2] = useState([0, 0])
-
-    const [movePiece, setMovePiece] = useState(false)
     const [moveVar, setMoveVar] = useState([0, 0])
 
     const selectBoard = state => state.board
-    const selectColor = state => state.color
-    const selectActivePiece = state => state.activePiece
-    const selectModeMade = state => state.moveMade
-
     const board = useSelector(selectBoard)
+    const selectColor = state => state.color
     const color = useSelector(selectColor)
+    const selectActivePiece = state => state.activePiece
     const activePiece = useSelector(selectActivePiece)
-    const moveMade = useSelector(selectModeMade)
 
     const boardEntries = Object.entries(board)
-
     const notInitialRender = useRef(false)
+    let animationSpeed = 0
+
+    if (store.getState().animations === "fast") {
+        animationSpeed = .3
+    } else if (store.getState().animations === "average") {
+        animationSpeed = .5
+    } else if (store.getState().animations === "slow") {
+        animationSpeed = .7
+    }
 
     const recordBoard = () => {
         const enemyReg = /^o/
@@ -68,29 +68,21 @@ const Board = () => {
         setEmptySquares(Object.values(justEmpty))
         setOccupiedSquares(Object.values(justOccupied))
     }
+
+    const knightLimits = [
+        [1, 9, 17, 25, 33, 41, 49, 57],
+        [2, 10, 18, 26, 34, 42, 50, 58], 
+        [7, 15, 23, 31, 39, 47, 55, 63], 
+        [8, 16, 24, 32, 40, 48, 56, 64]
+    ]
     
     useEffect(() => {
         recordBoard()
-        // const arrKnightLimit = []
-
-        // for (let i = 1; i < 58; i += 8) {
-        //     arrKnightLimit.push(i)
-        //     arrKnightLimit.push(i + 1)
-        //     arrKnightLimit.push(i + 6)
-        //     arrKnightLimit.push(i + 7)
-        //     setKnightLimit(arrKnightLimit)
-        // }
     }, [])
 
     useEffect(() => {
         recordBoard()
     }, [pieceSquare])
-
-    useEffect(() => {
-        // moveVar.push(filteredMove[1][0], filteredMove[1][1])console.log(moveVar)
-        // console.log(...filteredMove)
-        // console.log("movevar" + moveVar)
-    }, [moveMade])
 
     // const onSquareClick = (i) => {
     //     if ((!moveSquares.includes(i) && pieceSquare && !occupiedSquares.includes(i)) || i === pieceSquare) {
@@ -277,14 +269,22 @@ const Board = () => {
                                             key={a}
                                             alt="White Knight" 
                                             className="piece"
-                                            style={!movePiece ? {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} : {transform: `translate(0px, 0px)` , transition: "all .3s"}}>
+                                            style={activeStatePiece === "pk1"
+                                                            ?
+                                                            {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
+                                                            :
+                                                            {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
                                         </img>
                                     : 
                                         <img src={blackKnight}
                                             key={a}
                                             alt="Black Knight" 
                                             className="piece"
-                                            style={{transform: `translate(${playerKnight1[0]}px, ${playerKnight1[1]}px)`}}>
+                                            style={activeStatePiece === "pk1"
+                                                ?
+                                                {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
+                                                :
+                                                {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
                                         </img>)
                 case "pk2":
                     return (color === "white"
@@ -293,14 +293,22 @@ const Board = () => {
                                             key={a}
                                             alt="White Knight" 
                                             className="piece"
-                                            style={{transform: `translate(${playerKnight2[0]}px, ${playerKnight2[1]}px)`}}>
+                                            style={activeStatePiece === "pk2"
+                                                ?
+                                                {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
+                                                :
+                                                {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
                                         </img>
                                     : 
                                         <img src={blackKnight}
                                             key={a}
                                             alt="Black Knight" 
                                             className="piece"
-                                            style={{transform: `translate(${playerKnight2[0]}px, ${playerKnight2[1]}px)`}}>
+                                            style={activeStatePiece === "pk2"
+                                                ?
+                                                {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
+                                                :
+                                                {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
                                         </img>)
                 case "pb1": case "pb2":
                     return (color === "white"
@@ -450,117 +458,45 @@ const Board = () => {
         )
     }
 
-    const moveKnight = (i, piece, setter, string) => {
+    const animateKnight = (i, string, num1, num2) => {
+        setMoveVar([num1, num2])
+        store.dispatch({
+            type: "newSquare",
+            payload: i
+        })
+        store.dispatch({
+            type: string,
+        })
+        recordBoard()
+        setMoveSquares([])
+        setPieceSquare(null)
+    }
+
+    const moveKnight = (i, string) => {
         switch (pieceSquare - i) {
             case -17:
-                store.dispatch({
-                    type: "newSquare",
-                    payload: i
-                })
-                // setter([piece[0] + 80, piece[1] + 160])
-                setMoveSquares([])
-                setPieceSquare(null)
-                store.dispatch({
-                    type: string,
-                    payload: i
-                })
-                recordBoard()
+                animateKnight(i, string, -80, -160)
                 break;
             case -15:
-                store.dispatch({
-                    type: "newSquare",
-                    payload: i
-                })
-                // setter([piece[0] - 80, piece[1] + 160])
-                setMoveSquares([])
-                setPieceSquare(null)
-                store.dispatch({
-                    type: string,
-                    payload: i
-                })
-                recordBoard()
+                animateKnight(i, string, 80, -160)
                 break;
             case -10:
-                store.dispatch({
-                    type: "newSquare",
-                    payload: i
-                })
-                // setter([piece[0] + 160, piece[1] + 80])
-                setMoveSquares([])
-                setPieceSquare(null)
-                store.dispatch({
-                    type: string,
-                    payload: i
-                })
-                recordBoard()
+                animateKnight(i, string, -160, -80)
                 break;
             case -6:
-                store.dispatch({
-                    type: "newSquare",
-                    payload: i
-                })
-                // setter([piece[0] - 160, piece[1] + 80])
-                setMoveSquares([])
-                setPieceSquare(null)
-                store.dispatch({
-                    type: string,
-                    payload: i
-                })
-                recordBoard()
+                animateKnight(i, string, 160, -80)
                 break;
             case 6:
-                store.dispatch({
-                    type: "newSquare",
-                    payload: i
-                })
-                // setter([piece[0] + 160, piece[1] - 80])
-                setMoveSquares([])
-                setPieceSquare(null)
-                store.dispatch({
-                    type: string,
-                    payload: i
-                })
-                recordBoard()
+                animateKnight(i, string, -160, 80)
                 break;
             case 10:
-                store.dispatch({
-                    type: "newSquare",
-                    payload: i
-                })
-                // setter([piece[0] - 160, piece[1] - 80])
-                setMoveSquares([])
-                setPieceSquare(null)
-                store.dispatch({
-                    type: string,
-                    payload: i
-                })
-                recordBoard()
+                animateKnight(i, string, 160, 80)
                 break;
             case 15:
-                setMoveVar([-80, 160])
-                store.dispatch({
-                    type: "newSquare",
-                    payload: i
-                })
-                store.dispatch({
-                    type: string,
-                })
-                recordBoard()
-                setMoveSquares([])
-                setPieceSquare(null)
+                animateKnight(i, string, -80, 160)
                 break;
             case 17:
-                setMoveVar([80, 160])
-                store.dispatch({
-                    type: "newSquare",
-                    payload: i
-                })
-                store.dispatch({
-                    type: string,
-                })
-                recordBoard()
-                setMoveSquares([])
-                setPieceSquare(null)
+                animateKnight(i, string, 80, 160)
                 break;
             default:
                 break;
@@ -570,11 +506,10 @@ const Board = () => {
     useEffect(() => {
         if (notInitialRender.current) {
             const movePiece = setTimeout(() => {
-                setMovePiece(true)
+                setActiveStatePiece("")
                 setMoveVar([0, 0])
-            }, 75)
-            setTimeout(() => {
-                setMovePiece(false)
+            }, store.getState().animations === "none" ? 0 : 75)
+            const resetPiece = setTimeout(() => {
                 store.dispatch({
                     type: "activePiece",
                     payload: ""
@@ -582,6 +517,7 @@ const Board = () => {
             }, 150);
             return () => {
                 clearTimeout(movePiece)
+                clearTimeout(resetPiece)
             }
         } else {
             notInitialRender.current = true
@@ -589,8 +525,6 @@ const Board = () => {
     }, [JSON.stringify(board)]);
 
     function onSquareClick(i, piece) {
-        setMovePiece(false)
-        
         if (playerSquares.includes(i)) {
             setPieceSquare(i)
 
@@ -598,8 +532,20 @@ const Board = () => {
                 setMoveSquares([i - 8, i - 16])
             }
 
-            if (piece === "pk1" || piece === "pk2") {               
-                let arr = [i - 17, i - 15, i - 10, i - 6, i + 6, i + 10, i + 15, i + 17]
+            if (piece === "pk1" || piece === "pk2") {   
+                let arr = []     
+                if (knightLimits[0].includes(i)) {
+                    arr = [i - 15, i - 6, i + 10, i + 17]
+                } else if (knightLimits[1].includes(i)) {
+                    arr = [i - 17, i - 15, i - 6, i + 10, i + 15, i + 17]
+                } else if (knightLimits[2].includes(i)) {
+                    arr = [i - 17, i - 15, i - 10, i + 6, i + 15, i + 17]
+                } else if (knightLimits[3].includes(i)) {
+                    arr = [i - 17, i - 10, i + 6, i + 15]
+                }
+                else {
+                    arr = [i - 17, i - 15, i - 10, i - 6, i + 6, i + 10, i + 15, i + 17]
+                }
                 for (const number of arr) {
                     if (occupiedSquares.includes(number)) {
                         arr = arr.filter(x => x !== number)
@@ -607,6 +553,8 @@ const Board = () => {
                     }
                 }
             }
+
+            setActiveStatePiece(piece)
             
             store.dispatch({
                 type: "activePiece",
@@ -620,9 +568,9 @@ const Board = () => {
         }
 
         if (activePiece === "pk1" && moveSquares.includes(i)) {
-            moveKnight(i, playerKnight1, setPlayerKnight1, "pk1")
+            moveKnight(i, "pk1")
         } else if (activePiece === "pk2" && moveSquares.includes(i)) {
-            moveKnight(i, playerKnight2, setPlayerKnight2, "pk2")
+            moveKnight(i, "pk2")
         }
         
     }

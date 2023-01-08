@@ -1,4 +1,5 @@
 import Board from './components/board/Board';
+import Pieces from './components/pieces/Pieces';
 import Options from './components/options/Options';
 
 function App() {
@@ -6,6 +7,7 @@ function App() {
     <div className="App">
       <Options></Options>
       <Board></Board>
+      {/* <Pieces></Pieces> */}
     </div>
   );
 }

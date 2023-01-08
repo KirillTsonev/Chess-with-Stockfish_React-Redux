@@ -4,6 +4,8 @@ const initialState = {
     time: "",
     difficulty: "",
     options: false,
+    animations: "fast",
+    sounds: true,
     activePiece: "",
     oldSquare: null,
     newSquare: null,
