@@ -6,7 +6,7 @@ const initialState = {
     options: false,
     animations: "fast",
     sounds: true,
-    numbers: true,
+    numbers: false,
     activePiece: "",
     oldSquare: null,
     newSquare: null,
@@ -80,8 +80,15 @@ const initialState = {
         pk2: 63,
         pr2: 64,
     },
-    pawns: {
-        
+    pawnsFirstMove: {
+        pp1: true,
+        pp2: true,
+        pp3: true,
+        pp4: true,
+        pp5: true,
+        pp6: true,
+        pp7: true,
+        pp8: true,
     },
 }
 
@@ -150,6 +157,69 @@ function boardReducer(state = initialState, action) {
                 board: {
                     ...action.payload
                 },
+            }
+        case "pawnMoved":
+            return {
+                ...state,
+                pawnsFirstMove: {
+                    ...action.payload
+                }
+            }
+        case "pp1":
+            return {
+                ...state,
+                board: {
+                    ...action.payload
+                }
+            }
+        case "pp2":
+            return {
+                ...state,
+                board: {
+                    ...action.payload
+                }
+            }
+        case "pp3":
+            return {
+                ...state,
+                board: {
+                    ...action.payload
+                }
+            }
+        case "pp4":
+            return {
+                ...state,
+                board: {
+                    ...action.payload
+                }
+            }
+        case "pp5":
+            return {
+                ...state,
+                board: {
+                    ...action.payload
+                }
+            }
+        case "pp6":
+            return {
+                ...state,
+                board: {
+                    ...action.payload
+                }
+            }
+        case "pp7":
+            return {
+                ...state,
+                board: {
+                    ...action.payload
+                }
+            }
+        case "pp8":
+            return {
+                ...state,
+                board: {
+                    ...action.payload
+                }
             }
         default:
             return state

@@ -35,6 +35,7 @@ const Board = () => {
     const color = useSelector(state => state.color)
     const activePiece = useSelector(state => state.activePiece)
     const numbers = useSelector(state => state.numbers)
+    const pawnsFirstMove = useSelector(state => state.pawnsFirstMove)
 
     const boardEntries = Object.entries(board)
     const notInitialRender = useRef(false)
@@ -51,15 +52,12 @@ const Board = () => {
     let moveSound = new Audio(moveSoundFile)
 
     const recordBoard = () => {
-        const enemyReg = /^o/
         const filteredEnemy = boardEntries.filter(([key, value]) => /^o/.test(key))
         const justEnemy = Object.fromEntries(filteredEnemy)
 
-        const playerReg = /^p/
         const filteredPlayer = boardEntries.filter(([key, value]) => /^p/.test(key))
         const justPlayer = Object.fromEntries(filteredPlayer)
 
-        const emptyReg = /empty/
         const filteredEmpty = boardEntries.filter(([key, value]) => /empty/.test(key))
         const filteredOccupied = boardEntries.filter(([key, value]) => !/empty/.test(key))
         const justEmpty = Object.fromEntries(filteredEmpty)
@@ -356,20 +354,198 @@ const Board = () => {
                                     className="piece">
                                 </img>
                             )
-                case "pp1": case "pp2": case "pp3": case "pp4": case "pp5": case "pp6": case "pp7": case "pp8":
+                case "pp1":
                     return (color === "white" 
                                     ?
                                         <img src={whitePawn}
                                             key={a}
                                             alt="White Pawn" 
-                                            className="piece">
+                                            className="piece"
+                                            style={activeStatePiece === "pp1"
+                                                            ?
+                                                            {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
+                                                            :
+                                                            {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
                                         </img>
                                     :
                                         <img src={blackPawn}
                                             key={a}
                                             alt="Black Pawn" 
-                                            className="piece">
+                                            className="piece"
+                                            style={activeStatePiece === "pp1"
+                                                            ?
+                                                            {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
+                                                            :
+                                                            {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
                                         </img>)
+                case "pp2": 
+                    return (color === "white" 
+                                        ?
+                                            <img src={whitePawn}
+                                                key={a}
+                                                alt="White Pawn" 
+                                                className="piece"
+                                                style={activeStatePiece === "pp2"
+                                                                ?
+                                                                {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
+                                                                :
+                                                                {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
+                                            </img>
+                                        :
+                                            <img src={blackPawn}
+                                                key={a}
+                                                alt="Black Pawn" 
+                                                className="piece"
+                                                style={activeStatePiece === "pp2"
+                                                                ?
+                                                                {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
+                                                                :
+                                                                {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
+                                            </img>)
+                case "pp3": 
+                    return (color === "white" 
+                                        ?
+                                            <img src={whitePawn}
+                                                key={a}
+                                                alt="White Pawn" 
+                                                className="piece"
+                                                style={activeStatePiece === "pp3"
+                                                                ?
+                                                                {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
+                                                                :
+                                                                {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
+                                            </img>
+                                        :
+                                            <img src={blackPawn}
+                                                key={a}
+                                                alt="Black Pawn" 
+                                                className="piece"
+                                                style={activeStatePiece === "pp3"
+                                                                ?
+                                                                {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
+                                                                :
+                                                                {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
+                                            </img>)
+                case "pp4": 
+                    return (color === "white" 
+                                        ?
+                                            <img src={whitePawn}
+                                                key={a}
+                                                alt="White Pawn" 
+                                                className="piece"
+                                                style={activeStatePiece === "pp4"
+                                                                ?
+                                                                {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
+                                                                :
+                                                                {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
+                                            </img>
+                                        :
+                                            <img src={blackPawn}
+                                                key={a}
+                                                alt="Black Pawn" 
+                                                className="piece"
+                                                style={activeStatePiece === "pp4"
+                                                                ?
+                                                                {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
+                                                                :
+                                                                {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
+                                            </img>)
+                case "pp5": 
+                    return (color === "white" 
+                                        ?
+                                            <img src={whitePawn}
+                                                key={a}
+                                                alt="White Pawn" 
+                                                className="piece"
+                                                style={activeStatePiece === "pp5"
+                                                                ?
+                                                                {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
+                                                                :
+                                                                {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
+                                            </img>
+                                        :
+                                            <img src={blackPawn}
+                                                key={a}
+                                                alt="Black Pawn" 
+                                                className="piece"
+                                                style={activeStatePiece === "pp5"
+                                                                ?
+                                                                {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
+                                                                :
+                                                                {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
+                                            </img>)
+                case "pp6": 
+                    return (color === "white" 
+                                        ?
+                                            <img src={whitePawn}
+                                                key={a}
+                                                alt="White Pawn" 
+                                                className="piece"
+                                                style={activeStatePiece === "pp6"
+                                                                ?
+                                                                {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
+                                                                :
+                                                                {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
+                                            </img>
+                                        :
+                                            <img src={blackPawn}
+                                                key={a}
+                                                alt="Black Pawn" 
+                                                className="piece"
+                                                style={activeStatePiece === "pp6"
+                                                                ?
+                                                                {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
+                                                                :
+                                                                {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
+                                            </img>)
+                case "pp7": 
+                    return (color === "white" 
+                                        ?
+                                            <img src={whitePawn}
+                                                key={a}
+                                                alt="White Pawn" 
+                                                className="piece"
+                                                style={activeStatePiece === "pp7"
+                                                                ?
+                                                                {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
+                                                                :
+                                                                {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
+                                            </img>
+                                        :
+                                            <img src={blackPawn}
+                                                key={a}
+                                                alt="Black Pawn" 
+                                                className="piece"
+                                                style={activeStatePiece === "pp7"
+                                                                ?
+                                                                {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
+                                                                :
+                                                                {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
+                                            </img>)
+                case "pp8":
+                    return (color === "white" 
+                    ?
+                        <img src={whitePawn}
+                            key={a}
+                            alt="White Pawn" 
+                            className="piece"
+                            style={activeStatePiece === "pp8"
+                                            ?
+                                            {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
+                                            :
+                                            {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
+                        </img>
+                    :
+                        <img src={blackPawn}
+                            key={a}
+                            alt="Black Pawn" 
+                            className="piece"
+                            style={activeStatePiece === "pp8"
+                                            ?
+                                            {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
+                                            :
+                                            {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
+                        </img>)
                 default:
                     return (
                         <div className="piece"></div>
@@ -473,6 +649,25 @@ const Board = () => {
         setPieceSquare(null)
     }
 
+    const animatePawn = (i, string, num1, num2) => {
+        moveSound.play()
+        setMoveVar([num1, num2])
+        store.dispatch({
+            type: "newSquare",
+            payload: i
+        })
+        store.dispatch({
+            type: string,
+        })
+        store.dispatch({
+            type: "pawnMoved",
+            payload: string
+        })
+        recordBoard()
+        setMoveSquares([])
+        setPieceSquare(null)
+    }
+
     const moveKnight = (i, string) => {
         switch (pieceSquare - i) {
             case -17:
@@ -502,6 +697,19 @@ const Board = () => {
             default:
                 break;
         }   
+    }
+
+    const movePawn = (i, string) => {
+        switch (pieceSquare - i) {
+            case 8:
+                animatePawn(i, string, 0, 80)
+                break;
+            case 16:
+                animatePawn(i, string, 0, 160)
+                break;
+            default:
+                break;
+        }
     }
 
     useEffect(() => {
@@ -561,7 +769,13 @@ const Board = () => {
 
             if (/^pp/.test(piece)) {
                 let arr = []
-                arr = [i - 8, i - 16]
+                
+                if (pawnsFirstMove[piece]) {
+                    arr = [i - 8, i - 16]
+                } else {
+                    arr = [i - 8]
+                }
+                
                 if (occupiedSquares.includes(i - 8)) {
                     arr = []
                     setMoveSquares(arr)
@@ -602,6 +816,24 @@ const Board = () => {
             moveKnight(i, "pk1")
         } else if (activePiece === "pk2" && moveSquares.includes(i)) {
             moveKnight(i, "pk2")
+        }
+
+        if (activePiece === "pp1" && moveSquares.includes(i)) {
+            movePawn(i, "pp1")
+        } else if (activePiece === "pp2" && moveSquares.includes(i)) {
+            movePawn(i, "pp2")
+        } else if (activePiece === "pp3" && moveSquares.includes(i)) {
+            movePawn(i, "pp3")
+        } else if (activePiece === "pp4" && moveSquares.includes(i)) {
+            movePawn(i, "pp4")
+        } else if (activePiece === "pp5" && moveSquares.includes(i)) {
+            movePawn(i, "pp5")
+        } else if (activePiece === "pp6" && moveSquares.includes(i)) {
+            movePawn(i, "pp6")
+        } else if (activePiece === "pp7" && moveSquares.includes(i)) {
+            movePawn(i, "pp7")
+        } else if (activePiece === "pp8" && moveSquares.includes(i)) {
+            movePawn(i, "pp8")
         }
         
     }
