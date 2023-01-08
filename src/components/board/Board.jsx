@@ -12,6 +12,8 @@ import blackBishop from "../../images/blackBishop.png"
 import whitePawn from "../../images/whitePawn.png"
 import blackPawn from "../../images/blackPawn.png"
 
+import moveSoundFile from "../../sounds/move.ogg"
+
 import store from "../redux/store"
 
 import { useSelector } from "react-redux"
@@ -29,24 +31,24 @@ const Board = () => {
     const [enemySquares, setEnemySquares] = useState([])
     const [moveVar, setMoveVar] = useState([0, 0])
 
-    const selectBoard = state => state.board
-    const board = useSelector(selectBoard)
-    const selectColor = state => state.color
-    const color = useSelector(selectColor)
-    const selectActivePiece = state => state.activePiece
-    const activePiece = useSelector(selectActivePiece)
+    const board = useSelector(state => state.board)
+    const color = useSelector(state => state.color)
+    const activePiece = useSelector(state => state.activePiece)
+    const numbers = useSelector(state => state.numbers)
 
     const boardEntries = Object.entries(board)
     const notInitialRender = useRef(false)
     let animationSpeed = 0
 
     if (store.getState().animations === "fast") {
-        animationSpeed = .3
+        animationSpeed = .2
     } else if (store.getState().animations === "average") {
         animationSpeed = .5
     } else if (store.getState().animations === "slow") {
         animationSpeed = .7
     }
+
+    let moveSound = new Audio(moveSoundFile)
 
     const recordBoard = () => {
         const enemyReg = /^o/
@@ -119,40 +121,38 @@ const Board = () => {
         }
 
         return (
-            <div className="container">
-                <div className="board">
-                    {arr1.map((a, i) => <div key={i + 1} className={`${i % 2 === 0 ? "white" : "black"} ${i + 1 === pieceSquare ? "highlight" : null}`}>
-                        {moveSquares.includes(i + 1) ? <div className="activeSquare"></div> : null}
-                    </div>)}
+            <div className="board">
+                {arr1.map((a, i) => <div key={i + 1} className={`${i % 2 === 0 ? "white" : "black"} ${i + 1 === pieceSquare ? "highlight" : null}`}>
+                    {moveSquares.includes(i + 1) ? <div className="activeSquare"></div> : null}
+                </div>)}
 
-                    {arr2.map((a, i) => <div key={i + 9} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 9 === pieceSquare ? "highlight" : null}`}>
-                        {moveSquares.includes(i + 9) ? <div className="activeSquare"></div> : null}
-                    </div>)}
+                {arr2.map((a, i) => <div key={i + 9} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 9 === pieceSquare ? "highlight" : null}`}>
+                    {moveSquares.includes(i + 9) ? <div className="activeSquare"></div> : null}
+                </div>)}
 
-                    {arr3.map((a, i) => <div key={i + 17} className={`${i % 2 === 0 ? "white" : "black"} ${i + 17 === pieceSquare ? "highlight" : null}`}>
-                        {moveSquares.includes(i + 17) ? <div className="activeSquare"></div> : null}
-                    </div>)}
+                {arr3.map((a, i) => <div key={i + 17} className={`${i % 2 === 0 ? "white" : "black"} ${i + 17 === pieceSquare ? "highlight" : null}`}>
+                    {moveSquares.includes(i + 17) ? <div className="activeSquare"></div> : null}
+                </div>)}
 
-                    {arr4.map((a, i) => <div key={i + 25} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 25 === pieceSquare ? "highlight" : null}`}>
-                        {moveSquares.includes(i + 25) ? <div className="activeSquare"></div> : null}
-                    </div>)}
+                {arr4.map((a, i) => <div key={i + 25} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 25 === pieceSquare ? "highlight" : null}`}>
+                    {moveSquares.includes(i + 25) ? <div className="activeSquare"></div> : null}
+                </div>)}
 
-                    {arr5.map((a, i) => <div key={i + 33} className={`${i % 2 === 0 ? "white" : "black"} ${i + 33 === pieceSquare ? "highlight" : null}`}>
-                        {moveSquares.includes(i + 33) ? <div className="activeSquare"></div> : null}
-                    </div>)}
+                {arr5.map((a, i) => <div key={i + 33} className={`${i % 2 === 0 ? "white" : "black"} ${i + 33 === pieceSquare ? "highlight" : null}`}>
+                    {moveSquares.includes(i + 33) ? <div className="activeSquare"></div> : null}
+                </div>)}
 
-                    {arr6.map((a, i) => <div key={i + 41} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 41 === pieceSquare ? "highlight" : null}`}>
-                        {moveSquares.includes(i + 41) ? <div className="activeSquare"></div> : null}
-                    </div>)}
+                {arr6.map((a, i) => <div key={i + 41} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 41 === pieceSquare ? "highlight" : null}`}>
+                    {moveSquares.includes(i + 41) ? <div className="activeSquare"></div> : null}
+                </div>)}
 
-                    {arr7.map((a, i) => <div key={i + 49} className={`${i % 2 === 0 ? "white" : "black"} ${i + 49 === pieceSquare ? "highlight" : null}`}>
-                        {moveSquares.includes(i + 49) ? <div className="activeSquare"></div> : null}
-                    </div>)}
+                {arr7.map((a, i) => <div key={i + 49} className={`${i % 2 === 0 ? "white" : "black"} ${i + 49 === pieceSquare ? "highlight" : null}`}>
+                    {moveSquares.includes(i + 49) ? <div className="activeSquare"></div> : null}
+                </div>)}
 
-                    {arr8.map((a, i) => <div key={i + 57} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 57 === pieceSquare ? "highlight" : null}`} >
-                        {moveSquares.includes(i + 57) ? <div className="activeSquare"></div> : null}
-                    </div>)}
-                </div>
+                {arr8.map((a, i) => <div key={i + 57} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 57 === pieceSquare ? "highlight" : null}`} >
+                    {moveSquares.includes(i + 57) ? <div className="activeSquare"></div> : null}
+                </div>)}
             </div>
         )
     }
@@ -410,55 +410,56 @@ const Board = () => {
                 {arr1.map((a, i) => <div key={i + 1} 
                                         onClick={() => onSquareClick(i + 1, boardEntries[i][0])}
                                         className="movementSquare">
-                                            {i + 1}
+                                            {numbers ? i + 1 : ""}
                                     </div>)}
                                     
                 {arr2.map((a, i) => <div key={i + 9}
                                         onClick={() => onSquareClick(i + 9, boardEntries[i + 8][0])}
                                         className="movementSquare">
-                                            {i + 9}
+                                            {numbers ? i + 9 : ""}
                                     </div>)}
 
                 {arr3.map((a, i) => <div key={i + 17} 
                                         onClick={() => onSquareClick(i + 17, boardEntries[i + 16][0])}
                                         className="movementSquare">
-                                            {i + 17}
+                                            {numbers ? i + 17 : ""}
                                     </div>)}
 
                 {arr4.map((a, i) => <div key={i + 25}
                                         onClick={() => onSquareClick(i + 25, boardEntries[i + 24][0])}
                                         className="movementSquare">
-                                            {i + 25}
+                                            {numbers ? i + 25 : ""}
                                     </div>)}
 
                 {arr5.map((a, i) => <div key={i + 33} 
                                         onClick={() => onSquareClick(i + 33, boardEntries[i + 32][0])}
                                         className="movementSquare">
-                                            {i + 33}
+                                            {numbers ? i + 33 : ""}
                                     </div>)}
 
                 {arr6.map((a, i) => <div key={i + 41}
                                         onClick={() => onSquareClick(i + 41, boardEntries[i + 40][0])}
                                         className="movementSquare">
-                                            {i + 41}
+                                            {numbers ? i + 41 : ""}
                                     </div>)}
 
                 {arr7.map((a, i) => <div key={i + 49}
                                         onClick={() => onSquareClick(i + 49, boardEntries[i + 48][0])}
                                         className="movementSquare">
-                                            {i + 49}
+                                            {numbers ? i + 49 : ""}
                                     </div>)}
 
                 {arr8.map((a, i) => <div key={i + 57} 
                                         onClick={() => onSquareClick(i + 57, boardEntries[i + 56][0])}
                                         className="movementSquare">
-                                            {i + 57}
+                                            {numbers ? i + 57 : ""}
                                     </div>)}
             </div>
         )
     }
 
     const animateKnight = (i, string, num1, num2) => {
+        moveSound.play()
         setMoveVar([num1, num2])
         store.dispatch({
             type: "newSquare",
@@ -508,7 +509,7 @@ const Board = () => {
             const movePiece = setTimeout(() => {
                 setActiveStatePiece("")
                 setMoveVar([0, 0])
-            }, store.getState().animations === "none" ? 0 : 75)
+            }, store.getState().animations === "none" ? 0 : 50)
             const resetPiece = setTimeout(() => {
                 store.dispatch({
                     type: "activePiece",
@@ -533,7 +534,7 @@ const Board = () => {
     }, [JSON.stringify(board)]);
 
     function onSquareClick(i, piece) {
-        if (!moveSquares.includes(i) && (playerSquares.includes(i) && activeStatePiece === piece)){
+        if (!moveSquares.includes(i) || (playerSquares.includes(i) && activeStatePiece === piece)){
             setMoveSquares([])
             setActiveStatePiece("")
             setPieceSquare(null)
@@ -606,7 +607,7 @@ const Board = () => {
     }
 
     return (
-        <div>
+        <div className="container">
             {renderBoard()}
             {renderPieces()}
             {renderMovement()}

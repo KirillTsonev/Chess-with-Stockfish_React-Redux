@@ -6,6 +6,7 @@ const initialState = {
     options: false,
     animations: "fast",
     sounds: true,
+    numbers: true,
     activePiece: "",
     oldSquare: null,
     newSquare: null,
@@ -110,6 +111,16 @@ function boardReducer(state = initialState, action) {
                 board: {
                     ...boardRest2
                 },
+            }
+        case "behavior/numbers":
+            return {
+                ...state,
+                numbers: action.payload
+            }
+        case "behavior/animationSpeed":
+            return {
+                ...state,
+                animations: action.payload
             }
         case "activePiece":
             return {
