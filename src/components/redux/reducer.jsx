@@ -79,7 +79,13 @@ const initialState = {
     },
     pawns: {
         
-    }
+    },
+    moves: {
+        default: [0, 0],
+        startUpLeft: [80, 160],
+        startUpRight: [-80, 160]
+    },
+    moveMade: "default",
 }
 
 function boardReducer(state = initialState, action) {
@@ -96,7 +102,7 @@ function boardReducer(state = initialState, action) {
                 ...state,
                 color: "white",
                 board: {
-                    ...boardRest1,
+                    ...boardRest1
                 },
             }
         case "color/black":
@@ -106,34 +112,30 @@ function boardReducer(state = initialState, action) {
                 ...state,
                 color: "black",
                 board: {
-                    ...boardRest2,
+                    ...boardRest2
                 },
             }
         case "activePiece":
             return {
                 ...state,
-                activePiece: action.payload,
+                activePiece: action.payload
             }
         case "oldSquare":
             return {
                 ...state,
-                oldSquare: action.payload,
+                oldSquare: action.payload
             }
         case "newSquare":
             return {
                 ...state,
-                newSquare: action.payload,
+                newSquare: action.payload
+            }
+        case "moveMade":
+            return {
+                ...state,
+                moveMade: action.payload
             }
         case "pk1":
-            console.log(action.payload)
-            // const asArray = Object.entries(state.board)
-            // const swapElements = (array, index1, index2) => {
-            //     [array[index1 - 1], array[index2 - 1]] = [array[index2 - 1], array[index1 - 1]];
-            // };
-            // swapElements(asArray, state.oldSquare, state.newSquare)
-            // asArray[state.oldSquare - 1][1] = state.oldSquare
-            // asArray[state.newSquare - 1][1] = state.newSquare
-            // const swapped = Object.fromEntries(asArray)
             return {
                 ...state,
                 board: {

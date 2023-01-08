@@ -32,13 +32,27 @@ const Board = () => {
     const [playerKnight1, setPlayerKnight1] = useState([0, 0])
     const [playerKnight2, setPlayerKnight2] = useState([0, 0])
 
-    const selectColor = state => state.color
+    const [movePiece, setMovePiece] = useState(false)
+
     const selectBoard = state => state.board
-    const selectPiece = state => state.activePiece
+    const selectColor = state => state.color
+    const selectActivePiece = state => state.activePiece
+    const selectModeMade = state => state.moveMade
+    const selectMoves = state => state.moves
+    const selectNewSquare = state => state.newSquare
+
     const board = useSelector(selectBoard)
     const color = useSelector(selectColor)
-    const activePiece = useSelector(selectPiece)
+    const activePiece = useSelector(selectActivePiece)
+    const moveMade = useSelector(selectModeMade)
+    const moves = useSelector(selectMoves)
+    const newSquare = useSelector(selectNewSquare)
+
     const boardEntries = Object.entries(board)
+
+    const asArray = Object.entries(moves)
+    let filteredMove = asArray.filter(([key, value]) => key === moveMade)
+    // let defaultMove = moves.default
 
     const recordBoard = () => {
         const asArray = Object.entries(board)
@@ -65,7 +79,6 @@ const Board = () => {
     
     useEffect(() => {
         recordBoard()
-
         // const arrKnightLimit = []
 
         // for (let i = 1; i < 58; i += 8) {
@@ -103,6 +116,7 @@ const Board = () => {
         let arr6 = []
         let arr7 = []
         let arr8 = []
+
         for(let i = 0; i < 8; i++) {
             arr1.push("1")
             arr2.push("1")
@@ -113,6 +127,7 @@ const Board = () => {
             arr7.push("1")
             arr8.push("1")
         }
+
         return (
             <div className="container">
                 <div className="board">
@@ -231,6 +246,15 @@ const Board = () => {
     //     )
     // }
 
+    // const pieceAnimation = () => {
+    //     switch (key) {
+    //         case startUpLeft:
+    //             return 
+    //         default:
+    //             break;
+    //     }
+    // }
+
     const renderPieces = () => {
         const renderEntries = (a, i) => {
             switch (a) {
@@ -343,7 +367,7 @@ const Board = () => {
                                             key={a}
                                             alt="White Knight" 
                                             className="piece"
-                                            style={{transform: `translate(${playerKnight1[0]}px, ${playerKnight1[1]}px)`}}>
+                                            style={!movePiece ? {transform: `translate(${filteredMove[0][1][0]}px, ${filteredMove[0][1][1]}px)`} : {transform: `translate(0px, 0px)` , transition: "all .3s"}}>
                                         </img>
                                     : 
                                         <img src={blackKnight}
@@ -451,6 +475,7 @@ const Board = () => {
         let arr6 = []
         let arr7 = []
         let arr8 = []
+
         for(let i = 0; i < 8; i++) {
             arr1.push("1")
             arr2.push("1")
@@ -606,7 +631,7 @@ const Board = () => {
                     type: "newSquare",
                     payload: i
                 })
-                // setter([piece[0] + 80, piece[1] - 160])
+                setter([piece[0] + 80, piece[1] - 160])
                 setMoveSquares([])
                 setPieceSquare(null)
                 store.dispatch({
@@ -625,6 +650,19 @@ const Board = () => {
                     type: string,
                     // payload: string
                 })
+                store.dispatch({
+                    type: "moveMade",
+                    payload: "startUpLeft"
+                })
+
+                // press piece square
+                // press empty square
+                // translate 99 99
+                // state board changes
+                // rerender
+                // after rerender translate 0 0
+
+
                 // setPlayerKnight1([0, 0])
                 recordBoard()
                 setMoveSquares([])
@@ -633,9 +671,21 @@ const Board = () => {
             default:
                 break;
         }
+        store.dispatch({
+            type: "activePiece",
+            payload: ""
+        })
     }
 
+    // useEffect(() => {
+    //     setTimeout(() => {
+    //         setMovePiece(true)
+    //     }, 300)
+    //     console.log(moveSquares)
+    // }, [JSON.stringify(moveSquares)]);
+
     function onSquareClick(i, piece) {
+
         if (playerSquares.includes(i)) {
             setPieceSquare(i)
 
