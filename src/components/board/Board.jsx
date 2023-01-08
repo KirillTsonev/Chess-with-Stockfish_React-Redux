@@ -50,16 +50,16 @@ const Board = () => {
 
     const recordBoard = () => {
         const enemyReg = /^o/
-        const filteredEnemy = boardEntries.filter(([key, value]) => enemyReg.test(key))
+        const filteredEnemy = boardEntries.filter(([key, value]) => /^o/.test(key))
         const justEnemy = Object.fromEntries(filteredEnemy)
 
         const playerReg = /^p/
-        const filteredPlayer = boardEntries.filter(([key, value]) => playerReg.test(key))
+        const filteredPlayer = boardEntries.filter(([key, value]) => /^p/.test(key))
         const justPlayer = Object.fromEntries(filteredPlayer)
 
         const emptyReg = /empty/
-        const filteredEmpty = boardEntries.filter(([key, value]) => emptyReg.test(key))
-        const filteredOccupied = boardEntries.filter(([key, value]) => !emptyReg.test(key))
+        const filteredEmpty = boardEntries.filter(([key, value]) => /empty/.test(key))
+        const filteredOccupied = boardEntries.filter(([key, value]) => !/empty/.test(key))
         const justEmpty = Object.fromEntries(filteredEmpty)
         const justOccupied = Object.fromEntries(filteredOccupied)
 
@@ -513,7 +513,15 @@ const Board = () => {
                 store.dispatch({
                     type: "activePiece",
                     payload: ""
-                })     
+                })
+                store.dispatch({
+                    type: "newSquare",
+                    payload: null
+                })
+                store.dispatch({
+                    type: "oldSquare",
+                    payload: null
+                })
             }, 150);
             return () => {
                 clearTimeout(movePiece)
@@ -525,23 +533,55 @@ const Board = () => {
     }, [JSON.stringify(board)]);
 
     function onSquareClick(i, piece) {
-        if (playerSquares.includes(i)) {
-            setPieceSquare(i)
+        if (!moveSquares.includes(i) && (playerSquares.includes(i) && activeStatePiece === piece)){
+            setMoveSquares([])
+            setActiveStatePiece("")
+            setPieceSquare(null)
+        }
 
-            if (piece === "pawn") {
-                setMoveSquares([i - 8, i - 16])
+        if (playerSquares.includes(i) && activeStatePiece !== piece) {
+            setMoveSquares([])
+            setPieceSquare(i)
+            setActiveStatePiece(piece)
+
+            if (store.getState().activePiece !== piece) {
+                store.dispatch({
+                    type: "activePiece",
+                    payload: piece
+                })
             }
 
-            if (piece === "pk1" || piece === "pk2") {   
+            if (store.getState().oldSquare !== i) {
+                store.dispatch({
+                    type: "oldSquare",
+                    payload: i
+                })
+            }
+
+            if (/^pp/.test(piece)) {
+                let arr = []
+                arr = [i - 8, i - 16]
+                if (occupiedSquares.includes(i - 8)) {
+                    arr = []
+                    setMoveSquares(arr)
+                } else if (occupiedSquares.includes(i - 16)) {
+                    arr = [i - 8]
+                    setMoveSquares(arr)
+                } else {
+                    setMoveSquares(arr)
+                }
+            }
+
+            if (/^pk/.test(piece)) {   
                 let arr = []     
                 if (knightLimits[0].includes(i)) {
-                    arr = [i - 15, i - 6, i + 10, i + 17]
+                    arr = [i - 15, i - 6, i + 10, i + 17].filter(a => a < 65)
                 } else if (knightLimits[1].includes(i)) {
-                    arr = [i - 17, i - 15, i - 6, i + 10, i + 15, i + 17]
+                    arr = [i - 17, i - 15, i - 6, i + 10, i + 15, i + 17].filter(a => a < 65)
                 } else if (knightLimits[2].includes(i)) {
-                    arr = [i - 17, i - 15, i - 10, i + 6, i + 15, i + 17]
+                    arr = [i - 17, i - 15, i - 10, i + 6, i + 15, i + 17].filter(a => a < 65)
                 } else if (knightLimits[3].includes(i)) {
-                    arr = [i - 17, i - 10, i + 6, i + 15]
+                    arr = [i - 17, i - 10, i + 6, i + 15].filter(a => a < 65)
                 }
                 else {
                     arr = [i - 17, i - 15, i - 10, i - 6, i + 6, i + 10, i + 15, i + 17]
@@ -550,21 +590,11 @@ const Board = () => {
                     if (occupiedSquares.includes(number)) {
                         arr = arr.filter(x => x !== number)
                         setMoveSquares(arr)
+                    } else {
+                        setMoveSquares(arr)
                     }
                 }
             }
-
-            setActiveStatePiece(piece)
-            
-            store.dispatch({
-                type: "activePiece",
-                payload: piece
-            })
-
-            store.dispatch({
-                type: "oldSquare",
-                payload: i
-            })
         }
 
         if (activePiece === "pk1" && moveSquares.includes(i)) {
