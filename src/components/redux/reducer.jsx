@@ -80,12 +80,6 @@ const initialState = {
     pawns: {
         
     },
-    moves: {
-        default: [0, 0],
-        startUpLeft: [80, 160],
-        startUpRight: [-80, 160]
-    },
-    moveMade: "default",
 }
 
 function boardReducer(state = initialState, action) {
@@ -129,11 +123,6 @@ function boardReducer(state = initialState, action) {
             return {
                 ...state,
                 newSquare: action.payload
-            }
-        case "moveMade":
-            return {
-                ...state,
-                moveMade: action.payload
             }
         case "pk1":
             return {

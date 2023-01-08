@@ -1,16 +1,18 @@
 const swapAndEditBoard = store => next => action => {
     const func = (action) => {
-        const state = store.getState()
+        const board = store.getState().board
+        const oldSquare = store.getState().oldSquare
+        const newSquare = store.getState().newSquare
 
-        const asArray = Object.entries(state.board)
+        const asArray = Object.entries(board)
         const swapElements = (array, index1, index2) => {
-            [array[index1 - 1], array[index2 - 1]] = [array[index2 - 1], array[index1 - 1]];
-        };
+            [array[index1 - 1], array[index2 - 1]] = [array[index2 - 1], array[index1 - 1]]
+        }
         
         try {
-            swapElements(asArray, state.oldSquare, state.newSquare)
-            asArray[state.oldSquare - 1][1] = state.oldSquare
-            asArray[state.newSquare - 1][1] = state.newSquare
+            swapElements(asArray, oldSquare, newSquare)
+            asArray[oldSquare - 1][1] = oldSquare
+            asArray[newSquare - 1][1] = newSquare
             const swapped = Object.fromEntries(asArray)
             return {
                 ...action,
@@ -20,7 +22,7 @@ const swapAndEditBoard = store => next => action => {
         }
     }
 
-    if (action.type.length < 7) {
+    if (action.type.length < 4) {
         return next(func(action))
     } else {
         return next(action)

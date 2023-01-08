@@ -15,8 +15,7 @@ import blackPawn from "../../images/blackPawn.png"
 import store from "../redux/store"
 
 import { useSelector } from "react-redux"
-import { useState } from "react"
-import { useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 
 import "./board.sass"
 
@@ -33,41 +32,34 @@ const Board = () => {
     const [playerKnight2, setPlayerKnight2] = useState([0, 0])
 
     const [movePiece, setMovePiece] = useState(false)
+    const [moveVar, setMoveVar] = useState([0, 0])
 
     const selectBoard = state => state.board
     const selectColor = state => state.color
     const selectActivePiece = state => state.activePiece
     const selectModeMade = state => state.moveMade
-    const selectMoves = state => state.moves
-    const selectNewSquare = state => state.newSquare
 
     const board = useSelector(selectBoard)
     const color = useSelector(selectColor)
     const activePiece = useSelector(selectActivePiece)
     const moveMade = useSelector(selectModeMade)
-    const moves = useSelector(selectMoves)
-    const newSquare = useSelector(selectNewSquare)
 
     const boardEntries = Object.entries(board)
 
-    const asArray = Object.entries(moves)
-    let filteredMove = asArray.filter(([key, value]) => key === moveMade)
-    // let defaultMove = moves.default
+    const notInitialRender = useRef(false)
 
     const recordBoard = () => {
-        const asArray = Object.entries(board)
-
         const enemyReg = /^o/
-        const filteredEnemy = asArray.filter(([key, value]) => enemyReg.test(key))
+        const filteredEnemy = boardEntries.filter(([key, value]) => enemyReg.test(key))
         const justEnemy = Object.fromEntries(filteredEnemy)
 
         const playerReg = /^p/
-        const filteredPlayer = asArray.filter(([key, value]) => playerReg.test(key))
+        const filteredPlayer = boardEntries.filter(([key, value]) => playerReg.test(key))
         const justPlayer = Object.fromEntries(filteredPlayer)
 
         const emptyReg = /empty/
-        const filteredEmpty = asArray.filter(([key, value]) => emptyReg.test(key))
-        const filteredOccupied = asArray.filter(([key, value]) => !emptyReg.test(key))
+        const filteredEmpty = boardEntries.filter(([key, value]) => emptyReg.test(key))
+        const filteredOccupied = boardEntries.filter(([key, value]) => !emptyReg.test(key))
         const justEmpty = Object.fromEntries(filteredEmpty)
         const justOccupied = Object.fromEntries(filteredOccupied)
 
@@ -93,6 +85,12 @@ const Board = () => {
     useEffect(() => {
         recordBoard()
     }, [pieceSquare])
+
+    useEffect(() => {
+        // moveVar.push(filteredMove[1][0], filteredMove[1][1])console.log(moveVar)
+        // console.log(...filteredMove)
+        // console.log("movevar" + moveVar)
+    }, [moveMade])
 
     // const onSquareClick = (i) => {
     //     if ((!moveSquares.includes(i) && pieceSquare && !occupiedSquares.includes(i)) || i === pieceSquare) {
@@ -133,22 +131,10 @@ const Board = () => {
                 <div className="board">
                     {arr1.map((a, i) => <div key={i + 1} className={`${i % 2 === 0 ? "white" : "black"} ${i + 1 === pieceSquare ? "highlight" : null}`}>
                         {moveSquares.includes(i + 1) ? <div className="activeSquare"></div> : null}
-                        {/* {color === "white" && i + 1 === 5 ? <img className="piece" src={blackKing} alt="Black King"></img> : null}
-                        {color === "white" && i + 1 === 4 ? <img className="piece" src={blackQueen} alt="Black Queen"></img> : null}
-                        {color === "white" && (i + 1 === 1 || i + 1 === 8) ? <img className="piece" src={blackRook} alt="Black Rook"></img> : null}
-                        {color === "white" && (i + 1 === 3 || i + 1 === 6) ? <img className="piece" src={blackBishop} alt="Black Bishop"></img> : null}
-                        {color === "white" && (i + 1 === 2 || i + 1 === 7) ? <img className="piece" src={blackKnight} alt="Black Knight" onClick={(e) => onPieceClick("knight", i + 1, e)}></img> : null}
-                        {color === "black" && i + 1 === 4 ? <img className="piece" src={whiteKing} alt="White King"></img> : null}
-                        {color === "black" && i + 1 === 5 ? <img className="piece" src={whiteQueen} alt="White Queen"></img> : null}
-                        {color === "black" && (i + 1 === 1 || i + 1 === 8) ? <img className="piece" src={whiteRook} alt="White Rook"></img> : null}
-                        {color === "black" && (i + 1 === 3 || i + 1 === 6) ? <img className="piece" src={whiteBishop} alt="White Bishop"></img> : null}
-                        {color === "black" && (i + 1 === 2 || i + 1 === 7) ? <img className="piece" src={whiteKnight} alt="White Knight"></img> : null} */}
                     </div>)}
 
                     {arr2.map((a, i) => <div key={i + 9} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 9 === pieceSquare ? "highlight" : null}`}>
                         {moveSquares.includes(i + 9) ? <div className="activeSquare"></div> : null}
-                        {/* {color === "white" ? <img className="piece" src={blackPawn} alt="Black Pawn" onClick={() => onPieceClick("pawn", i + 9)}></img> : null}
-                        {color === "black" ? <img className="piece" src={whitePawn} alt="White Pawn"></img> : null} */}
                     </div>)}
 
                     {arr3.map((a, i) => <div key={i + 17} className={`${i % 2 === 0 ? "white" : "black"} ${i + 17 === pieceSquare ? "highlight" : null}`}>
@@ -169,91 +155,15 @@ const Board = () => {
 
                     {arr7.map((a, i) => <div key={i + 49} className={`${i % 2 === 0 ? "white" : "black"} ${i + 49 === pieceSquare ? "highlight" : null}`}>
                         {moveSquares.includes(i + 49) ? <div className="activeSquare"></div> : null}
-                        {/* {color === "white" ? <img className="piece" src={whitePawn} alt="White Pawn" onClick={() => onPieceClick("pawn", i + 49)}></img> : null}
-                        {color === "black" ? <img className="piece" src={blackPawn} alt="Black Pawn"></img> : null} */}
                     </div>)}
 
                     {arr8.map((a, i) => <div key={i + 57} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 57 === pieceSquare ? "highlight" : null}`} >
                         {moveSquares.includes(i + 57) ? <div className="activeSquare"></div> : null}
-                        {/* {color === "white" && i + 57 === 61 ? <img className="piece" src={whiteKing} alt="White King"></img> : null}
-                        {color === "white" && i + 57 === 60 ? <img className="piece" src={whiteQueen} alt="White Queen"></img> : null}
-                        {color === "white" && (i + 57 === 57 || i + 57 === 64) ? <img className="piece" src={whiteRook} alt="White Rook"></img> : null}
-                        {color === "white" && (i + 57 === 59 || i + 57 === 62) ? <img className="piece" src={whiteBishop} alt="White Bishop"></img> : null} */}
-
-                        {/* {color === "white" && (i + 57 === 58) ? <div className="piece" onClick={() => onSquareClick(i + 57)}>
-                            <img src={whiteKnight}
-                                alt="White Knight" 
-                                onClick={() => onPieceClick("playerKnight1", board.pk1)}
-                                style={{transform: `translate(${playerKnight1[0]}px, ${playerKnight1[1]}px)`}}>
-                            </img>
-                        </div> : null} */}
-
-                        {/* {color === "white" && (i + 57 === 63) ? <div className="piece" onClick={() => onSquareClick(i + 57)}>
-                            <img src={whiteKnight} 
-                                alt="White Knight" 
-                                onClick={() => onPieceClick("playerKnight2", board.pk2)}
-                                style={{transform: `translate(${playerKnight2[0]}px, ${playerKnight2[1]}px)`}}>
-                            </img>
-                        </div> : null} */}
-
-                        {/* {color === "black" && i + 57 === 60 ? <img className="piece" src={blackKing} alt="Black King"></img> : null}
-                        {color === "black" && i + 57 === 61 ? <img className="piece" src={blackQueen} alt="Black Queen"></img> : null}
-                        {color === "black" && (i + 57 === 57 || i + 57 === 64) ? <img className="piece" src={blackRook} alt="Black Rook"></img> : null}
-                        {color === "black" && (i + 57 === 59 || i + 57 === 62) ? <img className="piece" src={blackBishop} alt="Black Bishop"></img> : null} */}
-
-                        {/* {color === "black" && (i + 57 === 58) ? <div className="piece">
-                            <img src={blackKnight}
-                                alt="Black Knight" 
-                                onClick={() => onPieceClick("playerKnight1", board.pk1)}
-                                style={{transform: `translate(${playerKnight1[0]}px, ${playerKnight1[1]}px)`}}>
-                            </img>
-                        </div> : null} */}
-
-                        {/* {color === "black" && (i + 57 === 63) ? <div className="piece" >
-                            <img src={blackKnight} 
-                                alt="Black Knight" 
-                                onClick={() => onPieceClick("playerKnight2", board.pk2)}
-                                style={{transform: `translate(${playerKnight2[0]}px, ${playerKnight2[1]}px)`}}>
-                            </img>
-                        </div> : null} */}
                     </div>)}
                 </div>
             </div>
         )
     }
-
-    // const renderPieces = () => {
-    //     return (
-    //         <div className="piecesGrid">
-    //             {color === "white" ?
-    //                     <img src={whiteKnight}
-    //                         alt="White Knight" 
-    //                         onClick={() => onPieceClick("playerKnight1", board.pk1)}
-    //                         className="piece playerKnight1"
-    //                         style={{transform: `translate(${playerKnight1[0]}px, ${playerKnight1[1]}px)`}}>
-    //                     </img>
-    //             : null}
-
-    //             {color === "white" ?
-    //                 <img src={whiteKnight} 
-    //                     alt="White Knight" 
-    //                     onClick={() => onPieceClick("playerKnight2", board.pk2)}
-    //                     className="piece playerKnight2"
-    //                     style={{transform: `translate(${playerKnight2[0]}px, ${playerKnight2[1]}px)`}}>
-    //                 </img>
-    //             : null}
-    //         </div>
-    //     )
-    // }
-
-    // const pieceAnimation = () => {
-    //     switch (key) {
-    //         case startUpLeft:
-    //             return 
-    //         default:
-    //             break;
-    //     }
-    // }
 
     const renderPieces = () => {
         const renderEntries = (a, i) => {
@@ -367,7 +277,7 @@ const Board = () => {
                                             key={a}
                                             alt="White Knight" 
                                             className="piece"
-                                            style={!movePiece ? {transform: `translate(${filteredMove[0][1][0]}px, ${filteredMove[0][1][1]}px)`} : {transform: `translate(0px, 0px)` , transition: "all .3s"}}>
+                                            style={!movePiece ? {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} : {transform: `translate(0px, 0px)` , transition: "all .3s"}}>
                                         </img>
                                     : 
                                         <img src={blackKnight}
@@ -627,65 +537,60 @@ const Board = () => {
                 recordBoard()
                 break;
             case 15:
+                setMoveVar([-80, 160])
                 store.dispatch({
                     type: "newSquare",
                     payload: i
                 })
-                setter([piece[0] + 80, piece[1] - 160])
-                setMoveSquares([])
-                setPieceSquare(null)
                 store.dispatch({
                     type: string,
-                    // payload: i
                 })
                 recordBoard()
+                setMoveSquares([])
+                setPieceSquare(null)
                 break;
             case 17:
-                // setter([piece[0] - 80, piece[1] - 160])
+                setMoveVar([80, 160])
                 store.dispatch({
                     type: "newSquare",
                     payload: i
                 })
                 store.dispatch({
                     type: string,
-                    // payload: string
                 })
-                store.dispatch({
-                    type: "moveMade",
-                    payload: "startUpLeft"
-                })
-
-                // press piece square
-                // press empty square
-                // translate 99 99
-                // state board changes
-                // rerender
-                // after rerender translate 0 0
-
-
-                // setPlayerKnight1([0, 0])
                 recordBoard()
                 setMoveSquares([])
                 setPieceSquare(null)
                 break;
             default:
                 break;
-        }
-        store.dispatch({
-            type: "activePiece",
-            payload: ""
-        })
+        }   
     }
 
-    // useEffect(() => {
-    //     setTimeout(() => {
-    //         setMovePiece(true)
-    //     }, 300)
-    //     console.log(moveSquares)
-    // }, [JSON.stringify(moveSquares)]);
+    useEffect(() => {
+        if (notInitialRender.current) {
+            const movePiece = setTimeout(() => {
+                setMovePiece(true)
+                setMoveVar([0, 0])
+            }, 75)
+            setTimeout(() => {
+                setMovePiece(false)
+                store.dispatch({
+                    type: "activePiece",
+                    payload: ""
+                })     
+            }, 150);
+            return () => {
+                clearTimeout(movePiece)
+            }
+        } else {
+            notInitialRender.current = true
+        }
+    }, [JSON.stringify(board)]);
 
     function onSquareClick(i, piece) {
-
+        setMovePiece(false)
+        
         if (playerSquares.includes(i)) {
             setPieceSquare(i)
 
