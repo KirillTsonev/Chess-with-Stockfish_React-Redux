@@ -26,7 +26,7 @@ const Board = () => {
     const [moveSquares, setMoveSquares] = useState([])
     const [pieceSquare, setPieceSquare] = useState(null)
     const [occupiedSquares, setOccupiedSquares] = useState([])
-    const [emptySquares, setEmptySquares] = useState([])
+    // const [emptySquares, setEmptySquares] = useState([])
     const [playerSquares, setPlayerSquares] = useState([])
     const [enemySquares, setEnemySquares] = useState([])
     const [moveVar, setMoveVar] = useState([0, 0])
@@ -59,14 +59,14 @@ const Board = () => {
         const filteredPlayer = boardEntries.filter(([key, value]) => /^p/.test(key))
         const justPlayer = Object.fromEntries(filteredPlayer)
 
-        const filteredEmpty = boardEntries.filter(([key, value]) => /empty/.test(key))
+        // const filteredEmpty = boardEntries.filter(([key, value]) => /empty/.test(key))
         const filteredOccupied = boardEntries.filter(([key, value]) => !/empty/.test(key))
-        const justEmpty = Object.fromEntries(filteredEmpty)
+        // const justEmpty = Object.fromEntries(filteredEmpty)
         const justOccupied = Object.fromEntries(filteredOccupied)
 
         setEnemySquares(Object.values(justEnemy))
         setPlayerSquares(Object.values(justPlayer))
-        setEmptySquares(Object.values(justEmpty))
+        // setEmptySquares(Object.values(justEmpty))
         setOccupiedSquares(Object.values(justOccupied))
     }
 
@@ -473,7 +473,7 @@ const Board = () => {
                     if (subArr.includes(i)) {
                         for (let j = i + 1; j <= Math.max(...subArr); j++) {
                             if (subArr.includes(j)) {
-                                if (occupiedSquares.includes(j)) {
+                                if (playerSquares.includes(j)) {
                                     break
                                 } else {
                                     arr.push(j)
@@ -482,7 +482,7 @@ const Board = () => {
                         }
                         for (let j = i - 1; j >= Math.min(...subArr); j--) {
                             if (subArr.includes(j)) {
-                                if (occupiedSquares.includes(j)) {
+                                if (playerSquares.includes(j)) {
                                     break
                                 } else {
                                     arr.push(j)
@@ -510,7 +510,7 @@ const Board = () => {
                     arr = [i - 17, i - 15, i - 10, i - 6, i + 6, i + 10, i + 15, i + 17]
                 }
                 for (const number of arr) {
-                    if (occupiedSquares.includes(number)) {
+                    if (playerSquares.includes(number)) {
                         arr = arr.filter(x => x !== number)
                         setMoveSquares(arr)
                     } else {
@@ -558,7 +558,7 @@ const Board = () => {
                         if (subArr.includes(i)) {
                             for (let j = i + 1; j <= Math.max(...subArr); j++) {
                                 if (subArr.includes(j)) {
-                                    if (occupiedSquares.includes(j)) {
+                                    if (playerSquares.includes(j)) {
                                         break
                                     } else {
                                         arr.push(j)
@@ -567,7 +567,7 @@ const Board = () => {
                             }
                             for (let j = i - 1; j >= Math.min(...subArr); j--) {
                                 if (subArr.includes(j)) {
-                                    if (occupiedSquares.includes(j)) {
+                                    if (playerSquares.includes(j)) {
                                         break
                                     } else {
                                         arr.push(j)
@@ -583,7 +583,7 @@ const Board = () => {
                                 if (subArr.includes(i)) {
                                     for (let j = i + 1; j <= Math.max(...subArr); j++) {
                                         if (subArr.includes(j)) {
-                                            if (occupiedSquares.includes(j)) {
+                                            if (playerSquares.includes(j)) {
                                                 break
                                             } else {
                                                 arr.push(j)
@@ -592,7 +592,7 @@ const Board = () => {
                                     }
                                     for (let j = i - 1; j >= Math.min(...subArr); j--) {
                                         if (subArr.includes(j)) {
-                                            if (occupiedSquares.includes(j)) {
+                                            if (playerSquares.includes(j)) {
                                                 break
                                             } else {
                                                 arr.push(j)
@@ -610,7 +610,7 @@ const Board = () => {
                                 if (subArr.includes(i)) {
                                     for (let j = i + 1; j <= Math.max(...subArr); j++) {
                                         if (subArr.includes(j)) {
-                                            if (occupiedSquares.includes(j)) {
+                                            if (playerSquares.includes(j)) {
                                                 break
                                             } else {
                                                 arr.push(j)
@@ -619,7 +619,7 @@ const Board = () => {
                                     }
                                     for (let j = i - 1; j >= Math.min(...subArr); j--) {
                                         if (subArr.includes(j)) {
-                                            if (occupiedSquares.includes(j)) {
+                                            if (playerSquares.includes(j)) {
                                                 break
                                             } else {
                                                 arr.push(j)
