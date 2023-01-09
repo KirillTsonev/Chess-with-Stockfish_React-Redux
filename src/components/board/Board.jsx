@@ -80,7 +80,7 @@ const Board = () => {
         knightLimits[3].push(i + 7)
     }
 
-    const whiteBishopLimits = [
+    const whiteBishopMoves = [
         [7, 16],
         [5, 14, 23, 32],
         [3, 12, 21, 30, 39, 48],
@@ -96,7 +96,7 @@ const Board = () => {
         [48, 55, 62]
     ]
 
-    const blackBishopLimits = [
+    const blackBishopMoves = [
         [2, 9],
         [4, 11, 18, 25],
         [6, 13, 20, 27, 34, 41],
@@ -112,30 +112,30 @@ const Board = () => {
         [41, 50, 59]
     ]
 
-    const rookLimits = [
+    const rookMoves = [
         [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []
     ]
 
     for (let i = 1; i < 9; i++) {
-        rookLimits[0].push(i)
-        rookLimits[1].push(i + 8)
-        rookLimits[2].push(i + 16)
-        rookLimits[3].push(i + 24)
-        rookLimits[4].push(i + 32)
-        rookLimits[5].push(i + 40)
-        rookLimits[6].push(i + 48)
-        rookLimits[7].push(i + 56)
+        rookMoves[0].push(i)
+        rookMoves[1].push(i + 8)
+        rookMoves[2].push(i + 16)
+        rookMoves[3].push(i + 24)
+        rookMoves[4].push(i + 32)
+        rookMoves[5].push(i + 40)
+        rookMoves[6].push(i + 48)
+        rookMoves[7].push(i + 56)
     }
 
     for (let i = 1; i < 65; i += 8) {
-        rookLimits[8].push(i)
-        rookLimits[9].push(i + 1)
-        rookLimits[10].push(i + 2)
-        rookLimits[11].push(i + 3)
-        rookLimits[12].push(i + 4)
-        rookLimits[13].push(i + 5)
-        rookLimits[14].push(i + 6)
-        rookLimits[15].push(i + 7)
+        rookMoves[8].push(i)
+        rookMoves[9].push(i + 1)
+        rookMoves[10].push(i + 2)
+        rookMoves[11].push(i + 3)
+        rookMoves[12].push(i + 4)
+        rookMoves[13].push(i + 5)
+        rookMoves[14].push(i + 6)
+        rookMoves[15].push(i + 7)
     }
     
     useEffect(() => {
@@ -465,6 +465,35 @@ const Board = () => {
                 })
             }
 
+            const checkArrays = (array) => {
+                let arr = []
+
+                for (const subArr of array) {
+                    if (subArr.includes(i)) {
+                        for (let j = i + 1; j <= Math.max(...subArr); j++) {
+                            if (subArr.includes(j)) {
+                                if (occupiedSquares.includes(j)) {
+                                    break
+                                } else {
+                                    arr.push(j)
+                                }
+                            }
+                        }
+                        for (let j = i - 1; j >= Math.min(...subArr); j--) {
+                            if (subArr.includes(j)) {
+                                if (occupiedSquares.includes(j)) {
+                                    break
+                                } else {
+                                    arr.push(j)
+                                }
+                            }
+                        }
+
+                        setMoveSquares(arr)
+                    }
+                }
+            }
+
             if (piece === "pk1" || piece === "pk2") {   
                 let arr = []     
                 if (knightLimits[0].includes(i)) {
@@ -509,46 +538,22 @@ const Board = () => {
                 }
             }
 
-            const checkRookBishop = (string, array) => {
-                if (piece === string) {
-                    let arr = []
-    
-                    for (const subArr of array) {
-                        if (subArr.includes(i)) {
-                            for (let j = i + 1; j <= Math.max(...subArr); j++) {
-                                if (subArr.includes(j)) {
-                                    if (occupiedSquares.includes(j)) {
-                                        break
-                                    } else {
-                                        arr.push(j)
-                                    }
-                                }
-                            }
-                            for (let j = i - 1; j >= Math.min(...subArr); j--) {
-                                if (subArr.includes(j)) {
-                                    if (occupiedSquares.includes(j)) {
-                                        break
-                                    } else {
-                                        arr.push(j)
-                                    }
-                                }
-                            }
-
-                            setMoveSquares(arr)
-                        }
-                    }
-                }
+            if (/^pr/.test(piece)) {
+                checkArrays(rookMoves)
             }
 
-            checkRookBishop("pb1", blackBishopLimits)
-            checkRookBishop("pb2", whiteBishopLimits)
-            checkRookBishop("pr1", rookLimits)
-            checkRookBishop("pr2", rookLimits)
+            if (piece === "pb1") {
+                checkArrays(blackBishopMoves)
+            }
+
+            if (piece === "pb2") {
+                checkArrays(whiteBishopMoves)
+            }
 
             if (piece === "pqw" || piece === "pqb") {
                 let arr = []
     
-                    for (const subArr of rookLimits) {
+                    for (const subArr of rookMoves) {
                         if (subArr.includes(i)) {
                             for (let j = i + 1; j <= Math.max(...subArr); j++) {
                                 if (subArr.includes(j)) {
@@ -571,11 +576,58 @@ const Board = () => {
                         }
                     }
 
-                    if (blackBishopLimits.forEach(a => a.includes(i))) {
-                        console.log("black")
+                    for (const subArr of blackBishopMoves) {
+                        if (subArr.includes(i)) {
+                            for (const subArr of blackBishopMoves) {
+                                if (subArr.includes(i)) {
+                                    for (let j = i + 1; j <= Math.max(...subArr); j++) {
+                                        if (subArr.includes(j)) {
+                                            if (occupiedSquares.includes(j)) {
+                                                break
+                                            } else {
+                                                arr.push(j)
+                                            }
+                                        }
+                                    }
+                                    for (let j = i - 1; j >= Math.min(...subArr); j--) {
+                                        if (subArr.includes(j)) {
+                                            if (occupiedSquares.includes(j)) {
+                                                break
+                                            } else {
+                                                arr.push(j)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
-                    if (whiteBishopLimits.forEach(a => a.includes(i))) {
-                        console.log("white")
+                    
+                    for (const subArr of whiteBishopMoves) {
+                        if (subArr.includes(i)) {
+                            for (const subArr of whiteBishopMoves) {
+                                if (subArr.includes(i)) {
+                                    for (let j = i + 1; j <= Math.max(...subArr); j++) {
+                                        if (subArr.includes(j)) {
+                                            if (occupiedSquares.includes(j)) {
+                                                break
+                                            } else {
+                                                arr.push(j)
+                                            }
+                                        }
+                                    }
+                                    for (let j = i - 1; j >= Math.min(...subArr); j--) {
+                                        if (subArr.includes(j)) {
+                                            if (occupiedSquares.includes(j)) {
+                                                break
+                                            } else {
+                                                arr.push(j)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
 
                 setMoveSquares(arr)
@@ -928,7 +980,102 @@ const Board = () => {
     }
 
     const moveQueen = (i, string) => {
-        switch (pieceSquare - i) {
+        if ((knightLimits[0].includes(pieceSquare) || knightLimits[3].includes(pieceSquare)) && (knightLimits[0].includes(i) || knightLimits[3].includes(i))) {
+            switch (pieceSquare - i) {
+                case -7:
+                    animateQueen(i, string, -560, 0)
+                    break;
+                case 7:
+                    animateQueen(i, string, 560, 0)
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            switch (pieceSquare - i) {
+                case -7:
+                    animateQueen(i, string, 80, -80)
+                    break;
+                case 7:
+                    animateQueen(i, string, -80, 80)
+                    break;
+                default:
+                    break;
+            }
+        }
+        switch (pieceSquare - i) {                                                   
+            case 9:
+                animateQueen(i, string, 80, 80)
+                break;
+            case 18:
+                animateQueen(i, string, 160, 160)
+                break;
+            case 27:
+                animateQueen(i, string, 240, 240)
+                break;
+            case 36:
+                animateQueen(i, string, 320, 320)
+                break;
+            case 45:
+                animateQueen(i, string, 400, 400)
+                break;
+            case 54:
+                animateQueen(i, string, 480, 480)
+                break;
+            case 63:
+                animateQueen(i, string, 560, 560)
+                break;
+            case -9: 
+                animateQueen(i, string, -80, -80)
+                break;
+            case -18:
+                animateQueen(i, string, -160, -160)
+                break;
+            case -27:
+                animateQueen(i, string, -240, -240)
+                break;
+            case -36:
+                animateQueen(i, string, -320, -320)
+                break;
+            case -45:
+                animateQueen(i, string, -400, -400)
+                break;
+            case -54:
+                animateQueen(i, string, -480, -480)
+                break;
+            case -63:
+                animateQueen(i, string, -560, -560)
+                break;
+            case 14:
+                animateQueen(i, string, -160, 160)
+                break;
+            case 21: 
+                animateQueen(i, string, -240, 240)
+                break;
+            case 28: 
+                animateQueen(i, string, -320, 320)
+                break;
+            case 35: 
+                animateQueen(i, string, -400, 400)
+                break;
+            case 42: 
+                animateQueen(i, string, -480, 480)
+                break;
+            case -14:
+                animateQueen(i, string, 160, -160)
+                break;
+            case -21: 
+                animateQueen(i, string, 240, -240)
+                break;
+            case -28: 
+                animateQueen(i, string, 320, -320)
+                break;
+            case -35: 
+                animateQueen(i, string, 400, -400)
+                break;
+            case -42: 
+                animateQueen(i, string, 480, -480)
+                break;
             case 8:
                 animateQueen(i, string, 0, 80)
                 break;
@@ -989,9 +1136,6 @@ const Board = () => {
             case 6:
                 animateQueen(i, string, 480, 0)
                 break;
-            case 7:
-                animateQueen(i, string, 560, 0)
-                break;
             case -1:
                 animateQueen(i, string, -80, 0)
                 break;
@@ -1010,10 +1154,38 @@ const Board = () => {
             case -6:
                 animateQueen(i, string, -480, 0)
                 break;
-            case -7:
-                animateQueen(i, string, -560, 0)
+            default:
                 break;
+        }
+    }
 
+    const animateKing = (i, string, num1, num2) => {
+        moveSound.play()
+        setMoveVar([num1, num2])
+        store.dispatch({
+            type: "newSquare",
+            payload: i
+        })
+        store.dispatch({
+            type: string,
+        })
+        store.dispatch({
+            type: "pawnMoved",
+            payload: string
+        })
+        recordBoard()
+        setMoveSquares([])
+        setPieceSquare(null)
+    }
+
+    const moveKing = (i, string) => {
+        switch (pieceSquare - i) {
+            case 8:
+                animateKing(i, string, 0, 80)
+                break;
+            case 16:
+                animateKing(i, string, 0, 160)
+                break;
             default:
                 break;
         }
