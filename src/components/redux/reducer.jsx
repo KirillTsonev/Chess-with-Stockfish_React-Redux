@@ -285,7 +285,6 @@ function boardReducer(state = initialState, action) {
                 }
             }
         case "castlingMoved":
-            console.log(action.payload)
             return {
                 ...state,
                 castlingMoved: {

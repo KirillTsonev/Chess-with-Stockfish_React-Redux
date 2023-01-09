@@ -637,7 +637,7 @@ const Board = () => {
             if (piece === "pkw" || piece === "pkb") {
                 let arr = []
                 
-                if (castlingMoved[piece]) {
+                if (castlingMoved[piece] && castlingMoved.pr2 && castlingMoved.pr1) {
                     arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9, i + 2, i - 2].filter(a => a < 65)
                 } else {
                     arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9].filter(a => a < 65)
@@ -1206,8 +1206,39 @@ const Board = () => {
         setPieceSquare(null)
     }
 
+    const animateCastling = (coor1, coor2, newsqKing, newsqRook, oldsq, piece) => {
+        moveSound.play()
+        setMoveVar([coor1, coor2])
+        store.dispatch({
+            type: "newSquare",
+            payload: newsqKing
+        })
+        store.dispatch({
+            type: "pkw",
+        })
+        store.dispatch({
+            type: "castlingMoved",
+            payload: "pkw"
+        })
+
+        store.dispatch({
+            type: "oldSquare",
+            payload: oldsq
+        })
+        store.dispatch({
+            type: "newSquare",
+            payload: newsqRook
+        })
+        store.dispatch({
+            type: piece,
+        })
+
+        recordBoard()
+        setMoveSquares([])
+        setPieceSquare(null)
+    }
+
     const moveKing = (i, string) => {
-        //[i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9, i + 2, i - 2]
         switch (pieceSquare - i) {
             case 9:
                 animateKing(i, string, 80, 80)
@@ -1232,6 +1263,12 @@ const Board = () => {
                 break;
             case -9:
                 animateKing(i, string, -80, -80)
+                break;
+            case -2:
+                animateCastling(-160, 0, 63, 64, 62, "pr2")
+                break;
+            case 2:
+                animateCastling(160, 0, 59, 57, 60, "pr1")
                 break;
             default:
                 break;
