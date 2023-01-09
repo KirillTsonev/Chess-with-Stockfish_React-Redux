@@ -30,6 +30,7 @@ const Board = () => {
     const [playerSquares, setPlayerSquares] = useState([])
     const [enemySquares, setEnemySquares] = useState([])
     const [moveVar, setMoveVar] = useState([0, 0])
+    const [lastMadeMove, setLastMadeMove] = useState(null)
 
     const board = useSelector(state => state.board)
     const color = useSelector(state => state.color)
@@ -37,7 +38,7 @@ const Board = () => {
     const numbers = useSelector(state => state.numbers)
     const pawnsFirstMove = useSelector(state => state.pawnsFirstMove)
     const castlingMoved = useSelector(state => state.castlingMoved)
-    const newSquare = useSelector(state => state.newSquare)
+    // const newSquare = useSelector(state => state.newSquare)
 
     const boardEntries = Object.entries(board)
     const notInitialRender = useRef(false)
@@ -159,12 +160,12 @@ const Board = () => {
                     type: "activePiece",
                     payload: ""
                 })
-                // store.dispatch({
-                //     type: "newSquare",
-                //     payload: null
-                // })
                 store.dispatch({
                     type: "oldSquare",
+                    payload: null
+                })
+                store.dispatch({
+                    type: "newSquare",
                     payload: null
                 })
             }, 150);
@@ -202,36 +203,42 @@ const Board = () => {
             <div className="board">
                 {arr1.map((a, i) => <div key={i + 1} className={`${i % 2 === 0 ? "white" : "black"} ${i + 1 === pieceSquare ? "highlight" : null}`}>
                     {moveSquares.includes(i + 1) ? <div className="activeSquare"></div> : null}
-                    {/* {newSquare === i + 1 ? <div className="activeSquare"></div> : null} */}
+                    {lastMadeMove === i + 1 ? <div className="lastMadeMove"></div> : null}
                 </div>)}
 
                 {arr2.map((a, i) => <div key={i + 9} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 9 === pieceSquare ? "highlight" : null}`}>
                     {moveSquares.includes(i + 9) ? <div className="activeSquare"></div> : null}
+                    {lastMadeMove === i + 9 ? <div className="lastMadeMove"></div> : null}
                 </div>)}
 
                 {arr3.map((a, i) => <div key={i + 17} className={`${i % 2 === 0 ? "white" : "black"} ${i + 17 === pieceSquare ? "highlight" : null}`}>
                     {moveSquares.includes(i + 17) ? <div className="activeSquare"></div> : null}
+                    {lastMadeMove === i + 17 ? <div className="lastMadeMove"></div> : null}
                 </div>)}
 
                 {arr4.map((a, i) => <div key={i + 25} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 25 === pieceSquare ? "highlight" : null}`}>
                     {moveSquares.includes(i + 25) ? <div className="activeSquare"></div> : null}
+                    {lastMadeMove === i + 25 ? <div className="lastMadeMove"></div> : null}
                 </div>)}
 
                 {arr5.map((a, i) => <div key={i + 33} className={`${i % 2 === 0 ? "white" : "black"} ${i + 33 === pieceSquare ? "highlight" : null}`}>
                     {moveSquares.includes(i + 33) ? <div className="activeSquare"></div> : null}
+                    {lastMadeMove === i + 33 ? <div className="lastMadeMove"></div> : null}
                 </div>)}
 
                 {arr6.map((a, i) => <div key={i + 41} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 41 === pieceSquare ? "highlight" : null}`}>
                     {moveSquares.includes(i + 41) ? <div className="activeSquare"></div> : null}
-                    {newSquare === i + 41 ? <div className="lastMadeMove"></div> : null}
+                    {lastMadeMove === i + 41 ? <div className="lastMadeMove"></div> : null}
                 </div>)}
 
                 {arr7.map((a, i) => <div key={i + 49} className={`${i % 2 === 0 ? "white" : "black"} ${i + 49 === pieceSquare ? "highlight" : null}`}>
                     {moveSquares.includes(i + 49) ? <div className="activeSquare"></div> : null}
+                    {lastMadeMove === i + 49 ? <div className="lastMadeMove"></div> : null}
                 </div>)}
 
                 {arr8.map((a, i) => <div key={i + 57} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 57 === pieceSquare ? "highlight" : null}`} >
                     {moveSquares.includes(i + 57) ? <div className="activeSquare"></div> : null}
+                    {lastMadeMove === i + 57 ? <div className="lastMadeMove"></div> : null}
                 </div>)}
             </div>
         )
@@ -469,10 +476,10 @@ const Board = () => {
                 })
             }
 
-            store.dispatch({
-                type: "newSquare",
-                payload: null
-            })
+            // store.dispatch({
+            //     type: "newSquare",
+            //     payload: null
+            // })
 
             const checkArrays = (array) => {
                 let arr = []
@@ -727,6 +734,7 @@ const Board = () => {
         store.dispatch({
             type: string,
         })
+        setLastMadeMove(i)
         recordBoard()
         setMoveSquares([])
         setPieceSquare(null)
@@ -777,6 +785,7 @@ const Board = () => {
             type: "pawnMoved",
             payload: string
         })
+        setLastMadeMove(i)
         recordBoard()
         setMoveSquares([])
         setPieceSquare(null)
@@ -805,6 +814,7 @@ const Board = () => {
         store.dispatch({
             type: string,
         })
+        setLastMadeMove(i)
         recordBoard()
         setMoveSquares([])
         setPieceSquare(null)
@@ -909,6 +919,7 @@ const Board = () => {
             type: "castlingMoved",
             payload: string
         })
+        setLastMadeMove(i)
         recordBoard()
         setMoveSquares([])
         setPieceSquare(null)
@@ -1016,6 +1027,7 @@ const Board = () => {
         store.dispatch({
             type: string,
         })
+        setLastMadeMove(i)
         recordBoard()
         setMoveSquares([])
         setPieceSquare(null)
@@ -1215,17 +1227,18 @@ const Board = () => {
             type: "castlingMoved",
             payload: string
         })
+        setLastMadeMove(i)
         recordBoard()
         setMoveSquares([])
         setPieceSquare(null)
     }
 
-    const animateCastling = (coor1, coor2, newsqKing, newsqRook, oldsq, piece) => {
+    const animateCastling = (coor1, coor2, newSqKing, newSqRook, oldSq, piece, lastSq) => {
         moveSound.play()
         setMoveVar([coor1, coor2])
         store.dispatch({
             type: "newSquare",
-            payload: newsqKing
+            payload: newSqKing
         })
         store.dispatch({
             type: "pkw",
@@ -1234,19 +1247,18 @@ const Board = () => {
             type: "castlingMoved",
             payload: "pkw"
         })
-
         store.dispatch({
             type: "oldSquare",
-            payload: oldsq
+            payload: oldSq
         })
         store.dispatch({
             type: "newSquare",
-            payload: newsqRook
+            payload: newSqRook
         })
         store.dispatch({
             type: piece,
         })
-
+        setLastMadeMove(lastSq)
         recordBoard()
         setMoveSquares([])
         setPieceSquare(null)
@@ -1279,10 +1291,10 @@ const Board = () => {
                 animateKing(i, string, -80, -80)
                 break;
             case -2:
-                animateCastling(-160, 0, 63, 64, 62, "pr2")
+                animateCastling(-160, 0, 63, 64, 62, "pr2", 63)
                 break;
             case 2:
-                animateCastling(160, 0, 59, 57, 60, "pr1")
+                animateCastling(160, 0, 59, 57, 60, "pr1", 59)
                 break;
             default:
                 break;
