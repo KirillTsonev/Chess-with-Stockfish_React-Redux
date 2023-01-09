@@ -642,10 +642,16 @@ const Board = () => {
                 } else {
                     arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9].filter(a => a < 65)
                 }
-                
+
                 for (const number of arr) {
                     if (occupiedSquares.includes(number)) {
                         arr = arr.filter(x => x !== number)
+                        if (!arr.includes(60)) {
+                            arr = arr.filter(x => x !== 59)
+                        }
+                        if (!arr.includes(62)) {
+                            arr = arr.filter(x => x !== 63)
+                        }
                         setMoveSquares(arr)
                     } else {
                         setMoveSquares(arr)
