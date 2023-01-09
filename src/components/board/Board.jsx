@@ -84,19 +84,6 @@ const Board = () => {
         recordBoard()
     }, [pieceSquare])
 
-    // const onSquareClick = (i) => {
-    //     if ((!moveSquares.includes(i) && pieceSquare && !occupiedSquares.includes(i)) || i === pieceSquare) {
-    //         setMoveSquares([])
-    //         setPieceSquare(null)
-    //         
-    //     }
-    //     if (activePiece === "playerKnight1" && moveSquares.includes(i)) {
-    //         moveKnight(i, playerKnight1, "playerKnight1", setPlayerKnight1)
-    //     } else if (activePiece === "playerKnight2" && moveSquares.includes(i)) {
-    //         moveKnight(i, playerKnight2 ,"playerKnight2", setPlayerKnight2)
-    //     }
-    // }
-
     const renderBoard = () => {
         let arr1 = []
         let arr2 = []
@@ -156,7 +143,35 @@ const Board = () => {
     }
 
     const renderPieces = () => {
-        const renderEntries = (a, i) => {
+        const renderEachPiece = (a, src1, src2, alt1, alt2, piece) => {
+            return (
+                (color === "white"
+                                ?
+                                    <img src={src1}
+                                        key={a}
+                                        alt={alt1}
+                                        className="piece"
+                                        style={activeStatePiece === `${piece}`
+                                                                        ?
+                                                                        {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
+                                                                        :
+                                                                        {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
+                                    </img>
+                                : 
+                                    <img src={src2}
+                                        key={a}
+                                        alt={alt2}
+                                        className="piece"
+                                        style={activeStatePiece === `${piece}`
+                                                                        ?
+                                                                        {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
+                                                                        :
+                                                                        {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
+                                    </img>)
+            )
+        }
+
+        const renderEntries = (a) => {
             switch (a) {
                 case "or1": case "or2":
                     return (color === "white" 
@@ -261,53 +276,9 @@ const Board = () => {
                                             className="piece">
                                         </img>)
                 case "pk1":
-                    return (color === "white"
-                                    ?
-                                        <img src={whiteKnight}
-                                            key={a}
-                                            alt="White Knight" 
-                                            className="piece"
-                                            style={activeStatePiece === "pk1"
-                                                            ?
-                                                            {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
-                                                            :
-                                                            {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
-                                        </img>
-                                    : 
-                                        <img src={blackKnight}
-                                            key={a}
-                                            alt="Black Knight" 
-                                            className="piece"
-                                            style={activeStatePiece === "pk1"
-                                                ?
-                                                {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
-                                                :
-                                                {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
-                                        </img>)
+                    return renderEachPiece(a, whiteKnight, blackKnight, "White Knight", "Black Knight", "pk1")
                 case "pk2":
-                    return (color === "white"
-                                    ?
-                                        <img src={whiteKnight}
-                                            key={a}
-                                            alt="White Knight" 
-                                            className="piece"
-                                            style={activeStatePiece === "pk2"
-                                                ?
-                                                {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
-                                                :
-                                                {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
-                                        </img>
-                                    : 
-                                        <img src={blackKnight}
-                                            key={a}
-                                            alt="Black Knight" 
-                                            className="piece"
-                                            style={activeStatePiece === "pk2"
-                                                ?
-                                                {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
-                                                :
-                                                {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
-                                        </img>)
+                    return renderEachPiece(a, whiteKnight, blackKnight, "White Knight", "Black Knight", "pk2")
                 case "pb1": case "pb2":
                     return (color === "white"
                                     ?
@@ -355,197 +326,21 @@ const Board = () => {
                                 </img>
                             )
                 case "pp1":
-                    return (color === "white" 
-                                    ?
-                                        <img src={whitePawn}
-                                            key={a}
-                                            alt="White Pawn" 
-                                            className="piece"
-                                            style={activeStatePiece === "pp1"
-                                                            ?
-                                                            {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
-                                                            :
-                                                            {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
-                                        </img>
-                                    :
-                                        <img src={blackPawn}
-                                            key={a}
-                                            alt="Black Pawn" 
-                                            className="piece"
-                                            style={activeStatePiece === "pp1"
-                                                            ?
-                                                            {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
-                                                            :
-                                                            {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
-                                        </img>)
+                    return renderEachPiece(a, whitePawn, blackPawn, "White Pawn", "Black Pawn", "pp1")
                 case "pp2": 
-                    return (color === "white" 
-                                        ?
-                                            <img src={whitePawn}
-                                                key={a}
-                                                alt="White Pawn" 
-                                                className="piece"
-                                                style={activeStatePiece === "pp2"
-                                                                ?
-                                                                {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
-                                                                :
-                                                                {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
-                                            </img>
-                                        :
-                                            <img src={blackPawn}
-                                                key={a}
-                                                alt="Black Pawn" 
-                                                className="piece"
-                                                style={activeStatePiece === "pp2"
-                                                                ?
-                                                                {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
-                                                                :
-                                                                {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
-                                            </img>)
+                    return renderEachPiece(a, whitePawn, blackPawn, "White Pawn", "Black Pawn", "pp2")
                 case "pp3": 
-                    return (color === "white" 
-                                        ?
-                                            <img src={whitePawn}
-                                                key={a}
-                                                alt="White Pawn" 
-                                                className="piece"
-                                                style={activeStatePiece === "pp3"
-                                                                ?
-                                                                {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
-                                                                :
-                                                                {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
-                                            </img>
-                                        :
-                                            <img src={blackPawn}
-                                                key={a}
-                                                alt="Black Pawn" 
-                                                className="piece"
-                                                style={activeStatePiece === "pp3"
-                                                                ?
-                                                                {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
-                                                                :
-                                                                {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
-                                            </img>)
+                    return renderEachPiece(a, whitePawn, blackPawn, "White Pawn", "Black Pawn", "pp3")
                 case "pp4": 
-                    return (color === "white" 
-                                        ?
-                                            <img src={whitePawn}
-                                                key={a}
-                                                alt="White Pawn" 
-                                                className="piece"
-                                                style={activeStatePiece === "pp4"
-                                                                ?
-                                                                {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
-                                                                :
-                                                                {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
-                                            </img>
-                                        :
-                                            <img src={blackPawn}
-                                                key={a}
-                                                alt="Black Pawn" 
-                                                className="piece"
-                                                style={activeStatePiece === "pp4"
-                                                                ?
-                                                                {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
-                                                                :
-                                                                {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
-                                            </img>)
+                    return renderEachPiece(a, whitePawn, blackPawn, "White Pawn", "Black Pawn", "pp4")
                 case "pp5": 
-                    return (color === "white" 
-                                        ?
-                                            <img src={whitePawn}
-                                                key={a}
-                                                alt="White Pawn" 
-                                                className="piece"
-                                                style={activeStatePiece === "pp5"
-                                                                ?
-                                                                {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
-                                                                :
-                                                                {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
-                                            </img>
-                                        :
-                                            <img src={blackPawn}
-                                                key={a}
-                                                alt="Black Pawn" 
-                                                className="piece"
-                                                style={activeStatePiece === "pp5"
-                                                                ?
-                                                                {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
-                                                                :
-                                                                {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
-                                            </img>)
+                    return renderEachPiece(a, whitePawn, blackPawn, "White Pawn", "Black Pawn", "pp5")
                 case "pp6": 
-                    return (color === "white" 
-                                        ?
-                                            <img src={whitePawn}
-                                                key={a}
-                                                alt="White Pawn" 
-                                                className="piece"
-                                                style={activeStatePiece === "pp6"
-                                                                ?
-                                                                {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
-                                                                :
-                                                                {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
-                                            </img>
-                                        :
-                                            <img src={blackPawn}
-                                                key={a}
-                                                alt="Black Pawn" 
-                                                className="piece"
-                                                style={activeStatePiece === "pp6"
-                                                                ?
-                                                                {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
-                                                                :
-                                                                {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
-                                            </img>)
+                    return renderEachPiece(a, whitePawn, blackPawn, "White Pawn", "Black Pawn", "pp6")
                 case "pp7": 
-                    return (color === "white" 
-                                        ?
-                                            <img src={whitePawn}
-                                                key={a}
-                                                alt="White Pawn" 
-                                                className="piece"
-                                                style={activeStatePiece === "pp7"
-                                                                ?
-                                                                {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
-                                                                :
-                                                                {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
-                                            </img>
-                                        :
-                                            <img src={blackPawn}
-                                                key={a}
-                                                alt="Black Pawn" 
-                                                className="piece"
-                                                style={activeStatePiece === "pp7"
-                                                                ?
-                                                                {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
-                                                                :
-                                                                {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
-                                            </img>)
+                    return renderEachPiece(a, whitePawn, blackPawn, "White Pawn", "Black Pawn", "pp7")
                 case "pp8":
-                    return (color === "white" 
-                    ?
-                        <img src={whitePawn}
-                            key={a}
-                            alt="White Pawn" 
-                            className="piece"
-                            style={activeStatePiece === "pp8"
-                                            ?
-                                            {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
-                                            :
-                                            {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
-                        </img>
-                    :
-                        <img src={blackPawn}
-                            key={a}
-                            alt="Black Pawn" 
-                            className="piece"
-                            style={activeStatePiece === "pp8"
-                                            ?
-                                            {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
-                                            :
-                                            {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
-                        </img>)
+                    return renderEachPiece(a, whitePawn, blackPawn, "White Pawn", "Black Pawn", "pp8")
                 default:
                     return (
                         <div className="piece"></div>
@@ -634,40 +429,6 @@ const Board = () => {
         )
     }
 
-    const animateKnight = (i, string, num1, num2) => {
-        moveSound.play()
-        setMoveVar([num1, num2])
-        store.dispatch({
-            type: "newSquare",
-            payload: i
-        })
-        store.dispatch({
-            type: string,
-        })
-        recordBoard()
-        setMoveSquares([])
-        setPieceSquare(null)
-    }
-
-    const animatePawn = (i, string, num1, num2) => {
-        moveSound.play()
-        setMoveVar([num1, num2])
-        store.dispatch({
-            type: "newSquare",
-            payload: i
-        })
-        store.dispatch({
-            type: string,
-        })
-        store.dispatch({
-            type: "pawnMoved",
-            payload: string
-        })
-        recordBoard()
-        setMoveSquares([])
-        setPieceSquare(null)
-    }
-
     const moveKnight = (i, string) => {
         switch (pieceSquare - i) {
             case -17:
@@ -699,6 +460,21 @@ const Board = () => {
         }   
     }
 
+    const animateKnight = (i, string, num1, num2) => {
+        moveSound.play()
+        setMoveVar([num1, num2])
+        store.dispatch({
+            type: "newSquare",
+            payload: i
+        })
+        store.dispatch({
+            type: string,
+        })
+        recordBoard()
+        setMoveSquares([])
+        setPieceSquare(null)
+    }    
+
     const movePawn = (i, string) => {
         switch (pieceSquare - i) {
             case 8:
@@ -710,6 +486,25 @@ const Board = () => {
             default:
                 break;
         }
+    }
+
+    const animatePawn = (i, string, num1, num2) => {
+        moveSound.play()
+        setMoveVar([num1, num2])
+        store.dispatch({
+            type: "newSquare",
+            payload: i
+        })
+        store.dispatch({
+            type: string,
+        })
+        store.dispatch({
+            type: "pawnMoved",
+            payload: string
+        })
+        recordBoard()
+        setMoveSquares([])
+        setPieceSquare(null)
     }
 
     useEffect(() => {

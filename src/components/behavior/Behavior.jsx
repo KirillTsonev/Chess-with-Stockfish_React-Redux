@@ -35,7 +35,7 @@ const Behavior = () => {
                     <div className={`behavior__option ${animations === "fast" ? "active" : null}`}  onClick={() => onAnimationChoice("fast")}>Fast</div>
                 </div>
                 <div>
-                    <div className={`behavior__option ${animations === "average" ? "active" : null}`} onClick={() => onAnimationChoice("average")}>Average</div>
+                    <div className={`behavior__option ${animations === "average" ? "active" : null}`} onClick={() => onAnimationChoice("average")}>Normal</div>
                     <div className={`behavior__option ${animations === "none" ? "active" : null}`} onClick={() => onAnimationChoice("none")}>None</div>
                 </div>
             </div>
