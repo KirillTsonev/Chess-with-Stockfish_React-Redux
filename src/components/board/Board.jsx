@@ -237,121 +237,84 @@ const Board = () => {
         const renderEachPiece = (a, src1, src2, alt1, alt2, piece) => {
             return (
                 (color === "white"
-                                ?
-                                    <img src={src1}
-                                        key={a}
-                                        alt={alt1}
-                                        className="piece"
-                                        style={activeStatePiece === `${piece}`
-                                                                        ?
-                                                                        {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
-                                                                        :
-                                                                        {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
-                                    </img>
-                                : 
-                                    <img src={src2}
-                                        key={a}
-                                        alt={alt2}
-                                        className="piece"
-                                        style={activeStatePiece === `${piece}`
-                                                                        ?
-                                                                        {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
-                                                                        :
-                                                                        {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
-                                    </img>)
+                    ?
+                    <img src={src1}
+                        key={a}
+                        alt={alt1}
+                        className="piece"
+                        style={activeStatePiece === `${piece}`
+                            ?
+                            {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
+                            :
+                            {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
+                    </img>
+                    : 
+                    <img src={src2}
+                        key={a}
+                        alt={alt2}
+                        className="piece"
+                        style={activeStatePiece === `${piece}`
+                            ?
+                            {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
+                            :
+                            {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
+                    </img>)
+            )
+        }
+
+        const renderRoyals = (a, src, alt, piece) => {
+            return (
+                <img src={src}
+                    key={a}
+                    alt={alt}
+                    className="piece"
+                    style={activeStatePiece === `${piece}`
+                        ?
+                        {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
+                        :
+                        {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
+                </img>
             )
         }
 
         const renderEntries = (a) => {
             switch (a) {
-                case "or1": case "or2":
-                    return (color === "white" 
-                                    ?
-                                        <img src={blackRook}
-                                            key={a}
-                                            alt="Black Rook" 
-                                            className="piece">
-                                        </img>
-                                    :
-                                        <img src={whiteRook}
-                                            key={a}
-                                            alt="White Rook" 
-                                            className="piece">
-                                        </img>)
-                case "ok1": case "ok2":
-                    return (color === "white" 
-                                    ?
-                                        <img src={blackKnight}
-                                            key={a}
-                                            alt="Black Knight" 
-                                            className="piece">
-                                        </img>
-                                    :
-                                        <img src={whiteKnight}
-                                            key={a}
-                                            alt="White Knight" 
-                                            className="piece">
-                                        </img>)
-                case "ob1": case "ob2":
-                    return (color === "white" 
-                                    ?
-                                        <img src={blackBishop}
-                                            key={a}
-                                            alt="Black Bishop" 
-                                            className="piece">
-                                        </img>
-                                    :
-                                        <img src={whiteBishop}
-                                            key={a}
-                                            alt="White Bishop" 
-                                            className="piece">
-                                        </img>)
+                case "or1": 
+                    return renderEachPiece(a, blackRook, whiteRook, "Black Rook", "White Rook", "or1")
+                case "or2":
+                    return renderEachPiece(a, blackRook, whiteRook, "Black Rook", "White Rook", "or2")
+                case "ok1": 
+                    return renderEachPiece(a, blackKnight, whiteKnight, "Black Knight", "White Knight", "ok1")
+                case "ok2":
+                    return renderEachPiece(a, blackKnight, whiteKnight, "Black Knight", "White Knight", "ok2")
+                case "ob1": 
+                    return renderEachPiece(a, blackBishop, whiteBishop, "Black Bishop", "White Bishop", "ob1")
+                case "ob2":
+                    return renderEachPiece(a, blackBishop, whiteBishop, "Black Bishop", "White Bishop", "ob2") 
                 case "okw":
-                    return (
-                                <img src={whiteKing}
-                                    key={a}
-                                    alt="White King" 
-                                    className="piece">
-                                </img>
-                            )
+                    return renderRoyals(a, whiteKing, "White King", "okw") 
                 case "okb":
-                    return (
-                                <img src={blackKing}
-                                    key={a}
-                                    alt="Black King" 
-                                    className="piece">
-                                </img>
-                            )
+                    return renderRoyals(a, blackKing, "Black King", "okb") 
                 case "oqw":
-                    return (
-                                <img src={whiteQueen}
-                                    key={a}
-                                    alt="White Queen" 
-                                    className="piece">
-                                </img>
-                            )
+                    return renderRoyals(a, whiteQueen, "White Queen", "oqw") 
                 case "oqb":
-                    return (
-                                <img src={blackQueen}
-                                    key={a}
-                                    alt="Black Queen" 
-                                    className="piece">
-                                </img>
-                            )
-                case "op1": case "op2": case "op3": case "op4": case "op5": case "op6": case "op7": case "op8":
-                    return (color === "white" 
-                                    ?
-                                        <img src={blackPawn}
-                                            key={a}
-                                            alt="Black Pawn" 
-                                            className="piece">
-                                        </img>
-                                    :
-                                        <img src={whitePawn}
-                                            key={a}
-                                            alt="White Pawn" 
-                                            className="piece">
-                                        </img>)
+                    return renderRoyals(a, blackQueen, "Black Queen", "oqb") 
+                case "op1": 
+                    return renderEachPiece(a, blackPawn, whitePawn, "Black Pawn", "White Pawn", "op1")
+                case "op2": 
+                    return renderEachPiece(a, blackPawn, whitePawn, "Black Pawn", "White Pawn", "op2")
+                case "op3": 
+                    return renderEachPiece(a, blackPawn, whitePawn, "Black Pawn", "White Pawn", "op3")
+                case "op4": 
+                    return renderEachPiece(a, blackPawn, whitePawn, "Black Pawn", "White Pawn", "op4")
+                case "op5": 
+                    return renderEachPiece(a, blackPawn, whitePawn, "Black Pawn", "White Pawn", "op5")
+                case "op6": 
+                    return renderEachPiece(a, blackPawn, whitePawn, "Black Pawn", "White Pawn", "op6")
+                case "op7": 
+                    return renderEachPiece(a, blackPawn, whitePawn, "Black Pawn", "White Pawn", "op7")
+                case "op8":
+                    return renderEachPiece(a, blackPawn, whitePawn, "Black Pawn", "White Pawn", "op8")
                 case "pr1": 
                     return renderEachPiece(a, whiteRook, blackRook, "White Rook", "Black Rook", "pr1")
                 case "pr2":
@@ -365,37 +328,13 @@ const Board = () => {
                 case "pb2":
                     return renderEachPiece(a, whiteBishop, blackBishop, "White Bishop", "Black Bishop", "pb2")
                 case "pkw":
-                    return (
-                                <img src={whiteKing}
-                                    key={a}
-                                    alt="White King" 
-                                    className="piece">
-                                </img>
-                            )
+                    return renderRoyals(a, whiteKing, "White King", "pkw")
                 case "pkb":
-                    return (
-                                <img src={blackKing}
-                                    key={a}
-                                    alt="Black King" 
-                                    className="piece">
-                                </img>
-                            )
+                    return renderRoyals(a, blackKing, "Black King", "pkb")
                 case "pqw":
-                    return (
-                                <img src={whiteQueen}
-                                    key={a}
-                                    alt="White Queen" 
-                                    className="piece">
-                                </img>
-                            )
+                    return renderRoyals(a, whiteQueen, "White Queen", "pqw")
                 case "pqb":
-                    return (
-                                <img src={blackQueen}
-                                    key={a}
-                                    alt="Black Queen" 
-                                    className="piece">
-                                </img>
-                            )
+                    return renderRoyals(a, blackQueen, "Black Queen", "pqb")
                 case "pp1":
                     return renderEachPiece(a, whitePawn, blackPawn, "White Pawn", "Black Pawn", "pp1")
                 case "pp2": 
@@ -526,7 +465,7 @@ const Board = () => {
                 })
             }
 
-            if (/^pk/.test(piece)) {   
+            if (piece === "pk1" || piece === "pk2") {   
                 let arr = []     
                 if (knightLimits[0].includes(i)) {
                     arr = [i - 15, i - 6, i + 10, i + 17].filter(a => a < 65)
@@ -570,7 +509,7 @@ const Board = () => {
                 }
             }
 
-            const checkBishop = (string, array) => {
+            const checkRookBishop = (string, array) => {
                 if (piece === string) {
                     let arr = []
     
@@ -601,12 +540,47 @@ const Board = () => {
                 }
             }
 
-            checkBishop("pb1", blackBishopLimits)
-            checkBishop("pb2", whiteBishopLimits)
+            checkRookBishop("pb1", blackBishopLimits)
+            checkRookBishop("pb2", whiteBishopLimits)
+            checkRookBishop("pr1", rookLimits)
+            checkRookBishop("pr2", rookLimits)
 
-            if (/^pr/.test(piece)) {
+            if (piece === "pqw" || piece === "pqb") {
+                let arr = []
+    
+                    for (const subArr of rookLimits) {
+                        if (subArr.includes(i)) {
+                            for (let j = i + 1; j <= Math.max(...subArr); j++) {
+                                if (subArr.includes(j)) {
+                                    if (occupiedSquares.includes(j)) {
+                                        break
+                                    } else {
+                                        arr.push(j)
+                                    }
+                                }
+                            }
+                            for (let j = i - 1; j >= Math.min(...subArr); j--) {
+                                if (subArr.includes(j)) {
+                                    if (occupiedSquares.includes(j)) {
+                                        break
+                                    } else {
+                                        arr.push(j)
+                                    }
+                                }
+                            }
+                        }
+                    }
 
+                    if (blackBishopLimits.forEach(a => a.includes(i))) {
+                        console.log("black")
+                    }
+                    if (whiteBishopLimits.forEach(a => a.includes(i))) {
+                        console.log("white")
+                    }
+
+                setMoveSquares(arr)
             }
+
         }
 
         if (activePiece === "pk1" && moveSquares.includes(i)) {
@@ -640,10 +614,17 @@ const Board = () => {
         }
 
         if (activePiece === "pr1" && moveSquares.includes(i)) {
-            moveBishop(i, "pr1")
+            moveRook(i, "pr1")
         } else if (activePiece === "pr2" && moveSquares.includes(i)) {
-            moveBishop(i, "pr2")
+            moveRook(i, "pr2")
         }
+
+        if (activePiece === "pqw" && moveSquares.includes(i)) {
+            moveQueen(i, "pqw")
+        } else if (activePiece === "pqb" && moveSquares.includes(i)) {
+            moveQueen(i, "pqb")
+        }
+
     }
 
     const animateKnight = (i, string, num1, num2) => {
@@ -704,7 +685,7 @@ const Board = () => {
         })
         store.dispatch({
             type: "pawnMoved",
-            payload: {string: false}
+            payload: string
         })
         recordBoard()
         setMoveSquares([])
@@ -819,6 +800,220 @@ const Board = () => {
             case -42: 
                 animateBishop(i, string, 480, -480)
                 break;
+            default:
+                break;
+        }
+    }
+
+    const animateRook = (i, string, num1, num2) => {
+        moveSound.play()
+        setMoveVar([num1, num2])
+        store.dispatch({
+            type: "newSquare",
+            payload: i
+        })
+        store.dispatch({
+            type: string,
+        })
+        recordBoard()
+        setMoveSquares([])
+        setPieceSquare(null)
+    }
+
+    const moveRook = (i, string) => {
+        switch (pieceSquare - i) {
+            case 8:
+                animateRook(i, string, 0, 80)
+                break;
+            case 16:
+                animateRook(i, string, 0, 160)
+                break;
+            case 24:
+                animateRook(i, string, 0, 240)
+                break;
+            case 32:
+                animateRook(i, string, 0, 320)
+                break;
+            case 40:
+                animateRook(i, string, 0, 400)
+                break;
+            case 48:
+                animateRook(i, string, 0, 480)
+                break;
+            case 56:
+                animateRook(i, string, 0, 560)
+                break;
+            case -8:
+                animateRook(i, string, 0, -80)
+                break;
+            case -16:
+                animateRook(i, string, 0, -160)
+                break;
+            case -24:
+                animateRook(i, string, 0, -240)
+                break;
+            case -32:
+                animateRook(i, string, 0, -320)
+                break;
+            case -40:
+                animateRook(i, string, 0, -400)
+                break;
+            case -48:
+                animateRook(i, string, 0, -480)
+                break;
+            case -56:
+                animateRook(i, string, 0, -560)
+                break;
+            case 1:
+                animateRook(i, string, 80, 0)
+                break;
+            case 2:
+                animateRook(i, string, 160, 0)
+                break;
+            case 3:
+                animateRook(i, string, 240, 0)
+                break;
+            case 4:
+                animateRook(i, string, 320, 0)
+                break;
+            case 5:
+                animateRook(i, string, 400, 0)
+                break;
+            case 6:
+                animateRook(i, string, 480, 0)
+                break;
+            case 7:
+                animateRook(i, string, 560, 0)
+                break;
+            case -1:
+                animateRook(i, string, -80, 0)
+                break;
+            case -2:
+                animateRook(i, string, -160, 0)
+                break;
+            case -3:
+                animateRook(i, string, -240, 0)
+                break;
+            case -4:
+                animateRook(i, string, -320, 0)
+                break;
+            case -5:
+                animateRook(i, string, -400, 0)
+                break;
+            case -6:
+                animateRook(i, string, -480, 0)
+                break;
+            case -7:
+                animateRook(i, string, -560, 0)
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    const animateQueen = (i, string, num1, num2) => {
+        moveSound.play()
+        setMoveVar([num1, num2])
+        store.dispatch({
+            type: "newSquare",
+            payload: i
+        })
+        store.dispatch({
+            type: string,
+        })
+        recordBoard()
+        setMoveSquares([])
+        setPieceSquare(null)
+    }
+
+    const moveQueen = (i, string) => {
+        switch (pieceSquare - i) {
+            case 8:
+                animateQueen(i, string, 0, 80)
+                break;
+            case 16:
+                animateQueen(i, string, 0, 160)
+                break;
+            case 24:
+                animateQueen(i, string, 0, 240)
+                break;
+            case 32:
+                animateQueen(i, string, 0, 320)
+                break;
+            case 40:
+                animateQueen(i, string, 0, 400)
+                break;
+            case 48:
+                animateQueen(i, string, 0, 480)
+                break;
+            case 56:
+                animateQueen(i, string, 0, 560)
+                break;
+            case -8:
+                animateQueen(i, string, 0, -80)
+                break;
+            case -16:
+                animateQueen(i, string, 0, -160)
+                break;
+            case -24:
+                animateQueen(i, string, 0, -240)
+                break;
+            case -32:
+                animateQueen(i, string, 0, -320)
+                break;
+            case -40:
+                animateQueen(i, string, 0, -400)
+                break;
+            case -48:
+                animateQueen(i, string, 0, -480)
+                break;
+            case -56:
+                animateQueen(i, string, 0, -560)
+                break;
+            case 1:
+                animateQueen(i, string, 80, 0)
+                break;
+            case 2:
+                animateQueen(i, string, 160, 0)
+                break;
+            case 3:
+                animateQueen(i, string, 240, 0)
+                break;
+            case 4:
+                animateQueen(i, string, 320, 0)
+                break;
+            case 5:
+                animateQueen(i, string, 400, 0)
+                break;
+            case 6:
+                animateQueen(i, string, 480, 0)
+                break;
+            case 7:
+                animateQueen(i, string, 560, 0)
+                break;
+            case -1:
+                animateQueen(i, string, -80, 0)
+                break;
+            case -2:
+                animateQueen(i, string, -160, 0)
+                break;
+            case -3:
+                animateQueen(i, string, -240, 0)
+                break;
+            case -4:
+                animateQueen(i, string, -320, 0)
+                break;
+            case -5:
+                animateQueen(i, string, -400, 0)
+                break;
+            case -6:
+                animateQueen(i, string, -480, 0)
+                break;
+            case -7:
+                animateQueen(i, string, -560, 0)
+                break;
+
             default:
                 break;
         }

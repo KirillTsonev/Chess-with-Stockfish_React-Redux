@@ -250,6 +250,20 @@ function boardReducer(state = initialState, action) {
                     ...action.payload
                 }
             }
+        case "pqw":
+            return {
+                ...state,
+                board: {
+                    ...action.payload
+                }
+            }
+        case "pqb":
+            return {
+                ...state,
+                board: {
+                    ...action.payload
+                }
+            }
         default:
             return state
     }
