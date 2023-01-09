@@ -38,7 +38,6 @@ const Board = () => {
     const numbers = useSelector(state => state.numbers)
     const pawnsFirstMove = useSelector(state => state.pawnsFirstMove)
     const castlingMoved = useSelector(state => state.castlingMoved)
-    // const newSquare = useSelector(state => state.newSquare)
 
     const boardEntries = Object.entries(board)
     const notInitialRender = useRef(false)
@@ -475,11 +474,6 @@ const Board = () => {
                     payload: i
                 })
             }
-
-            // store.dispatch({
-            //     type: "newSquare",
-            //     payload: null
-            // })
 
             const checkArrays = (array) => {
                 let arr = []
