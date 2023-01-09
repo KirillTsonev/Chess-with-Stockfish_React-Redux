@@ -90,6 +90,12 @@ const initialState = {
         pp7: true,
         pp8: true,
     },
+    castlingMoved: {
+        pkw: true,
+        pkb: true,
+        pr1: true,
+        pr2: true
+    }
 }
 
 function boardReducer(state = initialState, action) {
@@ -275,6 +281,15 @@ function boardReducer(state = initialState, action) {
             return {
                 ...state,
                 board: {
+                    ...action.payload
+                }
+            }
+        case "castlingMoved":
+            console.log(action.payload)
+            return {
+                ...state,
+                castlingMoved: {
+                    ...state.castlingMoved,
                     ...action.payload
                 }
             }

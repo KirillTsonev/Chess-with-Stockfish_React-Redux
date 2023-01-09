@@ -29,7 +29,7 @@ const swapAndEditBoard = store => next => action => {
     }
 }
 
-const pawnFirstMoved = store => next => action => {
+const checkPieceMoved = store => next => action => {
     const func = (action) => {
         const pawnsFirstMove = store.getState().pawnsFirstMove
         const string = action.payload
@@ -53,4 +53,28 @@ const pawnFirstMoved = store => next => action => {
     }
 }
 
-export {swapAndEditBoard, pawnFirstMoved}
+const checkCastlingMoved = store => next => action => {
+    const func = (action) => {
+        const pawnsFirstMove = store.getState().castlingMoved
+        const string = action.payload
+        const reg = new RegExp(string)
+        const asArray = Object.entries(pawnsFirstMove)
+        const filteredCastling = asArray.filter(([key, value]) => reg.test(key))
+        const restArr = asArray.filter(([key, value]) => !reg.test(key))
+        filteredCastling[0][1] = false
+        const changedObject = Object.fromEntries(restArr.concat(filteredCastling))
+
+        return {
+            ...action,
+            payload: changedObject
+        }
+    }
+
+    if (action.type === "castlingMoved") {
+        return next(func(action))
+    } else {
+        return next(action)
+    }
+}
+
+export {swapAndEditBoard, checkPieceMoved, checkCastlingMoved}

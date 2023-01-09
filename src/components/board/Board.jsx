@@ -36,6 +36,7 @@ const Board = () => {
     const activePiece = useSelector(state => state.activePiece)
     const numbers = useSelector(state => state.numbers)
     const pawnsFirstMove = useSelector(state => state.pawnsFirstMove)
+    const castlingMoved = useSelector(state => state.castlingMoved)
 
     const boardEntries = Object.entries(board)
     const notInitialRender = useRef(false)
@@ -633,6 +634,24 @@ const Board = () => {
                 setMoveSquares(arr)
             }
 
+            if (piece === "pkw" || piece === "pkb") {
+                let arr = []
+                
+                if (castlingMoved[piece]) {
+                    arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9, i + 2, i - 2].filter(a => a < 65)
+                } else {
+                    arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9].filter(a => a < 65)
+                }
+                
+                for (const number of arr) {
+                    if (occupiedSquares.includes(number)) {
+                        arr = arr.filter(x => x !== number)
+                        setMoveSquares(arr)
+                    } else {
+                        setMoveSquares(arr)
+                    }
+                }
+            }
         }
 
         if (activePiece === "pk1" && moveSquares.includes(i)) {
@@ -677,6 +696,11 @@ const Board = () => {
             moveQueen(i, "pqb")
         }
 
+        if (activePiece === "pkw" && moveSquares.includes(i)) {
+            moveKing(i, "pkw")
+        } else if (activePiece === "pkb" && moveSquares.includes(i)) {
+            moveKing(i, "pkb")
+        }
     }
 
     const animateKnight = (i, string, num1, num2) => {
@@ -866,6 +890,10 @@ const Board = () => {
         })
         store.dispatch({
             type: string,
+        })
+        store.dispatch({
+            type: "castlingMoved",
+            payload: string
         })
         recordBoard()
         setMoveSquares([])
@@ -1170,7 +1198,7 @@ const Board = () => {
             type: string,
         })
         store.dispatch({
-            type: "pawnMoved",
+            type: "castlingMoved",
             payload: string
         })
         recordBoard()
@@ -1179,12 +1207,31 @@ const Board = () => {
     }
 
     const moveKing = (i, string) => {
+        //[i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9, i + 2, i - 2]
         switch (pieceSquare - i) {
+            case 9:
+                animateKing(i, string, 80, 80)
+                break;
             case 8:
                 animateKing(i, string, 0, 80)
                 break;
-            case 16:
-                animateKing(i, string, 0, 160)
+            case 7:
+                animateKing(i, string, -80, 80)
+                break;
+            case 1:
+                animateKing(i, string, 80, 0)
+                break;
+            case -1:
+                animateKing(i, string, -80, 0)
+                break;
+            case -7:
+                animateKing(i, string, 80, -80)
+                break;
+            case -8:
+                animateKing(i, string, 0, -80)
+                break;
+            case -9:
+                animateKing(i, string, -80, -80)
                 break;
             default:
                 break;
