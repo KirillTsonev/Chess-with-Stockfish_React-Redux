@@ -70,11 +70,73 @@ const Board = () => {
     }
 
     const knightLimits = [
-        [1, 9, 17, 25, 33, 41, 49, 57],
-        [2, 10, 18, 26, 34, 42, 50, 58], 
-        [7, 15, 23, 31, 39, 47, 55, 63], 
-        [8, 16, 24, 32, 40, 48, 56, 64]
+        [], [], [], []
     ]
+
+    for (let i = 1; i < 64; i += 8) {
+        knightLimits[0].push(i)
+        knightLimits[1].push(i + 1)
+        knightLimits[2].push(i + 6)
+        knightLimits[3].push(i + 7)
+    }
+
+    const whiteBishopLimits = [
+        [7, 16],
+        [5, 14, 23, 32],
+        [3, 12, 21, 30, 39, 48],
+        [1, 10, 19, 28, 37, 46, 55, 64],
+        [17, 26, 35, 44, 53, 62],
+        [33, 42, 51, 60],
+        [49, 58],
+        [3, 10, 17],
+        [5, 12, 19, 26, 33],
+        [7, 14, 21, 28, 35, 42, 49],
+        [16, 23, 30, 37, 44, 51, 58],
+        [32, 39, 46, 53, 60],
+        [48, 55, 62]
+    ]
+
+    const blackBishopLimits = [
+        [2, 9],
+        [4, 11, 18, 25],
+        [6, 13, 20, 27, 34, 41],
+        [8, 15, 22, 29, 36, 43, 50, 57],
+        [24, 31, 38, 45, 52, 59],
+        [40, 47, 54, 61],
+        [56, 63],
+        [6, 15, 24],
+        [4, 13, 22, 31, 40],
+        [2, 11, 20, 29, 38, 47, 56],
+        [9, 18, 27, 36, 45, 54, 63],
+        [25, 34, 43, 52, 61],
+        [41, 50, 59]
+    ]
+
+    const rookLimits = [
+        [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []
+    ]
+
+    for (let i = 1; i < 9; i++) {
+        rookLimits[0].push(i)
+        rookLimits[1].push(i + 8)
+        rookLimits[2].push(i + 16)
+        rookLimits[3].push(i + 24)
+        rookLimits[4].push(i + 32)
+        rookLimits[5].push(i + 40)
+        rookLimits[6].push(i + 48)
+        rookLimits[7].push(i + 56)
+    }
+
+    for (let i = 1; i < 65; i += 8) {
+        rookLimits[8].push(i)
+        rookLimits[9].push(i + 1)
+        rookLimits[10].push(i + 2)
+        rookLimits[11].push(i + 3)
+        rookLimits[12].push(i + 4)
+        rookLimits[13].push(i + 5)
+        rookLimits[14].push(i + 6)
+        rookLimits[15].push(i + 7)
+    }
     
     useEffect(() => {
         recordBoard()
@@ -83,6 +145,35 @@ const Board = () => {
     useEffect(() => {
         recordBoard()
     }, [pieceSquare])
+
+    useEffect(() => {
+        if (notInitialRender.current) {
+            const movePiece = setTimeout(() => {
+                setActiveStatePiece("")
+                setMoveVar([0, 0])
+            }, store.getState().animations === "none" ? 0 : 50)
+            const resetPiece = setTimeout(() => {
+                store.dispatch({
+                    type: "activePiece",
+                    payload: ""
+                })
+                store.dispatch({
+                    type: "newSquare",
+                    payload: null
+                })
+                store.dispatch({
+                    type: "oldSquare",
+                    payload: null
+                })
+            }, 150);
+            return () => {
+                clearTimeout(movePiece)
+                clearTimeout(resetPiece)
+            }
+        } else {
+            notInitialRender.current = true
+        }
+    }, [JSON.stringify(board)]);
 
     const renderBoard = () => {
         let arr1 = []
@@ -261,38 +352,18 @@ const Board = () => {
                                             alt="White Pawn" 
                                             className="piece">
                                         </img>)
-                case "pr1": case "pr2":
-                    return (color === "white"
-                                    ?
-                                        <img src={whiteRook}
-                                            key={a}
-                                            alt="White Rook" 
-                                            className="piece">
-                                        </img>
-                                    : 
-                                        <img src={blackRook}
-                                            key={a}
-                                            alt="Black Rook" 
-                                            className="piece">
-                                        </img>)
+                case "pr1": 
+                    return renderEachPiece(a, whiteRook, blackRook, "White Rook", "Black Rook", "pr1")
+                case "pr2":
+                    return renderEachPiece(a, whiteRook, blackRook, "White Rook", "Black Rook", "pr2")
                 case "pk1":
                     return renderEachPiece(a, whiteKnight, blackKnight, "White Knight", "Black Knight", "pk1")
                 case "pk2":
                     return renderEachPiece(a, whiteKnight, blackKnight, "White Knight", "Black Knight", "pk2")
-                case "pb1": case "pb2":
-                    return (color === "white"
-                                    ?
-                                        <img src={whiteBishop}
-                                            key={a}
-                                            alt="White Bishop" 
-                                            className="piece">
-                                        </img>
-                                    : 
-                                        <img src={blackBishop}
-                                            key={a}
-                                            alt="Black Bishop" 
-                                            className="piece">
-                                        </img>)
+                case "pb1": 
+                    return renderEachPiece(a, whiteBishop, blackBishop, "White Bishop", "Black Bishop", "pb1")
+                case "pb2":
+                    return renderEachPiece(a, whiteBishop, blackBishop, "White Bishop", "Black Bishop", "pb2")
                 case "pkw":
                     return (
                                 <img src={whiteKing}
@@ -429,6 +500,167 @@ const Board = () => {
         )
     }
 
+    function onSquareClick(i, piece) {
+        if (!moveSquares.includes(i) || (playerSquares.includes(i) && activeStatePiece === piece)){
+            setMoveSquares([])
+            setActiveStatePiece("")
+            setPieceSquare(null)
+        }
+
+        if (playerSquares.includes(i) && activeStatePiece !== piece) {
+            setMoveSquares([])
+            setPieceSquare(i)
+            setActiveStatePiece(piece)
+
+            if (store.getState().activePiece !== piece) {
+                store.dispatch({
+                    type: "activePiece",
+                    payload: piece
+                })
+            }
+
+            if (store.getState().oldSquare !== i) {
+                store.dispatch({
+                    type: "oldSquare",
+                    payload: i
+                })
+            }
+
+            if (/^pk/.test(piece)) {   
+                let arr = []     
+                if (knightLimits[0].includes(i)) {
+                    arr = [i - 15, i - 6, i + 10, i + 17].filter(a => a < 65)
+                } else if (knightLimits[1].includes(i)) {
+                    arr = [i - 17, i - 15, i - 6, i + 10, i + 15, i + 17].filter(a => a < 65)
+                } else if (knightLimits[2].includes(i)) {
+                    arr = [i - 17, i - 15, i - 10, i + 6, i + 15, i + 17].filter(a => a < 65)
+                } else if (knightLimits[3].includes(i)) {
+                    arr = [i - 17, i - 10, i + 6, i + 15].filter(a => a < 65)
+                }
+                else {
+                    arr = [i - 17, i - 15, i - 10, i - 6, i + 6, i + 10, i + 15, i + 17]
+                }
+                for (const number of arr) {
+                    if (occupiedSquares.includes(number)) {
+                        arr = arr.filter(x => x !== number)
+                        setMoveSquares(arr)
+                    } else {
+                        setMoveSquares(arr)
+                    }
+                }
+            }
+
+            if (/^pp/.test(piece)) {
+                let arr = []
+                
+                if (pawnsFirstMove[piece]) {
+                    arr = [i - 8, i - 16]
+                } else {
+                    arr = [i - 8]
+                }
+                
+                if (occupiedSquares.includes(i - 8)) {
+                    arr = []
+                    setMoveSquares(arr)
+                } else if (occupiedSquares.includes(i - 16)) {
+                    arr = [i - 8]
+                    setMoveSquares(arr)
+                } else {
+                    setMoveSquares(arr)
+                }
+            }
+
+            const checkBishop = (string, array) => {
+                if (piece === string) {
+                    let arr = []
+    
+                    for (const subArr of array) {
+                        if (subArr.includes(i)) {
+                            for (let j = i + 1; j <= Math.max(...subArr); j++) {
+                                if (subArr.includes(j)) {
+                                    if (occupiedSquares.includes(j)) {
+                                        break
+                                    } else {
+                                        arr.push(j)
+                                    }
+                                }
+                            }
+                            for (let j = i - 1; j >= Math.min(...subArr); j--) {
+                                if (subArr.includes(j)) {
+                                    if (occupiedSquares.includes(j)) {
+                                        break
+                                    } else {
+                                        arr.push(j)
+                                    }
+                                }
+                            }
+
+                            setMoveSquares(arr)
+                        }
+                    }
+                }
+            }
+
+            checkBishop("pb1", blackBishopLimits)
+            checkBishop("pb2", whiteBishopLimits)
+
+            if (/^pr/.test(piece)) {
+
+            }
+        }
+
+        if (activePiece === "pk1" && moveSquares.includes(i)) {
+            moveKnight(i, "pk1")
+        } else if (activePiece === "pk2" && moveSquares.includes(i)) {
+            moveKnight(i, "pk2")
+        }
+
+        if (activePiece === "pp1" && moveSquares.includes(i)) {
+            movePawn(i, "pp1")
+        } else if (activePiece === "pp2" && moveSquares.includes(i)) {
+            movePawn(i, "pp2")
+        } else if (activePiece === "pp3" && moveSquares.includes(i)) {
+            movePawn(i, "pp3")
+        } else if (activePiece === "pp4" && moveSquares.includes(i)) {
+            movePawn(i, "pp4")
+        } else if (activePiece === "pp5" && moveSquares.includes(i)) {
+            movePawn(i, "pp5")
+        } else if (activePiece === "pp6" && moveSquares.includes(i)) {
+            movePawn(i, "pp6")
+        } else if (activePiece === "pp7" && moveSquares.includes(i)) {
+            movePawn(i, "pp7")
+        } else if (activePiece === "pp8" && moveSquares.includes(i)) {
+            movePawn(i, "pp8")
+        }
+
+        if (activePiece === "pb1" && moveSquares.includes(i)) {
+            moveBishop(i, "pb1")
+        } else if (activePiece === "pb2" && moveSquares.includes(i)) {
+            moveBishop(i, "pb2")
+        }
+
+        if (activePiece === "pr1" && moveSquares.includes(i)) {
+            moveBishop(i, "pr1")
+        } else if (activePiece === "pr2" && moveSquares.includes(i)) {
+            moveBishop(i, "pr2")
+        }
+    }
+
+    const animateKnight = (i, string, num1, num2) => {
+        moveSound.play()
+        setMoveVar([num1, num2])
+        store.dispatch({
+            type: "newSquare",
+            payload: i
+        })
+        store.dispatch({
+            type: string,
+        })
+        recordBoard()
+        setMoveSquares([])
+        setPieceSquare(null)
+    }    
+
     const moveKnight = (i, string) => {
         switch (pieceSquare - i) {
             case -17:
@@ -460,7 +692,7 @@ const Board = () => {
         }   
     }
 
-    const animateKnight = (i, string, num1, num2) => {
+    const animatePawn = (i, string, num1, num2) => {
         moveSound.play()
         setMoveVar([num1, num2])
         store.dispatch({
@@ -470,10 +702,14 @@ const Board = () => {
         store.dispatch({
             type: string,
         })
+        store.dispatch({
+            type: "pawnMoved",
+            payload: {string: false}
+        })
         recordBoard()
         setMoveSquares([])
         setPieceSquare(null)
-    }    
+    }
 
     const movePawn = (i, string) => {
         switch (pieceSquare - i) {
@@ -488,7 +724,7 @@ const Board = () => {
         }
     }
 
-    const animatePawn = (i, string, num1, num2) => {
+    const animateBishop = (i, string, num1, num2) => {
         moveSound.play()
         setMoveVar([num1, num2])
         store.dispatch({
@@ -498,139 +734,94 @@ const Board = () => {
         store.dispatch({
             type: string,
         })
-        store.dispatch({
-            type: "pawnMoved",
-            payload: string
-        })
         recordBoard()
         setMoveSquares([])
         setPieceSquare(null)
     }
 
-    useEffect(() => {
-        if (notInitialRender.current) {
-            const movePiece = setTimeout(() => {
-                setActiveStatePiece("")
-                setMoveVar([0, 0])
-            }, store.getState().animations === "none" ? 0 : 50)
-            const resetPiece = setTimeout(() => {
-                store.dispatch({
-                    type: "activePiece",
-                    payload: ""
-                })
-                store.dispatch({
-                    type: "newSquare",
-                    payload: null
-                })
-                store.dispatch({
-                    type: "oldSquare",
-                    payload: null
-                })
-            }, 150);
-            return () => {
-                clearTimeout(movePiece)
-                clearTimeout(resetPiece)
-            }
-        } else {
-            notInitialRender.current = true
+    const moveBishop = (i, string) => {
+        switch (pieceSquare - i) {
+            case 9:
+                animateBishop(i, string, 80, 80)
+                break;
+            case 18:
+                animateBishop(i, string, 160, 160)
+                break;
+            case 27:
+                animateBishop(i, string, 240, 240)
+                break;
+            case 36:
+                animateBishop(i, string, 320, 320)
+                break;
+            case 45:
+                animateBishop(i, string, 400, 400)
+                break;
+            case 54:
+                animateBishop(i, string, 480, 480)
+                break;
+            case 63:
+                animateBishop(i, string, 560, 560)
+                break;
+            case -9: 
+                animateBishop(i, string, -80, -80)
+                break;
+            case -18:
+                animateBishop(i, string, -160, -160)
+                break;
+            case -27:
+                animateBishop(i, string, -240, -240)
+                break;
+            case -36:
+                animateBishop(i, string, -320, -320)
+                break;
+            case -45:
+                animateBishop(i, string, -400, -400)
+                break;
+            case -54:
+                animateBishop(i, string, -480, -480)
+                break;
+            case -63:
+                animateBishop(i, string, -560, -560)
+                break;
+            case 7:
+                animateBishop(i, string, -80, 80)
+                break;
+            case 14:
+                animateBishop(i, string, -160, 160)
+                break;
+            case 21: 
+                animateBishop(i, string, -240, 240)
+                break;
+            case 28: 
+                animateBishop(i, string, -320, 320)
+                break;
+            case 35: 
+                animateBishop(i, string, -400, 400)
+                break;
+            case 42: 
+                animateBishop(i, string, -480, 480)
+                break;
+            case -7:
+                animateBishop(i, string, 80, -80)
+                break;
+            case -14:
+                animateBishop(i, string, 160, -160)
+                break;
+            case -21: 
+                animateBishop(i, string, 240, -240)
+                break;
+            case -28: 
+                animateBishop(i, string, 320, -320)
+                break;
+            case -35: 
+                animateBishop(i, string, 400, -400)
+                break;
+            case -42: 
+                animateBishop(i, string, 480, -480)
+                break;
+            default:
+                break;
         }
-    }, [JSON.stringify(board)]);
-
-    function onSquareClick(i, piece) {
-        if (!moveSquares.includes(i) || (playerSquares.includes(i) && activeStatePiece === piece)){
-            setMoveSquares([])
-            setActiveStatePiece("")
-            setPieceSquare(null)
-        }
-
-        if (playerSquares.includes(i) && activeStatePiece !== piece) {
-            setMoveSquares([])
-            setPieceSquare(i)
-            setActiveStatePiece(piece)
-
-            if (store.getState().activePiece !== piece) {
-                store.dispatch({
-                    type: "activePiece",
-                    payload: piece
-                })
-            }
-
-            if (store.getState().oldSquare !== i) {
-                store.dispatch({
-                    type: "oldSquare",
-                    payload: i
-                })
-            }
-
-            if (/^pp/.test(piece)) {
-                let arr = []
-                
-                if (pawnsFirstMove[piece]) {
-                    arr = [i - 8, i - 16]
-                } else {
-                    arr = [i - 8]
-                }
-                
-                if (occupiedSquares.includes(i - 8)) {
-                    arr = []
-                    setMoveSquares(arr)
-                } else if (occupiedSquares.includes(i - 16)) {
-                    arr = [i - 8]
-                    setMoveSquares(arr)
-                } else {
-                    setMoveSquares(arr)
-                }
-            }
-
-            if (/^pk/.test(piece)) {   
-                let arr = []     
-                if (knightLimits[0].includes(i)) {
-                    arr = [i - 15, i - 6, i + 10, i + 17].filter(a => a < 65)
-                } else if (knightLimits[1].includes(i)) {
-                    arr = [i - 17, i - 15, i - 6, i + 10, i + 15, i + 17].filter(a => a < 65)
-                } else if (knightLimits[2].includes(i)) {
-                    arr = [i - 17, i - 15, i - 10, i + 6, i + 15, i + 17].filter(a => a < 65)
-                } else if (knightLimits[3].includes(i)) {
-                    arr = [i - 17, i - 10, i + 6, i + 15].filter(a => a < 65)
-                }
-                else {
-                    arr = [i - 17, i - 15, i - 10, i - 6, i + 6, i + 10, i + 15, i + 17]
-                }
-                for (const number of arr) {
-                    if (occupiedSquares.includes(number)) {
-                        arr = arr.filter(x => x !== number)
-                        setMoveSquares(arr)
-                    } else {
-                        setMoveSquares(arr)
-                    }
-                }
-            }
-        }
-
-        if (activePiece === "pk1" && moveSquares.includes(i)) {
-            moveKnight(i, "pk1")
-        } else if (activePiece === "pk2" && moveSquares.includes(i)) {
-            moveKnight(i, "pk2")
-        }
-
-        if (activePiece === "pp1" && moveSquares.includes(i)) {
-            movePawn(i, "pp1")
-        } else if (activePiece === "pp2" && moveSquares.includes(i)) {
-            movePawn(i, "pp2")
-        } else if (activePiece === "pp3" && moveSquares.includes(i)) {
-            movePawn(i, "pp3")
-        } else if (activePiece === "pp4" && moveSquares.includes(i)) {
-            movePawn(i, "pp4")
-        } else if (activePiece === "pp5" && moveSquares.includes(i)) {
-            movePawn(i, "pp5")
-        } else if (activePiece === "pp6" && moveSquares.includes(i)) {
-            movePawn(i, "pp6")
-        } else if (activePiece === "pp7" && moveSquares.includes(i)) {
-            movePawn(i, "pp7")
-        } else if (activePiece === "pp8" && moveSquares.includes(i)) {
-            movePawn(i, "pp8")
-        }
-        
     }
 
     return (

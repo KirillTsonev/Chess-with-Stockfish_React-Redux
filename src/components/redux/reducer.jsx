@@ -162,6 +162,7 @@ function boardReducer(state = initialState, action) {
             return {
                 ...state,
                 pawnsFirstMove: {
+                    ...state.pawnsFirstMove,
                     ...action.payload
                 }
             }
@@ -215,6 +216,34 @@ function boardReducer(state = initialState, action) {
                 }
             }
         case "pp8":
+            return {
+                ...state,
+                board: {
+                    ...action.payload
+                }
+            }
+        case "pb1":
+            return {
+                ...state,
+                board: {
+                    ...action.payload
+                }
+            }
+        case "pb2":
+            return {
+                ...state,
+                board: {
+                    ...action.payload
+                }
+            }
+        case "pr1":
+            return {
+                ...state,
+                board: {
+                    ...action.payload
+                }
+            }
+        case "pr2":
             return {
                 ...state,
                 board: {

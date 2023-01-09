@@ -22,35 +22,11 @@ const swapAndEditBoard = store => next => action => {
         }
     }
 
-    if (/^p/.test(action.type) && action.type.length < 5) {
+    if (action.type.length < 5) {
         return next(func(action))
     } else {
         return next(action)
     }
 }
 
-const pawnFirstMoved = store => next => action => {
-    const func = (action) => {
-        const pawnsFirstMove = store.getState().pawnsFirstMove
-        const string = action.payload
-        const reg = new RegExp(string)
-        const asArray = Object.entries(pawnsFirstMove)
-        const filteredPawn = asArray.filter(([key, value]) => reg.test(key))
-        const restArr = asArray.filter(([key, value]) => !reg.test(key))
-        filteredPawn[0][1] = false
-        const changedObject = Object.fromEntries(restArr.concat(filteredPawn))
-
-        return {
-            ...action,
-            payload: changedObject
-        }
-    }
-
-    if (action.type === "pawnMoved") {
-        return next(func(action))
-    } else {
-        return next(action)
-    }
-}
-
-export {swapAndEditBoard, pawnFirstMoved}
+export {swapAndEditBoard}
