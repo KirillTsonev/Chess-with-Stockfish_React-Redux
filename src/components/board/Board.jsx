@@ -37,6 +37,7 @@ const Board = () => {
     const numbers = useSelector(state => state.numbers)
     const pawnsFirstMove = useSelector(state => state.pawnsFirstMove)
     const castlingMoved = useSelector(state => state.castlingMoved)
+    const newSquare = useSelector(state => state.newSquare)
 
     const boardEntries = Object.entries(board)
     const notInitialRender = useRef(false)
@@ -158,10 +159,10 @@ const Board = () => {
                     type: "activePiece",
                     payload: ""
                 })
-                store.dispatch({
-                    type: "newSquare",
-                    payload: null
-                })
+                // store.dispatch({
+                //     type: "newSquare",
+                //     payload: null
+                // })
                 store.dispatch({
                     type: "oldSquare",
                     payload: null
@@ -201,6 +202,7 @@ const Board = () => {
             <div className="board">
                 {arr1.map((a, i) => <div key={i + 1} className={`${i % 2 === 0 ? "white" : "black"} ${i + 1 === pieceSquare ? "highlight" : null}`}>
                     {moveSquares.includes(i + 1) ? <div className="activeSquare"></div> : null}
+                    {/* {newSquare === i + 1 ? <div className="activeSquare"></div> : null} */}
                 </div>)}
 
                 {arr2.map((a, i) => <div key={i + 9} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 9 === pieceSquare ? "highlight" : null}`}>
@@ -221,6 +223,7 @@ const Board = () => {
 
                 {arr6.map((a, i) => <div key={i + 41} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 41 === pieceSquare ? "highlight" : null}`}>
                     {moveSquares.includes(i + 41) ? <div className="activeSquare"></div> : null}
+                    {newSquare === i + 41 ? <div className="lastMadeMove"></div> : null}
                 </div>)}
 
                 {arr7.map((a, i) => <div key={i + 49} className={`${i % 2 === 0 ? "white" : "black"} ${i + 49 === pieceSquare ? "highlight" : null}`}>
@@ -465,6 +468,11 @@ const Board = () => {
                     payload: i
                 })
             }
+
+            store.dispatch({
+                type: "newSquare",
+                payload: null
+            })
 
             const checkArrays = (array) => {
                 let arr = []
