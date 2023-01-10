@@ -30,7 +30,7 @@ const Board = () => {
     const [playerSquares, setPlayerSquares] = useState([])
     const [enemySquares, setEnemySquares] = useState([])
     const [moveVar, setMoveVar] = useState([0, 0])
-    const [lastMadeMove, setLastMadeMove] = useState(null)
+    const [lastMadeMove, setLastMadeMove] = useState([])
 
     const board = useSelector(state => state.board)
     const color = useSelector(state => state.color)
@@ -201,43 +201,51 @@ const Board = () => {
         return (
             <div className="board">
                 {arr1.map((a, i) => <div key={i + 1} className={`${i % 2 === 0 ? "white" : "black"} ${i + 1 === pieceSquare ? "highlight" : null}`}>
-                    {moveSquares.includes(i + 1) ? <div className="activeSquare"></div> : null}
-                    {lastMadeMove === i + 1 ? <div className="lastMadeMove"></div> : null}
+                    {moveSquares.includes(i + 1) && !enemySquares.includes(i + 1) ? <div className="activeSquare"></div> : null}
+                    {moveSquares.includes(i + 1) && enemySquares.includes(i + 1) ? <div className="enemySquare"><div></div></div> : null}
+                    {lastMadeMove[0] === i + 1 || lastMadeMove[1] === i + 1 ? <div className="lastMadeMove"></div> : null}
                 </div>)}
 
                 {arr2.map((a, i) => <div key={i + 9} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 9 === pieceSquare ? "highlight" : null}`}>
-                    {moveSquares.includes(i + 9) ? <div className="activeSquare"></div> : null}
-                    {lastMadeMove === i + 9 ? <div className="lastMadeMove"></div> : null}
+                    {moveSquares.includes(i + 9) && !enemySquares.includes(i + 9) ? <div className="activeSquare"></div> : null}
+                    {moveSquares.includes(i + 9) && enemySquares.includes(i + 9) ? <div className="enemySquare"><div></div></div> : null}
+                    {lastMadeMove[0] === i + 9 ? <div className="lastMadeMove"></div> : null}
                 </div>)}
 
                 {arr3.map((a, i) => <div key={i + 17} className={`${i % 2 === 0 ? "white" : "black"} ${i + 17 === pieceSquare ? "highlight" : null}`}>
-                    {moveSquares.includes(i + 17) ? <div className="activeSquare"></div> : null}
-                    {lastMadeMove === i + 17 ? <div className="lastMadeMove"></div> : null}
+                    {moveSquares.includes(i + 17) && !enemySquares.includes(i + 17) ? <div className="activeSquare"></div> : null}
+                    {moveSquares.includes(i + 17) && enemySquares.includes(i + 17) ? <div className="enemySquare"><div></div></div> : null}
+                    {lastMadeMove[0] === i + 17 ? <div className="lastMadeMove"></div> : null}
                 </div>)}
 
                 {arr4.map((a, i) => <div key={i + 25} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 25 === pieceSquare ? "highlight" : null}`}>
-                    {moveSquares.includes(i + 25) ? <div className="activeSquare"></div> : null}
-                    {lastMadeMove === i + 25 ? <div className="lastMadeMove"></div> : null}
+                    {moveSquares.includes(i + 25) && !enemySquares.includes(i + 25) ? <div className="activeSquare"></div> : null}
+                    {moveSquares.includes(i + 25) && enemySquares.includes(i + 25) ? <div className="enemySquare"><div></div></div> : null}
+                    {lastMadeMove[0] === i + 25 ? <div className="lastMadeMove"></div> : null}
                 </div>)}
 
                 {arr5.map((a, i) => <div key={i + 33} className={`${i % 2 === 0 ? "white" : "black"} ${i + 33 === pieceSquare ? "highlight" : null}`}>
-                    {moveSquares.includes(i + 33) ? <div className="activeSquare"></div> : null}
-                    {lastMadeMove === i + 33 ? <div className="lastMadeMove"></div> : null}
+                    {moveSquares.includes(i + 33) && !enemySquares.includes(i + 33) ? <div className="activeSquare"></div> : null}
+                    {moveSquares.includes(i + 33) && enemySquares.includes(i + 33) ? <div className="enemySquare"><div></div></div> : null}
+                    {lastMadeMove[0] === i + 33 ? <div className="lastMadeMove"></div> : null}
                 </div>)}
 
                 {arr6.map((a, i) => <div key={i + 41} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 41 === pieceSquare ? "highlight" : null}`}>
-                    {moveSquares.includes(i + 41) ? <div className="activeSquare"></div> : null}
-                    {lastMadeMove === i + 41 ? <div className="lastMadeMove"></div> : null}
+                    {moveSquares.includes(i + 41) && !enemySquares.includes(i + 41) ? <div className="activeSquare"></div> : null}
+                    {moveSquares.includes(i + 41) && enemySquares.includes(i + 41) ? <div className="enemySquare"><div></div></div> : null}
+                    {lastMadeMove[0] === i + 41 ? <div className="lastMadeMove"></div> : null}
                 </div>)}
 
                 {arr7.map((a, i) => <div key={i + 49} className={`${i % 2 === 0 ? "white" : "black"} ${i + 49 === pieceSquare ? "highlight" : null}`}>
-                    {moveSquares.includes(i + 49) ? <div className="activeSquare"></div> : null}
-                    {lastMadeMove === i + 49 ? <div className="lastMadeMove"></div> : null}
+                    {moveSquares.includes(i + 49) && !enemySquares.includes(i + 49) ? <div className="activeSquare"></div> : null}
+                    {moveSquares.includes(i + 49) && enemySquares.includes(i + 49) ? <div className="enemySquare"><div></div></div> : null}
+                    {lastMadeMove[0] === i + 49 ? <div className="lastMadeMove"></div> : null}
                 </div>)}
 
                 {arr8.map((a, i) => <div key={i + 57} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 57 === pieceSquare ? "highlight" : null}`} >
-                    {moveSquares.includes(i + 57) ? <div className="activeSquare"></div> : null}
-                    {lastMadeMove === i + 57 ? <div className="lastMadeMove"></div> : null}
+                    {moveSquares.includes(i + 57) && !enemySquares.includes(i + 57) ? <div className="activeSquare"></div> : null}
+                    {moveSquares.includes(i + 57) && enemySquares.includes(i + 57) ? <div className="enemySquare"><div></div></div> : null}
+                    {lastMadeMove[0] === i + 57 || lastMadeMove[1] === i + 57 ? <div className="lastMadeMove"></div> : null}
                 </div>)}
             </div>
         )
@@ -287,7 +295,7 @@ const Board = () => {
             )
         }
 
-        const renderEntries = (a) => {
+        const renderEntries = (a, i) => {
             switch (a) {
                 case "or1": 
                     return renderEachPiece(a, blackRook, whiteRook, "Black Rook", "White Rook", "or1")
@@ -402,48 +410,56 @@ const Board = () => {
                                         onClick={() => onSquareClick(i + 1, boardEntries[i][0])}
                                         className="movementSquare">
                                             {numbers ? i + 1 : ""}
+                                            {moveSquares.includes(i + 1) ? <div className="highlightSquare"><div></div></div> : null}
                                     </div>)}
                                     
                 {arr2.map((a, i) => <div key={i + 9}
                                         onClick={() => onSquareClick(i + 9, boardEntries[i + 8][0])}
                                         className="movementSquare">
                                             {numbers ? i + 9 : ""}
+                                            {moveSquares.includes(i + 9) ? <div className="highlightSquare"><div></div></div> : null}
                                     </div>)}
 
                 {arr3.map((a, i) => <div key={i + 17} 
                                         onClick={() => onSquareClick(i + 17, boardEntries[i + 16][0])}
                                         className="movementSquare">
                                             {numbers ? i + 17 : ""}
+                                            {moveSquares.includes(i + 17) ? <div className="highlightSquare"><div></div></div> : null}
                                     </div>)}
 
                 {arr4.map((a, i) => <div key={i + 25}
                                         onClick={() => onSquareClick(i + 25, boardEntries[i + 24][0])}
                                         className="movementSquare">
                                             {numbers ? i + 25 : ""}
+                                            {moveSquares.includes(i + 25) ? <div className="highlightSquare"><div></div></div> : null}
                                     </div>)}
 
                 {arr5.map((a, i) => <div key={i + 33} 
                                         onClick={() => onSquareClick(i + 33, boardEntries[i + 32][0])}
                                         className="movementSquare">
                                             {numbers ? i + 33 : ""}
+                                            {moveSquares.includes(i + 33) ? <div className="highlightSquare"><div></div></div> : null}
                                     </div>)}
 
                 {arr6.map((a, i) => <div key={i + 41}
                                         onClick={() => onSquareClick(i + 41, boardEntries[i + 40][0])}
                                         className="movementSquare">
                                             {numbers ? i + 41 : ""}
+                                            {moveSquares.includes(i + 41) ? <div className="highlightSquare"><div></div></div> : null}
                                     </div>)}
 
                 {arr7.map((a, i) => <div key={i + 49}
                                         onClick={() => onSquareClick(i + 49, boardEntries[i + 48][0])}
                                         className="movementSquare">
                                             {numbers ? i + 49 : ""}
+                                            {moveSquares.includes(i + 49) ? <div className="highlightSquare"><div></div></div> : null}
                                     </div>)}
 
                 {arr8.map((a, i) => <div key={i + 57} 
                                         onClick={() => onSquareClick(i + 57, boardEntries[i + 56][0])}
                                         className="movementSquare">
                                             {numbers ? i + 57 : ""}
+                                            {moveSquares.includes(i + 57) ? <div className="highlightSquare"><div></div></div> : null}
                                     </div>)}
             </div>
         )
@@ -648,6 +664,10 @@ const Board = () => {
                 
                 if (castlingMoved[piece] && castlingMoved.pr2 && castlingMoved.pr1) {
                     arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9, i + 2, i - 2].filter(a => a < 65)
+                } else if (knightLimits[0].includes(i)) {
+                    arr = [i - 8, i - 7, i + 1, i + 8, i + 9].filter(a => a < 65)
+                } else if (knightLimits[3].includes(i)) {
+                    arr = [i - 9, i - 8, i - 1, i + 7, i + 8].filter(a => a < 65)
                 } else {
                     arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9].filter(a => a < 65)
                 }
@@ -655,10 +675,10 @@ const Board = () => {
                 for (const number of arr) {
                     if (occupiedSquares.includes(number)) {
                         arr = arr.filter(x => x !== number)
-                        if (!arr.includes(60)) {
+                        if (!arr.includes(60) && pieceSquare === 61) {
                             arr = arr.filter(x => x !== 59)
                         }
-                        if (!arr.includes(62)) {
+                        if (!arr.includes(62) && pieceSquare === 61) {
                             arr = arr.filter(x => x !== 63)
                         }
                         setMoveSquares(arr)
@@ -718,7 +738,19 @@ const Board = () => {
         }
     }
 
-    const animateKnight = (i, string, num1, num2) => {
+    const animatePiece = (i, string, num1, num2) => {
+        if (/^pp/.test(string)) {
+            store.dispatch({
+                type: "pawnMoved",
+                payload: string
+            })
+        }
+        if (/^pr/.test(string) || string === "pkw" || string === "pkb") {
+            store.dispatch({
+                type: "castlingMoved",
+                payload: string
+            })
+        }
         moveSound.play()
         setMoveVar([num1, num2])
         store.dispatch({
@@ -728,313 +760,241 @@ const Board = () => {
         store.dispatch({
             type: string,
         })
-        setLastMadeMove(i)
+        setLastMadeMove([i, null])
         recordBoard()
         setMoveSquares([])
         setPieceSquare(null)
-    }    
+    }  
 
     const moveKnight = (i, string) => {
         switch (pieceSquare - i) {
             case -17:
-                animateKnight(i, string, -80, -160)
+                animatePiece(i, string, -80, -160)
                 break;
             case -15:
-                animateKnight(i, string, 80, -160)
+                animatePiece(i, string, 80, -160)
                 break;
             case -10:
-                animateKnight(i, string, -160, -80)
+                animatePiece(i, string, -160, -80)
                 break;
             case -6:
-                animateKnight(i, string, 160, -80)
+                animatePiece(i, string, 160, -80)
                 break;
             case 6:
-                animateKnight(i, string, -160, 80)
+                animatePiece(i, string, -160, 80)
                 break;
             case 10:
-                animateKnight(i, string, 160, 80)
+                animatePiece(i, string, 160, 80)
                 break;
             case 15:
-                animateKnight(i, string, -80, 160)
+                animatePiece(i, string, -80, 160)
                 break;
             case 17:
-                animateKnight(i, string, 80, 160)
+                animatePiece(i, string, 80, 160)
                 break;
             default:
                 break;
         }   
     }
 
-    const animatePawn = (i, string, num1, num2) => {
-        moveSound.play()
-        setMoveVar([num1, num2])
-        store.dispatch({
-            type: "newSquare",
-            payload: i
-        })
-        store.dispatch({
-            type: string,
-        })
-        store.dispatch({
-            type: "pawnMoved",
-            payload: string
-        })
-        setLastMadeMove(i)
-        recordBoard()
-        setMoveSquares([])
-        setPieceSquare(null)
-    }
-
     const movePawn = (i, string) => {
         switch (pieceSquare - i) {
             case 8:
-                animatePawn(i, string, 0, 80)
+                animatePiece(i, string, 0, 80)
                 break;
             case 16:
-                animatePawn(i, string, 0, 160)
+                animatePiece(i, string, 0, 160)
                 break;
             default:
                 break;
         }
-    }
-
-    const animateBishop = (i, string, num1, num2) => {
-        moveSound.play()
-        setMoveVar([num1, num2])
-        store.dispatch({
-            type: "newSquare",
-            payload: i
-        })
-        store.dispatch({
-            type: string,
-        })
-        setLastMadeMove(i)
-        recordBoard()
-        setMoveSquares([])
-        setPieceSquare(null)
     }
 
     const moveBishop = (i, string) => {
         switch (pieceSquare - i) {
             case 9:
-                animateBishop(i, string, 80, 80)
+                animatePiece(i, string, 80, 80)
                 break;
             case 18:
-                animateBishop(i, string, 160, 160)
+                animatePiece(i, string, 160, 160)
                 break;
             case 27:
-                animateBishop(i, string, 240, 240)
+                animatePiece(i, string, 240, 240)
                 break;
             case 36:
-                animateBishop(i, string, 320, 320)
+                animatePiece(i, string, 320, 320)
                 break;
             case 45:
-                animateBishop(i, string, 400, 400)
+                animatePiece(i, string, 400, 400)
                 break;
             case 54:
-                animateBishop(i, string, 480, 480)
+                animatePiece(i, string, 480, 480)
                 break;
             case 63:
-                animateBishop(i, string, 560, 560)
+                animatePiece(i, string, 560, 560)
                 break;
             case -9: 
-                animateBishop(i, string, -80, -80)
+                animatePiece(i, string, -80, -80)
                 break;
             case -18:
-                animateBishop(i, string, -160, -160)
+                animatePiece(i, string, -160, -160)
                 break;
             case -27:
-                animateBishop(i, string, -240, -240)
+                animatePiece(i, string, -240, -240)
                 break;
             case -36:
-                animateBishop(i, string, -320, -320)
+                animatePiece(i, string, -320, -320)
                 break;
             case -45:
-                animateBishop(i, string, -400, -400)
+                animatePiece(i, string, -400, -400)
                 break;
             case -54:
-                animateBishop(i, string, -480, -480)
+                animatePiece(i, string, -480, -480)
                 break;
             case -63:
-                animateBishop(i, string, -560, -560)
+                animatePiece(i, string, -560, -560)
                 break;
             case 7:
-                animateBishop(i, string, -80, 80)
+                animatePiece(i, string, -80, 80)
                 break;
             case 14:
-                animateBishop(i, string, -160, 160)
+                animatePiece(i, string, -160, 160)
                 break;
             case 21: 
-                animateBishop(i, string, -240, 240)
+                animatePiece(i, string, -240, 240)
                 break;
             case 28: 
-                animateBishop(i, string, -320, 320)
+                animatePiece(i, string, -320, 320)
                 break;
             case 35: 
-                animateBishop(i, string, -400, 400)
+                animatePiece(i, string, -400, 400)
                 break;
             case 42: 
-                animateBishop(i, string, -480, 480)
+                animatePiece(i, string, -480, 480)
                 break;
             case -7:
-                animateBishop(i, string, 80, -80)
+                animatePiece(i, string, 80, -80)
                 break;
             case -14:
-                animateBishop(i, string, 160, -160)
+                animatePiece(i, string, 160, -160)
                 break;
             case -21: 
-                animateBishop(i, string, 240, -240)
+                animatePiece(i, string, 240, -240)
                 break;
             case -28: 
-                animateBishop(i, string, 320, -320)
+                animatePiece(i, string, 320, -320)
                 break;
             case -35: 
-                animateBishop(i, string, 400, -400)
+                animatePiece(i, string, 400, -400)
                 break;
             case -42: 
-                animateBishop(i, string, 480, -480)
+                animatePiece(i, string, 480, -480)
                 break;
             default:
                 break;
         }
-    }
-
-    const animateRook = (i, string, num1, num2) => {
-        moveSound.play()
-        setMoveVar([num1, num2])
-        store.dispatch({
-            type: "newSquare",
-            payload: i
-        })
-        store.dispatch({
-            type: string,
-        })
-        store.dispatch({
-            type: "castlingMoved",
-            payload: string
-        })
-        setLastMadeMove(i)
-        recordBoard()
-        setMoveSquares([])
-        setPieceSquare(null)
     }
 
     const moveRook = (i, string) => {
         switch (pieceSquare - i) {
             case 8:
-                animateRook(i, string, 0, 80)
+                animatePiece(i, string, 0, 80)
                 break;
             case 16:
-                animateRook(i, string, 0, 160)
+                animatePiece(i, string, 0, 160)
                 break;
             case 24:
-                animateRook(i, string, 0, 240)
+                animatePiece(i, string, 0, 240)
                 break;
             case 32:
-                animateRook(i, string, 0, 320)
+                animatePiece(i, string, 0, 320)
                 break;
             case 40:
-                animateRook(i, string, 0, 400)
+                animatePiece(i, string, 0, 400)
                 break;
             case 48:
-                animateRook(i, string, 0, 480)
+                animatePiece(i, string, 0, 480)
                 break;
             case 56:
-                animateRook(i, string, 0, 560)
+                animatePiece(i, string, 0, 560)
                 break;
             case -8:
-                animateRook(i, string, 0, -80)
+                animatePiece(i, string, 0, -80)
                 break;
             case -16:
-                animateRook(i, string, 0, -160)
+                animatePiece(i, string, 0, -160)
                 break;
             case -24:
-                animateRook(i, string, 0, -240)
+                animatePiece(i, string, 0, -240)
                 break;
             case -32:
-                animateRook(i, string, 0, -320)
+                animatePiece(i, string, 0, -320)
                 break;
             case -40:
-                animateRook(i, string, 0, -400)
+                animatePiece(i, string, 0, -400)
                 break;
             case -48:
-                animateRook(i, string, 0, -480)
+                animatePiece(i, string, 0, -480)
                 break;
             case -56:
-                animateRook(i, string, 0, -560)
+                animatePiece(i, string, 0, -560)
                 break;
             case 1:
-                animateRook(i, string, 80, 0)
+                animatePiece(i, string, 80, 0)
                 break;
             case 2:
-                animateRook(i, string, 160, 0)
+                animatePiece(i, string, 160, 0)
                 break;
             case 3:
-                animateRook(i, string, 240, 0)
+                animatePiece(i, string, 240, 0)
                 break;
             case 4:
-                animateRook(i, string, 320, 0)
+                animatePiece(i, string, 320, 0)
                 break;
             case 5:
-                animateRook(i, string, 400, 0)
+                animatePiece(i, string, 400, 0)
                 break;
             case 6:
-                animateRook(i, string, 480, 0)
+                animatePiece(i, string, 480, 0)
                 break;
             case 7:
-                animateRook(i, string, 560, 0)
+                animatePiece(i, string, 560, 0)
                 break;
             case -1:
-                animateRook(i, string, -80, 0)
+                animatePiece(i, string, -80, 0)
                 break;
             case -2:
-                animateRook(i, string, -160, 0)
+                animatePiece(i, string, -160, 0)
                 break;
             case -3:
-                animateRook(i, string, -240, 0)
+                animatePiece(i, string, -240, 0)
                 break;
             case -4:
-                animateRook(i, string, -320, 0)
+                animatePiece(i, string, -320, 0)
                 break;
             case -5:
-                animateRook(i, string, -400, 0)
+                animatePiece(i, string, -400, 0)
                 break;
             case -6:
-                animateRook(i, string, -480, 0)
+                animatePiece(i, string, -480, 0)
                 break;
             case -7:
-                animateRook(i, string, -560, 0)
+                animatePiece(i, string, -560, 0)
                 break;
 
             default:
                 break;
         }
-    }
-
-    const animateQueen = (i, string, num1, num2) => {
-        moveSound.play()
-        setMoveVar([num1, num2])
-        store.dispatch({
-            type: "newSquare",
-            payload: i
-        })
-        store.dispatch({
-            type: string,
-        })
-        setLastMadeMove(i)
-        recordBoard()
-        setMoveSquares([])
-        setPieceSquare(null)
     }
 
     const moveQueen = (i, string) => {
         if ((knightLimits[0].includes(pieceSquare) || knightLimits[3].includes(pieceSquare)) && (knightLimits[0].includes(i) || knightLimits[3].includes(i))) {
             switch (pieceSquare - i) {
                 case -7:
-                    animateQueen(i, string, -560, 0)
+                    animatePiece(i, string, -560, 0)
                     break;
                 case 7:
-                    animateQueen(i, string, 560, 0)
+                    animatePiece(i, string, 560, 0)
                     break;
                 default:
                     break;
@@ -1042,10 +1002,10 @@ const Board = () => {
         } else {
             switch (pieceSquare - i) {
                 case -7:
-                    animateQueen(i, string, 80, -80)
+                    animatePiece(i, string, 80, -80)
                     break;
                 case 7:
-                    animateQueen(i, string, -80, 80)
+                    animatePiece(i, string, -80, 80)
                     break;
                 default:
                     break;
@@ -1053,181 +1013,161 @@ const Board = () => {
         }
         switch (pieceSquare - i) {                                                   
             case 9:
-                animateQueen(i, string, 80, 80)
+                animatePiece(i, string, 80, 80)
                 break;
             case 18:
-                animateQueen(i, string, 160, 160)
+                animatePiece(i, string, 160, 160)
                 break;
             case 27:
-                animateQueen(i, string, 240, 240)
+                animatePiece(i, string, 240, 240)
                 break;
             case 36:
-                animateQueen(i, string, 320, 320)
+                animatePiece(i, string, 320, 320)
                 break;
             case 45:
-                animateQueen(i, string, 400, 400)
+                animatePiece(i, string, 400, 400)
                 break;
             case 54:
-                animateQueen(i, string, 480, 480)
+                animatePiece(i, string, 480, 480)
                 break;
             case 63:
-                animateQueen(i, string, 560, 560)
+                animatePiece(i, string, 560, 560)
                 break;
             case -9: 
-                animateQueen(i, string, -80, -80)
+                animatePiece(i, string, -80, -80)
                 break;
             case -18:
-                animateQueen(i, string, -160, -160)
+                animatePiece(i, string, -160, -160)
                 break;
             case -27:
-                animateQueen(i, string, -240, -240)
+                animatePiece(i, string, -240, -240)
                 break;
             case -36:
-                animateQueen(i, string, -320, -320)
+                animatePiece(i, string, -320, -320)
                 break;
             case -45:
-                animateQueen(i, string, -400, -400)
+                animatePiece(i, string, -400, -400)
                 break;
             case -54:
-                animateQueen(i, string, -480, -480)
+                animatePiece(i, string, -480, -480)
                 break;
             case -63:
-                animateQueen(i, string, -560, -560)
+                animatePiece(i, string, -560, -560)
                 break;
             case 14:
-                animateQueen(i, string, -160, 160)
+                animatePiece(i, string, -160, 160)
                 break;
             case 21: 
-                animateQueen(i, string, -240, 240)
+                animatePiece(i, string, -240, 240)
                 break;
             case 28: 
-                animateQueen(i, string, -320, 320)
+                animatePiece(i, string, -320, 320)
                 break;
             case 35: 
-                animateQueen(i, string, -400, 400)
+                animatePiece(i, string, -400, 400)
                 break;
             case 42: 
-                animateQueen(i, string, -480, 480)
+                animatePiece(i, string, -480, 480)
                 break;
             case -14:
-                animateQueen(i, string, 160, -160)
+                animatePiece(i, string, 160, -160)
                 break;
             case -21: 
-                animateQueen(i, string, 240, -240)
+                animatePiece(i, string, 240, -240)
                 break;
             case -28: 
-                animateQueen(i, string, 320, -320)
+                animatePiece(i, string, 320, -320)
                 break;
             case -35: 
-                animateQueen(i, string, 400, -400)
+                animatePiece(i, string, 400, -400)
                 break;
             case -42: 
-                animateQueen(i, string, 480, -480)
+                animatePiece(i, string, 480, -480)
                 break;
             case 8:
-                animateQueen(i, string, 0, 80)
+                animatePiece(i, string, 0, 80)
                 break;
             case 16:
-                animateQueen(i, string, 0, 160)
+                animatePiece(i, string, 0, 160)
                 break;
             case 24:
-                animateQueen(i, string, 0, 240)
+                animatePiece(i, string, 0, 240)
                 break;
             case 32:
-                animateQueen(i, string, 0, 320)
+                animatePiece(i, string, 0, 320)
                 break;
             case 40:
-                animateQueen(i, string, 0, 400)
+                animatePiece(i, string, 0, 400)
                 break;
             case 48:
-                animateQueen(i, string, 0, 480)
+                animatePiece(i, string, 0, 480)
                 break;
             case 56:
-                animateQueen(i, string, 0, 560)
+                animatePiece(i, string, 0, 560)
                 break;
             case -8:
-                animateQueen(i, string, 0, -80)
+                animatePiece(i, string, 0, -80)
                 break;
             case -16:
-                animateQueen(i, string, 0, -160)
+                animatePiece(i, string, 0, -160)
                 break;
             case -24:
-                animateQueen(i, string, 0, -240)
+                animatePiece(i, string, 0, -240)
                 break;
             case -32:
-                animateQueen(i, string, 0, -320)
+                animatePiece(i, string, 0, -320)
                 break;
             case -40:
-                animateQueen(i, string, 0, -400)
+                animatePiece(i, string, 0, -400)
                 break;
             case -48:
-                animateQueen(i, string, 0, -480)
+                animatePiece(i, string, 0, -480)
                 break;
             case -56:
-                animateQueen(i, string, 0, -560)
+                animatePiece(i, string, 0, -560)
                 break;
             case 1:
-                animateQueen(i, string, 80, 0)
+                animatePiece(i, string, 80, 0)
                 break;
             case 2:
-                animateQueen(i, string, 160, 0)
+                animatePiece(i, string, 160, 0)
                 break;
             case 3:
-                animateQueen(i, string, 240, 0)
+                animatePiece(i, string, 240, 0)
                 break;
             case 4:
-                animateQueen(i, string, 320, 0)
+                animatePiece(i, string, 320, 0)
                 break;
             case 5:
-                animateQueen(i, string, 400, 0)
+                animatePiece(i, string, 400, 0)
                 break;
             case 6:
-                animateQueen(i, string, 480, 0)
+                animatePiece(i, string, 480, 0)
                 break;
             case -1:
-                animateQueen(i, string, -80, 0)
+                animatePiece(i, string, -80, 0)
                 break;
             case -2:
-                animateQueen(i, string, -160, 0)
+                animatePiece(i, string, -160, 0)
                 break;
             case -3:
-                animateQueen(i, string, -240, 0)
+                animatePiece(i, string, -240, 0)
                 break;
             case -4:
-                animateQueen(i, string, -320, 0)
+                animatePiece(i, string, -320, 0)
                 break;
             case -5:
-                animateQueen(i, string, -400, 0)
+                animatePiece(i, string, -400, 0)
                 break;
             case -6:
-                animateQueen(i, string, -480, 0)
+                animatePiece(i, string, -480, 0)
                 break;
             default:
                 break;
         }
     }
 
-    const animateKing = (i, string, num1, num2) => {
-        moveSound.play()
-        setMoveVar([num1, num2])
-        store.dispatch({
-            type: "newSquare",
-            payload: i
-        })
-        store.dispatch({
-            type: string,
-        })
-        store.dispatch({
-            type: "castlingMoved",
-            payload: string
-        })
-        setLastMadeMove(i)
-        recordBoard()
-        setMoveSquares([])
-        setPieceSquare(null)
-    }
-
-    const animateCastling = (coor1, coor2, newSqKing, newSqRook, oldSq, piece, lastSq) => {
+    const animateCastling = (coor1, coor2, newSqKing, newSqRook, oldSq, piece, lastSq1, lastSq2) => {
         moveSound.play()
         setMoveVar([coor1, coor2])
         store.dispatch({
@@ -1252,7 +1192,7 @@ const Board = () => {
         store.dispatch({
             type: piece,
         })
-        setLastMadeMove(lastSq)
+        setLastMadeMove([lastSq1, lastSq2])
         recordBoard()
         setMoveSquares([])
         setPieceSquare(null)
@@ -1261,34 +1201,34 @@ const Board = () => {
     const moveKing = (i, string) => {
         switch (pieceSquare - i) {
             case 9:
-                animateKing(i, string, 80, 80)
+                animatePiece(i, string, 80, 80)
                 break;
             case 8:
-                animateKing(i, string, 0, 80)
+                animatePiece(i, string, 0, 80)
                 break;
             case 7:
-                animateKing(i, string, -80, 80)
+                animatePiece(i, string, -80, 80)
                 break;
             case 1:
-                animateKing(i, string, 80, 0)
+                animatePiece(i, string, 80, 0)
                 break;
             case -1:
-                animateKing(i, string, -80, 0)
+                animatePiece(i, string, -80, 0)
                 break;
             case -7:
-                animateKing(i, string, 80, -80)
+                animatePiece(i, string, 80, -80)
                 break;
             case -8:
-                animateKing(i, string, 0, -80)
+                animatePiece(i, string, 0, -80)
                 break;
             case -9:
-                animateKing(i, string, -80, -80)
+                animatePiece(i, string, -80, -80)
                 break;
             case -2:
-                animateCastling(-160, 0, 63, 64, 62, "pr2", 63)
+                animateCastling(-160, 0, 63, 64, 62, "pr2", 63, 62)
                 break;
             case 2:
-                animateCastling(160, 0, 59, 57, 60, "pr1", 59)
+                animateCastling(160, 0, 59, 57, 60, "pr1", 59, 60)
                 break;
             default:
                 break;

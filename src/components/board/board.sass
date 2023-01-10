@@ -23,20 +23,13 @@
     background: #ecebe1
 
 .black
-    background: #503605
+    background: #7c5409
     color: white
 
 .piece
-    padding: 7px 10px 13px 10px
-    width: 60px
-    height: 60px
-    cursor: pointer
-
-.activeSquare
-    height: 30px
-    width: 30px
-    border-radius: 100%
-    background: #17ce2980
+    padding: 2px 5px 8px 5px
+    width: 70px
+    height: 70px
 
 .highlight
     background: #17ce2980
@@ -72,7 +65,100 @@
     align-items: center
     cursor: pointer
 
+.activeSquare
+    height: 30px
+    width: 30px
+    border-radius: 100%
+    background: #17ce2980
+
+.enemySquare
+    height: 80px
+    width: 80px
+    position: relative
+    &::before
+        content: ""
+        border: 19px solid transparent
+        border-bottom: none
+        border-top-color: #ce1717ae
+        position: absolute
+        transform: rotate(-45deg)
+        bottom: -3px
+        right: -12px
+    &::after
+        content: ""
+        border: 19px solid transparent
+        border-bottom: none
+        border-top-color: #ce1717ae
+        position: absolute
+        transform: rotate(45deg)
+        bottom: -3px
+        left: -12px
+    div
+        position: relative
+        &::before
+            content: ""
+            border: 19px solid transparent
+            border-bottom: none
+            border-top-color: #ce1717ae
+            position: absolute
+            transform: rotate(-135deg)
+            top: -3px
+            right: -12px
+        &::after
+            content: ""
+            border: 19px solid transparent
+            border-bottom: none
+            border-top-color: #ce1717ae
+            position: absolute
+            transform: rotate(135deg)
+            top: -3px
+            left: -12px
+
 .lastMadeMove
     background: #cece1780
     height: 80px
     width: 80px
+
+.highlightSquare
+    width: 80px
+    height: 81px
+    position: relative
+    &:hover
+        &::before
+            content: ""
+            border: 20px solid transparent
+            border-bottom: none
+            border-top-color: #1cce31
+            position: absolute
+            transform: rotate(-45deg)
+            bottom: -2px
+            right: -13px
+        &::after
+            content: ""
+            border: 20px solid transparent
+            border-bottom: none
+            border-top-color: #1cce31
+            position: absolute
+            transform: rotate(45deg)
+            bottom: -2px
+            left: -13px
+        div
+            position: relative
+            &::before
+                content: ""
+                border: 20px solid transparent
+                border-bottom: none
+                border-top-color: #1cce31
+                position: absolute
+                transform: rotate(-135deg)
+                top: -3px
+                right: -13px
+            &::after
+                content: ""
+                border: 20px solid transparent
+                border-bottom: none
+                border-top-color: #1cce31
+                position: absolute
+                transform: rotate(135deg)
+                top: -3px
+                left: -13px
