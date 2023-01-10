@@ -13,6 +13,9 @@ import whitePawn from "../../images/whitePawn.png"
 import blackPawn from "../../images/blackPawn.png"
 
 import moveSoundFile from "../../sounds/move.ogg"
+import captureSoundFile from "../../sounds/capture.ogg"
+import checkSoundFile from "../../sounds/check.ogg"
+import castlingSoundFile from "../../sounds/castling.ogg"
 
 import store from "../redux/store"
 
@@ -52,6 +55,9 @@ const Board = () => {
     }
 
     let moveSound = new Audio(moveSoundFile)
+    let captureSound = new Audio(captureSoundFile)
+    let castlingSound = new Audio(castlingSoundFile)
+    let checkSound = new Audio(checkSoundFile)
 
     const recordBoard = () => {
         const filteredEnemy = boardEntries.filter(([key, value]) => /^o/.test(key))
@@ -500,6 +506,9 @@ const Board = () => {
                             if (subArr.includes(j)) {
                                 if (playerSquares.includes(j)) {
                                     break
+                                } else if (enemySquares.includes(j)) {
+                                    arr.push(j)
+                                    break
                                 } else {
                                     arr.push(j)
                                 }
@@ -508,6 +517,9 @@ const Board = () => {
                         for (let j = i - 1; j >= Math.min(...subArr); j--) {
                             if (subArr.includes(j)) {
                                 if (playerSquares.includes(j)) {
+                                    break
+                                } else if (enemySquares.includes(j)) {
+                                    arr.push(j)
                                     break
                                 } else {
                                     arr.push(j)
@@ -585,6 +597,9 @@ const Board = () => {
                                 if (subArr.includes(j)) {
                                     if (playerSquares.includes(j)) {
                                         break
+                                    } else if (enemySquares.includes(j)) {
+                                        arr.push(j)
+                                        break
                                     } else {
                                         arr.push(j)
                                     }
@@ -593,6 +608,9 @@ const Board = () => {
                             for (let j = i - 1; j >= Math.min(...subArr); j--) {
                                 if (subArr.includes(j)) {
                                     if (playerSquares.includes(j)) {
+                                        break
+                                    } else if (enemySquares.includes(j)) {
+                                        arr.push(j)
                                         break
                                     } else {
                                         arr.push(j)
@@ -610,6 +628,9 @@ const Board = () => {
                                         if (subArr.includes(j)) {
                                             if (playerSquares.includes(j)) {
                                                 break
+                                            } else if (enemySquares.includes(j)) {
+                                                arr.push(j)
+                                                break
                                             } else {
                                                 arr.push(j)
                                             }
@@ -618,6 +639,9 @@ const Board = () => {
                                     for (let j = i - 1; j >= Math.min(...subArr); j--) {
                                         if (subArr.includes(j)) {
                                             if (playerSquares.includes(j)) {
+                                                break
+                                            } else if (enemySquares.includes(j)) {
+                                                arr.push(j)
                                                 break
                                             } else {
                                                 arr.push(j)
@@ -637,6 +661,9 @@ const Board = () => {
                                         if (subArr.includes(j)) {
                                             if (playerSquares.includes(j)) {
                                                 break
+                                            } else if (enemySquares.includes(j)) {
+                                                arr.push(j)
+                                                break
                                             } else {
                                                 arr.push(j)
                                             }
@@ -645,6 +672,9 @@ const Board = () => {
                                     for (let j = i - 1; j >= Math.min(...subArr); j--) {
                                         if (subArr.includes(j)) {
                                             if (playerSquares.includes(j)) {
+                                                break
+                                            } else if (enemySquares.includes(j)) {
+                                                arr.push(j)
                                                 break
                                             } else {
                                                 arr.push(j)
@@ -664,6 +694,10 @@ const Board = () => {
                 
                 if (castlingMoved[piece] && castlingMoved.pr2 && castlingMoved.pr1) {
                     arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9, i + 2, i - 2].filter(a => a < 65)
+                } else if (castlingMoved[piece] && castlingMoved.pr2) {
+                    arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9, i + 2].filter(a => a < 65)
+                } else if (castlingMoved[piece] && castlingMoved.pr1) {
+                    arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9, i - 2].filter(a => a < 65)
                 } else if (knightLimits[0].includes(i)) {
                     arr = [i - 8, i - 7, i + 1, i + 8, i + 9].filter(a => a < 65)
                 } else if (knightLimits[3].includes(i)) {
@@ -738,28 +772,41 @@ const Board = () => {
         }
     }
 
-    const animatePiece = (i, string, num1, num2) => {
+    const animatePiece = (i, string, num1, num2) => {        
         if (/^pp/.test(string)) {
             store.dispatch({
                 type: "pawnMoved",
                 payload: string
             })
         }
+
         if (/^pr/.test(string) || string === "pkw" || string === "pkb") {
             store.dispatch({
                 type: "castlingMoved",
                 payload: string
             })
         }
-        moveSound.play()
+
         setMoveVar([num1, num2])
+
         store.dispatch({
             type: "newSquare",
             payload: i
         })
-        store.dispatch({
-            type: string,
-        })
+
+        if (enemySquares.includes(i)) {
+            store.dispatch({
+                type: string,
+                payload: "takes"
+            })
+            captureSound.play()
+        } else {
+            store.dispatch({
+                type: string,
+            })
+            moveSound.play()
+        }
+
         setLastMadeMove([i, null])
         recordBoard()
         setMoveSquares([])
@@ -1168,7 +1215,7 @@ const Board = () => {
     }
 
     const animateCastling = (coor1, coor2, newSqKing, newSqRook, oldSq, piece, lastSq1, lastSq2) => {
-        moveSound.play()
+        castlingSound.play()
         setMoveVar([coor1, coor2])
         store.dispatch({
             type: "newSquare",

@@ -5,7 +5,7 @@ const swapAndEditBoard = store => next => action => {
         const newSquare = store.getState().newSquare
 
         const asArray = Object.entries(board)
-        const swapElements = (array, index1, index2) => {
+        const swapElements = (array, index1, index2) => {  
             [array[index1 - 1], array[index2 - 1]] = [array[index2 - 1], array[index1 - 1]]
         }
         
@@ -13,6 +13,10 @@ const swapAndEditBoard = store => next => action => {
             swapElements(asArray, oldSquare, newSquare)
             asArray[oldSquare - 1][1] = oldSquare
             asArray[newSquare - 1][1] = newSquare
+            if (action.payload === "takes") {
+                asArray[oldSquare - 1][0] = `empty${Object.keys(board).filter(a => /empty/.test(a)).length + 1}`
+                console.log(Object.keys(board).filter(a => /empty/.test(a)).length)
+            }
             const swapped = Object.fromEntries(asArray)
             return {
                 ...action,

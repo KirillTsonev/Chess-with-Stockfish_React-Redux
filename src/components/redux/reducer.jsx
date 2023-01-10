@@ -95,7 +95,7 @@ const initialState = {
         pkb: true,
         pr1: true,
         pr2: true
-    }
+    },
 }
 
 function boardReducer(state = initialState, action) {
