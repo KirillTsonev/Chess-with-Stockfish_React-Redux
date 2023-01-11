@@ -15,7 +15,6 @@ const swapAndEditBoard = store => next => action => {
             asArray[newSquare - 1][1] = newSquare
             if (action.payload === "takes") {
                 asArray[oldSquare - 1][0] = `empty${Object.keys(board).filter(a => /empty/.test(a)).length + 1}`
-                console.log(Object.keys(board).filter(a => /empty/.test(a)).length)
             }
             const swapped = Object.fromEntries(asArray)
             return {

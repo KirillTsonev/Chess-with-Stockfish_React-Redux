@@ -12,14 +12,14 @@ const initialState = {
     newSquare: null,
     board: {
         or1: 1,
-        ok1: 2,
+        oh1: 2,
         ob1: 3,
         // okw: 4,
         oqb: 4,
         okb: 5,
         // oqw: 5,
         ob2: 6,
-        ok2: 7,
+        oh2: 7,
         or2: 8,
         op1: 9,
         op2: 10,
@@ -70,14 +70,14 @@ const initialState = {
         pp7: 55,
         pp8: 56,
         pr1: 57,
-        pk1: 58,
+        ph1: 58,
         pb1: 59,
         // pkb: 60,
         pqw: 60,
         pkw: 61,
         // pqb: 61,
         pb2: 62,
-        pk2: 63,
+        ph2: 63,
         pr2: 64,
     },
     pawnsFirstMove: {
@@ -150,14 +150,14 @@ function boardReducer(state = initialState, action) {
                 ...state,
                 newSquare: action.payload
             }
-        case "pk1":
+        case "ph1":
             return {
                 ...state,
                 board: {
                     ...action.payload
                 },
             }
-        case "pk2":
+        case "ph2":
             return {
                 ...state,
                 board: {
