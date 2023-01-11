@@ -47,181 +47,63 @@ const Board = () => {
     const castlingPlayerMoved = useSelector(state => state.castlingPlayerMoved)
     const moveCounter = useSelector(state => state.moveCounter)
 
-
-
-
-
-
-
-
-
-
-
-    var wasmSupported = typeof WebAssembly === 'object' && WebAssembly.validate(Uint8Array.of(0x0, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00));
-
-    var stockfish = new Worker(wasmSupported ? 'stockfish.wasm.js' : 'stockfish.js');
-    
-    stockfish.addEventListener('message', function (e) {
-    //   console.log(e.data);
-    });
-    
-    // stockfish.postMessage('uci');
-    // stockfish.postMessage('isready');
-    // stockfish.postMessage('position startpos moves e2e4');
-    // stockfish.postMessage('go');
+    let pieceSquareForEngine = useRef(null)
+    let newSquareIDK
 
     const boardEntries = Object.entries(board)
     const notInitialRender = useRef(false)
 
+    let engineOldSquare
+    let engineNewSquare
+    let enginePieceToMove
+    let enginePieceSquare
+    let engineWhereToMove
 
+    const wasmSupported = typeof WebAssembly === 'object' && WebAssembly.validate(Uint8Array.of(0x0, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00))
 
+    const stockfish = new Worker(wasmSupported ? 'stockfish.wasm.js' : 'stockfish.js')
+    
+    stockfish.addEventListener('message', function(e) {
+        if (/^bestmove/.test(e.data)) {
+ 
+            engineOldSquare = e.data.slice(9, 11)
+            engineNewSquare = e.data.slice(11, 13)
 
+            enginePieceToMove = boardEntries.filter(([key, value]) => value[1] === engineOldSquare).flat()[0]
+            enginePieceSquare = boardEntries.filter(([key, value]) => value[1] === engineOldSquare).flat()[1][0]
+            engineWhereToMove = boardEntries.filter(([key, value]) => value[1] === engineNewSquare).flat()[1][0]
 
+            store.dispatch({
+                type: "oldSquare",
+                payload: enginePieceSquare
+            })
 
+            if (color === "white") {
+                store.dispatch({
+                    type: "moveCounter"
+                })
+            }
 
+            pieceSquareForEngine.current = enginePieceSquare            
+
+            if (/^op/.test(enginePieceToMove)) {
+                movePawn(engineWhereToMove, enginePieceToMove)
+            }
+        }
+    });
+
+    let playerPiece = useRef(null)
+    let playerNewSquareForEngine
+
+    const engineTurn = () => {
+        let string = `position fen ${stringToSend} moves ${playerPiece.current}${playerNewSquareForEngine}`
+
+        stockfish.postMessage(string)
+        stockfish.postMessage('go movetime 1000')
+    }
+
+    let stringToSend
     const encode = () => {
-        // const coordinateTranslate = (num) => {
-        //     switch (num) {
-        //         case 1:
-        //             return "a8"
-        //         case 2:
-        //             return "a7"
-        //         case 3:
-        //             return "a8"
-        //         case 4:
-        //             return "a7"
-        //         case 5:
-        //             return "a8"
-        //         case 6:
-        //             return "a7"
-        //         case 7:
-        //             return "a8"
-        //         case 8:
-        //             return "a7"
-        //         case 9:
-        //             return "a8"
-        //         case 10:
-        //             return "a7"
-        //         case 11:
-        //             return "a8"
-        //         case 12:
-        //             return "a7"
-        //         case 13:
-        //             return "a8"
-        //         case 14:
-        //             return "a7"
-        //         case 15:
-        //             return "a8"
-        //         case 16:
-        //             return "a7"
-        //         case 17:
-        //             return "a8"
-        //         case 18:
-        //             return "a7"
-        //         case 19:
-        //             return "a8"
-        //         case 20:
-        //             return "a7"
-        //         case 21:
-        //             return "a8"
-        //         case 22:
-        //             return "a7"
-        //         case 23:
-        //             return "a8"
-        //         case 24:
-        //             return "a7"
-        //         case 25:
-        //             return "a8"
-        //         case 26:
-        //             return "a7"
-        //         case 27:
-        //             return "a8"
-        //         case 28:
-        //             return "a7"
-        //         case 29:
-        //             return "a8"
-        //         case 30:
-        //             return "a7"
-        //         case 31:
-        //             return "a8"
-        //         case 32:
-        //             return "a7"
-        //         case 33:
-        //             return "a8"
-        //         case 34:
-        //             return "a7"
-        //         case 35:
-        //             return "a8"
-        //         case 36:
-        //             return "a7"
-        //         case 37:
-        //             return "a8"
-        //         case 38:
-        //             return "a7"
-        //         case 39:
-        //             return "a8"
-        //         case 40:
-        //             return "a7"
-        //         case 41:
-        //             return "a8"
-        //         case 42:
-        //             return "a7"
-        //         case 43:
-        //             return "a8"
-        //         case 44:
-        //             return "a7"
-        //         case 45:
-        //             return "a8"
-        //         case 46:
-        //             return "a7"
-        //         case 47:
-        //             return "a8"
-        //         // case 2:
-        //         //     return "a7"
-        //         // case 1:
-        //         //     return "a8"
-        //         // case 2:
-        //         //     return "a7"
-        //         // case 1:
-        //         //     return "a8"
-        //         // case 2:
-        //         //     return "a7"
-        //         // case 1:
-        //         //     return "a8"
-        //         // case 2:
-        //         //     return "a7"
-        //         // case 1:
-        //         //     return "a8"
-        //         // case 2:
-        //         //     return "a7"
-        //         // case 1:
-        //         //     return "a8"
-        //         // case 2:
-        //         //     return "a7"
-        //         // case 1:
-        //         //     return "a8"
-        //         // case 2:
-        //         //     return "a7"
-        //         // case 1:
-        //         //     return "a8"
-        //         // case 2:
-        //         //     return "a7"
-        //         // case 1:
-        //         //     return "a8"
-        //         // case 2:
-        //         //     return "a7"
-        //         // case 1:
-        //         //     return "a8"
-        //         // case 2:
-        //         //     return "a7"
-        //         // case 1:
-        //         //     return "a8"
-        //         // case 2:
-        //         //     return "a7"
-        //         default:
-        //             break;
-        //     }
-        // }
         const fenEncode = (arr) => {
             switch (arr[0]) {
                 case "or1": case "or2":
@@ -369,23 +251,9 @@ const Board = () => {
         /////////////////////////////////
 
         fenString += moveCounter
+        stringToSend = fenString
         // console.log(fenString)
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     let animationSpeed = 0
 
@@ -476,36 +344,55 @@ const Board = () => {
 
     let attackedByPlayerArr = [[], [], [], [], [], [], [], [], [], []]
 
+    const enemyBishop1 = boardEntries.indexOf(boardEntries.filter(([key, value]) => /^ob1/.test(key))[0]) + 1
+    const enemyBishop2 = boardEntries.indexOf(boardEntries.filter(([key, value]) => /^ob2/.test(key))[0]) + 1
+    const enemyKnight1 = boardEntries.indexOf(boardEntries.filter(([key, value]) => /^oh1/.test(key))[0]) + 1
+    const enemyKnight2 = boardEntries.indexOf(boardEntries.filter(([key, value]) => /^oh2/.test(key))[0]) + 1
+    const enemyRook1 = boardEntries.indexOf(boardEntries.filter(([key, value]) => /^or1/.test(key))[0]) + 1
+    const enemyRook2 = boardEntries.indexOf(boardEntries.filter(([key, value]) => /^or2/.test(key))[0]) + 1
+    const enemyQueen = boardEntries.indexOf(boardEntries.filter(([key, value]) => /^oq/.test(key))[0]) + 1
+    const enemyKing = boardEntries.indexOf(boardEntries.filter(([key, value]) => /^ok/.test(key))[0]) + 1
+
+    const enemyPawn1 = boardEntries.indexOf(boardEntries.filter(([key, value]) => /^op1/.test(key))[0]) + 1
+    const enemyPawn2 = boardEntries.indexOf(boardEntries.filter(([key, value]) => /^op2/.test(key))[0]) + 1
+    const enemyPawn3 = boardEntries.indexOf(boardEntries.filter(([key, value]) => /^op3/.test(key))[0]) + 1
+    const enemyPawn4 = boardEntries.indexOf(boardEntries.filter(([key, value]) => /^op4/.test(key))[0]) + 1
+    const enemyPawn5 = boardEntries.indexOf(boardEntries.filter(([key, value]) => /^op5/.test(key))[0]) + 1
+    const enemyPawn6 = boardEntries.indexOf(boardEntries.filter(([key, value]) => /^op6/.test(key))[0]) + 1
+    const enemyPawn7 = boardEntries.indexOf(boardEntries.filter(([key, value]) => /^op7/.test(key))[0]) + 1
+    const enemyPawn8 = boardEntries.indexOf(boardEntries.filter(([key, value]) => /^op8/.test(key))[0]) + 1
+        
     const attackedByOpponent = () => {
+
         let arr = []
-        setKnightMoves(justEnemy.oh1, arr)
-        setKnightMoves(justEnemy.oh2, arr)
-        checkArrays(whiteBishopMoves, justEnemy.ob1, arr)
-        checkArrays(blackBishopMoves, justEnemy.ob2, arr)
-        checkArrays(rookMoves, justEnemy.or1, arr)
-        checkArrays(rookMoves, justEnemy.or2, arr)
+        setKnightMoves(enemyKnight1, arr)
+        setKnightMoves(enemyKnight2, arr)
+        checkArrays(whiteBishopMoves, enemyBishop1, arr)
+        checkArrays(blackBishopMoves, enemyBishop2, arr)
+        checkArrays(rookMoves, enemyRook1, arr)
+        checkArrays(rookMoves, enemyRook2, arr)
         if (justEnemy.oqw) {
-            checkArrays(whiteBishopMoves, justEnemy.oqw, arr)
-            checkArrays(blackBishopMoves, justEnemy.oqw, arr)
-            checkArrays(rookMoves, justEnemy.oqw, arr)
+            checkArrays(whiteBishopMoves, enemyQueen, arr)
+            checkArrays(blackBishopMoves, enemyQueen, arr)
+            checkArrays(rookMoves, enemyQueen, arr)
         } else {
-            checkArrays(whiteBishopMoves, justEnemy.oqb, arr)
-            checkArrays(blackBishopMoves, justEnemy.oqb, arr)
-            checkArrays(rookMoves, justEnemy.oqb, arr)
+            checkArrays(whiteBishopMoves, enemyQueen, arr)
+            checkArrays(blackBishopMoves, enemyQueen, arr)
+            checkArrays(rookMoves, enemyQueen, arr)
         }
         if (justEnemy.okw) {
-            setOpponentKingMoves(justEnemy.okw, arr)
+            setOpponentKingMoves(enemyKing, arr)
         } else {
-            setOpponentKingMoves(justEnemy.okb, arr)
+            setOpponentKingMoves(enemyKing, arr)
         }
-        setOpponentPawnMoves(justEnemy.op1, arr)
-        setOpponentPawnMoves(justEnemy.op2, arr)
-        setOpponentPawnMoves(justEnemy.op3, arr)
-        setOpponentPawnMoves(justEnemy.op4, arr)
-        setOpponentPawnMoves(justEnemy.op5, arr)
-        setOpponentPawnMoves(justEnemy.op6, arr)
-        setOpponentPawnMoves(justEnemy.op7, arr)
-        setOpponentPawnMoves(justEnemy.op8, arr)
+        setOpponentPawnMoves(enemyPawn1, arr)
+        setOpponentPawnMoves(enemyPawn2, arr)
+        setOpponentPawnMoves(enemyPawn3, arr)
+        setOpponentPawnMoves(enemyPawn4, arr)
+        setOpponentPawnMoves(enemyPawn5, arr)
+        setOpponentPawnMoves(enemyPawn6, arr)
+        setOpponentPawnMoves(enemyPawn7, arr)
+        setOpponentPawnMoves(enemyPawn8, arr)
 
         setAttackedByOpponentArr(arr)
     }
@@ -519,16 +406,19 @@ const Board = () => {
         // const justEmpty = Object.fromEntries(filteredEmpty)
         const justOccupied = Object.fromEntries(filteredOccupied)
 
-        setEnemySquares(Object.values(justEnemy))
+        setEnemySquares(Object.values(justEnemy).map(a => a = a[0]))
         setPlayerSquares(Object.values(justPlayer).map(a => a = a[0]))
-        // setEmptySquares(Object.values(justEmpty))
-        setOccupiedSquares(Object.values(justOccupied))
+        // setEmptySquares(Object.values(justEmpty).map(a => a = a[0]))
+        setOccupiedSquares(Object.values(justOccupied).map(a => a = a[0]))
 
         attackedByOpponent()
         encode()
     }
 
-
+    useEffect(() => {
+        stockfish.postMessage('uci')
+        stockfish.postMessage('isready')
+    }, [])
 
     useEffect(() => {
         recordBoard()
@@ -978,12 +868,8 @@ const Board = () => {
             setPieceSquare(i)
             setActiveStatePiece(piece)
 
-            ////////////////////////////////////////////////////////////////////////
-            if (/^op/.test(piece)) {
-                let arr = [i + 8, i + 16]
-                setMoveSquares(arr)
-            }
-            ////////////////////////////////////////////////////
+            pieceSquareForEngine.current = i
+            playerPiece.current = boardEntries.filter(([key, value]) => value[0] === pieceSquareForEngine.current).flat()[1][1]
             
             if (store.getState().activePiece !== piece) {
                 store.dispatch({
@@ -1057,10 +943,10 @@ const Board = () => {
                 for (const number of arr) {
                     if (occupiedSquares.includes(number)) {
                         arr = arr.filter(x => x !== number)
-                        if (!arr.includes(60) && pieceSquare === 61) {
+                        if (!arr.includes(60) && i === 61) {
                             arr = arr.filter(x => x !== 59)
                         }
-                        if (!arr.includes(62) && pieceSquare === 61) {
+                        if (!arr.includes(62) && i === 61) {
                             arr = arr.filter(x => x !== 63)
                         }
                         arr = arr.filter(a => !attackedByOpponentArr.includes(a))
@@ -1073,16 +959,8 @@ const Board = () => {
             }
         }
 
-        /////////////////////////////////////////////////////////////////
-        if (activePiece === "op5" && moveSquares.includes(i)) {
-            movePawn(i, "op5")
-        }
-        /////////////////////////////////////////
-
-
-
-
-
+        newSquareIDK = i
+        playerNewSquareForEngine = boardEntries.filter(([key, value]) => value[0] === newSquareIDK).flat()[1][1]
 
 
         if (activePiece === "ph1" && moveSquares.includes(i)) {
@@ -1094,6 +972,7 @@ const Board = () => {
             } else {
                 setToMove("w")
             }
+            engineTurn()
         } else if (activePiece === "ph2" && moveSquares.includes(i)) {
             attackedByPlayerArr[8] = []
             setKnightMoves(i, attackedByPlayerArr[8])
@@ -1103,6 +982,7 @@ const Board = () => {
             } else {
                 setToMove("w")
             }
+            engineTurn()
         }
 
         if (activePiece === "pp1" && moveSquares.includes(i)) {
@@ -1114,6 +994,7 @@ const Board = () => {
             } else {
                 setToMove("w")
             }
+            engineTurn()
         } else if (activePiece === "pp2" && moveSquares.includes(i)) {
             attackedByPlayerArr[9] = []
             setPawnMoves(i, "pp2", attackedByPlayerArr[9])
@@ -1123,6 +1004,7 @@ const Board = () => {
             } else {
                 setToMove("w")
             }
+            engineTurn()
         } else if (activePiece === "pp3" && moveSquares.includes(i)) {
             attackedByPlayerArr[9] = []
             setPawnMoves(i, "pp3", attackedByPlayerArr[9])
@@ -1132,6 +1014,7 @@ const Board = () => {
             } else {
                 setToMove("w")
             }
+            engineTurn()
         } else if (activePiece === "pp4" && moveSquares.includes(i)) {
             attackedByPlayerArr[9] = []
             setPawnMoves(i, "pp4", attackedByPlayerArr[9])
@@ -1141,6 +1024,7 @@ const Board = () => {
             } else {
                 setToMove("w")
             }
+            engineTurn()
         } else if (activePiece === "pp5" && moveSquares.includes(i)) {
             attackedByPlayerArr[9] = []
             setPawnMoves(i, "pp5", attackedByPlayerArr[9])
@@ -1150,6 +1034,7 @@ const Board = () => {
             } else {
                 setToMove("w")
             }
+            engineTurn()
         } else if (activePiece === "pp6" && moveSquares.includes(i)) {
             attackedByPlayerArr[9] = []
             setPawnMoves(i, "pp6", attackedByPlayerArr[9])
@@ -1159,6 +1044,7 @@ const Board = () => {
             } else {
                 setToMove("w")
             }
+            engineTurn()
         } else if (activePiece === "pp7" && moveSquares.includes(i)) {
             attackedByPlayerArr[9] = []
             setPawnMoves(i, "pp7", attackedByPlayerArr[9])
@@ -1168,6 +1054,7 @@ const Board = () => {
             } else {
                 setToMove("w")
             }
+            engineTurn()
         } else if (activePiece === "pp8" && moveSquares.includes(i)) {
             attackedByPlayerArr[9] = []
             setPawnMoves(i, "pp8", attackedByPlayerArr[9])
@@ -1177,6 +1064,7 @@ const Board = () => {
             } else {
                 setToMove("w")
             }
+            engineTurn()
         }
 
         if (activePiece === "pb1" && moveSquares.includes(i)) {
@@ -1188,6 +1076,7 @@ const Board = () => {
             } else {
                 setToMove("w")
             }
+            engineTurn()
         } else if (activePiece === "pb2" && moveSquares.includes(i)) {
             attackedByPlayerArr[6] = []
             checkArrays(whiteBishopMoves, i, attackedByPlayerArr[6])
@@ -1197,6 +1086,7 @@ const Board = () => {
             } else {
                 setToMove("w")
             }
+            engineTurn()
         }
 
         if (activePiece === "pr1" && moveSquares.includes(i)) {
@@ -1208,6 +1098,7 @@ const Board = () => {
             } else {
                 setToMove("w")
             }
+            engineTurn()
         } else if (activePiece === "pr2" && moveSquares.includes(i)) {
             attackedByPlayerArr[4] = []
             checkArrays(rookMoves, i, attackedByPlayerArr[4])
@@ -1217,6 +1108,7 @@ const Board = () => {
             } else {
                 setToMove("w")
             }
+            engineTurn()
         }
 
         if (activePiece === "pqw" && moveSquares.includes(i)) {
@@ -1228,6 +1120,7 @@ const Board = () => {
             checkArrays(whiteBishopMoves, i, attackedByPlayerArr[2])
             moveQueen(i, "pqw")
             setToMove("b")
+            engineTurn()
         } else if (activePiece === "pqb" && moveSquares.includes(i)) {
             attackedByPlayerArr[0] = []
             attackedByPlayerArr[1] = []
@@ -1237,31 +1130,19 @@ const Board = () => {
             checkArrays(whiteBishopMoves, i, attackedByPlayerArr[2])
             moveQueen(i, "pqb")
             setToMove("w")
+            engineTurn()
         }
 
         if (activePiece === "pkw" && moveSquares.includes(i) && !attackedByOpponentArr.includes(i)) {
             moveKing(i, "pkw")
             setToMove("b")
+            engineTurn()
         } else if (activePiece === "pkb" && moveSquares.includes(i) && !attackedByOpponentArr.includes(i)) {
             moveKing(i, "pkb")
             setToMove("w")
+            engineTurn()
         }
     }
-
-
-
-
-
-
-    const enemyKing = boardEntries.indexOf(boardEntries.filter(([key, value]) => /^ok/.test(key))[0]) + 1
-
-
-
-
-
-
-
-
 
     const animatePiece = (i, string, num1, num2) => {        
         if (/^pp/.test(string)) {
@@ -1314,6 +1195,12 @@ const Board = () => {
             })
         }
 
+        if (color === "black") {
+            store.dispatch({
+                type: "moveCounter"
+            })
+        }
+
         setLastMadeMove([i, null])
         setMoveSquares([])
         setPieceSquare(null)
@@ -1322,7 +1209,7 @@ const Board = () => {
     }  
 
     const moveKnight = (i, string) => {
-        switch (pieceSquare - i) {
+        switch (pieceSquareForEngine.current - i) {
             case -17:
                 animatePiece(i, string, -80, -160)
                 break;
@@ -1352,8 +1239,8 @@ const Board = () => {
         }   
     }
 
-    const movePawn = (i, string) => {
-        switch (pieceSquare - i) {
+    function movePawn(i, string) {
+        switch (pieceSquareForEngine.current - i) {
             case 7:
                 animatePiece(i, string, -80, 80)
                 break;
@@ -1366,18 +1253,19 @@ const Board = () => {
             case 16:
                 animatePiece(i, string, 0, 160)
                 break;
-            ///////////////////////////////////
             case -16: 
                 animatePiece(i, string, 0, -160)
                 break;
-            ///////////////////////////////////
+            case -8: 
+                animatePiece(i, string, 0, -80)
+                break;
             default:
                 break;
         }
     }
 
     const moveBishop = (i, string) => {
-        switch (pieceSquare - i) {
+        switch (pieceSquareForEngine.current - i) {
             case 9:
                 animatePiece(i, string, 80, 80)
                 break;
@@ -1462,7 +1350,7 @@ const Board = () => {
     }
 
     const moveRook = (i, string) => {
-        switch (pieceSquare - i) {
+        switch (pieceSquareForEngine.current - i) {
             case 8:
                 animatePiece(i, string, 0, 80)
                 break;
@@ -1555,7 +1443,7 @@ const Board = () => {
 
     const moveQueen = (i, string) => {
         if ((knightLimits[0].includes(pieceSquare) || knightLimits[3].includes(pieceSquare)) && (knightLimits[0].includes(i) || knightLimits[3].includes(i))) {
-            switch (pieceSquare - i) {
+            switch (pieceSquareForEngine.current - i) {
                 case -7:
                     animatePiece(i, string, -560, 0)
                     break;
@@ -1566,7 +1454,7 @@ const Board = () => {
                     break;
             }
         } else {
-            switch (pieceSquare - i) {
+            switch (pieceSquareForEngine.current - i) {
                 case -7:
                     animatePiece(i, string, 80, -80)
                     break;
@@ -1577,7 +1465,7 @@ const Board = () => {
                     break;
             }
         }
-        switch (pieceSquare - i) {                                                   
+        switch (pieceSquareForEngine.current - i) {                                                   
             case 9:
                 animatePiece(i, string, 80, 80)
                 break;

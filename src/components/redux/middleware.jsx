@@ -3,9 +3,7 @@ const swapAndEditBoard = store => next => action => {
         const board = store.getState().board
         const oldSquare = store.getState().oldSquare
         const newSquare = store.getState().newSquare
-
         const asArray = Object.entries(board)
-        console.log(asArray)
         const swapElements = (array, index1, index2) => {  
             [array[index1 - 1][0], array[index2 - 1][0]] = [array[index2 - 1][0], array[index1 - 1][0]]
         }
