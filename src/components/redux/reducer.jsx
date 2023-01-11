@@ -292,6 +292,132 @@ function boardReducer(state = initialState, action) {
                     ...action.payload
                 }
             }
+        case "op1":
+            return {
+                ...state,
+                board: {
+                    ...action.payload
+                }
+            }
+        case "op2":
+            return {
+                ...state,
+                board: {
+                    ...action.payload
+                }
+            }
+        case "op3":
+            return {
+                ...state,
+                board: {
+                    ...action.payload
+                }
+            }
+        case "op4":
+            return {
+                ...state,
+                board: {
+                    ...action.payload
+                }
+            }
+        case "op5":
+            return {
+                ...state,
+                board: {
+                    ...action.payload
+                }
+            }
+        case "op6":
+            return {
+                ...state,
+                board: {
+                    ...action.payload
+                }
+            }
+        case "op7":
+            return {
+                ...state,
+                board: {
+                    ...action.payload
+                }
+            }
+        case "op8":
+            return {
+                ...state,
+                board: {
+                    ...action.payload
+                }
+            }
+        case "oh1":
+            return {
+                ...state,
+                board: {
+                    ...action.payload
+                },
+            }
+        case "oh2":
+            return {
+                ...state,
+                board: {
+                    ...action.payload
+                },
+            }
+        case "ob1":
+            return {
+                ...state,
+                board: {
+                    ...action.payload
+                },
+            }
+        case "ob2":
+            return {
+                ...state,
+                board: {
+                    ...action.payload
+                },
+            }
+        case "or1":
+            return {
+                ...state,
+                board: {
+                    ...action.payload
+                },
+            }
+        case "or2":
+            return {
+                ...state,
+                board: {
+                    ...action.payload
+                },
+            }
+        case "oqw":
+            return {
+                ...state,
+                board: {
+                    ...action.payload
+                }
+            }
+        case "oqb":
+            return {
+                ...state,
+                board: {
+                    ...action.payload
+                }
+            }
+        case "okw":
+            return {
+                ...state,
+                board: {
+                    ...action.payload
+                }
+            }
+        case "okb":
+            return {
+                ...state,
+                board: {
+                    ...action.payload
+                }
+            }
         default:
             return state
     }

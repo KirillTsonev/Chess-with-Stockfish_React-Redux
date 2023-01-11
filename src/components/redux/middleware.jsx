@@ -8,7 +8,7 @@ const swapAndEditBoard = store => next => action => {
         const swapElements = (array, index1, index2) => {  
             [array[index1 - 1], array[index2 - 1]] = [array[index2 - 1], array[index1 - 1]]
         }
-        
+        console.log(action.type)
         try {
             swapElements(asArray, oldSquare, newSquare)
             asArray[oldSquare - 1][1] = oldSquare

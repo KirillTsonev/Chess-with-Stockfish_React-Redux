@@ -168,7 +168,6 @@ const Board = () => {
         setOpponentPawnMoves(justEnemy.op8, arr)
 
         setAttackedByOpponentArr(arr)
-        console.log(attackedByOpponentArr)
     }
 
     const recordBoard = () => {
@@ -633,10 +632,20 @@ const Board = () => {
             setPieceSquare(null)
         }
 
-        if (playerSquares.includes(i) && activeStatePiece !== piece) {
+        if 
+            // (playerSquares.includes(i) && activeStatePiece !== piece) 
+            (occupiedSquares.includes(i) && activeStatePiece !== piece) 
+        {
             setMoveSquares([])
             setPieceSquare(i)
             setActiveStatePiece(piece)
+
+            ////////////////////////////////////////////////////////////////////////
+            if (/^op/.test(piece)) {
+                let arr = [i + 8, i + 16]
+                setMoveSquares(arr)
+            }
+            ////////////////////////////////////////////////////
             
             if (store.getState().activePiece !== piece) {
                 store.dispatch({
@@ -726,6 +735,18 @@ const Board = () => {
             }
         }
 
+        /////////////////////////////////////////////////////////////////
+        if (activePiece === "op5" && moveSquares.includes(i)) {
+            movePawn(i, "op5")
+        }
+        /////////////////////////////////////////
+
+
+
+
+
+
+
         if (activePiece === "ph1" && moveSquares.includes(i)) {
             attackedByPlayerArr[7] = []
             setKnightMoves(i, attackedByPlayerArr[7])
@@ -807,8 +828,6 @@ const Board = () => {
             checkArrays(whiteBishopMoves, i, attackedByPlayerArr[2])
             moveQueen(i, "pqb")
         }
-
-        console.log(attackedByOpponentArr)
 
         if (activePiece === "pkw" && moveSquares.includes(i) && !attackedByOpponentArr.includes(i)) {
             moveKing(i, "pkw")
@@ -920,6 +939,11 @@ const Board = () => {
             case 16:
                 animatePiece(i, string, 0, 160)
                 break;
+            ///////////////////////////////////
+            case -16: 
+                animatePiece(i, string, 0, -160)
+                break;
+            ///////////////////////////////////
             default:
                 break;
         }
