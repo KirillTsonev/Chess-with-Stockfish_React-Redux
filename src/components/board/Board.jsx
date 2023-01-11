@@ -37,16 +37,356 @@ const Board = () => {
     const [enemyKingAttacked, setEnemyKingAttacked] = useState(false)
     const [playerKingAttacked, setPlayerKingAttacked] = useState(false)
     const [attackedByOpponentArr, setAttackedByOpponentArr] = useState([])
+    const [toMove, setToMove] = useState("w")
 
     const board = useSelector(state => state.board)
     const color = useSelector(state => state.color)
     const activePiece = useSelector(state => state.activePiece)
     const numbers = useSelector(state => state.numbers)
     const pawnsFirstMove = useSelector(state => state.pawnsFirstMove)
-    const castlingMoved = useSelector(state => state.castlingMoved)
+    const castlingPlayerMoved = useSelector(state => state.castlingPlayerMoved)
+    const moveCounter = useSelector(state => state.moveCounter)
+
+
+
+
+
+
+
+
+
+
+
+    var wasmSupported = typeof WebAssembly === 'object' && WebAssembly.validate(Uint8Array.of(0x0, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00));
+
+    var stockfish = new Worker(wasmSupported ? 'stockfish.wasm.js' : 'stockfish.js');
+    
+    stockfish.addEventListener('message', function (e) {
+    //   console.log(e.data);
+    });
+    
+    // stockfish.postMessage('uci');
+    // stockfish.postMessage('isready');
+    // stockfish.postMessage('position startpos moves e2e4');
+    // stockfish.postMessage('go');
 
     const boardEntries = Object.entries(board)
     const notInitialRender = useRef(false)
+
+
+
+
+
+
+
+    const encode = () => {
+        // const coordinateTranslate = (num) => {
+        //     switch (num) {
+        //         case 1:
+        //             return "a8"
+        //         case 2:
+        //             return "a7"
+        //         case 3:
+        //             return "a8"
+        //         case 4:
+        //             return "a7"
+        //         case 5:
+        //             return "a8"
+        //         case 6:
+        //             return "a7"
+        //         case 7:
+        //             return "a8"
+        //         case 8:
+        //             return "a7"
+        //         case 9:
+        //             return "a8"
+        //         case 10:
+        //             return "a7"
+        //         case 11:
+        //             return "a8"
+        //         case 12:
+        //             return "a7"
+        //         case 13:
+        //             return "a8"
+        //         case 14:
+        //             return "a7"
+        //         case 15:
+        //             return "a8"
+        //         case 16:
+        //             return "a7"
+        //         case 17:
+        //             return "a8"
+        //         case 18:
+        //             return "a7"
+        //         case 19:
+        //             return "a8"
+        //         case 20:
+        //             return "a7"
+        //         case 21:
+        //             return "a8"
+        //         case 22:
+        //             return "a7"
+        //         case 23:
+        //             return "a8"
+        //         case 24:
+        //             return "a7"
+        //         case 25:
+        //             return "a8"
+        //         case 26:
+        //             return "a7"
+        //         case 27:
+        //             return "a8"
+        //         case 28:
+        //             return "a7"
+        //         case 29:
+        //             return "a8"
+        //         case 30:
+        //             return "a7"
+        //         case 31:
+        //             return "a8"
+        //         case 32:
+        //             return "a7"
+        //         case 33:
+        //             return "a8"
+        //         case 34:
+        //             return "a7"
+        //         case 35:
+        //             return "a8"
+        //         case 36:
+        //             return "a7"
+        //         case 37:
+        //             return "a8"
+        //         case 38:
+        //             return "a7"
+        //         case 39:
+        //             return "a8"
+        //         case 40:
+        //             return "a7"
+        //         case 41:
+        //             return "a8"
+        //         case 42:
+        //             return "a7"
+        //         case 43:
+        //             return "a8"
+        //         case 44:
+        //             return "a7"
+        //         case 45:
+        //             return "a8"
+        //         case 46:
+        //             return "a7"
+        //         case 47:
+        //             return "a8"
+        //         // case 2:
+        //         //     return "a7"
+        //         // case 1:
+        //         //     return "a8"
+        //         // case 2:
+        //         //     return "a7"
+        //         // case 1:
+        //         //     return "a8"
+        //         // case 2:
+        //         //     return "a7"
+        //         // case 1:
+        //         //     return "a8"
+        //         // case 2:
+        //         //     return "a7"
+        //         // case 1:
+        //         //     return "a8"
+        //         // case 2:
+        //         //     return "a7"
+        //         // case 1:
+        //         //     return "a8"
+        //         // case 2:
+        //         //     return "a7"
+        //         // case 1:
+        //         //     return "a8"
+        //         // case 2:
+        //         //     return "a7"
+        //         // case 1:
+        //         //     return "a8"
+        //         // case 2:
+        //         //     return "a7"
+        //         // case 1:
+        //         //     return "a8"
+        //         // case 2:
+        //         //     return "a7"
+        //         // case 1:
+        //         //     return "a8"
+        //         // case 2:
+        //         //     return "a7"
+        //         // case 1:
+        //         //     return "a8"
+        //         // case 2:
+        //         //     return "a7"
+        //         default:
+        //             break;
+        //     }
+        // }
+        const fenEncode = (arr) => {
+            switch (arr[0]) {
+                case "or1": case "or2":
+                    if (color === "white") {
+                        return arr = "r"
+                    } else {
+                        return arr = "R"
+                    }
+                case "oh1": case "oh2":
+                    if (color === "white") {
+                        return arr = "n"
+                    } else {
+                        return arr = "N"
+                    }
+                case "ob1": case "ob2":
+                    if (color === "white") {
+                        return arr = "b"
+                    } else {
+                        return arr = "B"
+                    }
+                case "oqw": case "oqb":
+                    if (color === "white") {
+                        return arr = "q"
+                    } else {
+                        return arr = "Q"
+                    }
+                case "okw": case "okb":
+                    if (color === "white") {
+                        return arr = "k"
+                    } else {
+                        return arr = "K"
+                    }
+                case "op1": case "op2": case "op3": case "op4": case "op5": case "op6": case "op7": case "op8":
+                    if (color === "white") {
+                        return arr = "p"
+                    } else {
+                        return arr = "P"
+                    }
+                case "pr1": case "pr2":
+                    if (color === "white") {
+                        return arr = "R"
+                    } else {
+                        return arr = "r"
+                    }
+                case "ph1": case "ph2":
+                    if (color === "white") {
+                        return arr = "N"
+                    } else {
+                        return arr = "n"
+                    }
+                case "pb1": case "pb2":
+                    if (color === "white") {
+                        return arr = "B"
+                    } else {
+                        return arr = "b"
+                    }
+                case "pqw": case "pqb":
+                    if (color === "white") {
+                        return arr = "Q"
+                    } else {
+                        return arr = "q"
+                    }
+                case "pkw": case "pkb":
+                    if (color === "white") {
+                        return arr = "K"
+                    } else {
+                        return arr = "k"
+                    }
+                case "pp1": case "pp2": case "pp3": case "pp4": case "pp5": case "pp6": case "pp7": case "pp8":
+                    if (color === "white") {
+                        return arr = "P"
+                    } else {
+                        return arr = "p"
+                    }
+                default:
+                    return arr = 1
+            }
+        }
+        const fen = boardEntries.map(a => fenEncode(a))
+        let fenArrays = [[], [], [], [], [], [], [], []]
+        for (let i = 0; i < 8; i++) {
+            for (let j = i * 8; j < i * 8 + 8; j++) {
+                fenArrays[i].push(fen[j])
+            }
+        }
+        const customReducer = (arr) => {
+            if (arr.includes(1)) {
+                let temp = 0
+                let reducedArr = 0
+                for (let elem of arr) {
+                    if (typeof elem === "number") {
+                        temp += elem
+                    } else {
+                        reducedArr += temp
+                        temp = 0
+                        reducedArr += elem
+                    }
+                }
+                reducedArr += temp
+                if (typeof reducedArr === "number") {
+                    return reducedArr
+                } else {
+                    return reducedArr.split("").filter(a => a !== "0").join("")
+                }
+            } else {
+                return arr.join("")
+            }
+        }
+        fenArrays = fenArrays.map(a => customReducer(a))
+        let fenString = fenArrays.join("/")
+        fenString += ` ${toMove}`
+        if (((castlingPlayerMoved.pkw || castlingPlayerMoved.pkb) && castlingPlayerMoved.pr1) 
+            && 
+            ((castlingPlayerMoved.pkw || castlingPlayerMoved.pkb) && castlingPlayerMoved.pr2)) {
+                if (color === "white") {
+                    fenString += " KQ"
+                } else {
+                    fenString += " kq"
+                }
+        }
+        if (((castlingPlayerMoved.pkw || castlingPlayerMoved.pkb) && castlingPlayerMoved.pr1) && !castlingPlayerMoved.pr2) {
+            if (color === "white") {
+                fenString += " Q"
+            } else {
+                fenString += " q"
+            }
+        }
+        if (!castlingPlayerMoved.pr1 && ((castlingPlayerMoved.pkw || castlingPlayerMoved.pkb) && castlingPlayerMoved.pr2)) {
+            if (color === "white") {
+                fenString += " K"
+            } else {
+                fenString += " k"
+            }
+        }
+        ////////////////////////////////////////////////
+        if (color === "white") {
+            fenString += "kq"
+        } else {
+            fenString += "KQ"
+        }
+        ////////////////////////////////////////
+
+        ////////////////////////////////
+        fenString += " - 0 "
+        /////////////////////////////////
+
+        fenString += moveCounter
+        // console.log(fenString)
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     let animationSpeed = 0
 
     if (store.getState().animations === "fast") {
@@ -180,11 +520,12 @@ const Board = () => {
         const justOccupied = Object.fromEntries(filteredOccupied)
 
         setEnemySquares(Object.values(justEnemy))
-        setPlayerSquares(Object.values(justPlayer))
+        setPlayerSquares(Object.values(justPlayer).map(a => a = a[0]))
         // setEmptySquares(Object.values(justEmpty))
         setOccupiedSquares(Object.values(justOccupied))
 
         attackedByOpponent()
+        encode()
     }
 
 
@@ -632,10 +973,7 @@ const Board = () => {
             setPieceSquare(null)
         }
 
-        if 
-            // (playerSquares.includes(i) && activeStatePiece !== piece) 
-            (occupiedSquares.includes(i) && activeStatePiece !== piece) 
-        {
+        if (playerSquares.includes(i) && activeStatePiece !== piece) {
             setMoveSquares([])
             setPieceSquare(i)
             setActiveStatePiece(piece)
@@ -702,11 +1040,11 @@ const Board = () => {
             if (piece === "pkw" || piece === "pkb") {
                 let arr = []
                 
-                if (castlingMoved[piece] && castlingMoved.pr2 && castlingMoved.pr1) {
+                if (castlingPlayerMoved[piece] && castlingPlayerMoved.pr2 && castlingPlayerMoved.pr1) {
                     arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9, i + 2, i - 2]
-                } else if (castlingMoved[piece] && castlingMoved.pr2) {
+                } else if (castlingPlayerMoved[piece] && castlingPlayerMoved.pr2) {
                     arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9, i + 2]
-                } else if (castlingMoved[piece] && castlingMoved.pr1) {
+                } else if (castlingPlayerMoved[piece] && castlingPlayerMoved.pr1) {
                     arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9, i - 2]
                 } else if (knightLimits[0].includes(i)) {
                     arr = [i - 8, i - 7, i + 1, i + 8, i + 9]
@@ -751,64 +1089,134 @@ const Board = () => {
             attackedByPlayerArr[7] = []
             setKnightMoves(i, attackedByPlayerArr[7])
             moveKnight(i, "ph1")
+            if (color === "white") {
+                setToMove("b")
+            } else {
+                setToMove("w")
+            }
         } else if (activePiece === "ph2" && moveSquares.includes(i)) {
             attackedByPlayerArr[8] = []
             setKnightMoves(i, attackedByPlayerArr[8])
             moveKnight(i, "ph2")
+            if (color === "white") {
+                setToMove("b")
+            } else {
+                setToMove("w")
+            }
         }
 
         if (activePiece === "pp1" && moveSquares.includes(i)) {
             attackedByPlayerArr[9] = []
             setPawnMoves(i, "pp1", attackedByPlayerArr[9])
             movePawn(i, "pp1")
+            if (color === "white") {
+                setToMove("b")
+            } else {
+                setToMove("w")
+            }
         } else if (activePiece === "pp2" && moveSquares.includes(i)) {
             attackedByPlayerArr[9] = []
             setPawnMoves(i, "pp2", attackedByPlayerArr[9])
             movePawn(i, "pp2")
+            if (color === "white") {
+                setToMove("b")
+            } else {
+                setToMove("w")
+            }
         } else if (activePiece === "pp3" && moveSquares.includes(i)) {
             attackedByPlayerArr[9] = []
             setPawnMoves(i, "pp3", attackedByPlayerArr[9])
             movePawn(i, "pp3")
+            if (color === "white") {
+                setToMove("b")
+            } else {
+                setToMove("w")
+            }
         } else if (activePiece === "pp4" && moveSquares.includes(i)) {
             attackedByPlayerArr[9] = []
             setPawnMoves(i, "pp4", attackedByPlayerArr[9])
             movePawn(i, "pp4")
+            if (color === "white") {
+                setToMove("b")
+            } else {
+                setToMove("w")
+            }
         } else if (activePiece === "pp5" && moveSquares.includes(i)) {
             attackedByPlayerArr[9] = []
             setPawnMoves(i, "pp5", attackedByPlayerArr[9])
             movePawn(i, "pp5")
+            if (color === "white") {
+                setToMove("b")
+            } else {
+                setToMove("w")
+            }
         } else if (activePiece === "pp6" && moveSquares.includes(i)) {
             attackedByPlayerArr[9] = []
             setPawnMoves(i, "pp6", attackedByPlayerArr[9])
             movePawn(i, "pp6")
+            if (color === "white") {
+                setToMove("b")
+            } else {
+                setToMove("w")
+            }
         } else if (activePiece === "pp7" && moveSquares.includes(i)) {
             attackedByPlayerArr[9] = []
             setPawnMoves(i, "pp7", attackedByPlayerArr[9])
             movePawn(i, "pp7")
+            if (color === "white") {
+                setToMove("b")
+            } else {
+                setToMove("w")
+            }
         } else if (activePiece === "pp8" && moveSquares.includes(i)) {
             attackedByPlayerArr[9] = []
             setPawnMoves(i, "pp8", attackedByPlayerArr[9])
             movePawn(i, "pp8")
+            if (color === "white") {
+                setToMove("b")
+            } else {
+                setToMove("w")
+            }
         }
 
         if (activePiece === "pb1" && moveSquares.includes(i)) {
             attackedByPlayerArr[5] = []
             checkArrays(blackBishopMoves, i, attackedByPlayerArr[5])
             moveBishop(i, "pb1")
+            if (color === "white") {
+                setToMove("b")
+            } else {
+                setToMove("w")
+            }
         } else if (activePiece === "pb2" && moveSquares.includes(i)) {
             attackedByPlayerArr[6] = []
             checkArrays(whiteBishopMoves, i, attackedByPlayerArr[6])
             moveBishop(i, "pb2")
+            if (color === "white") {
+                setToMove("b")
+            } else {
+                setToMove("w")
+            }
         }
 
         if (activePiece === "pr1" && moveSquares.includes(i)) {
             attackedByPlayerArr[3] = []
             checkArrays(rookMoves, i, attackedByPlayerArr[3])
             moveRook(i, "pr1")
+            if (color === "white") {
+                setToMove("b")
+            } else {
+                setToMove("w")
+            }
         } else if (activePiece === "pr2" && moveSquares.includes(i)) {
             attackedByPlayerArr[4] = []
             checkArrays(rookMoves, i, attackedByPlayerArr[4])
             moveRook(i, "pr2")
+            if (color === "white") {
+                setToMove("b")
+            } else {
+                setToMove("w")
+            }
         }
 
         if (activePiece === "pqw" && moveSquares.includes(i)) {
@@ -819,6 +1227,7 @@ const Board = () => {
             checkArrays(blackBishopMoves, i, attackedByPlayerArr[1])
             checkArrays(whiteBishopMoves, i, attackedByPlayerArr[2])
             moveQueen(i, "pqw")
+            setToMove("b")
         } else if (activePiece === "pqb" && moveSquares.includes(i)) {
             attackedByPlayerArr[0] = []
             attackedByPlayerArr[1] = []
@@ -827,14 +1236,32 @@ const Board = () => {
             checkArrays(blackBishopMoves, i, attackedByPlayerArr[1])
             checkArrays(whiteBishopMoves, i, attackedByPlayerArr[2])
             moveQueen(i, "pqb")
+            setToMove("w")
         }
 
         if (activePiece === "pkw" && moveSquares.includes(i) && !attackedByOpponentArr.includes(i)) {
             moveKing(i, "pkw")
+            setToMove("b")
         } else if (activePiece === "pkb" && moveSquares.includes(i) && !attackedByOpponentArr.includes(i)) {
             moveKing(i, "pkb")
+            setToMove("w")
         }
     }
+
+
+
+
+
+
+    const enemyKing = boardEntries.indexOf(boardEntries.filter(([key, value]) => /^ok/.test(key))[0]) + 1
+
+
+
+
+
+
+
+
 
     const animatePiece = (i, string, num1, num2) => {        
         if (/^pp/.test(string)) {
@@ -846,7 +1273,7 @@ const Board = () => {
 
         if (/^pr/.test(string) || string === "pkw" || string === "pkb") {
             store.dispatch({
-                type: "castlingMoved",
+                type: "castlingPlayerMoved",
                 payload: string
             })
         }
@@ -859,10 +1286,10 @@ const Board = () => {
         })
 
         if (enemySquares.includes(i)) {
-            if (attackedByPlayerArr.flat().includes(board.okb) || attackedByPlayerArr.flat().includes(board.okw)) {
+            if (attackedByPlayerArr.flat().includes(enemyKing)) {
                 checkSound.play()
                 setEnemyKingAttacked(true)
-            } else if (!attackedByPlayerArr.flat().includes(board.okb) || !attackedByPlayerArr.flat().includes(board.okw)) {
+            } else if (!attackedByPlayerArr.flat().includes(enemyKing)) {
                 captureSound.play()
                 setEnemyKingAttacked(false)
             } else {
@@ -873,10 +1300,10 @@ const Board = () => {
                 payload: "takes"
             })
         } else {
-            if (attackedByPlayerArr.flat().includes(board.okb) || attackedByPlayerArr.flat().includes(board.okw)) {
+            if (attackedByPlayerArr.flat().includes(enemyKing)) {
                 checkSound.play()
                 setEnemyKingAttacked(true)
-            } else if (!attackedByPlayerArr.flat().includes(board.okb) || !attackedByPlayerArr.flat().includes(board.okw)) {
+            } else if (!attackedByPlayerArr.flat().includes(enemyKing)) {
                 moveSound.play()
                 setEnemyKingAttacked(false)
             } else {
@@ -1317,7 +1744,7 @@ const Board = () => {
             type: "pkw",
         })
         store.dispatch({
-            type: "castlingMoved",
+            type: "castlingPlayerMoved",
             payload: "pkw"
         })
         store.dispatch({
