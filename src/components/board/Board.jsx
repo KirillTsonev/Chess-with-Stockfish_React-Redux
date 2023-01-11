@@ -61,7 +61,7 @@ const Board = () => {
     let castlingSound = new Audio(castlingSoundFile)
     let checkSound = new Audio(checkSoundFile)
 
-    let attackedArr = [[], [], []]
+    let attackedArr = [[], [], [], [], [], [], [], [], []]
 
     const recordBoard = () => {
         const filteredEnemy = boardEntries.filter(([key, value]) => /^o/.test(key))
@@ -79,8 +79,6 @@ const Board = () => {
         setPlayerSquares(Object.values(justPlayer))
         // setEmptySquares(Object.values(justEmpty))
         setOccupiedSquares(Object.values(justOccupied))
-
-        // recordAttacked()
     }
 
     const knightLimits = [
@@ -504,6 +502,29 @@ const Board = () => {
         }
     }
 
+    const setKnightMoves = (i, arrMoves) => {    
+        let arr = []
+        if (knightLimits[0].includes(i)) {
+            arr = [i - 15, i - 6, i + 10, i + 17].filter(a => a < 65)
+        } else if (knightLimits[1].includes(i)) {
+            arr = [i - 17, i - 15, i - 6, i + 10, i + 15, i + 17].filter(a => a < 65)
+        } else if (knightLimits[2].includes(i)) {
+            arr = [i - 17, i - 15, i - 10, i + 6, i + 15, i + 17].filter(a => a < 65)
+        } else if (knightLimits[3].includes(i)) {
+            arr = [i - 17, i - 10, i + 6, i + 15].filter(a => a < 65)
+        }
+        else {
+            arr = [i - 17, i - 15, i - 10, i - 6, i + 6, i + 10, i + 15, i + 17]
+        }
+        for (const number of arr) {
+            if (playerSquares.includes(number)) {
+                arr = arr.filter(x => x !== number)
+            }
+        }
+        for (const number of arr) {
+            arrMoves.push(number)
+        }
+    }
 
     function onSquareClick(i, piece) {
         if (!moveSquares.includes(i) || (playerSquares.includes(i) && activeStatePiece === piece)){
@@ -532,27 +553,9 @@ const Board = () => {
             }
 
             if (/^ph/.test(piece)) {   
-                let arr = []     
-                if (knightLimits[0].includes(i)) {
-                    arr = [i - 15, i - 6, i + 10, i + 17].filter(a => a < 65)
-                } else if (knightLimits[1].includes(i)) {
-                    arr = [i - 17, i - 15, i - 6, i + 10, i + 15, i + 17].filter(a => a < 65)
-                } else if (knightLimits[2].includes(i)) {
-                    arr = [i - 17, i - 15, i - 10, i + 6, i + 15, i + 17].filter(a => a < 65)
-                } else if (knightLimits[3].includes(i)) {
-                    arr = [i - 17, i - 10, i + 6, i + 15].filter(a => a < 65)
-                }
-                else {
-                    arr = [i - 17, i - 15, i - 10, i - 6, i + 6, i + 10, i + 15, i + 17]
-                }
-                for (const number of arr) {
-                    if (playerSquares.includes(number)) {
-                        arr = arr.filter(x => x !== number)
-                        setMoveSquares(arr)
-                    } else {
-                        setMoveSquares(arr)
-                    }
-                }
+                let arr = []
+                setKnightMoves(i, arr)
+                setMoveSquares(arr)
             }
 
             if (/^pp/.test(piece)) {
@@ -636,9 +639,13 @@ const Board = () => {
         }
 
         if (activePiece === "ph1" && moveSquares.includes(i)) {
+            setKnightMoves(i, attackedArr[7])
             moveKnight(i, "ph1")
+            attackedArr[7] = []
         } else if (activePiece === "ph2" && moveSquares.includes(i)) {
+            setKnightMoves(i, attackedArr[8])
             moveKnight(i, "ph2")
+            attackedArr[8] = []
         }
 
         if (activePiece === "pp1" && moveSquares.includes(i)) {
@@ -660,15 +667,23 @@ const Board = () => {
         }
 
         if (activePiece === "pb1" && moveSquares.includes(i)) {
+            checkArrays(blackBishopMoves, i, attackedArr[5])
             moveBishop(i, "pb1")
+            attackedArr[5] = []
         } else if (activePiece === "pb2" && moveSquares.includes(i)) {
+            checkArrays(whiteBishopMoves, i, attackedArr[6])
             moveBishop(i, "pb2")
+            attackedArr[6] = []
         }
 
         if (activePiece === "pr1" && moveSquares.includes(i)) {
+            checkArrays(rookMoves, i, attackedArr[3])
             moveRook(i, "pr1")
+            attackedArr[3] = []
         } else if (activePiece === "pr2" && moveSquares.includes(i)) {
+            checkArrays(rookMoves, i, attackedArr[4])
             moveRook(i, "pr2")
+            attackedArr[4] = []
         }
 
         if (activePiece === "pqw" && moveSquares.includes(i)) {
@@ -676,8 +691,17 @@ const Board = () => {
             checkArrays(blackBishopMoves, i, attackedArr[1])
             checkArrays(whiteBishopMoves, i, attackedArr[2])
             moveQueen(i, "pqw")
+            attackedArr[0] = []
+            attackedArr[1] = []
+            attackedArr[2] = []
         } else if (activePiece === "pqb" && moveSquares.includes(i)) {
+            checkArrays(rookMoves, i, attackedArr[0])
+            checkArrays(blackBishopMoves, i, attackedArr[1])
+            checkArrays(whiteBishopMoves, i, attackedArr[2])
             moveQueen(i, "pqb")
+            attackedArr[0] = []
+            attackedArr[1] = []
+            attackedArr[2] = []
         }
 
         if (activePiece === "pkw" && moveSquares.includes(i)) {
