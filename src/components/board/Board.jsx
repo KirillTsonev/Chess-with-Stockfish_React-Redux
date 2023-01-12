@@ -64,8 +64,9 @@ const Board = () => {
     const stockfish = new Worker(wasmSupported ? 'stockfish.wasm.js' : 'stockfish.js')
     
     stockfish.addEventListener('message', function(e) {
+        // console.log(e.data)
         if (/^bestmove/.test(e.data)) {
- 
+            
             engineOldSquare = e.data.slice(9, 11)
             engineNewSquare = e.data.slice(11, 13)
 
@@ -84,11 +85,28 @@ const Board = () => {
                 })
             }
 
+            // console.log(engineOldSquare)
+            // console.log(engineNewSquare)
+            // console.log(enginePieceToMove)
+            // console.log(enginePieceSquare)
+            // console.log(engineWhereToMove)
+
             pieceSquareForEngine.current = enginePieceSquare            
 
             if (/^op/.test(enginePieceToMove)) {
                 movePawn(engineWhereToMove, enginePieceToMove)
+            } else if (/^ob/.test(enginePieceToMove)) {
+                moveBishop(engineWhereToMove, enginePieceToMove)
+            } else if (/^oh/.test(enginePieceToMove)) {
+                moveKnight(engineWhereToMove, enginePieceToMove)
+            } else if (/^or/.test(enginePieceToMove)) {
+                moveRook(engineWhereToMove, enginePieceToMove)
+            } else if (/^oq/.test(enginePieceToMove)) {
+                moveQueen(engineWhereToMove, enginePieceToMove)
+            } else if (/^ok/.test(enginePieceToMove)) {
+                moveKing(engineWhereToMove, enginePieceToMove)
             }
+            recordBoard()
         }
     });
 
@@ -98,6 +116,9 @@ const Board = () => {
     const engineTurn = () => {
         let string = `position fen ${stringToSend} moves ${playerPiece.current}${playerNewSquareForEngine}`
 
+        console.log(string)
+
+        // stockfish.postMessage(`position fen rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2 moves f2f3`)
         stockfish.postMessage(string)
         stockfish.postMessage('go movetime 1000')
     }
