@@ -56,10 +56,16 @@ const checkPieceMoved = store => next => action => {
 
 const checkCastlingMoved = store => next => action => {
     const func = (action) => {
-        const castlingPlayerMoved = store.getState().castlingPlayerMoved
+        let castlingMoved
+        if (action.type === "castlingPlayerMoved") {
+            castlingMoved = store.getState().castlingPlayerMoved
+        } else if (action.type === "castlingEnemyMoved") {
+            castlingMoved = store.getState().castlingEnemyMoved
+        }
+        
         const string = action.payload
         const reg = new RegExp(string)
-        const asArray = Object.entries(castlingPlayerMoved)
+        const asArray = Object.entries(castlingMoved)
         const filteredCastling = asArray.filter(([key, value]) => reg.test(key))
         const restArr = asArray.filter(([key, value]) => !reg.test(key))
         filteredCastling[0][1] = false
@@ -71,7 +77,7 @@ const checkCastlingMoved = store => next => action => {
         }
     }
 
-    if (action.type === "castlingPlayerMoved") {
+    if (action.type === "castlingPlayerMoved" || action.type === "castlingEnemyMoved") {
         return next(func(action))
     } else {
         return next(action)

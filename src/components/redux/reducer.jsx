@@ -14,8 +14,8 @@ const initialState = {
         or1: [1, "a8"],
         oh1: [2, "b8"],
         ob1: [3, "c8"],
-        // okw: [4, "d8"],
-        oqb: [4, "d8"],
+        // okw1: [4, "d8"],
+        oqb1: [4, "d8"],
         okb: [5, "e8"],
         // oqw: [5, "e8"],
         ob2: [6, "f8"],
@@ -72,8 +72,8 @@ const initialState = {
         pr1: [57, "a1"],
         ph1: [58, "b1"],
         pb1: [59, "c1"],
-        // pkb: [60, "d1"],
-        pqw: [60, "d1"],
+        // pkb1: [60, "d1"],
+        pqw1: [60, "d1"],
         pkw: [61, "e1"],
         // pqb: [61, "e1"],
         pb2: [62, "f1"],
@@ -95,6 +95,12 @@ const initialState = {
         pkb: true,
         pr1: true,
         pr2: true
+    },
+    castlingEnemyMoved: {
+        okw: true,
+        okb: true,
+        or1: true,
+        or2: true
     },
     moveCounter: 1,
     enemySquares: [],
@@ -187,137 +193,11 @@ function boardReducer(state = initialState, action) {
                 ...state,
                 newSquare: action.payload
             }
-        case "ph1":
-            return {
-                ...state,
-                board: {
-                    ...action.payload
-                },
-            }
-        case "ph2":
-            return {
-                ...state,
-                board: {
-                    ...action.payload
-                },
-            }
         case "pawnMoved":
             return {
                 ...state,
                 pawnsFirstMove: {
                     ...state.pawnsFirstMove,
-                    ...action.payload
-                }
-            }
-        case "pp1":
-            return {
-                ...state,
-                board: {
-                    ...action.payload
-                }
-            }
-        case "pp2":
-            return {
-                ...state,
-                board: {
-                    ...action.payload
-                }
-            }
-        case "pp3":
-            return {
-                ...state,
-                board: {
-                    ...action.payload
-                }
-            }
-        case "pp4":
-            return {
-                ...state,
-                board: {
-                    ...action.payload
-                }
-            }
-        case "pp5":
-            return {
-                ...state,
-                board: {
-                    ...action.payload
-                }
-            }
-        case "pp6":
-            return {
-                ...state,
-                board: {
-                    ...action.payload
-                }
-            }
-        case "pp7":
-            return {
-                ...state,
-                board: {
-                    ...action.payload
-                }
-            }
-        case "pp8":
-            return {
-                ...state,
-                board: {
-                    ...action.payload
-                }
-            }
-        case "pb1":
-            return {
-                ...state,
-                board: {
-                    ...action.payload
-                }
-            }
-        case "pb2":
-            return {
-                ...state,
-                board: {
-                    ...action.payload
-                }
-            }
-        case "pr1":
-            return {
-                ...state,
-                board: {
-                    ...action.payload
-                }
-            }
-        case "pr2":
-            return {
-                ...state,
-                board: {
-                    ...action.payload
-                }
-            }
-        case "pqw":
-            return {
-                ...state,
-                board: {
-                    ...action.payload
-                }
-            }
-        case "pqb":
-            return {
-                ...state,
-                board: {
-                    ...action.payload
-                }
-            }
-        case "pkw":
-            return {
-                ...state,
-                board: {
-                    ...action.payload
-                }
-            }
-        case "pkb":
-            return {
-                ...state,
-                board: {
                     ...action.payload
                 }
             }
@@ -329,126 +209,18 @@ function boardReducer(state = initialState, action) {
                     ...action.payload
                 }
             }
-        case "op1":
+        case "castlingEnemyMoved":
             return {
                 ...state,
-                board: {
+                castlingEnemyMoved: {
+                    ...state.castlingPlayerMoved,
                     ...action.payload
                 }
             }
-        case "op2":
-            return {
-                ...state,
-                board: {
-                    ...action.payload
-                }
-            }
-        case "op3":
-            return {
-                ...state,
-                board: {
-                    ...action.payload
-                }
-            }
-        case "op4":
-            return {
-                ...state,
-                board: {
-                    ...action.payload
-                }
-            }
-        case "op5":
-            return {
-                ...state,
-                board: {
-                    ...action.payload
-                }
-            }
-        case "op6":
-            return {
-                ...state,
-                board: {
-                    ...action.payload
-                }
-            }
-        case "op7":
-            return {
-                ...state,
-                board: {
-                    ...action.payload
-                }
-            }
-        case "op8":
-            return {
-                ...state,
-                board: {
-                    ...action.payload
-                }
-            }
-        case "oh1":
-            return {
-                ...state,
-                board: {
-                    ...action.payload
-                },
-            }
-        case "oh2":
-            return {
-                ...state,
-                board: {
-                    ...action.payload
-                },
-            }
-        case "ob1":
-            return {
-                ...state,
-                board: {
-                    ...action.payload
-                },
-            }
-        case "ob2":
-            return {
-                ...state,
-                board: {
-                    ...action.payload
-                },
-            }
-        case "or1":
-            return {
-                ...state,
-                board: {
-                    ...action.payload
-                },
-            }
-        case "or2":
-            return {
-                ...state,
-                board: {
-                    ...action.payload
-                },
-            }
-        case "oqw":
-            return {
-                ...state,
-                board: {
-                    ...action.payload
-                }
-            }
-        case "oqb":
-            return {
-                ...state,
-                board: {
-                    ...action.payload
-                }
-            }
-        case "okw":
-            return {
-                ...state,
-                board: {
-                    ...action.payload
-                }
-            }
-        case "okb":
+        case "ph1": case "ph2": case "pp1": case "pp2": case "pp3": case "pp4": case "pp5": case "pp6": case "pp7": case "pp8": case "pb1": case "pb2": case "pr1":
+        case "pr2": case "pqw1": case "pqw2": case "pqw3": case "pqw4": case "pqb1": case "pqb2": case "pqb3": case "pqb4": case "pkw": case "pkb": case "op1": 
+        case "op2": case "op3": case "op4": case "op5": case "op6": case "op7": case "op8": case "oh1": case "oh2": case "ob1": case "ob2": case "or1": case "or2":
+        case "oqw1": case "oqw2": case "oqw3": case "oqw4": case "oqb1": case "oqb2": case "oqb3": case "oqb4": case "okw": case "okb":
             return {
                 ...state,
                 board: {
