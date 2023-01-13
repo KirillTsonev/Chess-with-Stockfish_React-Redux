@@ -63,7 +63,7 @@ const initialState = {
         empty32: [48, "h3"],
         pp1: [49, "a2"],
         pp2: [50, "b2"],
-        pp3: [51, "c1"],
+        pp3: [51, "c2"],
         pp4: [52, "d2"],
         pp5: [53, "e2"],
         pp6: [54, "f2"],
@@ -97,10 +97,28 @@ const initialState = {
         pr2: true
     },
     moveCounter: 1,
+    enemySquares: [],
+    playerSquares: [],
+    occupiedSquares: [],
 }
 
 function boardReducer(state = initialState, action) {
     switch (action.type) {
+        case "enemySquares":
+            return {
+                ...state,
+                enemySquares: [...action.payload]
+            }
+        case "playerSquares":
+            return {
+                ...state,
+                playerSquares: [...action.payload]
+            }
+        case "occupiedSquares":
+            return {
+                ...state,
+                occupiedSquares: [...action.payload]
+            }
         case "optionsOff":
             return {
                 ...state,
