@@ -34,8 +34,8 @@ const Board = () => {
     // const [enemySquares, setEnemySquares] = useState([])
     const [moveVar, setMoveVar] = useState([0, 0]) // 4
     const [lastMadeMove, setLastMadeMove] = useState([]) // 5
-    const [enemyKingAttacked, setEnemyKingAttacked] = useState(false) // 6
-    const [playerKingAttacked, setPlayerKingAttacked] = useState(false) // 7
+    // const [enemyKingAttacked, setEnemyKingAttacked] = useState(false) // 6
+    // const [playerKingAttacked, setPlayerKingAttacked] = useState(false) // 7
     // const [attackedByOpponentArr, setAttackedByOpponentArr] = useState([]) // 8
     const [toMove, setToMove] = useState("w") // 8
 
@@ -49,6 +49,8 @@ const Board = () => {
     const playerSquares = useSelector(state => state.playerSquares)
     const enemySquares = useSelector(state => state.enemySquares)
     const occupiedSquares = useSelector(state => state.occupiedSquares)
+    const enemyKingAttacked = useSelector(state => state.enemyKingAttacked)
+    const playerKingAttacked = useSelector(state => state.playerKingAttacked)
 
     let pieceSquareForEngine = useRef(null)
     let newSquareIDK
@@ -101,9 +103,10 @@ const Board = () => {
                 setToMove("b")
             }
 
-            pieceSquareForEngine.current = enginePieceSquare            
+            pieceSquareForEngine.current = enginePieceSquare      
 
             if (/^op/.test(enginePieceToMove)) {
+
                 movePawn(engineWhereToMove, enginePieceToMove)
             } else if (/^ob/.test(enginePieceToMove)) {
                 moveBishop(engineWhereToMove, enginePieceToMove)
@@ -112,12 +115,24 @@ const Board = () => {
             } else if (/^or/.test(enginePieceToMove)) {
                 moveRook(engineWhereToMove, enginePieceToMove)
             } else if (/^oq/.test(enginePieceToMove)) {
+                opponentChecks.current = []
+                if (board.oqw) {
+                    checkArrays(whiteBishopMoves, engineWhereToMove, opponentChecks.current, enemySquares, playerSquares)
+                    checkArrays(blackBishopMoves, engineWhereToMove, opponentChecks.current, enemySquares, playerSquares)
+                    checkArrays(rookMoves, engineWhereToMove, opponentChecks.current, enemySquares, playerSquares)
+                } else {
+                    checkArrays(whiteBishopMoves, engineWhereToMove, opponentChecks.current, enemySquares, playerSquares)
+                    checkArrays(blackBishopMoves, engineWhereToMove, opponentChecks.current, enemySquares, playerSquares)
+                    checkArrays(rookMoves, engineWhereToMove, opponentChecks.current, enemySquares, playerSquares)
+                }
                 moveQueen(engineWhereToMove, enginePieceToMove)
             } else if (/^ok/.test(enginePieceToMove)) {
                 moveKing(engineWhereToMove, enginePieceToMove)
             }
         }
     });
+
+    const opponentChecks = useRef([])
 
     let playerPiece = useRef(null)
     let playerNewSquareForEngine
@@ -373,25 +388,24 @@ const Board = () => {
 
     let attackedByPlayerArr = [[], [], [], [], [], [], [], [], [], []]
 
-    const enemyBishop1 = boardEntries.indexOf(boardEntries.filter(([key, value]) => /^ob1/.test(key))[0]) + 1
-    const enemyBishop2 = boardEntries.indexOf(boardEntries.filter(([key, value]) => /^ob2/.test(key))[0]) + 1
-    const enemyKnight1 = boardEntries.indexOf(boardEntries.filter(([key, value]) => /^oh1/.test(key))[0]) + 1
-    const enemyKnight2 = boardEntries.indexOf(boardEntries.filter(([key, value]) => /^oh2/.test(key))[0]) + 1
-    const enemyRook1 = boardEntries.indexOf(boardEntries.filter(([key, value]) => /^or1/.test(key))[0]) + 1
-    const enemyRook2 = boardEntries.indexOf(boardEntries.filter(([key, value]) => /^or2/.test(key))[0]) + 1
+    const enemyBishop1 = board.ob1? board.ob1[0] : null
+    const enemyBishop2 = board.ob2? board.ob2[0] : null
+    const enemyKnight1 = board.oh1? board.oh1[0] : null
+    const enemyKnight2 = board.oh2? board.oh2[0] : null
+    const enemyRook1 = board.or1 ? board.or1[0] : null
+    const enemyRook2 = board.or2 ? board.or2[0] : null
     const enemyQueen = boardEntries.indexOf(boardEntries.filter(([key, value]) => /^oq/.test(key))[0]) + 1
     const enemyKing = boardEntries.indexOf(boardEntries.filter(([key, value]) => /^ok/.test(key))[0]) + 1
+    const enemyPawn1 = board.op1 ? board.op1[0] : null
+    const enemyPawn2 = board.op2 ? board.op2[0] : null
+    const enemyPawn3 = board.op3 ? board.op3[0] : null
+    const enemyPawn4 = board.op4 ? board.op4[0] : null
+    const enemyPawn5 = board.op5 ? board.op5[0] : null
+    const enemyPawn6 = board.op6 ? board.op6[0] : null
+    const enemyPawn7 = board.op7 ? board.op7[0] : null
+    const enemyPawn8 = board.op8 ? board.op8[0] : null
 
-    const enemyPawn1 = boardEntries.indexOf(boardEntries.filter(([key, value]) => /^op1/.test(key))[0]) + 1
-    const enemyPawn2 = boardEntries.indexOf(boardEntries.filter(([key, value]) => /^op2/.test(key))[0]) + 1
-    const enemyPawn3 = boardEntries.indexOf(boardEntries.filter(([key, value]) => /^op3/.test(key))[0]) + 1
-    const enemyPawn4 = boardEntries.indexOf(boardEntries.filter(([key, value]) => /^op4/.test(key))[0]) + 1
-    const enemyPawn5 = boardEntries.indexOf(boardEntries.filter(([key, value]) => /^op5/.test(key))[0]) + 1
-    const enemyPawn6 = boardEntries.indexOf(boardEntries.filter(([key, value]) => /^op6/.test(key))[0]) + 1
-    const enemyPawn7 = boardEntries.indexOf(boardEntries.filter(([key, value]) => /^op7/.test(key))[0]) + 1
-    const enemyPawn8 = boardEntries.indexOf(boardEntries.filter(([key, value]) => /^op8/.test(key))[0]) + 1
-
-    const playerKing = boardEntries.indexOf(boardEntries.filter(([key, value]) => /^pk/.test(key))[0]) + 1
+    const playerKing = color === "white" ? board.pkw[0] : board.pkb[0]
 
     let attackedByOpponentArr = []
         
@@ -399,18 +413,18 @@ const Board = () => {
         let arr = []
         recordKnightMoves(enemyKnight1, arr)
         recordKnightMoves(enemyKnight2, arr)
-        checkArrays(whiteBishopMoves, enemyBishop1, arr)
-        checkArrays(blackBishopMoves, enemyBishop2, arr)
-        checkArrays(rookMoves, enemyRook1, arr)
-        checkArrays(rookMoves, enemyRook2, arr)
+        checkArrays(whiteBishopMoves, enemyBishop1, arr, enemySquares, playerSquares)
+        checkArrays(blackBishopMoves, enemyBishop2, arr, enemySquares, playerSquares)
+        checkArrays(rookMoves, enemyRook1, arr, enemySquares, playerSquares)
+        checkArrays(rookMoves, enemyRook2, arr, enemySquares, playerSquares)
         if (justEnemy.oqw) {
-            checkArrays(whiteBishopMoves, enemyQueen, arr)
-            checkArrays(blackBishopMoves, enemyQueen, arr)
-            checkArrays(rookMoves, enemyQueen, arr)
+            checkArrays(whiteBishopMoves, enemyQueen, arr, enemySquares, playerSquares)
+            checkArrays(blackBishopMoves, enemyQueen, arr, enemySquares, playerSquares)
+            checkArrays(rookMoves, enemyQueen, arr, enemySquares, playerSquares)
         } else {
-            checkArrays(whiteBishopMoves, enemyQueen, arr)
-            checkArrays(blackBishopMoves, enemyQueen, arr)
-            checkArrays(rookMoves, enemyQueen, arr)
+            checkArrays(whiteBishopMoves, enemyQueen, arr, enemySquares, playerSquares)
+            checkArrays(blackBishopMoves, enemyQueen, arr, enemySquares, playerSquares)
+            checkArrays(rookMoves, enemyQueen, arr, enemySquares, playerSquares)
         }
         if (justEnemy.okw) {
             recordOpponentKingMoves(enemyKing, arr)
@@ -787,14 +801,14 @@ const Board = () => {
         )
     }
 
-    function checkArrays(arrayChecked, i, arr) {
+    function checkArrays(arrayChecked, i, arr, ownArr, oppArr) {
         for (const subArr of arrayChecked) {
             if (subArr.includes(i)) {
                 for (let j = i + 1; j <= Math.max(...subArr); j++) {
                     if (subArr.includes(j)) {
-                        if (playerSquares.includes(j)) {
+                        if (ownArr.includes(j)) {
                             break
-                        } else if (enemySquares.includes(j)) {
+                        } else if (oppArr.includes(j)) {
                             arr.push(j)
                             break
                         } else {
@@ -804,9 +818,9 @@ const Board = () => {
                 }
                 for (let j = i - 1; j >= Math.min(...subArr); j--) {
                     if (subArr.includes(j)) {
-                        if (playerSquares.includes(j)) {
+                        if (ownArr.includes(j)) {
                             break
-                        } else if (enemySquares.includes(j)) {
+                        } else if (oppArr.includes(j)) {
                             arr.push(j)
                             break
                         } else {
@@ -945,27 +959,27 @@ const Board = () => {
 
             if (/^pr/.test(piece)) {
                 let arr = []
-                checkArrays(rookMoves, i, arr)
+                checkArrays(rookMoves, i, arr, playerSquares, enemySquares)
                 setMoveSquares(arr)
             }
 
             if (piece === "pb1") {
                 let arr = []
-                checkArrays(blackBishopMoves, i, arr)
+                checkArrays(blackBishopMoves, i, arr, playerSquares, enemySquares)
                 setMoveSquares(arr)
             }
 
             if (piece === "pb2") {
                 let arr = []
-                checkArrays(whiteBishopMoves, i, arr)
+                checkArrays(whiteBishopMoves, i, arr, playerSquares, enemySquares)
                 setMoveSquares(arr)
             }
 
             if (piece === "pqw" || piece === "pqb") {
                 let arr = []
-                checkArrays(rookMoves, i, arr)
-                checkArrays(blackBishopMoves, i, arr)
-                checkArrays(whiteBishopMoves, i, arr)
+                checkArrays(rookMoves, i, arr, playerSquares, enemySquares)
+                checkArrays(blackBishopMoves, i, arr, playerSquares, enemySquares)
+                checkArrays(whiteBishopMoves, i, arr, playerSquares, enemySquares)
                 setMoveSquares(arr)
             }
 
@@ -1115,7 +1129,7 @@ const Board = () => {
 
         if (activePiece === "pb1" && moveSquares.includes(i)) {
             attackedByPlayerArr[5] = []
-            checkArrays(blackBishopMoves, i, attackedByPlayerArr[5])
+            checkArrays(blackBishopMoves, i, attackedByPlayerArr[5], playerSquares, enemySquares)
             moveBishop(i, "pb1")
             if (color === "white") {
                 setToMove("b")
@@ -1125,7 +1139,7 @@ const Board = () => {
             engineTurn()
         } else if (activePiece === "pb2" && moveSquares.includes(i)) {
             attackedByPlayerArr[6] = []
-            checkArrays(whiteBishopMoves, i, attackedByPlayerArr[6])
+            checkArrays(whiteBishopMoves, i, attackedByPlayerArr[6], playerSquares, enemySquares)
             moveBishop(i, "pb2")
             if (color === "white") {
                 setToMove("b")
@@ -1134,12 +1148,12 @@ const Board = () => {
             }
             engineTurn()
             // attackedByPlayerArr[6] = []
-            // checkArrays(whiteBishopMoves, i, attackedByPlayerArr[6])
+            // checkArrays(whiteBishopMoves, i, attackedByPlayerArr[6], playerSquares, enemySquares)
         }
 
         if (activePiece === "pr1" && moveSquares.includes(i)) {
             attackedByPlayerArr[3] = []
-            checkArrays(rookMoves, i, attackedByPlayerArr[3])
+            checkArrays(rookMoves, i, attackedByPlayerArr[3], playerSquares, enemySquares)
             moveRook(i, "pr1")
             if (color === "white") {
                 setToMove("b")
@@ -1149,7 +1163,7 @@ const Board = () => {
             engineTurn()
         } else if (activePiece === "pr2" && moveSquares.includes(i)) {
             attackedByPlayerArr[4] = []
-            checkArrays(rookMoves, i, attackedByPlayerArr[4])
+            checkArrays(rookMoves, i, attackedByPlayerArr[4], playerSquares, enemySquares)
             moveRook(i, "pr2")
             if (color === "white") {
                 setToMove("b")
@@ -1163,9 +1177,9 @@ const Board = () => {
             attackedByPlayerArr[0] = []
             attackedByPlayerArr[1] = []
             attackedByPlayerArr[2] = []
-            checkArrays(rookMoves, i, attackedByPlayerArr[0])
-            checkArrays(blackBishopMoves, i, attackedByPlayerArr[1])
-            checkArrays(whiteBishopMoves, i, attackedByPlayerArr[2])
+            checkArrays(rookMoves, i, attackedByPlayerArr[0], playerSquares, enemySquares)
+            checkArrays(blackBishopMoves, i, attackedByPlayerArr[1], playerSquares, enemySquares)
+            checkArrays(whiteBishopMoves, i, attackedByPlayerArr[2], playerSquares, enemySquares)
             moveQueen(i, "pqw")
             setToMove("b")
             engineTurn()
@@ -1173,9 +1187,9 @@ const Board = () => {
             attackedByPlayerArr[0] = []
             attackedByPlayerArr[1] = []
             attackedByPlayerArr[2] = []
-            checkArrays(rookMoves, i, attackedByPlayerArr[0])
-            checkArrays(blackBishopMoves, i, attackedByPlayerArr[1])
-            checkArrays(whiteBishopMoves, i, attackedByPlayerArr[2])
+            checkArrays(rookMoves, i, attackedByPlayerArr[0], playerSquares, enemySquares)
+            checkArrays(blackBishopMoves, i, attackedByPlayerArr[1], playerSquares, enemySquares)
+            checkArrays(whiteBishopMoves, i, attackedByPlayerArr[2], playerSquares, enemySquares)
             moveQueen(i, "pqb")
             setToMove("w")
             engineTurn()
@@ -1216,12 +1230,28 @@ const Board = () => {
 
         if (/^o/.test(string)) {
             if (store.getState().playerSquares.includes(i)) {
-                if (attackedByPlayerArr.flat().includes(playerKing)) {
-                    checkSound.play()
-                    setPlayerKingAttacked(true)
-                } else if (!attackedByPlayerArr.flat().includes(playerKing)) {
+                if (i === store.getState().checkingPiece[1]) {
                     captureSound.play()
-                    setPlayerKingAttacked(false)
+                    store.dispatch({
+                        type: "enemyKingAttacked",
+                        payload: false
+                    })
+                } else if (opponentChecks.current.includes(playerKing)) {
+                    checkSound.play()
+                    store.dispatch({
+                        type: "playerKingAttacked",
+                        payload: true
+                    })
+                    store.dispatch({
+                        type: "checkingPiece",
+                        payload: [string, i]
+                    })
+                } else if (!opponentChecks.current.includes(playerKing)) {
+                    captureSound.play()
+                    store.dispatch({
+                        type: "playerKingAttacked",
+                        payload: false
+                    })
                 } else {
                     captureSound.play()
                 }
@@ -1230,16 +1260,29 @@ const Board = () => {
                     payload: "takes"
                 })
             } else {
-                if (attackedByOpponentArr.flat().includes(playerKing)) {
+                if (attackedByPlayerArr.flat().includes(i)) {
+                    moveSound.play()
+                    store.dispatch({
+                        type: "enemyKingAttacked",
+                        payload: false
+                    })
+                } else if (opponentChecks.current.includes(playerKing)) {
                     checkSound.play()
-                    setPlayerKingAttacked(true)
-                } else if (!attackedByOpponentArr.flat().includes(playerKing)) {
+                    store.dispatch({
+                        type: "playerKingAttacked",
+                        payload: true
+                    })
+                    store.dispatch({
+                        type: "checkingPiece",
+                        payload: [string, i]
+                    })
+                } else if (!opponentChecks.current.includes(playerKing)) {
                     moveSound.play()
-                    setPlayerKingAttacked(false)
-                } else if (attackedByPlayerArr.flat().includes(i)) {
-                    moveSound.play()
-                    setEnemyKingAttacked(false)
-                } else {
+                    store.dispatch({
+                        type: "playerKingAttacked",
+                        payload: false
+                    })
+                } else  {
                     moveSound.play()
                 }
                 store.dispatch({
@@ -1250,12 +1293,28 @@ const Board = () => {
 
         if (/^p/.test(string)) {
             if (enemySquares.includes(i)) {
-                if (attackedByPlayerArr.flat().includes(enemyKing)) {
+                if (i === store.getState().checkingPiece[1]) {
+                    captureSound.play()
+                    store.dispatch({
+                        type: "playerKingAttacked",
+                        payload: false
+                    })
+                } else if (attackedByPlayerArr.flat().includes(enemyKing)) {
                     checkSound.play()
-                    setEnemyKingAttacked(true)
+                    store.dispatch({
+                        type: "enemyKingAttacked",
+                        payload: true
+                    })
+                    store.dispatch({
+                        type: "checkingPiece",
+                        payload: [string, i]
+                    })
                 } else if (!attackedByPlayerArr.flat().includes(enemyKing)) {
                     captureSound.play()
-                    setEnemyKingAttacked(false)
+                    store.dispatch({
+                        type: "enemyKingAttacked",
+                        payload: false
+                    })
                 } else {
                     captureSound.play()
                 }
@@ -1264,16 +1323,30 @@ const Board = () => {
                     payload: "takes"
                 })
             } else {
-                if (attackedByPlayerArr.flat().includes(enemyKing)) {
+                if (opponentChecks.current.includes(i)) {
+                    moveSound.play()
+                    store.dispatch({
+                        type: "playerKingAttacked",
+                        payload: false
+                    })
+                    opponentChecks.current = []
+                } else if (attackedByPlayerArr.flat().includes(enemyKing)) {
                     checkSound.play()
-                    setEnemyKingAttacked(true)
+                    store.dispatch({
+                        type: "enemyKingAttacked",
+                        payload: true
+                    })
+                    store.dispatch({
+                        type: "checkingPiece",
+                        payload: [string, i]
+                    })
                 } else if (!attackedByPlayerArr.flat().includes(enemyKing)) {
                     moveSound.play()
-                    setEnemyKingAttacked(false)
-                } else if (attackedByOpponentArr.flat().includes(i)) {
-                    moveSound.play()
-                    setPlayerKingAttacked(false)
-                } else {
+                    store.dispatch({
+                        type: "enemyKingAttacked",
+                        payload: false
+                    })
+                } else  {
                     moveSound.play()
                 }
                 store.dispatch({
@@ -1289,6 +1362,8 @@ const Board = () => {
         }
 
         encode()
+
+        console.log(opponentChecks.current)
 
         // recordBoard()
 

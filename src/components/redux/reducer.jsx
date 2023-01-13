@@ -100,10 +100,28 @@ const initialState = {
     enemySquares: [],
     playerSquares: [],
     occupiedSquares: [],
+    checkingPiece: [],
+    enemyKingAttacked: false,
+    playerKingAttacked: false,
 }
 
 function boardReducer(state = initialState, action) {
     switch (action.type) {
+        case "enemyKingAttacked":
+            return {
+                ...state,
+                enemyKingAttacked: action.payload
+            }
+        case "playerKingAttacked":
+            return {
+                ...state,
+                playerKingAttacked: action.payload
+            }
+        case "checkingPiece":
+            return {
+                ...state,
+                checkingPiece: [...action.payload]
+            }
         case "enemySquares":
             return {
                 ...state,
