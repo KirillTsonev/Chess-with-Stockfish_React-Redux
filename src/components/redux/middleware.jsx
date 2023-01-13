@@ -64,9 +64,18 @@ const checkCastlingMoved = store => next => action => {
         }
         
         const string = action.payload
-        const reg = new RegExp(string)
+        let reg
+        if (/[pk]|[ok]/.test(action.payload)) {
+            reg = new RegExp(string.slice(0, 2))
+        } else {
+            reg = new RegExp(string)
+        }
         const asArray = Object.entries(castlingMoved)
         const filteredCastling = asArray.filter(([key, value]) => reg.test(key))
+        console.log(castlingMoved)
+        console.log(reg)
+        console.log(asArray)
+        console.log(filteredCastling)
         const restArr = asArray.filter(([key, value]) => !reg.test(key))
         filteredCastling[0][1] = false
         const changedObject = Object.fromEntries(restArr.concat(filteredCastling))

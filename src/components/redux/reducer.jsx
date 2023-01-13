@@ -91,14 +91,12 @@ const initialState = {
         pp8: true,
     },
     castlingPlayerMoved: {
-        pkw: true,
-        pkb: true,
+        pk: true,
         pr1: true,
         pr2: true
     },
     castlingEnemyMoved: {
-        okw: true,
-        okb: true,
+        ok: true,
         or1: true,
         or2: true
     },

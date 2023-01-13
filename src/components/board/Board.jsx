@@ -45,12 +45,15 @@ const Board = () => {
     const numbers = useSelector(state => state.numbers)
     const pawnsFirstMove = useSelector(state => state.pawnsFirstMove)
     const castlingPlayerMoved = useSelector(state => state.castlingPlayerMoved)
+    const castlingEnemyMoved = useSelector(state => state.castlingEnemyMoved)
     const moveCounter = useSelector(state => state.moveCounter)
     const playerSquares = useSelector(state => state.playerSquares)
     const enemySquares = useSelector(state => state.enemySquares)
     const occupiedSquares = useSelector(state => state.occupiedSquares)
     const enemyKingAttacked = useSelector(state => state.enemyKingAttacked)
     const playerKingAttacked = useSelector(state => state.playerKingAttacked)
+
+    let enPassantSquare
 
     let pieceSquareForEngine = useRef(null)
     let newSquareIDK
@@ -70,7 +73,6 @@ const Board = () => {
     
     stockfish.addEventListener('message', function(e) {
         if (/^bestmove/.test(e.data)) {
-            
             engineOldSquare = e.data.slice(9, 11)
             engineNewSquare = e.data.slice(11, 13)
 
@@ -107,36 +109,47 @@ const Board = () => {
 
             if (/^op/.test(enginePieceToMove)) {
                 opponentChecks.current = []
+
                 recordOpponentPawnMoves(engineWhereToMove, opponentChecks.current)
+
                 movePawn(engineWhereToMove, enginePieceToMove)
             } 
             
             if (enginePieceToMove === "ob1") {
                 opponentChecks.current = []
+
                 checkArrays(whiteBishopMoves, engineWhereToMove, opponentChecks.current, enemySquares, playerSquares)
+
                 moveBishop(engineWhereToMove, enginePieceToMove)
             } 
             
             if (enginePieceToMove === "ob2") {
                 opponentChecks.current = []
+
                 checkArrays(blackBishopMoves, engineWhereToMove, opponentChecks.current, enemySquares, playerSquares)
+
                 moveBishop(engineWhereToMove, enginePieceToMove)
             } 
             
             if (/^oh/.test(enginePieceToMove)) {
                 opponentChecks.current = []
+
                 recordKnightMoves(engineWhereToMove, opponentChecks.current)
+
                 moveKnight(engineWhereToMove, enginePieceToMove)
             } 
             
             if (/^or/.test(enginePieceToMove)) {
                 opponentChecks.current = []
+
                 checkArrays(rookMoves, engineWhereToMove, opponentChecks.current, enemySquares, playerSquares)
-                moveRook(engineWhereToMove, enginePieceToMove)
+
                 store.dispatch({
                     type: "castlingEnemyMoved",
                     payload: enginePieceToMove
                 })
+
+                moveRook(engineWhereToMove, enginePieceToMove)
             } 
             
             if (/^oq/.test(enginePieceToMove)) {
@@ -154,11 +167,13 @@ const Board = () => {
             } 
             
             if (/^ok/.test(enginePieceToMove)) {
-                moveKing(engineWhereToMove, enginePieceToMove)
                 store.dispatch({
                     type: "castlingEnemyMoved",
                     payload: enginePieceToMove
                 })
+
+                moveKing(engineWhereToMove, enginePieceToMove)
+               
             }
         }
     });
@@ -173,11 +188,12 @@ const Board = () => {
 
         // console.log(string)
 
-        // stockfish.postMessage(string)
-        // stockfish.postMessage('go movetime 2000')
+        stockfish.postMessage(string)
+        stockfish.postMessage('go movetime 2000')
     }
 
     let stringToSend
+
     const encode = () => {
         const fenEncode = (arr) => {
             switch (arr[0]) {
@@ -199,7 +215,7 @@ const Board = () => {
                     } else {
                         return arr = "B"
                     }
-                case "oqw": case "oqb":
+                case "oqw1": case "oqb1": case "oqw2": case "oqb2": case "oqw3": case "oqb3": case "oqw4": case "oqb4":
                     if (color === "white") {
                         return arr = "q"
                     } else {
@@ -257,13 +273,17 @@ const Board = () => {
                     return arr = 1
             }
         }
+
         const fen = boardEntries.map(a => fenEncode(a))
+
         let fenArrays = [[], [], [], [], [], [], [], []]
+
         for (let i = 0; i < 8; i++) {
             for (let j = i * 8; j < i * 8 + 8; j++) {
                 fenArrays[i].push(fen[j])
             }
         }
+
         const customReducer = (arr) => {
             if (arr.includes(1)) {
                 let temp = 0
@@ -287,49 +307,73 @@ const Board = () => {
                 return arr.join("")
             }
         }
+
         fenArrays = fenArrays.map(a => customReducer(a))
+
         let fenString = fenArrays.join("/")
-        fenString += ` ${toMove}`
-        if (((castlingPlayerMoved.pkw || castlingPlayerMoved.pkb) && castlingPlayerMoved.pr1) 
-            && 
-            ((castlingPlayerMoved.pkw || castlingPlayerMoved.pkb) && castlingPlayerMoved.pr2)) {
+
+        fenString += ` ${toMove} `
+
+        if (castlingPlayerMoved.pk && castlingPlayerMoved.pr1 && castlingPlayerMoved.pr2) {
                 if (color === "white") {
-                    fenString += " KQ"
+                    fenString += "KQ "
                 } else {
-                    fenString += " kq"
+                    fenString += "kq "
                 }
         }
-        if (((castlingPlayerMoved.pkw || castlingPlayerMoved.pkb) && castlingPlayerMoved.pr1) && !castlingPlayerMoved.pr2) {
+        if (castlingPlayerMoved.pk && castlingPlayerMoved.pr1 && !castlingPlayerMoved.pr2) {
             if (color === "white") {
-                fenString += " Q"
+                fenString += "Q "
             } else {
-                fenString += " q"
+                fenString += "q "
             }
         }
-        if (!castlingPlayerMoved.pr1 && ((castlingPlayerMoved.pkw || castlingPlayerMoved.pkb) && castlingPlayerMoved.pr2)) {
+        if (castlingPlayerMoved.pk && !castlingPlayerMoved.pr1 && castlingPlayerMoved.pr2) {
             if (color === "white") {
-                fenString += " K"
+                fenString += "K "
             } else {
-                fenString += " k"
+                fenString += "k "
             }
+        }
+
+        if (castlingEnemyMoved.ok && castlingEnemyMoved.or1 && castlingEnemyMoved.or2) {
+                if (color === "white") {
+                    fenString += "kq "
+                } else {
+                    fenString += "KQ "
+                }
+            }
+        if (castlingEnemyMoved.ok && castlingEnemyMoved.or1 && !castlingEnemyMoved.or2) {
+            if (color === "white") {
+                fenString += "q "
+            } else {
+                fenString += "Q "
+            }
+        }
+        if (castlingEnemyMoved.ok && !castlingEnemyMoved.or1 && castlingEnemyMoved.or2) {
+            if (color === "white") {
+                fenString += "k "
+            } else {
+                fenString += "K "
+            }
+        }
+
+        if (enPassantSquare) {
+            fenString += boardEntries.filter(([key, value]) => value[0] === enPassantSquare).flat()[1][1]
+        } else {
+            fenString += "-"
         }
         
-        ////////////////////////////////////////////////
-        if (color === "white") {
-            fenString += "kq"
-        } else {
-            fenString += "KQ"
-        }
-        ////////////////////////////////////////
-
         ////////////////////////////////
-        fenString += " - 0 "
+        fenString += " 0 "
         /////////////////////////////////
 
         fenString += moveCounter
         stringToSend = fenString
-        // console.log(fenString)
+        console.log(fenString)
     }
+
+
 
     let animationSpeed
 
@@ -984,6 +1028,12 @@ const Board = () => {
             setPieceSquare(i)
             setActiveStatePiece(piece)
 
+            ////////////////////////////////////////////////////////////////////////////////////////////////
+            // store.dispatch({
+            //     type: "enPassantSquare",
+            //     payload: ""
+            // })
+
             pieceSquareForEngine.current = i
             playerPiece.current = boardEntries.filter(([key, value]) => value[0] === pieceSquareForEngine.current).flat()[1][1]
             
@@ -1042,11 +1092,11 @@ const Board = () => {
             if (piece === "pkw" || piece === "pkb") {
                 let arr = []
                 
-                if (castlingPlayerMoved[piece] && castlingPlayerMoved.pr2 && castlingPlayerMoved.pr1) {
+                if (castlingPlayerMoved[piece.slice(0, 2)] && castlingPlayerMoved.pr2 && castlingPlayerMoved.pr1) {
                     arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9, i + 2, i - 2]
-                } else if (castlingPlayerMoved[piece] && castlingPlayerMoved.pr2) {
+                } else if (castlingPlayerMoved[piece.slice(0, 2)] && castlingPlayerMoved.pr2) {
                     arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9, i + 2]
-                } else if (castlingPlayerMoved[piece] && castlingPlayerMoved.pr1) {
+                } else if (castlingPlayerMoved[piece.slice(0, 2)] && castlingPlayerMoved.pr1) {
                     arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9, i - 2]
                 } else if (knightLimits[0].includes(i)) {
                     arr = [i - 8, i - 7, i + 1, i + 8, i + 9]
@@ -1077,7 +1127,6 @@ const Board = () => {
 
         newSquareIDK = i
         playerNewSquareForEngine = boardEntries.filter(([key, value]) => value[0] === newSquareIDK).flat()[1][1]
-
 
         if (activePiece === "ph1" && moveSquares.includes(i)) {
             attackedByPlayerArr[7] = []
@@ -1511,9 +1560,11 @@ const Board = () => {
                 animatePiece(i, string, 80, 80)
                 break;
             case 16:
+                enPassantSquare = i + 8
                 animatePiece(i, string, 0, 160)
                 break;
             case -16: 
+                enPassantSquare = i - 8
                 animatePiece(i, string, 0, -160)
                 break;
             case -8: 
@@ -1708,7 +1759,9 @@ const Board = () => {
     }
 
     const moveQueen = (i, string) => {
-        if ((knightLimits[0].includes(pieceSquare) || knightLimits[3].includes(pieceSquare)) && (knightLimits[0].includes(i) || knightLimits[3].includes(i))) {
+        if ((knightLimits[0].includes(pieceSquare) || knightLimits[3].includes(pieceSquare)) 
+            && 
+            (knightLimits[0].includes(i) || knightLimits[3].includes(i))) {
             switch (pieceSquareForEngine.current - i) {
                 case -7:
                     animatePiece(i, string, -560, 0)
@@ -1887,34 +1940,62 @@ const Board = () => {
         }
     }
 
-    const animateCastling = (coor1, coor2, newSqKing, newSqRook, oldSq, piece) => {
+    const animateCastling = (coor1, coor2, newSqKing, newSqRook, oldSq, piece1, piece2) => {
         castlingSound.play()
+
         setMoveVar([coor1, coor2])
+
         store.dispatch({
             type: "newSquare",
             payload: newSqKing
         })
+
         store.dispatch({
-            type: "pkw",
+            type: piece2
         })
-        store.dispatch({
-            type: "castlingPlayerMoved",
-            payload: "pkw"
-        })
+
+        if (/^pk/.test(piece2)) {
+            store.dispatch({
+                type: "castlingPlayerMoved",
+                payload: piece2
+            })
+    
+            store.dispatch({
+                type: "castlingPlayerMoved",
+                payload: piece1
+            })
+        } else {
+            store.dispatch({
+                type: "castlingEnemyMoved",
+                payload: piece2
+            })
+    
+            store.dispatch({
+                type: "castlingEnemyMoved",
+                payload: piece1
+            })
+        }
+
         store.dispatch({
             type: "oldSquare",
             payload: oldSq
         })
+
         store.dispatch({
             type: "newSquare",
             payload: newSqRook
         })
+
         store.dispatch({
-            type: piece,
+            type: piece1
         })
+
         encode()
+
         setLastMadeMove([newSqKing, oldSq])
+
         setMoveSquares([])
+
         setPieceSquare(null)
     }
 
@@ -1922,10 +2003,10 @@ const Board = () => {
         if (/^pk/.test(string)) {
             switch (pieceSquareForEngine.current - i) {
                 case -2:
-                    animateCastling(-160, 0, 63, 64, 62, "pr2")
+                    animateCastling(-160, 0, 63, 64, 62, "pr2", string)
                     break;
                 case 2:
-                    animateCastling(160, 0, 59, 57, 60, "pr1")
+                    animateCastling(160, 0, 59, 57, 60, "pr1", string)
                     break;
                 default:
                     break;
@@ -1934,10 +2015,10 @@ const Board = () => {
         if (/^ok/.test(string)) {
             switch (pieceSquareForEngine.current - i) {
                 case -2:
-                    animateCastling(-160, 0, 7, 8, 6, "or2")
+                    animateCastling(-160, 0, 7, 8, 6, "or2", string)
                     break;
                 case 2:
-                    animateCastling(160, 0, 3, 1, 4, "or1")
+                    animateCastling(160, 0, 3, 1, 4, "or1", string)
                     break;
                 default:
                     break;
