@@ -101,9 +101,9 @@ const initialState = {
         or2: true
     },
     moveCounter: 1,
-    enemySquares: [],
-    playerSquares: [],
-    occupiedSquares: [],
+    // enemySquares: [],
+    // playerSquares: [],
+    // occupiedSquares: [],
     checkingPiece: [],
     enemyKingAttacked: false,
     playerKingAttacked: false,
@@ -126,21 +126,21 @@ function boardReducer(state = initialState, action) {
                 ...state,
                 checkingPiece: [...action.payload]
             }
-        case "enemySquares":
-            return {
-                ...state,
-                enemySquares: [...action.payload]
-            }
-        case "playerSquares":
-            return {
-                ...state,
-                playerSquares: [...action.payload]
-            }
-        case "occupiedSquares":
-            return {
-                ...state,
-                occupiedSquares: [...action.payload]
-            }
+        // case "enemySquares":
+        //     return {
+        //         ...state,
+        //         enemySquares: [...action.payload]
+        //     }
+        // case "playerSquares":
+        //     return {
+        //         ...state,
+        //         playerSquares: [...action.payload]
+        //     }
+        // case "occupiedSquares":
+        //     return {
+        //         ...state,
+        //         occupiedSquares: [...action.payload]
+        //     }
         case "optionsOff":
             return {
                 ...state,
