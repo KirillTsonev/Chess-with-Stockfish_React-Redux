@@ -134,7 +134,9 @@ const Board = () => {
             if (/^oh/.test(enginePieceToMove)) {
                 opponentChecks.current = []
 
-                recordKnightMoves(engineWhereToMove, opponentChecks.current)
+                recordKnightMoves(engineWhereToMove, opponentChecks.current, enemySquares)
+
+                // console.log(opponentChecks.current)
 
                 moveKnight(engineWhereToMove, enginePieceToMove)
             } 
@@ -154,15 +156,9 @@ const Board = () => {
             
             if (/^oq/.test(enginePieceToMove)) {
                 opponentChecks.current = []
-                if (board.oqw) {
-                    checkArrays(whiteBishopMoves, engineWhereToMove, opponentChecks.current, enemySquares, playerSquares)
-                    checkArrays(blackBishopMoves, engineWhereToMove, opponentChecks.current, enemySquares, playerSquares)
-                    checkArrays(rookMoves, engineWhereToMove, opponentChecks.current, enemySquares, playerSquares)
-                } else {
-                    checkArrays(whiteBishopMoves, engineWhereToMove, opponentChecks.current, enemySquares, playerSquares)
-                    checkArrays(blackBishopMoves, engineWhereToMove, opponentChecks.current, enemySquares, playerSquares)
-                    checkArrays(rookMoves, engineWhereToMove, opponentChecks.current, enemySquares, playerSquares)
-                }
+                checkArrays(whiteBishopMoves, engineWhereToMove, opponentChecks.current, enemySquares, store.getState().playerSquares)
+                checkArrays(blackBishopMoves, engineWhereToMove, opponentChecks.current, enemySquares, store.getState().playerSquares)
+                checkArrays(rookMoves, engineWhereToMove, opponentChecks.current, enemySquares, store.getState().playerSquares)
                 moveQueen(engineWhereToMove, enginePieceToMove)
             } 
             
@@ -370,7 +366,7 @@ const Board = () => {
 
         fenString += moveCounter
         stringToSend = fenString
-        console.log(fenString)
+        // console.log(fenString)
     }
 
 
@@ -487,8 +483,8 @@ const Board = () => {
         
     const attackedByOpponent = () => {
         let arr = []
-        recordKnightMoves(enemyKnight1, arr)
-        recordKnightMoves(enemyKnight2, arr)
+        recordKnightMoves(enemyKnight1, arr, enemySquares)
+        recordKnightMoves(enemyKnight2, arr, enemySquares)
         checkArrays(whiteBishopMoves, enemyBishop1, arr, enemySquares, playerSquares)
         checkArrays(blackBishopMoves, enemyBishop2, arr, enemySquares, playerSquares)
         checkArrays(rookMoves, enemyRook1, arr, enemySquares, playerSquares)
@@ -547,8 +543,6 @@ const Board = () => {
         // setPlayerSquares(Object.values(justPlayer).map(a => a = a[0]))
         // setEmptySquares(Object.values(justEmpty).map(a => a = a[0]))
         // setOccupiedSquares(Object.values(justOccupied).map(a => a = a[0]))
-
-        attackedByOpponent()
     }
 
     useEffect(() => {
@@ -932,7 +926,7 @@ const Board = () => {
         }
     }
 
-    function recordKnightMoves(i, arrMoves) {    
+    function recordKnightMoves(i, arrMoves, excArr) {    
         let arr = []
         if (knightLimits[0].includes(i)) {
             arr = [i - 15, i - 6, i + 10, i + 17]
@@ -947,7 +941,7 @@ const Board = () => {
             arr = [i - 17, i - 15, i - 10, i - 6, i + 6, i + 10, i + 15, i + 17]
         }
         for (const number of arr) {
-            if (playerSquares.includes(number)) {
+            if (excArr.includes(number)) {
                 arr = arr.filter(x => x !== number)
             }
         }
@@ -1053,7 +1047,7 @@ const Board = () => {
 
             if (/^ph/.test(piece)) {   
                 let arr = []
-                recordKnightMoves(i, arr)
+                recordKnightMoves(i, arr, playerSquares)
                 setMoveSquares(arr)
             }
 
@@ -1090,6 +1084,8 @@ const Board = () => {
             }
 
             if (piece === "pkw" || piece === "pkb") {
+                attackedByOpponent()
+
                 let arr = []
                 
                 if (castlingPlayerMoved[piece.slice(0, 2)] && castlingPlayerMoved.pr2 && castlingPlayerMoved.pr1) {
@@ -1105,6 +1101,8 @@ const Board = () => {
                 } else {
                     arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9]
                 }
+
+                console.log(attackedByOpponentArr)
 
                 for (const number of arr) {
                     if (occupiedSquares.includes(number)) {
@@ -1130,7 +1128,7 @@ const Board = () => {
 
         if (activePiece === "ph1" && moveSquares.includes(i)) {
             attackedByPlayerArr[7] = []
-            recordKnightMoves(i, attackedByPlayerArr[7])
+            recordKnightMoves(i, attackedByPlayerArr[7], playerSquares)
             moveKnight(i, "ph1")
             if (color === "white") {
                 setToMove("b")
@@ -1142,7 +1140,7 @@ const Board = () => {
         
         if (activePiece === "ph2" && moveSquares.includes(i)) {
             attackedByPlayerArr[8] = []
-            recordKnightMoves(i, attackedByPlayerArr[8])
+            recordKnightMoves(i, attackedByPlayerArr[8], playerSquares)
             moveKnight(i, "ph2")
             if (color === "white") {
                 setToMove("b")
@@ -1392,7 +1390,7 @@ const Board = () => {
                     payload: "takes"
                 })
             } else {
-                if (attackedByPlayerArr.flat().includes(i)) {
+                if ((!attackedByPlayerArr.flat().includes(i) && /^ok/.test(string)) || attackedByPlayerArr.flat().includes(i)) {
                     moveSound.play()
                     store.dispatch({
                         type: "enemyKingAttacked",
@@ -1401,6 +1399,7 @@ const Board = () => {
                 } 
                 
                 if (opponentChecks.current.includes(playerKing)) {
+                    console.log("check")
                     checkSound.play()
                     store.dispatch({
                         type: "playerKingAttacked",
@@ -1465,13 +1464,12 @@ const Board = () => {
                     payload: "takes"
                 })
             } else {
-                if (opponentChecks.current.includes(i)) {
+                if ((!opponentChecks.current.includes(i) && /^pk/.test(string)) || opponentChecks.current.includes(i)) {
                     moveSound.play()
                     store.dispatch({
                         type: "playerKingAttacked",
                         payload: false
                     })
-                    opponentChecks.current = []
                 } 
                 
                 if (attackedByPlayerArr.flat().includes(enemyKing)) {
