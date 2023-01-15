@@ -72,10 +72,6 @@ const checkCastlingMoved = store => next => action => {
         }
         const asArray = Object.entries(castlingMoved)
         const filteredCastling = asArray.filter(([key, value]) => reg.test(key))
-        console.log(castlingMoved)
-        // console.log(reg)
-        // console.log(asArray)
-        // console.log(filteredCastling)
         const restArr = asArray.filter(([key, value]) => !reg.test(key))
         filteredCastling[0][1] = false
         const changedObject = Object.fromEntries(restArr.concat(filteredCastling))
