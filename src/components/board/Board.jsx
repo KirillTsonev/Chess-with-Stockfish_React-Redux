@@ -733,57 +733,6 @@ const Board = () => {
     const enemyPawn7 = board.op7 ? board.op7[0] : null
     const enemyPawn8 = board.op8 ? board.op8[0] : null
 
-    function resetPieces() {
-        if (!board.oh1) {
-            enemyKnight1.current = 0
-        }
-        if (!board.oh2) {
-            enemyKnight2.current = 0
-        }
-        if (!board.ob1) {
-            enemyBishop1.current = 0
-        }
-        if (!board.ob2) {
-            enemyBishop2.current = 0
-        }
-        if (!board.or1) {
-            enemyRook1.current = 0
-        }
-        if (!board.or2) {
-            enemyRook2.current = 0
-        }
-        if (!board.oqb1 && color === "white") {
-            enemyQueen1.current = 0
-        }
-        if (!board.oqw1 && color === "black") {
-            enemyQueen1.current = 0
-        }
-        if (!board.ph1) {
-            playerKnight1.current = 0
-        }
-        if (!board.ph2) {
-            playerKnight2.current = 0
-        }
-        if (!board.pb1) {
-            playerBishop1.current = 0
-        }
-        if (!board.pb2) {
-            playerBishop2.current = 0
-        }
-        if (!board.pr1) {
-            playerRook1.current = 0
-        }
-        if (!board.pr2) {
-            playerRook2.current = 0
-        }
-        if (!board.pqb1 && color === "black") {
-            playerQueen1.current = 0
-        }
-        if (!board.pqw1 && color === "white") {
-            playerQueen1.current = 0
-        }
-    }
-
     const playerBishop1 = useRef(0)
     const playerBishop2 = useRef(0)
     const playerBishop3 = useRef(0)
@@ -794,8 +743,8 @@ const Board = () => {
     const playerBishop8 = useRef(0)
     const playerBishop9 = useRef(0)
 
-    const playerKnight1 = useRef(0)
-    const playerKnight2 = useRef(0)
+    const playerKnight1 = useRef(100)
+    const playerKnight2 = useRef(100)
     const playerKnight3 = useRef(0)
     const playerKnight4 = useRef(0)
     const playerKnight5 = useRef(0)
@@ -835,7 +784,227 @@ const Board = () => {
     const playerPawn7 = board.pp7 ? board.pp7[0] : null
     const playerPawn8 = board.pp8 ? board.pp8[0] : null
 
+    function resetPieces() {
+        if (!board.oh1) {
+            enemyKnight1.current = 0
+        }
+        if (!board.oh2) {
+            enemyKnight2.current = 0
+        }
+        if (!board.oh3) {
+            enemyKnight3.current = 0
+        }
+        if (!board.oh4) {
+            enemyKnight4.current = 0
+        }
+        if (!board.oh5) {
+            enemyKnight5.current = 0
+        }
+        if (!board.oh6) {
+            enemyKnight6.current = 0
+        }
+        if (!board.oh7) {
+            enemyKnight7.current = 0
+        }
+        if (!board.oh8) {
+            enemyKnight8.current = 0
+        }
+        if (!board.oh9) {
+            enemyKnight9.current = 0
+        }
+        if (!board.ob1) {
+            enemyBishop1.current = 0
+        }
+        if (!board.ob2) {
+            enemyBishop2.current = 0
+        }
+        if (!board.ob3) {
+            enemyBishop3.current = 0
+        }
+        if (!board.ob4) {
+            enemyBishop4.current = 0
+        }
+        if (!board.ob5) {
+            enemyBishop5.current = 0
+        }
+        if (!board.ob6) {
+            enemyBishop6.current = 0
+        }
+        if (!board.ob7) {
+            enemyBishop7.current = 0
+        }
+        if (!board.ob8) {
+            enemyBishop8.current = 0
+        }
+        if (!board.ob9) {
+            enemyBishop9.current = 0
+        }
+        if (!board.or1) {
+            enemyRook1.current = 0
+        }
+        if (!board.or2) {
+            enemyRook2.current = 0
+        }
+        if (!board.or3) {
+            enemyRook3.current = 0
+        }
+        if (!board.or4) {
+            enemyRook4.current = 0
+        }
+        if (!board.or5) {
+            enemyRook5.current = 0
+        }
+        if (!board.or6) {
+            enemyRook6.current = 0
+        }
+        if (!board.or7) {
+            enemyRook7.current = 0
+        }
+        if (!board.or8) {
+            enemyRook8.current = 0
+        }
+        if (!board.or9) {
+            enemyRook9.current = 0
+        }
+        if ((!board.oqb1 && color === "white") || (!board.oqw1 && color === "black")) {
+            enemyQueen1.current = 0
+        }
+        if ((!board.oqb2 && color === "white") || (!board.oqw2 && color === "black")) {
+            enemyQueen2.current = 0
+        }
+        if ((!board.oqb3 && color === "white") || (!board.oqw3 && color === "black")) {
+            enemyQueen3.current = 0
+        }
+        if ((!board.oqb4 && color === "white") || (!board.oqw4 && color === "black")) {
+            enemyQueen4.current = 0
+        }
+        if ((!board.oqb5 && color === "white") || (!board.oqw5 && color === "black")) {
+            enemyQueen5.current = 0
+        }
+        if ((!board.oqb6 && color === "white") || (!board.oqw6 && color === "black")) {
+            enemyQueen6.current = 0
+        }
+        if ((!board.oqb7 && color === "white") || (!board.oqw7 && color === "black")) {
+            enemyQueen7.current = 0
+        }
+        if ((!board.oqb8 && color === "white") || (!board.oqw8 && color === "black")) {
+            enemyQueen8.current = 0
+        }
+        if ((!board.oqb9 && color === "white") || (!board.oqw9 && color === "black")) {
+            enemyQueen9.current = 0
+        }
+        if (!board.ph1) {
+            playerKnight1.current = 100
+        }
+        if (!board.ph2) {
+            playerKnight2.current = 100
+        }
+        if (!board.ph3) {
+            playerKnight3.current = 0
+        }
+        if (!board.ph4) {
+            playerKnight4.current = 0
+        }
+        if (!board.ph5) {
+            playerKnight5.current = 0
+        }
+        if (!board.ph6) {
+            playerKnight6.current = 0
+        }
+        if (!board.ph7) {
+            playerKnight7.current = 0
+        }
+        if (!board.ph8) {
+            playerKnight8.current = 0
+        }
+        if (!board.ph9) {
+            playerKnight9.current = 0
+        }
+        if (!board.pb1) {
+            playerBishop1.current = 0
+        }
+        if (!board.pb2) {
+            playerBishop2.current = 0
+        }
+        if (!board.pb3) {
+            playerBishop3.current = 0
+        }
+        if (!board.pb4) {
+            playerBishop4.current = 0
+        }
+        if (!board.pb5) {
+            playerBishop5.current = 0
+        }
+        if (!board.pb6) {
+            playerBishop6.current = 0
+        }
+        if (!board.pb7) {
+            playerBishop7.current = 0
+        }
+        if (!board.pb8) {
+            playerBishop8.current = 0
+        }
+        if (!board.pb9) {
+            playerBishop9.current = 0
+        }
+        if (!board.pr1) {
+            playerRook1.current = 0
+        }
+        if (!board.pr2) {
+            playerRook2.current = 0
+        }
+        if (!board.pr3) {
+            playerRook3.current = 0
+        }
+        if (!board.pr4) {
+            playerRook4.current = 0
+        }
+        if (!board.pr5) {
+            playerRook5.current = 0
+        }
+        if (!board.pr6) {
+            playerRook6.current = 0
+        }
+        if (!board.pr7) {
+            playerRook7.current = 0
+        }
+        if (!board.pr8) {
+            playerRook8.current = 0
+        }
+        if (!board.pr9) {
+            playerRook9.current = 0
+        }
+        if ((!board.pqb1 && color === "black") || (!board.pqw1 && color === "white")) {
+            playerQueen1.current = 0
+        }
+        if ((!board.pqb2 && color === "black") || (!board.pqw2 && color === "white")) {
+            playerQueen2.current = 0
+        }
+        if ((!board.pqb3 && color === "black") || (!board.pqw3 && color === "white")) {
+            playerQueen3.current = 0
+        }
+        if ((!board.pqb4 && color === "black") || (!board.pqw4 && color === "white")) {
+            playerQueen4.current = 0
+        }
+        if ((!board.pqb5 && color === "black") || (!board.pqw5 && color === "white")) {
+            playerQueen5.current = 0
+        }
+        if ((!board.pqb6 && color === "black") || (!board.pqw6 && color === "white")) {
+            playerQueen6.current = 0
+        }
+        if ((!board.pqb7 && color === "black") || (!board.pqw7 && color === "white")) {
+            playerQueen7.current = 0
+        }
+        if ((!board.pqb8 && color === "black") || (!board.pqw8 && color === "white")) {
+            playerQueen8.current = 0
+        }
+        if ((!board.pqb9 && color === "black") || (!board.pqw9 && color === "white")) {
+            playerQueen9.current = 0
+        }
+    }
+
     const checkedByPlayerArr = useRef([])
+    const attackedByPlayerArr = useRef([])
     const attackedByOpponentArr = useRef([])
     const checkedByOpponentArr = useRef([])
 
@@ -878,7 +1047,7 @@ const Board = () => {
         checkArrays(whiteBishopMoves, enemyQueen1.current, arr, enemySquaresRender, playerSquaresRender, true)
         checkArrays(blackBishopMoves, enemyQueen1.current, arr, enemySquaresRender, playerSquaresRender, true)
         checkArrays(rookMoves, enemyQueen1.current, arr, enemySquaresRender, playerSquaresRender, true)
-        // recordOpponentKingMoves(enemyKing, arr)
+
         recordOpponentPawnAttacks(enemyPawn1, arr)
         recordOpponentPawnAttacks(enemyPawn2, arr)
         recordOpponentPawnAttacks(enemyPawn3, arr)
@@ -889,6 +1058,34 @@ const Board = () => {
         recordOpponentPawnAttacks(enemyPawn8, arr)
 
         attackedByOpponentArr.current = arr
+    }
+
+    const attackedByPlayer = () => {
+        let arr = []
+
+        recordKnightMoves(playerKnight1.current, arr, playerSquaresRender)
+        recordKnightMoves(playerKnight2.current, arr, playerSquaresRender)
+
+        checkArrays(whiteBishopMoves, playerBishop2.current, arr, playerSquaresRender, enemySquaresRender, true)
+        checkArrays(blackBishopMoves, playerBishop1.current, arr, playerSquaresRender, enemySquaresRender, true)
+
+        checkArrays(rookMoves, playerRook1.current, arr, playerSquaresRender, enemySquaresRender, true)
+        checkArrays(rookMoves, playerRook2.current, arr, playerSquaresRender, enemySquaresRender, true)
+
+        checkArrays(whiteBishopMoves, playerQueen1.current, arr, playerSquaresRender, enemySquaresRender, true)
+        checkArrays(blackBishopMoves, playerQueen1.current, arr, playerSquaresRender, enemySquaresRender, true)
+        checkArrays(rookMoves, playerQueen1.current, arr, playerSquaresRender, enemySquaresRender, true)
+
+        recordPlayerPawnAttacks(playerPawn1, arr)
+        recordPlayerPawnAttacks(playerPawn2, arr)
+        recordPlayerPawnAttacks(playerPawn3, arr)
+        recordPlayerPawnAttacks(playerPawn4, arr)
+        recordPlayerPawnAttacks(playerPawn5, arr)
+        recordPlayerPawnAttacks(playerPawn6, arr)
+        recordPlayerPawnAttacks(playerPawn7, arr)
+        recordPlayerPawnAttacks(playerPawn8, arr)
+
+        attackedByPlayerArr.current = arr
     }
 
     const renderBoard = () => {
@@ -1569,22 +1766,6 @@ const Board = () => {
         }
     }
 
-    // function recordOpponentKingMoves(i, arrMoves) {
-    //     let arr = []
-                
-    //     if (knightLimits[0].includes(i)) {
-    //         arr = [i - 8, i - 7, i + 1, i + 8, i + 9]
-    //     } else if (knightLimits[3].includes(i)) {
-    //         arr = [i - 9, i - 8, i - 1, i + 7, i + 8]
-    //     } else {
-    //         arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9]
-    //     }
-
-    //     for (const number of arr) {
-    //         arrMoves.push(number)
-    //     }
-    // }
-
     function recordOpponentPawnAttacks(i, arrMoves) {
         let arr = []
 
@@ -1594,6 +1775,22 @@ const Board = () => {
 
         if (!knightLimits[3].includes(i)) {
             arr.push(i + 9)
+        }
+
+        for (const number of arr) {
+            arrMoves.push(number)
+        }
+    }
+
+    function recordPlayerPawnAttacks(i, arrMoves) {
+        let arr = []
+
+        if (!knightLimits[0].includes(i)) {
+            arr.push(i - 7)
+        }
+
+        if (!knightLimits[3].includes(i)) {
+            arr.push(i - 9)
         }
 
         for (const number of arr) {
@@ -1658,7 +1855,7 @@ const Board = () => {
                 setMoveSquares(arr)
             }
 
-            if (/^pqw/.test(piece) || /^pqb/.test(piece)) {
+            if (/^pq/.test(piece)) {
                 let arr = []
                 checkArrays(rookMoves, i, arr, playerSquaresRender, enemySquaresRender, true)
                 checkArrays(blackBishopMoves, i, arr, playerSquaresRender, enemySquaresRender, true)
@@ -1666,42 +1863,7 @@ const Board = () => {
                 setMoveSquares(arr)
             }
 
-            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            if (/^oh/.test(piece)) {   
-                let arr = []
-                recordKnightMoves(i, arr, enemySquaresRender)
-                setMoveSquares(arr)
-            }
-
-            if (/^op/.test(piece)) {
-                let arr = []
-                recordOpponentPawnMoves(i, piece, arr)
-                setMoveSquares(arr)
-            }
-
-            if (/^or/.test(piece)) {
-                let arr = []
-                checkArrays(rookMoves, i, arr, enemySquaresRender, playerSquaresRender, true)
-                setMoveSquares(arr)
-            }
-
-            if (/^ob/.test(piece)) {
-                let arr = []
-                checkArrays(whiteBishopMoves, i, arr, enemySquaresRender, playerSquaresRender, true)
-                checkArrays(blackBishopMoves, i, arr, enemySquaresRender, playerSquaresRender, true)
-                setMoveSquares(arr)
-            }
-
-            if (/^oqw/.test(piece) || /^oqb/.test(piece)) {
-                let arr = []
-                checkArrays(rookMoves, i, arr, enemySquaresRender, playerSquaresRender, true)
-                checkArrays(blackBishopMoves, i, arr, enemySquaresRender, playerSquaresRender, true)
-                checkArrays(whiteBishopMoves, i, arr, enemySquaresRender, playerSquaresRender, true)
-                setMoveSquares(arr)
-            }
-            ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-            if (piece === "pkw" || piece === "pkb") {
+            if (/^pk/.test(piece)) {
                 attackedByOpponent()
 
                 // console.log(JSON.stringify(playerSquaresRender))
@@ -1740,6 +1902,89 @@ const Board = () => {
                     }
                 }
             }
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            if (/^oh/.test(piece)) {   
+                let arr = []
+                recordKnightMoves(i, arr, enemySquaresRender)
+                setMoveSquares(arr)
+            }
+
+            if (/^op/.test(piece)) {
+                let arr = []
+                recordOpponentPawnMoves(i, piece, arr)
+                setMoveSquares(arr)
+            }
+
+            if (/^or/.test(piece)) {
+                let arr = []
+                checkArrays(rookMoves, i, arr, enemySquaresRender, playerSquaresRender, true)
+                setMoveSquares(arr)
+            }
+
+            if (/^ob/.test(piece)) {
+                let arr = []
+                checkArrays(whiteBishopMoves, i, arr, enemySquaresRender, playerSquaresRender, true)
+                checkArrays(blackBishopMoves, i, arr, enemySquaresRender, playerSquaresRender, true)
+                setMoveSquares(arr)
+            }
+
+            if (/^oqw/.test(piece) || /^oqb/.test(piece)) {
+                let arr = []
+                checkArrays(rookMoves, i, arr, enemySquaresRender, playerSquaresRender, true)
+                checkArrays(blackBishopMoves, i, arr, enemySquaresRender, playerSquaresRender, true)
+                checkArrays(whiteBishopMoves, i, arr, enemySquaresRender, playerSquaresRender, true)
+                setMoveSquares(arr)
+            }
+
+            if (/^ok/.test(piece)) {
+                attackedByPlayer()
+
+                // console.log(JSON.stringify(playerSquaresRender))
+                
+
+                let arr = []
+                
+                if (castlingEnemyMoved[piece.slice(0, 2)] && castlingEnemyMoved.or2 && castlingEnemyMoved.or1) {
+                    arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9, i + 2, i - 2]
+                } else if (castlingEnemyMoved[piece.slice(0, 2)] && castlingEnemyMoved.or2) {
+                    arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9, i + 2]
+                } else if (castlingEnemyMoved[piece.slice(0, 2)] && castlingEnemyMoved.or1) {
+                    arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9, i - 2]
+                } else if (knightLimits[3].includes(i)) {
+                    arr = [i - 8, i - 7, i + 1, i + 8, i + 9]
+                } else if (knightLimits[0].includes(i)) {
+                    arr = [i - 9, i - 8, i - 1, i + 7, i + 8]
+                } else {
+                    arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9]
+                }
+
+                console.log(attackedByPlayerArr.current)
+                for (const number of arr) {
+                    if (enemySquaresRender.includes(number)) {
+
+                        arr = arr.filter(x => x !== number)
+
+                        if (!arr.includes(4) && i === 5) {
+                            arr = arr.filter(x => x !== 3)
+                        }
+
+                        if (!arr.includes(6) && i === 5) {
+                            arr = arr.filter(x => x !== 7)
+                        }
+
+                        arr = arr.filter(a => !attackedByPlayerArr.current.includes(a))
+
+                        setMoveSquares(arr)
+                    } else {
+                        arr = arr.filter(a => !attackedByPlayerArr.current.includes(a))
+                        setMoveSquares(arr)
+                    }
+                }
+            }
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////
         }
 
         if (/^ph/.test(activePiece) && moveSquares.includes(i)) {
@@ -1912,19 +2157,13 @@ const Board = () => {
             moveQueen(i, activePiece)
         } 
 
-        if (activePiece === "pkw" && moveSquares.includes(i) && !attackedByOpponentArr.current.includes(i)) {
+        if (/^pk/.test(activePiece) && moveSquares.includes(i) && !attackedByOpponentArr.current.includes(i)) {
             updateStateBoard(i, activePiece)
-            moveKing(i, "pkw")
+            moveKing(i, activePiece)
             playerKing = i
             playerKingSpiderSense()
         } 
         
-        if (activePiece === "pkb" && moveSquares.includes(i) && !attackedByOpponentArr.current.includes(i)) {
-            updateStateBoard(i, activePiece)
-            moveKing(i, "pkb")
-            playerKing = i
-            playerKingSpiderSense()
-        }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2099,6 +2338,13 @@ const Board = () => {
             moveQueen(i, activePiece)
 
             checkedByOpponentArr.current = []
+        } 
+
+        if (/^ok/.test(activePiece) && moveSquares.includes(i) && !attackedByPlayerArr.current.includes(i)) {
+            updateStateBoard(i, activePiece)
+            moveKing(i, activePiece)
+            enemyKing = i
+            enemyKingSpiderSense()
         } 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
