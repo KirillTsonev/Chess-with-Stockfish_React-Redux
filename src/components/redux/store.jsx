@@ -3,10 +3,11 @@ import boardReducer from "./reducer";
 import { swapAndEditBoard } from "./middleware";
 import { checkPieceMoved } from "./middleware";
 import { checkCastlingMoved } from "./middleware";
+import { pawnPromotion } from "./middleware";
 
 const store = configureStore({
     reducer: boardReducer,
-    middleware: [swapAndEditBoard, checkPieceMoved, checkCastlingMoved]
+    middleware: [swapAndEditBoard, checkPieceMoved, checkCastlingMoved, pawnPromotion ]
 })
 
 export default store

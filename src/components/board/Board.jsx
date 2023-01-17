@@ -38,6 +38,7 @@ const Board = () => {
     // const [playerKingAttacked, setPlayerKingAttacked] = useState(false) // 7
     // const [attackedByOpponentArr, setAttackedByOpponentArr] = useState([]) // 8
     const [toMove, setToMove] = useState("w") // 6
+    const [pawnPromotes, setPawnPromotes] = useState(false)
 
     const board = useSelector(state => state.board)
     const color = useSelector(state => state.color)
@@ -52,6 +53,7 @@ const Board = () => {
     // const occupiedSquares = useSelector(state => state.occupiedSquares)
     const enemyKingAttacked = useSelector(state => state.enemyKingAttacked)
     const playerKingAttacked = useSelector(state => state.playerKingAttacked)
+    const halfMoveCounter = useSelector(state => state.halfMoveCounter)
 
 
 
@@ -494,9 +496,7 @@ const Board = () => {
             fenString += "-"
         }
         
-        ////////////////////////////////
-        fenString += " 0 "
-        /////////////////////////////////
+        fenString += ` ${halfMoveCounter} `
 
         fenString += moveCounter
         stringToSend = fenString
@@ -802,6 +802,17 @@ const Board = () => {
         )
     }
 
+    const promotePawn = (pawn, pieceToPromoteToW, pieceToPromoteToB) => {
+        const pieceToPromoteTo = color === "white" ? pieceToPromoteToW : pieceToPromoteToB
+
+        store.dispatch({
+            type: "pawnPromotion",
+            payload: {pawn, pieceToPromoteTo}
+        })
+
+        setPawnPromotes(false)
+    }
+
     const renderPieces = () => {
         const renderEachPiece = (a, src1, src2, alt1, alt2, piece) => {
             return (
@@ -939,7 +950,39 @@ const Board = () => {
                 case "pp5": 
                     return renderEachPiece(a, whitePawn, blackPawn, "White Pawn", "Black Pawn", "pp5")
                 case "pp6": 
-                    return renderEachPiece(a, whitePawn, blackPawn, "White Pawn", "Black Pawn", "pp6")
+                    return <div className="pawnContainer">
+                        {renderEachPiece(a, whitePawn, blackPawn, "White Pawn", "Black Pawn", "pp6")}
+                            <div className="pawnPromotion" style={pawnPromotes ? {display: "block"} : {display: "none"}}>
+                                <div className="promotionPiece">
+                                    <img 
+                                    src={color === "white" ? whiteQueen : blackQueen} 
+                                    alt="Player Queen" 
+                                    className="piece"
+                                    onClick={() => promotePawn("pp6", "pqw2", "pqb2")}/>
+                                </div>
+                                <div className="promotionPiece">
+                                    <img 
+                                    src={color === "white" ? whiteRook : blackRook} 
+                                    alt="Player Rook" 
+                                    className="piece"
+                                    onClick={() => promotePawn("pp6")}/>
+                                </div>
+                                <div className="promotionPiece">
+                                    <img 
+                                    src={color === "white" ? whiteBishop : blackBishop} 
+                                    alt="Player Bishop" 
+                                    className="piece"
+                                    onClick={() => promotePawn("pp6")}/>
+                                </div>
+                                <div className="promotionPiece">
+                                    <img 
+                                    src={color === "white" ? whiteKnight : blackKnight} 
+                                    alt="Player Knight" 
+                                    className="piece"
+                                    onClick={() => promotePawn("pp6")}/>
+                                </div>
+                            </div>
+                        </div>
                 case "pp7": 
                     return renderEachPiece(a, whitePawn, blackPawn, "White Pawn", "Black Pawn", "pp7")
                 case "pp8":
@@ -981,6 +1024,8 @@ const Board = () => {
 
         return (
             <div className="movementGrid">
+                <div className="pawnPromotionOverlay" style={pawnPromotes ? {display: "block"} : {display: "none"}}></div>
+
                 {arr1.map((a, i) => <div key={i + 1} 
                                         onClick={() => onSquareClick(i + 1, boardEntries[i][0])}
                                         className="movementSquare">
@@ -1528,14 +1573,17 @@ const Board = () => {
 
         if (/^o/.test(string)) {
             if (playerSquaresRender.includes(i)) {
+                store.dispatch({
+                    type: "halfMoveCounter/reset",
+                })
                 
-                if (i === store.getState().checkingPiece[1]) {
-                    captureSound.play()
-                    store.dispatch({
-                        type: "enemyKingAttacked",
-                        payload: false
-                    })
-                }
+                // if (i === store.getState().checkingPiece[1]) {
+                //     captureSound.play()
+                //     store.dispatch({
+                //         type: "enemyKingAttacked",
+                //         payload: false
+                //     })
+                // }
                 
                 if (checkedByOpponentArr.current.flat().includes(playerKing)) {
                     checkSound.play()
@@ -1601,6 +1649,16 @@ const Board = () => {
             } else {
                 // console.log(checkedByOpponentArr.current.flat())
                 // console.log(playerKingSpiderSenseArr.current)
+
+                if (/^op/.test(string)) {
+                    store.dispatch({
+                        type: "halfMoveCounter/reset",
+                    })
+                } else {
+                    store.dispatch({
+                        type: "halfMoveCounter/increase",
+                    })
+                }
                 
                 if ((!checkedByPlayerArr.current.flat().includes(i) && /^ok/.test(string)) || checkedByPlayerArr.current.flat().includes(i)) {
                     moveSound.play()
@@ -1686,12 +1744,20 @@ const Board = () => {
 
         if (/^p/.test(string)) {
             if (enemySquaresRender.includes(i)) {
-                if (i === store.getState().checkingPiece[1]) {
-                    captureSound.play()
-                    store.dispatch({
-                        type: "playerKingAttacked",
-                        payload: false
-                    })
+                store.dispatch({
+                    type: "halfMoveCounter/reset",
+                })
+
+                // if (i === store.getState().checkingPiece[1]) {
+                //     captureSound.play()
+                //     store.dispatch({
+                //         type: "playerKingAttacked",
+                //         payload: false
+                //     })
+                // }
+
+                if (/^pp/.test(string) && rookMoves[0].includes(i)) {
+                    setPawnPromotes(true)
                 }
                 
                 if (checkedByPlayerArr.current.flat().includes(enemyKing)) {
@@ -1756,6 +1822,20 @@ const Board = () => {
 
                 captureSound.play()
             } else {
+
+                if (/^pp/.test(string) && rookMoves[0].includes(i)) {
+                    setPawnPromotes(true)
+                }
+
+                if (/^pp/.test(string)) {
+                    store.dispatch({
+                        type: "halfMoveCounter/reset",
+                    })
+                } else {
+                    store.dispatch({
+                        type: "halfMoveCounter/increase",
+                    })
+                }
                 
                 if ((!checkedByOpponentArr.current.flat().includes(i) && /^pk/.test(string)) || checkedByOpponentArr.current.flat().includes(i)) {
                     moveSound.play()

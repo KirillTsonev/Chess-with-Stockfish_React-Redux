@@ -101,9 +101,7 @@ const initialState = {
         or2: true
     },
     moveCounter: 1,
-    // enemySquares: [],
-    // playerSquares: [],
-    // occupiedSquares: [],
+    halfMoveCounter: 0,
     checkingPiece: [],
     enemyKingAttacked: false,
     playerKingAttacked: false,
@@ -111,6 +109,21 @@ const initialState = {
 
 function boardReducer(state = initialState, action) {
     switch (action.type) {
+        case "pawnPromotion":
+            return {
+                ...state,
+                board: action.payload
+            }
+        case "halfMoveCounter/increase":
+            return {
+                ...state,
+                halfMoveCounter: state.halfMoveCounter + 1
+            }
+        case "halfMoveCounter/reset":
+            return {
+                ...state,
+                halfMoveCounter: 0
+            }
         case "enemyKingAttacked":
             return {
                 ...state,
@@ -121,25 +134,10 @@ function boardReducer(state = initialState, action) {
                 ...state,
                 playerKingAttacked: action.payload
             }
-        case "checkingPiece":
-            return {
-                ...state,
-                checkingPiece: [...action.payload]
-            }
-        // case "enemySquares":
+        // case "checkingPiece":
         //     return {
         //         ...state,
-        //         enemySquares: [...action.payload]
-        //     }
-        // case "playerSquares":
-        //     return {
-        //         ...state,
-        //         playerSquares: [...action.payload]
-        //     }
-        // case "occupiedSquares":
-        //     return {
-        //         ...state,
-        //         occupiedSquares: [...action.payload]
+        //         checkingPiece: [...action.payload]
         //     }
         case "optionsOff":
             return {

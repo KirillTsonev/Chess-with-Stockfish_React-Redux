@@ -89,4 +89,36 @@ const checkCastlingMoved = store => next => action => {
     }
 }
 
-export {swapAndEditBoard, checkPieceMoved, checkCastlingMoved}
+const pawnPromotion = store => next => action => {
+    const func = (action) => {
+        let board = store.getState().board
+        const pawn = action.payload.pawn
+        const piece = action.payload.pieceToPromoteTo
+
+        // board[action.payload.pawn] = action.payload.pieceToPromoteTo
+
+        delete Object.assign(board, {[piece]: board[pawn]})[pawn]
+
+        const asArray = Object.entries(board)
+
+        const arr = asArray.filter(([key, value]) => key === piece)
+        const slice = arr[0][1][0] - 1
+
+        const finalArr = asArray.slice(0, slice).concat(arr).concat(asArray.slice(slice)).slice(0, 64)
+
+        const obj = Object.fromEntries(finalArr)
+
+        return {
+            ...action,
+            payload: obj
+        }
+    }
+
+    if (action.type === "pawnPromotion") {
+        return next(func(action))
+    } else {
+        return next(action)
+    }
+}
+
+export {swapAndEditBoard, checkPieceMoved, checkCastlingMoved, pawnPromotion}

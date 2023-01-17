@@ -39,7 +39,7 @@
     width: 640px
     height: 640px
     left: calc(50% - 320px)
-    top: 10px
+    top: 9.5px
     display: flex
     flex-wrap: wrap
 
@@ -48,7 +48,7 @@
     width: 640px
     height: 640px
     left: calc(50% - 320px)
-    top: 10px
+    top: 9.5px
     display: flex
     flex-wrap: wrap
 
@@ -165,3 +165,27 @@
 
 .kingInCheck
     box-shadow: inset 0 0 35px red
+
+.pawnPromotion
+    position: absolute
+    z-index: 5
+    top: 0
+
+.pawnContainer
+    position: relative
+    height: 80px
+
+.promotionPiece
+    height: 80px
+    cursor: pointer
+    background: #d4d4d4
+    border-radius: 100%
+    transition: all .5s
+    &:hover
+        border-radius: 0
+        background: #1cce31
+
+.pawnPromotionOverlay
+    background: #00000068
+    width: 100%
+    height: 100%
