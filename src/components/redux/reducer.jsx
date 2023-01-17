@@ -105,10 +105,16 @@ const initialState = {
     checkingPiece: [],
     enemyKingAttacked: false,
     playerKingAttacked: false,
+    sandbox: true,
 }
 
 function boardReducer(state = initialState, action) {
     switch (action.type) {
+        case "sandbox":
+            return {
+                ...state,
+                sandbox: action.payload
+            }
         case "pawnPromotion":
             return {
                 ...state,
