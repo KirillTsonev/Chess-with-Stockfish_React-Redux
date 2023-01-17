@@ -107,7 +107,6 @@ const Board = () => {
         playerSquaresLive =  Object.values(justPlayerLive).map(a => a = a[0])
         occupiedSquares = Object.values(justOccupied).map(a => a = a[0])
 
-        resetPieces()
         playerNewSquareForEngine = boardEntries.filter(([key, value]) => value[0] === pieceSquareForEngine.current).flat()[1][1]
         encode()
 
@@ -733,46 +732,55 @@ const Board = () => {
     const enemyPawn7 = board.op7 ? board.op7[0] : null
     const enemyPawn8 = board.op8 ? board.op8[0] : null
 
-    const playerBishop1 = useRef(0)
-    const playerBishop2 = useRef(0)
-    const playerBishop3 = useRef(0)
-    const playerBishop4 = useRef(0)
-    const playerBishop5 = useRef(0)
-    const playerBishop6 = useRef(0)
-    const playerBishop7 = useRef(0)
-    const playerBishop8 = useRef(0)
-    const playerBishop9 = useRef(0)
+    let playerBishop1 = board.pb1 ? board.pb1[0] : null
+    let playerBishop2 = board.pb2 ? board.pb2[0] : null
+    let playerBishop3 = board.pb3 ? board.pb3[0] : null
+    let playerBishop4 = board.pb4 ? board.pb4[0] : null
+    let playerBishop5 = board.pb5 ? board.pb5[0] : null
+    let playerBishop6 = board.pb6 ? board.pb6[0] : null
+    let playerBishop7 = board.pb7 ? board.pb7[0] : null
+    let playerBishop8 = board.pb8 ? board.pb8[0] : null
+    let playerBishop9 = board.pb9 ? board.pb9[0] : null
 
-    const playerKnight1 = useRef(100)
-    const playerKnight2 = useRef(100)
-    const playerKnight3 = useRef(0)
-    const playerKnight4 = useRef(0)
-    const playerKnight5 = useRef(0)
-    const playerKnight6 = useRef(0)
-    const playerKnight7 = useRef(0)
-    const playerKnight8 = useRef(0)
-    const playerKnight9 = useRef(0)
+    let playerKnight1 = board.ph1 ? board.ph1[0] : null
+    let playerKnight2 = board.ph2 ? board.ph2[0] : null
+    let playerKnight3 = board.ph3 ? board.ph3[0] : null
+    let playerKnight4 = board.ph4 ? board.ph4[0] : null
+    let playerKnight5 = board.ph5 ? board.ph5[0] : null
+    let playerKnight6 = board.ph6 ? board.ph6[0] : null
+    let playerKnight7 = board.ph7 ? board.ph7[0] : null
+    let playerKnight8 = board.ph8 ? board.ph8[0] : null
+    let playerKnight9 = board.ph9 ? board.ph9[0] : null
 
-    const playerRook1 = useRef(0)
-    const playerRook2 = useRef(0)
-    const playerRook3 = useRef(0)
-    const playerRook4 = useRef(0)
-    const playerRook5 = useRef(0)
-    const playerRook6 = useRef(0)
-    const playerRook7 = useRef(0)
-    const playerRook8 = useRef(0)
-    const playerRook9 = useRef(0)
+    let playerRook1 = board.pr1 ? board.pr1[0] : null
+    let playerRook2 = board.pr2 ? board.pr2[0] : null
+    let playerRook3 = board.pr3 ? board.pr3[0] : null
+    let playerRook4 = board.pr4 ? board.pr4[0] : null
+    let playerRook5 = board.pr5 ? board.pr5[0] : null
+    let playerRook6 = board.pr6 ? board.pr6[0] : null
+    let playerRook7 = board.pr7 ? board.pr7[0] : null
+    let playerRook8 = board.pr8 ? board.pr8[0] : null
+    let playerRook9 = board.pr9 ? board.pr9[0] : null
 
-    const playerQueen1 = useRef(0)
-    const playerQueen2 = useRef(0)
-    const playerQueen3 = useRef(0)
-    const playerQueen4 = useRef(0)
-    const playerQueen5 = useRef(0)
-    const playerQueen6 = useRef(0)
-    const playerQueen7 = useRef(0)
-    const playerQueen8 = useRef(0)
-    const playerQueen9 = useRef(0)
-    
+    let playerQueen1
+    color === "white" ? (playerQueen1 = board.pqw1 ? board.pqw1[0] : null) : (playerQueen1 = board.pqb1 ? board.pqb1[0] : null)
+    let playerQueen2
+    color === "white" ? (playerQueen2 = board.pqw2 ? board.pqw2[0] : null) : (playerQueen2 = board.pqb2 ? board.pqb2[0] : null)
+    let playerQueen3
+    color === "white" ? (playerQueen3 = board.pqw3 ? board.pqw3[0] : null) : (playerQueen3 = board.pqb3 ? board.pqb3[0] : null)
+    let playerQueen4
+    color === "white" ? (playerQueen4 = board.pqw4 ? board.pqw4[0] : null) : (playerQueen4 = board.pqb4 ? board.pqb4[0] : null)
+    let playerQueen5
+    color === "white" ? (playerQueen5 = board.pqw5 ? board.pqw5[0] : null) : (playerQueen5 = board.pqb5 ? board.pqb5[0] : null)
+    let playerQueen6
+    color === "white" ? (playerQueen6 = board.pqw6 ? board.pqw6[0] : null) : (playerQueen6 = board.pqb6 ? board.pqb6[0] : null)
+    let playerQueen7
+    color === "white" ? (playerQueen7 = board.pqw7 ? board.pqw7[0] : null) : (playerQueen7 = board.pqb7 ? board.pqb7[0] : null)
+    let playerQueen8
+    color === "white" ? (playerQueen8 = board.pqw8 ? board.pqw8[0] : null) : (playerQueen8 = board.pqb8 ? board.pqb8[0] : null)
+    let playerQueen9
+    color === "white" ? (playerQueen9 = board.pqw9 ? board.pqw9[0] : null) : (playerQueen9 = board.pqb9 ? board.pqb9[0] : null)
+
     let playerKing = board.pkw ? board.pkw[0] : board.pkb[0]
 
     const playerPawn1 = board.pp1 ? board.pp1[0] : null
@@ -783,225 +791,6 @@ const Board = () => {
     const playerPawn6 = board.pp6 ? board.pp6[0] : null
     const playerPawn7 = board.pp7 ? board.pp7[0] : null
     const playerPawn8 = board.pp8 ? board.pp8[0] : null
-
-    function resetPieces() {
-        if (!board.oh1) {
-            enemyKnight1.current = 0
-        }
-        if (!board.oh2) {
-            enemyKnight2.current = 0
-        }
-        if (!board.oh3) {
-            enemyKnight3.current = 0
-        }
-        if (!board.oh4) {
-            enemyKnight4.current = 0
-        }
-        if (!board.oh5) {
-            enemyKnight5.current = 0
-        }
-        if (!board.oh6) {
-            enemyKnight6.current = 0
-        }
-        if (!board.oh7) {
-            enemyKnight7.current = 0
-        }
-        if (!board.oh8) {
-            enemyKnight8.current = 0
-        }
-        if (!board.oh9) {
-            enemyKnight9.current = 0
-        }
-        if (!board.ob1) {
-            enemyBishop1.current = 0
-        }
-        if (!board.ob2) {
-            enemyBishop2.current = 0
-        }
-        if (!board.ob3) {
-            enemyBishop3.current = 0
-        }
-        if (!board.ob4) {
-            enemyBishop4.current = 0
-        }
-        if (!board.ob5) {
-            enemyBishop5.current = 0
-        }
-        if (!board.ob6) {
-            enemyBishop6.current = 0
-        }
-        if (!board.ob7) {
-            enemyBishop7.current = 0
-        }
-        if (!board.ob8) {
-            enemyBishop8.current = 0
-        }
-        if (!board.ob9) {
-            enemyBishop9.current = 0
-        }
-        if (!board.or1) {
-            enemyRook1.current = 0
-        }
-        if (!board.or2) {
-            enemyRook2.current = 0
-        }
-        if (!board.or3) {
-            enemyRook3.current = 0
-        }
-        if (!board.or4) {
-            enemyRook4.current = 0
-        }
-        if (!board.or5) {
-            enemyRook5.current = 0
-        }
-        if (!board.or6) {
-            enemyRook6.current = 0
-        }
-        if (!board.or7) {
-            enemyRook7.current = 0
-        }
-        if (!board.or8) {
-            enemyRook8.current = 0
-        }
-        if (!board.or9) {
-            enemyRook9.current = 0
-        }
-        if ((!board.oqb1 && color === "white") || (!board.oqw1 && color === "black")) {
-            enemyQueen1.current = 0
-        }
-        if ((!board.oqb2 && color === "white") || (!board.oqw2 && color === "black")) {
-            enemyQueen2.current = 0
-        }
-        if ((!board.oqb3 && color === "white") || (!board.oqw3 && color === "black")) {
-            enemyQueen3.current = 0
-        }
-        if ((!board.oqb4 && color === "white") || (!board.oqw4 && color === "black")) {
-            enemyQueen4.current = 0
-        }
-        if ((!board.oqb5 && color === "white") || (!board.oqw5 && color === "black")) {
-            enemyQueen5.current = 0
-        }
-        if ((!board.oqb6 && color === "white") || (!board.oqw6 && color === "black")) {
-            enemyQueen6.current = 0
-        }
-        if ((!board.oqb7 && color === "white") || (!board.oqw7 && color === "black")) {
-            enemyQueen7.current = 0
-        }
-        if ((!board.oqb8 && color === "white") || (!board.oqw8 && color === "black")) {
-            enemyQueen8.current = 0
-        }
-        if ((!board.oqb9 && color === "white") || (!board.oqw9 && color === "black")) {
-            enemyQueen9.current = 0
-        }
-        if (!board.ph1) {
-            playerKnight1.current = 100
-        }
-        if (!board.ph2) {
-            playerKnight2.current = 100
-        }
-        if (!board.ph3) {
-            playerKnight3.current = 0
-        }
-        if (!board.ph4) {
-            playerKnight4.current = 0
-        }
-        if (!board.ph5) {
-            playerKnight5.current = 0
-        }
-        if (!board.ph6) {
-            playerKnight6.current = 0
-        }
-        if (!board.ph7) {
-            playerKnight7.current = 0
-        }
-        if (!board.ph8) {
-            playerKnight8.current = 0
-        }
-        if (!board.ph9) {
-            playerKnight9.current = 0
-        }
-        if (!board.pb1) {
-            playerBishop1.current = 0
-        }
-        if (!board.pb2) {
-            playerBishop2.current = 0
-        }
-        if (!board.pb3) {
-            playerBishop3.current = 0
-        }
-        if (!board.pb4) {
-            playerBishop4.current = 0
-        }
-        if (!board.pb5) {
-            playerBishop5.current = 0
-        }
-        if (!board.pb6) {
-            playerBishop6.current = 0
-        }
-        if (!board.pb7) {
-            playerBishop7.current = 0
-        }
-        if (!board.pb8) {
-            playerBishop8.current = 0
-        }
-        if (!board.pb9) {
-            playerBishop9.current = 0
-        }
-        if (!board.pr1) {
-            playerRook1.current = 0
-        }
-        if (!board.pr2) {
-            playerRook2.current = 0
-        }
-        if (!board.pr3) {
-            playerRook3.current = 0
-        }
-        if (!board.pr4) {
-            playerRook4.current = 0
-        }
-        if (!board.pr5) {
-            playerRook5.current = 0
-        }
-        if (!board.pr6) {
-            playerRook6.current = 0
-        }
-        if (!board.pr7) {
-            playerRook7.current = 0
-        }
-        if (!board.pr8) {
-            playerRook8.current = 0
-        }
-        if (!board.pr9) {
-            playerRook9.current = 0
-        }
-        if ((!board.pqb1 && color === "black") || (!board.pqw1 && color === "white")) {
-            playerQueen1.current = 0
-        }
-        if ((!board.pqb2 && color === "black") || (!board.pqw2 && color === "white")) {
-            playerQueen2.current = 0
-        }
-        if ((!board.pqb3 && color === "black") || (!board.pqw3 && color === "white")) {
-            playerQueen3.current = 0
-        }
-        if ((!board.pqb4 && color === "black") || (!board.pqw4 && color === "white")) {
-            playerQueen4.current = 0
-        }
-        if ((!board.pqb5 && color === "black") || (!board.pqw5 && color === "white")) {
-            playerQueen5.current = 0
-        }
-        if ((!board.pqb6 && color === "black") || (!board.pqw6 && color === "white")) {
-            playerQueen6.current = 0
-        }
-        if ((!board.pqb7 && color === "black") || (!board.pqw7 && color === "white")) {
-            playerQueen7.current = 0
-        }
-        if ((!board.pqb8 && color === "black") || (!board.pqw8 && color === "white")) {
-            playerQueen8.current = 0
-        }
-        if ((!board.pqb9 && color === "black") || (!board.pqw9 && color === "white")) {
-            playerQueen9.current = 0
-        }
-    }
 
     const checkedByPlayerArr = useRef([])
     const attackedByPlayerArr = useRef([])
@@ -1063,27 +852,28 @@ const Board = () => {
     const attackedByPlayer = () => {
         let arr = []
 
-        recordKnightMoves(playerKnight1.current, arr, playerSquaresRender)
-        recordKnightMoves(playerKnight2.current, arr, playerSquaresRender)
+        const rooks = [playerRook1, playerRook2, playerRook3, playerRook4, playerRook5, playerRook6, playerRook7, playerRook8, playerRook9]
 
-        checkArrays(whiteBishopMoves, playerBishop2.current, arr, playerSquaresRender, enemySquaresRender, true)
-        checkArrays(blackBishopMoves, playerBishop1.current, arr, playerSquaresRender, enemySquaresRender, true)
+        rooks.forEach(a => checkArrays(rookMoves, a, arr, playerSquaresRender, enemySquaresRender, true))
 
-        checkArrays(rookMoves, playerRook1.current, arr, playerSquaresRender, enemySquaresRender, true)
-        checkArrays(rookMoves, playerRook2.current, arr, playerSquaresRender, enemySquaresRender, true)
+        const knights = [playerKnight1, playerKnight2, playerKnight3, playerKnight4, playerKnight5, playerKnight6, playerKnight7, playerKnight8, playerKnight9]
 
-        checkArrays(whiteBishopMoves, playerQueen1.current, arr, playerSquaresRender, enemySquaresRender, true)
-        checkArrays(blackBishopMoves, playerQueen1.current, arr, playerSquaresRender, enemySquaresRender, true)
-        checkArrays(rookMoves, playerQueen1.current, arr, playerSquaresRender, enemySquaresRender, true)
+        knights.forEach(a => recordKnightMoves(a, arr, playerSquaresRender))
 
-        recordPlayerPawnAttacks(playerPawn1, arr)
-        recordPlayerPawnAttacks(playerPawn2, arr)
-        recordPlayerPawnAttacks(playerPawn3, arr)
-        recordPlayerPawnAttacks(playerPawn4, arr)
-        recordPlayerPawnAttacks(playerPawn5, arr)
-        recordPlayerPawnAttacks(playerPawn6, arr)
-        recordPlayerPawnAttacks(playerPawn7, arr)
-        recordPlayerPawnAttacks(playerPawn8, arr)
+        const bishops = [playerBishop1, playerBishop2, playerBishop3, playerBishop4, playerBishop5, playerBishop6, playerBishop7, playerBishop8, playerBishop9]
+
+        bishops.forEach(a => checkArrays(whiteBishopMoves, a, arr, playerSquaresRender, enemySquaresRender, true))
+        bishops.forEach(a => checkArrays(blackBishopMoves, a, arr, playerSquaresRender, enemySquaresRender, true))
+
+        const queens = [playerQueen1, playerQueen2, playerQueen3, playerQueen4, playerQueen5, playerQueen6, playerQueen7, playerQueen8, playerQueen9]
+
+        queens.forEach(a => checkArrays(whiteBishopMoves, a, arr, playerSquaresRender, enemySquaresRender, true))
+        queens.forEach(a => checkArrays(blackBishopMoves, a, arr, playerSquaresRender, enemySquaresRender, true))
+        queens.forEach(a => checkArrays(rookMoves, a, arr, playerSquaresRender, enemySquaresRender, true))
+
+        const pawns = [playerPawn1, playerPawn2, playerPawn3, playerPawn4, playerPawn5, playerPawn6, playerPawn7, playerPawn8]
+
+        pawns.forEach(a => recordPlayerPawnAttacks(a, arr))
 
         attackedByPlayerArr.current = arr
     }
@@ -1939,10 +1729,7 @@ const Board = () => {
             }
 
             if (/^ok/.test(piece)) {
-                attackedByPlayer()
-
-                // console.log(JSON.stringify(playerSquaresRender))
-                
+                attackedByPlayer()                
 
                 let arr = []
                 
@@ -1960,7 +1747,6 @@ const Board = () => {
                     arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9]
                 }
 
-                console.log(attackedByPlayerArr.current)
                 for (const number of arr) {
                     if (enemySquaresRender.includes(number)) {
 
@@ -1994,31 +1780,31 @@ const Board = () => {
 
             switch (activePiece) {
                 case "ph1":
-                    playerKnight1.current = i
+                    playerKnight1 = i
                     break;
                 case "ph2":
-                    playerKnight2.current = i
+                    playerKnight2 = i
                     break;
                 case "ph3":
-                    playerKnight3.current = i
+                    playerKnight3 = i
                     break;
                 case "ph4":
-                    playerKnight4.current = i
+                    playerKnight4 = i
                     break;
                 case "ph5":
-                    playerKnight5.current = i
+                    playerKnight5 = i
                     break;
                 case "ph6":
-                    playerKnight6.current = i
+                    playerKnight6 = i
                     break;
                 case "ph7":
-                    playerKnight7.current = i
+                    playerKnight7 = i
                     break;
                 case "ph8":
-                    playerKnight8.current = i
+                    playerKnight8 = i
                     break;
                 case "ph9":
-                    playerKnight9.current = i
+                    playerKnight9 = i
                     break;
                 default:
                     break;
@@ -2041,31 +1827,31 @@ const Board = () => {
             
             switch (activePiece) {
                 case "pb1":
-                    playerBishop1.current = i
+                    playerBishop1 = i
                     break;
                 case "pb2":
-                    playerBishop2.current = i
+                    playerBishop2 = i
                     break;
                 case "pb3":
-                    playerBishop3.current = i
+                    playerBishop3 = i
                     break;
                 case "pb4":
-                    playerBishop4.current = i
+                    playerBishop4 = i
                     break;
                 case "pb5":
-                    playerBishop5.current = i
+                    playerBishop5 = i
                     break;
                 case "pb6":
-                    playerBishop6.current = i
+                    playerBishop6 = i
                     break;
                 case "pb7":
-                    playerBishop7.current = i
+                    playerBishop7 = i
                     break;
                 case "pb8":
-                    playerBishop8.current = i
+                    playerBishop8 = i
                     break;
                 case "pb9":
-                    playerBishop9.current = i
+                    playerBishop9 = i
                     break;
                 default:
                     break;
@@ -2082,31 +1868,31 @@ const Board = () => {
             
             switch (activePiece) {
                 case "pr1":
-                    playerRook1.current = i
+                    playerRook1 = i
                     break;
                 case "pr2":
-                    playerRook2.current = i
+                    playerRook2 = i
                     break;
                 case "pr3":
-                    playerRook3.current = i
+                    playerRook3 = i
                     break;
                 case "pr4":
-                    playerRook4.current = i
+                    playerRook4 = i
                     break;
                 case "pr5":
-                    playerRook5.current = i
+                    playerRook5 = i
                     break;
                 case "pr6":
-                    playerRook6.current = i
+                    playerRook6 = i
                     break;
                 case "pr7":
-                    playerRook7.current = i
+                    playerRook7 = i
                     break;
                 case "pr8":
-                    playerRook8.current = i
+                    playerRook8 = i
                     break;
                 case "pr9":
-                    playerRook9.current = i
+                    playerRook9 = i
                     break;
                 default:
                     break;
@@ -2124,31 +1910,31 @@ const Board = () => {
 
             switch (activePiece) {
                 case "pqw1": case "pqb1":
-                    playerQueen1.current = i
+                    playerQueen1 = i
                     break;
                 case "pqw2": case "pqb2":
-                    playerQueen2.current = i
+                    playerQueen2 = i
                     break;
                 case "pqw3": case "pqb3":
-                    playerQueen3.current = i
+                    playerQueen3 = i
                     break;
                 case "pqw4": case "pqb4":
-                    playerQueen4.current = i
+                    playerQueen4 = i
                     break;
                 case "pqw5": case "pqb5":
-                    playerQueen5.current = i
+                    playerQueen5 = i
                     break;
                 case "pqw6": case "pqb6":
-                    playerQueen6.current = i
+                    playerQueen6 = i
                     break;
                 case "pqw7": case "pqb7":
-                    playerQueen7.current = i
+                    playerQueen7 = i
                     break;
                 case "pqw8": case "pqb8":
-                    playerQueen8.current = i
+                    playerQueen8 = i
                     break;
                 case "pqw9": case "pqb9":
-                    playerQueen9.current = i
+                    playerQueen9 = i
                     break;
                 default:
                     break;
@@ -2164,7 +1950,6 @@ const Board = () => {
             playerKingSpiderSense()
         } 
         
-
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 
@@ -2208,7 +1993,6 @@ const Board = () => {
             checkedByOpponentArr.current = []
         } 
         
-
         if (/^op/.test(activePiece) && moveSquares.includes(i)) {
             updateStateBoard(i, activePiece)
             movePawn(i, activePiece)
@@ -2254,7 +2038,6 @@ const Board = () => {
             }
             checkedByOpponentArr.current = []
         } 
-
 
         if (/^or/.test(activePiece) && moveSquares.includes(i)) {
             updateStateBoard(i, activePiece)
@@ -2624,12 +2407,12 @@ const Board = () => {
                     })
                 } 
 
-                if ((enemyKingSpiderSenseArr.current[0].includes(playerQueen1.current) 
-                    || enemyKingSpiderSenseArr.current[0].includes(playerBishop2.current))
-                    && !enemyKingSpiderSenseArr.current.includes(playerKnight2.current) 
-                    && !enemyKingSpiderSenseArr.current.includes(playerKnight1.current) 
-                    && !enemyKingSpiderSenseArr.current.includes(playerRook1.current) 
-                    && !enemyKingSpiderSenseArr.current.includes(playerRook2.current)) {
+                if ((enemyKingSpiderSenseArr.current[0].includes(playerQueen1) 
+                    || enemyKingSpiderSenseArr.current[0].includes(playerBishop2))
+                    && !enemyKingSpiderSenseArr.current.includes(playerKnight2) 
+                    && !enemyKingSpiderSenseArr.current.includes(playerKnight1) 
+                    && !enemyKingSpiderSenseArr.current.includes(playerRook1) 
+                    && !enemyKingSpiderSenseArr.current.includes(playerRook2)) {
                     checkSound.play()
                     store.dispatch({
                         type: "enemyKingAttacked",
@@ -2637,12 +2420,12 @@ const Board = () => {
                     })
                 }
 
-                if ((enemyKingSpiderSenseArr.current[1].includes(playerQueen1.current) 
-                    || enemyKingSpiderSenseArr.current[1].includes(playerBishop1.current))
-                    && !enemyKingSpiderSenseArr.current.includes(playerKnight2.current) 
-                    && !enemyKingSpiderSenseArr.current.includes(playerKnight1.current) 
-                    && !enemyKingSpiderSenseArr.current.includes(playerRook1.current) 
-                    && !enemyKingSpiderSenseArr.current.includes(playerRook2.current)) {
+                if ((enemyKingSpiderSenseArr.current[1].includes(playerQueen1) 
+                    || enemyKingSpiderSenseArr.current[1].includes(playerBishop1))
+                    && !enemyKingSpiderSenseArr.current.includes(playerKnight2) 
+                    && !enemyKingSpiderSenseArr.current.includes(playerKnight1) 
+                    && !enemyKingSpiderSenseArr.current.includes(playerRook1) 
+                    && !enemyKingSpiderSenseArr.current.includes(playerRook2)) {
                     checkSound.play()
                     store.dispatch({
                         type: "enemyKingAttacked",
@@ -2650,13 +2433,13 @@ const Board = () => {
                     })
                 }
 
-                if ((enemyKingSpiderSenseArr.current[2].includes(playerQueen1.current) 
-                    || enemyKingSpiderSenseArr.current[2].includes(playerRook1.current) 
-                    || enemyKingSpiderSenseArr.current[2].includes(playerRook2.current))
-                    && !enemyKingSpiderSenseArr.current.includes(playerKnight2.current)
-                    && !enemyKingSpiderSenseArr.current.includes(playerKnight1.current)
-                    && !enemyKingSpiderSenseArr.current.includes(playerBishop1.current)
-                    && !enemyKingSpiderSenseArr.current.includes(playerBishop2.current)) {
+                if ((enemyKingSpiderSenseArr.current[2].includes(playerQueen1) 
+                    || enemyKingSpiderSenseArr.current[2].includes(playerRook1) 
+                    || enemyKingSpiderSenseArr.current[2].includes(playerRook2))
+                    && !enemyKingSpiderSenseArr.current.includes(playerKnight2)
+                    && !enemyKingSpiderSenseArr.current.includes(playerKnight1)
+                    && !enemyKingSpiderSenseArr.current.includes(playerBishop1)
+                    && !enemyKingSpiderSenseArr.current.includes(playerBishop2)) {
                     checkSound.play()
                     store.dispatch({
                         type: "enemyKingAttacked",
@@ -2709,12 +2492,12 @@ const Board = () => {
                     })
                 } 
 
-                if ((enemyKingSpiderSenseArr.current[0].includes(playerQueen1.current) 
-                    || enemyKingSpiderSenseArr.current[0].includes(playerBishop2.current))
-                    && !enemyKingSpiderSenseArr.current.includes(playerKnight2.current) 
-                    && !enemyKingSpiderSenseArr.current.includes(playerKnight1.current) 
-                    && !enemyKingSpiderSenseArr.current.includes(playerRook1.current) 
-                    && !enemyKingSpiderSenseArr.current.includes(playerRook2.current)) {
+                if ((enemyKingSpiderSenseArr.current[0].includes(playerQueen1) 
+                    || enemyKingSpiderSenseArr.current[0].includes(playerBishop2))
+                    && !enemyKingSpiderSenseArr.current.includes(playerKnight2) 
+                    && !enemyKingSpiderSenseArr.current.includes(playerKnight1) 
+                    && !enemyKingSpiderSenseArr.current.includes(playerRook1) 
+                    && !enemyKingSpiderSenseArr.current.includes(playerRook2)) {
                     checkSound.play()
                     store.dispatch({
                         type: "enemyKingAttacked",
@@ -2723,12 +2506,12 @@ const Board = () => {
                     
                 }
 
-                if ((enemyKingSpiderSenseArr.current[1].includes(playerQueen1.current) 
-                    || enemyKingSpiderSenseArr.current[1].includes(playerBishop1.current))
-                    && !enemyKingSpiderSenseArr.current.includes(playerKnight2.current) 
-                    && !enemyKingSpiderSenseArr.current.includes(playerKnight1.current) 
-                    && !enemyKingSpiderSenseArr.current.includes(playerRook1.current) 
-                    && !enemyKingSpiderSenseArr.current.includes(playerRook2.current)) {
+                if ((enemyKingSpiderSenseArr.current[1].includes(playerQueen1) 
+                    || enemyKingSpiderSenseArr.current[1].includes(playerBishop1))
+                    && !enemyKingSpiderSenseArr.current.includes(playerKnight2) 
+                    && !enemyKingSpiderSenseArr.current.includes(playerKnight1) 
+                    && !enemyKingSpiderSenseArr.current.includes(playerRook1) 
+                    && !enemyKingSpiderSenseArr.current.includes(playerRook2)) {
                     checkSound.play()
                     store.dispatch({
                         type: "enemyKingAttacked",
@@ -2737,13 +2520,13 @@ const Board = () => {
                     
                 }
 
-                if ((enemyKingSpiderSenseArr.current[2].includes(playerQueen1.current) 
-                    || enemyKingSpiderSenseArr.current[2].includes(playerRook1.current) 
-                    || enemyKingSpiderSenseArr.current[2].includes(playerRook2.current))
-                    && !enemyKingSpiderSenseArr.current.includes(playerKnight2.current)
-                    && !enemyKingSpiderSenseArr.current.includes(playerKnight1.current)
-                    && !enemyKingSpiderSenseArr.current.includes(playerBishop1.current)
-                    && !enemyKingSpiderSenseArr.current.includes(playerBishop2.current)) {
+                if ((enemyKingSpiderSenseArr.current[2].includes(playerQueen1) 
+                    || enemyKingSpiderSenseArr.current[2].includes(playerRook1) 
+                    || enemyKingSpiderSenseArr.current[2].includes(playerRook2))
+                    && !enemyKingSpiderSenseArr.current.includes(playerKnight2)
+                    && !enemyKingSpiderSenseArr.current.includes(playerKnight1)
+                    && !enemyKingSpiderSenseArr.current.includes(playerBishop1)
+                    && !enemyKingSpiderSenseArr.current.includes(playerBishop2)) {
                     checkSound.play()
                     store.dispatch({
                         type: "enemyKingAttacked",
