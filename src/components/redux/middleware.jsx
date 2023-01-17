@@ -92,16 +92,17 @@ const checkCastlingMoved = store => next => action => {
 const pawnPromotion = store => next => action => {
     const func = (action) => {
         let board = store.getState().board
+        let asArray = Object.entries(board)
         const pawn = action.payload.pawn
-        const piece = action.payload.pieceToPromoteTo
-
-        // board[action.payload.pawn] = action.payload.pieceToPromoteTo
-
+        let piece = action.payload.pieceToPromoteTo
+        const reg = new RegExp(piece.slice(0, 2))
+        piece += asArray.filter(([key, value]) => reg.test(key)).length + 1
+        
         delete Object.assign(board, {[piece]: board[pawn]})[pawn]
-
-        const asArray = Object.entries(board)
+        asArray = Object.entries(board)
 
         const arr = asArray.filter(([key, value]) => key === piece)
+
         const slice = arr[0][1][0] - 1
 
         const finalArr = asArray.slice(0, slice).concat(arr).concat(asArray.slice(slice)).slice(0, 64)
