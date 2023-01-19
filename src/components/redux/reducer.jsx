@@ -227,10 +227,20 @@ function boardReducer(state = initialState, action) {
                     ...action.payload
                 }
             }
-        case "ph1": case "ph2": case "pp1": case "pp2": case "pp3": case "pp4": case "pp5": case "pp6": case "pp7": case "pp8": case "pb1": case "pb2": case "pr1":
-        case "pr2": case "pqw1": case "pqw2": case "pqw3": case "pqw4": case "pqb1": case "pqb2": case "pqb3": case "pqb4": case "pkw": case "pkb": case "op1": 
-        case "op2": case "op3": case "op4": case "op5": case "op6": case "op7": case "op8": case "oh1": case "oh2": case "ob1": case "ob2": case "or1": case "or2":
-        case "oqw1": case "oqw2": case "oqw3": case "oqw4": case "oqb1": case "oqb2": case "oqb3": case "oqb4": case "okw": case "okb":
+        case "pp1": case "pp2": case "pp3": case "pp4": case "pp5": case "pp6": case "pp7": case "pp8":
+        case "ph1": case "ph2": case "ph3": case "ph4": case "ph5": case "ph6": case "ph7": case "ph8": case "ph9": case "ph01": 
+        case "pb1": case "pb2": case "pb3": case "pb4": case "pb5": case "pb6": case "pb7": case "pb8": case "pb9": case "pb01": 
+        case "pr1": case "pr2": case "pr3": case "pr4": case "pr5": case "pr6": case "pr7": case "pr8": case "pr9": case "pr01": 
+        case "pqw1": case "pqw2": case "pqw3": case "pqw4": case "pqw5": case "pqw6": case "pqw7": case "pqw8": case "pqw9": 
+        case "pqb1": case "pqb2": case "pqb3": case "pqb4": case "pqb5": case "pqb6": case "pqb7": case "pqb8": case "pqb9": 
+        case "pkw": case "pkb": 
+        case "op1": case "op2": case "op3": case "op4": case "op5": case "op6": case "op7": case "op8": 
+        case "oh1": case "oh2": case "oh3": case "oh4": case "oh5": case "oh6": case "oh7": case "oh8": case "oh9": case "oh01": 
+        case "ob1": case "ob2": case "ob3": case "ob4": case "ob5": case "ob6": case "ob7": case "ob8": case "ob9": case "ob01": 
+        case "or1": case "or2": case "or3": case "or4": case "or5": case "or6": case "or7": case "or8": case "or9": case "or01":
+        case "oqw1": case "oqw2": case "oqw3": case "oqw4": case "oqw5": case "oqw6": case "oqw7": case "oqw8": case "oqw9":
+        case "oqb1": case "oqb2": case "oqb3": case "oqb4": case "oqb5": case "oqb6": case "oqb7": case "oqb8": case "oqb9":
+        case "okw": case "okb":
             return {
                 ...state,
                 board: {
