@@ -113,7 +113,9 @@ const Board = () => {
         encode()
 
         playerKingSpiderSense()
+        playerKingXray()
         enemyKingSpiderSense()
+        opponentAttackedXray()
     }
 
     useEffect(() => {
@@ -167,10 +169,8 @@ const Board = () => {
     let enPassantSquare = useRef(0)
 
     let pieceSquareForEngine = useRef(1)
-    
 
     const notInitialRender = useRef(false)
-
 
     const wasmSupported = typeof WebAssembly === 'object' && WebAssembly.validate(Uint8Array.of(0x0, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00))
 
@@ -821,14 +821,81 @@ const Board = () => {
     const attackedByOpponentArr = useRef([])
     const checkedByOpponentArr = useRef([])
 
+
+
+
+
+
+
+
+
+
+
+
+
+    let playerKingXrayArr = useRef([])
+
+    const playerKingXray = () => {
+        let arr = [[], [], []]
+
+        checkArrays(whiteBishopMoves, playerKing, arr[0], playerSquaresLive, enemySquaresLive, false)
+        checkArrays(blackBishopMoves, playerKing, arr[1], playerSquaresLive, enemySquaresLive, false)
+        checkArrays(rookMoves, playerKing, arr[2], playerSquaresLive, enemySquaresLive, false)
+
+        playerKingXrayArr.current = arr
+    }
+
+    const opponentAttackedXrayArr = useRef([])
+
+    const opponentAttackedXray = () => {
+        let arr = [[], [], [], [], [], [], [], [], [], [],
+                    [], [], [], [], [], [], [], [], [], [],
+                    [], [], [], [], [], [], [], [], []]
+
+        for (let i = 0; i < 10; i++) {
+            for (let j = 0; j < 10; j++) {
+                checkArrays(rookMoves, enemyRooks[i], arr[j], enemySquaresRender, playerSquaresRender, false)
+            }
+            for (let j = 10; j < 20; j++) {
+                checkArrays(whiteBishopMoves, enemyBishops[i], arr[j], enemySquaresRender, playerSquaresRender, false)
+                checkArrays(blackBishopMoves, enemyBishops[i], arr[j], enemySquaresRender, playerSquaresRender, false)
+            }
+            // for (let j = 20; j < 30; j++) {
+            //     checkArrays(whiteBishopMoves, enemyQueens[i], arr[j], enemySquaresRender, playerSquaresRender, false)
+            //     checkArrays(blackBishopMoves, enemyQueens[i], arr[j], enemySquaresRender, playerSquaresRender, false)
+            //     checkArrays(rookMoves, enemyQueens[i], arr[j], enemySquaresRender, playerSquaresRender, false)
+            // }
+        }
+
+        opponentAttackedXrayArr.current = arr
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     let playerKingSpiderSenseArr = useRef([])
 
     const playerKingSpiderSense = () => {
-        let arr = [[], [], []]
+        let arr = [[], []]
 
         checkArrays(whiteBishopMoves, playerKing, arr[0], playerSquaresLive, enemySquaresLive, true)
-        checkArrays(blackBishopMoves, playerKing, arr[1], playerSquaresLive, enemySquaresLive, true)
-        checkArrays(rookMoves, playerKing, arr[2], playerSquaresLive, enemySquaresLive, true)
+        checkArrays(blackBishopMoves, playerKing, arr[0], playerSquaresLive, enemySquaresLive, true)
+        checkArrays(rookMoves, playerKing, arr[1], playerSquaresLive, enemySquaresLive, true)
 
         playerKingSpiderSenseArr.current = arr
     }
@@ -1512,6 +1579,9 @@ const Board = () => {
                     arr = arr.filter(x => x !== number)
                 }
             }
+            if (playerKingXrayArr.current.flat().includes(i) && attackedByOpponentArr.current.includes(i)) {
+                console.log(playerKingXrayArr.current)
+            }
             for (const number of arr) {
                 arrMoves.push(number)
             }
@@ -1612,6 +1682,8 @@ const Board = () => {
             setActiveStatePiece("")
             setPieceSquare(null)
         }
+
+        console.log(opponentAttackedXrayArr.current)
 
         if (!sandbox ? (playerSquaresRender.includes(i) && activeStatePiece !== piece) :
             (((/^o/.test(activePiece) && !/^p/.test(piece)) 
@@ -1981,6 +2053,7 @@ const Board = () => {
             moveKing(i, activePiece)
             playerKing = i
             playerKingSpiderSense()
+            playerKingXray()
         } 
                 
         if (/^oh/.test(activePiece) && moveSquares.includes(i)) {
