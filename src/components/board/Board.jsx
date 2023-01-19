@@ -162,7 +162,7 @@ const Board = () => {
         }
     }, [toMove])
 
-    let enPassantSquare
+    let enPassantSquare = useRef(0)
 
     let pieceSquareForEngine = useRef(1)
     
@@ -222,7 +222,7 @@ const Board = () => {
                 checkArrays(blackBishopMoves, engineWhereToMove, checkedByOpponentArr.current, enemySquaresLive, playerSquaresLive, true)
                 
 
-                switch (activePiece) {
+                switch (enginePieceToMove) {
                     case "ob1":
                         enemyBishop1.current = engineWhereToMove
                         break;
@@ -266,7 +266,7 @@ const Board = () => {
                 recordKnightMoves(engineWhereToMove, checkedByOpponentArr.current, enemySquaresLive)
 
                 
-                switch (activePiece) {
+                switch (enginePieceToMove) {
                     case "oh1":
                         enemyKnight1.current = engineWhereToMove
                         break;
@@ -311,7 +311,7 @@ const Board = () => {
 
                 
 
-                switch (activePiece) {
+                switch (enginePieceToMove) {
                     case "or1":
                         enemyRook1.current = engineWhereToMove
                         break;
@@ -351,12 +351,11 @@ const Board = () => {
             if (/^oq/.test(enginePieceToMove)) {
                 updateStateBoard(engineWhereToMove, enginePieceToMove)
                 
-                
                 checkArrays(whiteBishopMoves, engineWhereToMove, checkedByOpponentArr.current, enemySquaresLive, playerSquaresLive, true)
                 checkArrays(blackBishopMoves, engineWhereToMove, checkedByOpponentArr.current, enemySquaresLive, playerSquaresLive, true)
                 checkArrays(rookMoves, engineWhereToMove, checkedByOpponentArr.current, enemySquaresLive, playerSquaresLive, true)
 
-                switch (activePiece) {
+                switch (enginePieceToMove) {
                     case "oqw1": case "oqb1":
                         enemyQueen1.current = engineWhereToMove
                         break;
@@ -584,8 +583,8 @@ const Board = () => {
             }
         }
 
-        if (enPassantSquare) {
-            fenString += boardEntries.filter(([key, value]) => value[0] === enPassantSquare).flat()[1][1]
+        if (enPassantSquare.current) {
+            fenString += boardEntries.filter(([key, value]) => value[0] === enPassantSquare.current).flat()[1][1]
         } else {
             fenString += "-"
         }
@@ -1515,11 +1514,11 @@ const Board = () => {
             arr = [i - 8]
         }
 
-        if (enemySquaresRender.includes(i - 9) && !knightLimits[0].includes(i)) {
+        if ((enemySquaresRender.includes(i - 9) || (rookMoves[3].includes(i) && i - 9 === enPassantSquare.current)) && !knightLimits[0].includes(i)) {
             arr.push(i - 9)
         }
 
-        if (enemySquaresRender.includes(i - 7) && !knightLimits[3].includes(i)) {
+        if ((enemySquaresRender.includes(i - 7) || (rookMoves[3].includes(i) && i - 7 === enPassantSquare.current)) && !knightLimits[3].includes(i)) {
             arr.push(i - 7)
         }
 
@@ -1543,11 +1542,11 @@ const Board = () => {
             arr = [i + 8]
         }
 
-        if (playerSquaresRender.includes(i + 9) && !knightLimits[3].includes(i)) {
+        if ((playerSquaresRender.includes(i + 9) || (rookMoves[4].includes(i) && i + 9 === enPassantSquare.current)) && !knightLimits[3].includes(i)) {
             arr.push(i + 9)
         }
 
-        if (playerSquaresRender.includes(i + 7) && !knightLimits[1].includes(i)) {
+        if ((playerSquaresRender.includes(i + 7) || (rookMoves[4].includes(i) && i + 7 === enPassantSquare.current)) && !knightLimits[1].includes(i)) {
             arr.push(i + 7)
         }
 
@@ -1657,7 +1656,7 @@ const Board = () => {
                 attackedByOpponent()
 
                 // console.log(JSON.stringify(playerSquaresRender))
-                // console.log(JSON.stringify(playerSquaresLive))
+                // console.log(enemyQueen1.current)
 
                 let arr = []
                 
@@ -1722,9 +1721,11 @@ const Board = () => {
 
             if (/^oqw/.test(piece) || /^oqb/.test(piece)) {
                 let arr = []
+
                 checkArrays(rookMoves, i, arr, enemySquaresRender, playerSquaresRender, true)
                 checkArrays(blackBishopMoves, i, arr, enemySquaresRender, playerSquaresRender, true)
                 checkArrays(whiteBishopMoves, i, arr, enemySquaresRender, playerSquaresRender, true)
+
                 setMoveSquares(arr)
             }
 
@@ -2193,7 +2194,7 @@ const Board = () => {
         setMoveVar([num1, num2])
 
         if (/^o/.test(string)) {
-            if (playerSquaresRender.includes(i)) {
+            if (playerSquaresRender.includes(i)){
                 store.dispatch({
                     type: "halfMoveCounter/reset",
                 })
@@ -2598,35 +2599,54 @@ const Board = () => {
     }
 
     function movePawn(i, string) {
-        switch (pieceSquareForEngine.current - i) {
-            case 7:
-                animatePiece(i, string, -80, 80)
-                break;
-            case 8:
-                animatePiece(i, string, 0, 80)
-                break;
-            case 9:
-                animatePiece(i, string, 80, 80)
-                break;
-            case 16:
-                enPassantSquare = i + 8
-                animatePiece(i, string, 0, 160)
-                break;
-            case -16: 
-                enPassantSquare = i - 8
-                animatePiece(i, string, 0, -160)
-                break;
-            case -8: 
-                animatePiece(i, string, 0, -80)
-                break;
-            case -7: 
-                animatePiece(i, string, 80, -80)
-                break;
-            case -9: 
-                animatePiece(i, string, -80, -80)
-                break;
-            default:
-                break;
+        if (i === enPassantSquare.current) {
+            switch (pieceSquareForEngine.current - i) {
+                case -9:
+                    animateEnPassant(-80, -80, string, i)
+                    break;
+                case -7:
+                    animateEnPassant(80, -80, string, i)
+                    break;
+                case 7:
+                    animateEnPassant(-80, 80, string, i)
+                    break;
+                case 9:
+                    animateEnPassant(80, 80, string, i)
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            switch (pieceSquareForEngine.current - i) {
+                case 7:
+                    animatePiece(i, string, -80, 80)
+                    break;
+                case 8:
+                    animatePiece(i, string, 0, 80)
+                    break;
+                case 9:
+                    animatePiece(i, string, 80, 80)
+                    break;
+                case 16:
+                    enPassantSquare.current = i + 8
+                    animatePiece(i, string, 0, 160)
+                    break;
+                case -16: 
+                    enPassantSquare.current = i - 8
+                    animatePiece(i, string, 0, -160)
+                    break;
+                case -8: 
+                    animatePiece(i, string, 0, -80)
+                    break;
+                case -7: 
+                    animatePiece(i, string, 80, -80)
+                    break;
+                case -9: 
+                    animatePiece(i, string, -80, -80)
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -3023,7 +3043,72 @@ const Board = () => {
                 setToMove("w")
             }
         } else {
-            if (/^pr/.test(rookToMove)) {
+            if (/^or/.test(rookToMove)) {
+                setToMove("w")
+            } else {
+                setToMove("b")
+            }
+        }
+    }
+
+    const animateEnPassant = (coor1, coor2, string, i) => {
+        captureSound.play()
+
+        setMoveVar([coor1, coor2])
+
+        let capturedPawn = i
+
+        if (/^pp/.test(string)) {
+            capturedPawn += 8
+        } else {
+            capturedPawn -= 8
+        }
+
+        store.dispatch({
+            type: "oldSquare",
+            payload: i
+        })
+
+        store.dispatch({
+            type: "newSquare",
+            payload: capturedPawn
+        })
+
+        store.dispatch({
+            type: string,
+            payload: "takes"
+        })
+
+        store.dispatch({
+            type: "oldSquare",
+            payload: capturedPawn
+        })
+
+        store.dispatch({
+            type: "newSquare",
+            payload: i
+        })
+
+        store.dispatch({
+            type: string
+        })
+
+        encode()
+
+        setLastMadeMove([i, 0])
+
+        setMoveSquares([])
+
+        setPieceSquare(null)
+
+        if (color === "white") {
+            if (/^pp/.test(string)) {
+                setToMove("b")
+            } else {
+                setToMove("w")
+            }
+        } else {
+            if (/^op/.test(string)) {
                 setToMove("w")
             } else {
                 setToMove("b")
