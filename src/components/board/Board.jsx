@@ -77,35 +77,43 @@ const Board = () => {
     let justPlayerLive = Object.fromEntries(filteredPlayerLive)
 
     // const filteredEmpty = boardEntries.filter(([key, value]) => /empty/.test(key))
-    const filteredOccupied = boardEntries.filter(([key, value]) => !/empty/.test(key))
-    // const filteredOccupied = Object.entries(store.getState().board).filter(([key, value]) => !/empty/.test(key))
+    let filteredOccupiedRender = boardEntries.filter(([key, value]) => !/empty/.test(key))
+    let filteredOccupiedLive = Object.entries(store.getState().board).filter(([key, value]) => !/empty/.test(key))
     // const justEmpty = Object.fromEntries(filteredEmpty)
-    const justOccupied = Object.fromEntries(filteredOccupied)
+    let justOccupiedRender = Object.fromEntries(filteredOccupiedRender)
+    let justOccupiedLive = Object.fromEntries(filteredOccupiedLive)
 
 
     let enemySquaresRender = Object.values(justEnemyRender).map(a => a = a[0])
     let playerSquaresRender =  Object.values(justPlayerRender).map(a => a = a[0])
+    let occupiedSquaresRender =  Object.values(justOccupiedRender).map(a => a = a[0])
     let enemySquaresLive = Object.values(justEnemyLive).map(a => a = a[0])
     let playerSquaresLive =  Object.values(justPlayerLive).map(a => a = a[0])
-    let occupiedSquares = Object.values(justOccupied).map(a => a = a[0])
+    let occupiedSquaresLive = Object.values(justOccupiedLive).map(a => a = a[0])
 
     
     const recordBoard = () => {
         filteredEnemyRender = boardEntries.filter(([key, value]) => /^o/.test(key))
         filteredEnemyLive = Object.entries(store.getState().board).filter(([key, value]) => /^o/.test(key))
-        filteredPlayerLive = Object.entries(store.getState().board).filter(([key, value]) => /^p/.test(key))
-        filteredPlayerRender = boardEntries.filter(([key, value]) => /^p/.test(key))
         justEnemyRender = Object.fromEntries(filteredEnemyRender)
-        justPlayerRender = Object.fromEntries(filteredPlayerRender)
-
         justEnemyLive = Object.fromEntries(filteredEnemyLive)
+
+        filteredPlayerRender = boardEntries.filter(([key, value]) => /^p/.test(key))
+        filteredPlayerLive = Object.entries(store.getState().board).filter(([key, value]) => /^p/.test(key))        
+        justPlayerRender = Object.fromEntries(filteredPlayerRender)
         justPlayerLive = Object.fromEntries(filteredPlayerLive)
+
+        filteredOccupiedRender = boardEntries.filter(([key, value]) => !/empty/.test(key))
+        filteredOccupiedLive = Object.entries(store.getState().board).filter(([key, value]) => !/empty/.test(key))
+        justOccupiedRender = Object.fromEntries(filteredOccupiedRender)
+        justOccupiedLive = Object.fromEntries(filteredOccupiedLive)
 
         enemySquaresRender = Object.values(justEnemyRender).map(a => a = a[0])
         playerSquaresRender =  Object.values(justPlayerRender).map(a => a = a[0])
+        occupiedSquaresRender = Object.values(justOccupiedRender).map(a => a = a[0])
         enemySquaresLive = Object.values(justEnemyLive).map(a => a = a[0])
         playerSquaresLive =  Object.values(justPlayerLive).map(a => a = a[0])
-        occupiedSquares = Object.values(justOccupied).map(a => a = a[0])
+        occupiedSquaresLive = Object.values(justOccupiedLive).map(a => a = a[0])
 
         playerNewSquareForEngine = boardEntries.filter(([key, value]) => value[0] === pieceSquareForEngine.current).flat()[1][1]
 
@@ -115,7 +123,9 @@ const Board = () => {
         playerKingSpiderSense()
         playerKingXray()
         enemyKingSpiderSense()
+        enemyKingXray()
         opponentAttackedXray()
+        playerAttackedXray()
     }
 
     useEffect(() => {
@@ -845,29 +855,72 @@ const Board = () => {
         playerKingXrayArr.current = arr
     }
 
+    let enemyKingXrayArr = useRef([])
+
+    const enemyKingXray = () => {
+        let arr = [[], [], []]
+
+        checkArrays(whiteBishopMoves, enemyKing, arr[0], enemySquaresLive, playerSquaresLive, false)
+        checkArrays(blackBishopMoves, enemyKing, arr[1], enemySquaresLive, playerSquaresLive, false)
+        checkArrays(rookMoves, enemyKing, arr[2], enemySquaresLive, playerSquaresLive, false)
+
+        enemyKingXrayArr.current = arr
+    }
+
+
+
+
+
+
+
     const opponentAttackedXrayArr = useRef([])
 
     const opponentAttackedXray = () => {
         let arr = [[], [], [], [], [], [], [], [], [], [],
                     [], [], [], [], [], [], [], [], [], [],
-                    [], [], [], [], [], [], [], [], []]
+                    [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []]
 
         for (let i = 0; i < 10; i++) {
-            for (let j = 0; j < 10; j++) {
-                checkArrays(rookMoves, enemyRooks[i], arr[j], enemySquaresRender, playerSquaresRender, false)
-            }
-            for (let j = 10; j < 20; j++) {
-                checkArrays(whiteBishopMoves, enemyBishops[i], arr[j], enemySquaresRender, playerSquaresRender, false)
-                checkArrays(blackBishopMoves, enemyBishops[i], arr[j], enemySquaresRender, playerSquaresRender, false)
-            }
-            // for (let j = 20; j < 30; j++) {
-            //     checkArrays(whiteBishopMoves, enemyQueens[i], arr[j], enemySquaresRender, playerSquaresRender, false)
-            //     checkArrays(blackBishopMoves, enemyQueens[i], arr[j], enemySquaresRender, playerSquaresRender, false)
-            //     checkArrays(rookMoves, enemyQueens[i], arr[j], enemySquaresRender, playerSquaresRender, false)
-            // }
+            checkArrays(rookMoves, enemyRooks[i], arr[i], enemySquaresRender, playerSquaresRender, false)
+        }
+
+        for (let i = 0; i < 10; i++) {
+            checkArrays(whiteBishopMoves, enemyBishops[i], arr[i + 10], enemySquaresRender, playerSquaresRender, false)
+            checkArrays(blackBishopMoves, enemyBishops[i], arr[i + 10], enemySquaresRender, playerSquaresRender, false)
+        }
+
+        for (let i = 0; i < 10; i++) {
+            checkArrays(whiteBishopMoves, enemyQueens[i], arr[i + 20], enemySquaresRender, playerSquaresRender, false)
+            checkArrays(blackBishopMoves, enemyQueens[i], arr[i + 20], enemySquaresRender, playerSquaresRender, false)
+            checkArrays(rookMoves, enemyQueens[i], arr[i + 21], enemySquaresRender, playerSquaresRender, false)
         }
 
         opponentAttackedXrayArr.current = arr
+    }
+
+    const playerAttackedXrayArr = useRef([])
+
+    const playerAttackedXray = () => {
+        let arr = [[], [], [], [], [], [], [], [], [], [],
+                    [], [], [], [], [], [], [], [], [], [],
+                    [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []]
+
+        for (let i = 0; i < 10; i++) {
+            checkArrays(rookMoves, playerRooks[i], arr[i], playerSquaresRender, enemySquaresRender, false)
+        }
+
+        for (let i = 0; i < 10; i++) {
+            checkArrays(whiteBishopMoves, playerBishops[i], arr[i + 10], playerSquaresRender, enemySquaresRender, false)
+            checkArrays(blackBishopMoves, playerBishops[i], arr[i + 10], playerSquaresRender, enemySquaresRender, false)
+        }
+
+        for (let i = 0; i < 10; i++) {
+            checkArrays(whiteBishopMoves, playerQueens[i], arr[i + 20], playerSquaresRender, enemySquaresRender, false)
+            checkArrays(blackBishopMoves, playerQueens[i], arr[i + 20], playerSquaresRender, enemySquaresRender, false)
+            checkArrays(rookMoves, playerQueens[i], arr[i + 21], playerSquaresRender, enemySquaresRender, false)
+        }
+
+        playerAttackedXrayArr.current = arr
     }
 
 
@@ -925,7 +978,7 @@ const Board = () => {
     let enemyPawns = [enemyPawn1, enemyPawn2, enemyPawn3, enemyPawn4, enemyPawn5, enemyPawn6, enemyPawn7, enemyPawn8]
 
     const attackedByOpponent = () => {
-        let arr = enemySquaresRender
+        let arr = []
 
         enemyRooks.forEach(a => checkArrays(rookMoves, a, arr, enemySquaresRender, playerSquaresRender, true))
 
@@ -944,7 +997,7 @@ const Board = () => {
     }
 
     const attackedByPlayer = () => {
-        let arr = playerSquaresRender
+        let arr = []
 
         playerRooks.forEach(a => checkArrays(rookMoves, a, arr, playerSquaresRender, enemySquaresRender, true))
 
@@ -986,50 +1039,50 @@ const Board = () => {
         return (
             <div className="board">
                 {arr1.map((a, i) => <div key={i + 1} className={`${i % 2 === 0 ? "white" : "black"} ${i + 1 === pieceSquare ? "highlight" : null}`}>
-                    {moveSquares.includes(i + 1) && !occupiedSquares.includes(i + 1) ? <div className="activeSquare"></div> : null}
-                    {moveSquares.includes(i + 1) && occupiedSquares.includes(i + 1) ? <div className="enemySquare"><div></div></div> : null}
+                    {moveSquares.includes(i + 1) && !occupiedSquaresRender.includes(i + 1) ? <div className="activeSquare"></div> : null}
+                    {moveSquares.includes(i + 1) && occupiedSquaresRender.includes(i + 1) ? <div className="enemySquare"><div></div></div> : null}
                     {lastMadeMove[0] === i + 1 || lastMadeMove[1] === i + 1 ? <div className="lastMadeMove"></div> : null}
                 </div>)}
 
                 {arr2.map((a, i) => <div key={i + 9} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 9 === pieceSquare ? "highlight" : null}`}>
-                    {moveSquares.includes(i + 9) && !occupiedSquares.includes(i + 9) ? <div className="activeSquare"></div> : null}
-                    {moveSquares.includes(i + 9) && occupiedSquares.includes(i + 9) ? <div className="enemySquare"><div></div></div> : null}
+                    {moveSquares.includes(i + 9) && !occupiedSquaresRender.includes(i + 9) ? <div className="activeSquare"></div> : null}
+                    {moveSquares.includes(i + 9) && occupiedSquaresRender.includes(i + 9) ? <div className="enemySquare"><div></div></div> : null}
                     {lastMadeMove[0] === i + 9 ? <div className="lastMadeMove"></div> : null}
                 </div>)}
 
                 {arr3.map((a, i) => <div key={i + 17} className={`${i % 2 === 0 ? "white" : "black"} ${i + 17 === pieceSquare ? "highlight" : null}`}>
-                    {moveSquares.includes(i + 17) && !occupiedSquares.includes(i + 17) ? <div className="activeSquare"></div> : null}
-                    {moveSquares.includes(i + 17) && occupiedSquares.includes(i + 17) ? <div className="enemySquare"><div></div></div> : null}
+                    {moveSquares.includes(i + 17) && !occupiedSquaresRender.includes(i + 17) ? <div className="activeSquare"></div> : null}
+                    {moveSquares.includes(i + 17) && occupiedSquaresRender.includes(i + 17) ? <div className="enemySquare"><div></div></div> : null}
                     {lastMadeMove[0] === i + 17 ? <div className="lastMadeMove"></div> : null}
                 </div>)}
 
                 {arr4.map((a, i) => <div key={i + 25} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 25 === pieceSquare ? "highlight" : null}`}>
-                    {moveSquares.includes(i + 25) && !occupiedSquares.includes(i + 25) ? <div className="activeSquare"></div> : null}
-                    {moveSquares.includes(i + 25) && occupiedSquares.includes(i + 25) ? <div className="enemySquare"><div></div></div> : null}
+                    {moveSquares.includes(i + 25) && !occupiedSquaresRender.includes(i + 25) ? <div className="activeSquare"></div> : null}
+                    {moveSquares.includes(i + 25) && occupiedSquaresRender.includes(i + 25) ? <div className="enemySquare"><div></div></div> : null}
                     {lastMadeMove[0] === i + 25 ? <div className="lastMadeMove"></div> : null}
                 </div>)}
 
                 {arr5.map((a, i) => <div key={i + 33} className={`${i % 2 === 0 ? "white" : "black"} ${i + 33 === pieceSquare ? "highlight" : null}`}>
-                    {moveSquares.includes(i + 33) && !occupiedSquares.includes(i + 33) ? <div className="activeSquare"></div> : null}
-                    {moveSquares.includes(i + 33) && occupiedSquares.includes(i + 33) ? <div className="enemySquare"><div></div></div> : null}
+                    {moveSquares.includes(i + 33) && !occupiedSquaresRender.includes(i + 33) ? <div className="activeSquare"></div> : null}
+                    {moveSquares.includes(i + 33) && occupiedSquaresRender.includes(i + 33) ? <div className="enemySquare"><div></div></div> : null}
                     {lastMadeMove[0] === i + 33 ? <div className="lastMadeMove"></div> : null}
                 </div>)}
 
                 {arr6.map((a, i) => <div key={i + 41} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 41 === pieceSquare ? "highlight" : null}`}>
-                    {moveSquares.includes(i + 41) && !occupiedSquares.includes(i + 41) ? <div className="activeSquare"></div> : null}
-                    {moveSquares.includes(i + 41) && occupiedSquares.includes(i + 41) ? <div className="enemySquare"><div></div></div> : null}
+                    {moveSquares.includes(i + 41) && !occupiedSquaresRender.includes(i + 41) ? <div className="activeSquare"></div> : null}
+                    {moveSquares.includes(i + 41) && occupiedSquaresRender.includes(i + 41) ? <div className="enemySquare"><div></div></div> : null}
                     {lastMadeMove[0] === i + 41 ? <div className="lastMadeMove"></div> : null}
                 </div>)}
 
                 {arr7.map((a, i) => <div key={i + 49} className={`${i % 2 === 0 ? "white" : "black"} ${i + 49 === pieceSquare ? "highlight" : null}`}>
-                    {moveSquares.includes(i + 49) && !occupiedSquares.includes(i + 49) ? <div className="activeSquare"></div> : null}
-                    {moveSquares.includes(i + 49) && occupiedSquares.includes(i + 49) ? <div className="enemySquare"><div></div></div> : null}
+                    {moveSquares.includes(i + 49) && !occupiedSquaresRender.includes(i + 49) ? <div className="activeSquare"></div> : null}
+                    {moveSquares.includes(i + 49) && occupiedSquaresRender.includes(i + 49) ? <div className="enemySquare"><div></div></div> : null}
                     {lastMadeMove[0] === i + 49 ? <div className="lastMadeMove"></div> : null}
                 </div>)}
 
                 {arr8.map((a, i) => <div key={i + 57} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 57 === pieceSquare ? "highlight" : null}`} >
-                    {moveSquares.includes(i + 57) && !occupiedSquares.includes(i + 57) ? <div className="activeSquare"></div> : null}
-                    {moveSquares.includes(i + 57) && occupiedSquares.includes(i + 57) ? <div className="enemySquare"><div></div></div> : null}
+                    {moveSquares.includes(i + 57) && !occupiedSquaresRender.includes(i + 57) ? <div className="activeSquare"></div> : null}
+                    {moveSquares.includes(i + 57) && occupiedSquaresRender.includes(i + 57) ? <div className="enemySquare"><div></div></div> : null}
                     {lastMadeMove[0] === i + 57 || lastMadeMove[1] === i + 57 ? <div className="lastMadeMove"></div> : null}
                 </div>)}
             </div>
@@ -1530,6 +1583,21 @@ const Board = () => {
     }
 
     function checkArrays(arrayChecked, i, arr, ownArr, oppArr, exclude) {
+        let arr2 = []
+        if (playerSquaresRender.includes(i)) {
+            for (const subArr of opponentAttackedXrayArr.current) {
+                if (subArr.includes(i) && subArr.includes(playerKing)) {
+                    arr2 = subArr
+                }
+            }
+        }
+        if (enemySquaresRender.includes(i)) {
+            for (const subArr of playerAttackedXrayArr.current) {
+                if (subArr.includes(i) && subArr.includes(enemyKing)) {
+                    arr2 = subArr
+                }
+            }
+        }
         for (const subArr of arrayChecked) {
             if (subArr.includes(i)) {
                 for (let j = i + 1; j <= Math.max(...subArr); j++) {
@@ -1542,7 +1610,12 @@ const Board = () => {
                         } else {
                             arr.push(j)
                         }
-                    }
+                    } 
+                    // else {
+                    //     if (subArr.includes(j) && arr2.includes(j)) {
+                    //         arr.push(j)
+                    //     }
+                    // }
                 }
                 for (let j = i - 1; j >= Math.min(...subArr); j--) {
                     if (subArr.includes(j)) {
@@ -1554,14 +1627,35 @@ const Board = () => {
                         } else {
                             arr.push(j)
                         }
-                    }
+                    } 
+                    // else {
+                    //     if (subArr.includes(j) && arr2.includes(j)) {
+                    //         arr.push(j)
+                    //     }
+                    // }
                 }
             }
         }
+        // console.log(arr2)
     }
 
-    function recordKnightMoves(i, arrMoves, excArr) {    
+    function recordKnightMoves(i, arrMoves, excArr) {  
         let arr = []
+        let arr2 = []
+        if (playerSquaresRender.includes(i)) {
+            for (const subArr of opponentAttackedXrayArr.current) {
+                if (subArr.includes(i) && subArr.includes(playerKing)) {
+                    arr2 = subArr
+                }
+            }
+        }
+        if (enemySquaresRender.includes(i)) {
+            for (const subArr of playerAttackedXrayArr.current) {
+                if (subArr.includes(i) && subArr.includes(enemyKing)) {
+                    arr2 = subArr
+                }
+            }
+        }
         if (i) {
             if (knightLimits[0].includes(i)) {
                 arr = [i - 15, i - 6, i + 10, i + 17]
@@ -1576,11 +1670,11 @@ const Board = () => {
             }
             for (const number of arr) {
                 if (excArr.includes(number)) {
-                    arr = arr.filter(x => x !== number)
+                    arr = arr.filter(a => a !== number)
                 }
-            }
-            if (playerKingXrayArr.current.flat().includes(i) && attackedByOpponentArr.current.includes(i)) {
-                console.log(playerKingXrayArr.current)
+                if (arr2.length > 0) {
+                    arr = arr.filter(a => arr2.includes(a))
+                }
             }
             for (const number of arr) {
                 arrMoves.push(number)
@@ -1590,16 +1684,22 @@ const Board = () => {
 
     const recordPlayerPawnMoves = (i, piece, arrMoves) => {    
         let arr = []
-
+        let arr2 = []
+        for (const subArr of opponentAttackedXrayArr.current) {
+            if (subArr.includes(i) && subArr.includes(playerKing)) {
+                arr2 = subArr
+            }
+        }
+        
         if (pawnsFirstMove[piece]) {
             arr = [i - 8, i - 16]
         } else {
             arr = [i - 8]
         }
         
-        if (occupiedSquares.includes(i - 8)) {
+        if (occupiedSquaresRender.includes(i - 8)) {
             arr = []
-        } else if (occupiedSquares.includes(i - 16)) {
+        } else if (occupiedSquaresRender.includes(i - 16)) {
             arr = [i - 8]
         }
 
@@ -1611,6 +1711,10 @@ const Board = () => {
             arr.push(i - 7)
         }
 
+        if (arr2.length > 0) {
+            arr = arr.filter(a => arr2.includes(a))
+        }
+
         for (const number of arr) {
             arrMoves.push(number)
         }
@@ -1618,6 +1722,13 @@ const Board = () => {
 
     const recordOpponentPawnMoves = (i, piece, arrMoves) => {    
         let arr = []
+        let arr2 = []
+
+        for (const subArr of playerAttackedXrayArr.current) {
+            if (subArr.includes(i) && subArr.includes(enemyKing)) {
+                arr2 = subArr
+            }
+        }
 
         if (pawnsFirstMove[piece]) {
             arr = [i + 8, i + 16]
@@ -1625,9 +1736,9 @@ const Board = () => {
             arr = [i + 8]
         }
         
-        if (occupiedSquares.includes(i + 8)) {
+        if (occupiedSquaresRender.includes(i + 8)) {
             arr = []
-        } else if (occupiedSquares.includes(i + 16)) {
+        } else if (occupiedSquaresRender.includes(i + 16)) {
             arr = [i + 8]
         }
 
@@ -1637,6 +1748,10 @@ const Board = () => {
 
         if ((playerSquaresRender.includes(i + 7) || (rookMoves[4].includes(i) && i + 7 === enPassantSquare.current)) && !knightLimits[1].includes(i)) {
             arr.push(i + 7)
+        }
+
+        if (arr2.length > 0) {
+            arr = arr.filter(a => arr2.includes(a))
         }
 
         for (const number of arr) {
@@ -1683,13 +1798,11 @@ const Board = () => {
             setPieceSquare(null)
         }
 
-        console.log(opponentAttackedXrayArr.current)
-
         if (!sandbox ? (playerSquaresRender.includes(i) && activeStatePiece !== piece) :
             (((/^o/.test(activePiece) && !/^p/.test(piece)) 
             || (/^p/.test(activePiece) && !/^o/.test(piece)) 
             || !activeStatePiece) 
-            && (occupiedSquares.includes(i) && activeStatePiece !== piece))) {
+            && (occupiedSquaresRender.includes(i) && activeStatePiece !== piece))) {
             setMoveSquares([])
             setPieceSquare(i)
             setActiveStatePiece(piece)
@@ -2352,20 +2465,21 @@ const Board = () => {
 
                 if ((playerKingSpiderSenseArr.current[0].includes(enemyQueen1) 
                     || enemyBishops.some(a => playerKingSpiderSenseArr.current[0].includes(a)))
-                    && enemyKnights.every(a => !playerKingSpiderSenseArr.current[0].includes(a))
-                    && enemyRooks.every(a => !playerKingSpiderSenseArr.current[0].includes(a))) {
+                    && occupiedSquaresLive.filter(a => !enemyBishops.includes(a))
+                                            .filter(a => !enemyQueens.includes(a))
+                                            .every(a => !playerKingSpiderSenseArr.current[0].includes(a))) {
                     checkSound.play()
                     store.dispatch({
                         type: "playerKingAttacked",
                         payload: true
                     })
-                    
                 }
 
                 if ((playerKingSpiderSenseArr.current[1].includes(enemyQueen1) 
                     || enemyRooks.some(a => playerKingSpiderSenseArr.current[1].includes(a)))
-                    && enemyKnights.every(a => !playerKingSpiderSenseArr.current[1].includes(a))
-                    && enemyBishops.every(a => !playerKingSpiderSenseArr.current[1].includes(a))) {
+                    && occupiedSquaresLive.filter(a => !enemyQueens.includes(a))
+                                            .filter(a => !enemyRooks.includes(a))
+                                            .every(a => !playerKingSpiderSenseArr.current[1].includes(a))) {
                     checkSound.play()
                     store.dispatch({
                         type: "playerKingAttacked",
@@ -2422,20 +2536,21 @@ const Board = () => {
 
                 if ((playerKingSpiderSenseArr.current[0].includes(enemyQueen1) 
                     || enemyBishops.some(a => playerKingSpiderSenseArr.current[0].includes(a)))
-                    && enemyKnights.every(a => !playerKingSpiderSenseArr.current[0].includes(a))
-                    && enemyRooks.every(a => !playerKingSpiderSenseArr.current[0].includes(a))) {
+                    && occupiedSquaresLive.filter(a => !enemyBishops.includes(a))
+                                            .filter(a => !enemyQueens.includes(a))
+                                            .every(a => !playerKingSpiderSenseArr.current[0].includes(a))) {
                     checkSound.play()
                     store.dispatch({
                         type: "playerKingAttacked",
                         payload: true
                     })
-                    
                 }
 
                 if ((playerKingSpiderSenseArr.current[1].includes(enemyQueen1) 
                     || enemyRooks.some(a => playerKingSpiderSenseArr.current[1].includes(a)))
-                    && enemyKnights.every(a => !playerKingSpiderSenseArr.current[1].includes(a))
-                    && enemyBishops.every(a => !playerKingSpiderSenseArr.current[1].includes(a))) {
+                    && occupiedSquaresLive.filter(a => !enemyQueens.includes(a))
+                                            .filter(a => !enemyRooks.includes(a))
+                                            .every(a => !playerKingSpiderSenseArr.current[1].includes(a))) {
                     checkSound.play()
                     store.dispatch({
                         type: "playerKingAttacked",
@@ -2493,8 +2608,9 @@ const Board = () => {
 
                 if ((enemyKingSpiderSenseArr.current[0].includes(playerQueen1) 
                     || playerBishops.some(a => enemyKingSpiderSenseArr.current[0].includes(a)))
-                    && playerKnights.every(a => !enemyKingSpiderSenseArr.current[0].includes(a))
-                    && playerRooks.every(a => !enemyKingSpiderSenseArr.current[0].includes(a))) {
+                    && occupiedSquaresLive.filter(a => !playerQueens.includes(a))
+                                            .filter(a => !playerBishops.includes(a))
+                                            .every(a => !enemyKingSpiderSenseArr.current[1].includes(a))) {
                     checkSound.play()
                     store.dispatch({
                         type: "enemyKingAttacked",
@@ -2505,8 +2621,9 @@ const Board = () => {
 
                 if ((enemyKingSpiderSenseArr.current[1].includes(playerQueen1) 
                     || playerRooks.some(a => enemyKingSpiderSenseArr.current[1].includes(a)))
-                    && playerKnights.every(a => !enemyKingSpiderSenseArr.current[1].includes(a))
-                    && playerBishops.every(a => !enemyKingSpiderSenseArr.current[1].includes(a))) {
+                    && occupiedSquaresLive.filter(a => !playerQueens.includes(a))
+                                            .filter(a => !playerRooks.includes(a))
+                                            .every(a => !enemyKingSpiderSenseArr.current[1].includes(a))) {
                     checkSound.play()
                     store.dispatch({
                         type: "enemyKingAttacked",
@@ -2561,8 +2678,9 @@ const Board = () => {
 
                 if ((enemyKingSpiderSenseArr.current[0].includes(playerQueen1) 
                     || playerBishops.some(a => enemyKingSpiderSenseArr.current[0].includes(a)))
-                    && playerKnights.every(a => !enemyKingSpiderSenseArr.current[0].includes(a))
-                    && playerRooks.every(a => !enemyKingSpiderSenseArr.current[0].includes(a))) {
+                    && occupiedSquaresLive.filter(a => !playerQueens.includes(a))
+                                            .filter(a => !playerBishops.includes(a))
+                                            .every(a => !enemyKingSpiderSenseArr.current[1].includes(a))) {
                     checkSound.play()
                     store.dispatch({
                         type: "enemyKingAttacked",
@@ -2573,8 +2691,9 @@ const Board = () => {
 
                 if ((enemyKingSpiderSenseArr.current[1].includes(playerQueen1) 
                     || playerRooks.some(a => enemyKingSpiderSenseArr.current[1].includes(a)))
-                    && playerKnights.every(a => !enemyKingSpiderSenseArr.current[1].includes(a))
-                    && playerBishops.every(a => !enemyKingSpiderSenseArr.current[1].includes(a))) {
+                    && occupiedSquaresLive.filter(a => !playerQueens.includes(a))
+                                            .filter(a => !playerRooks.includes(a))
+                                            .every(a => !enemyKingSpiderSenseArr.current[1].includes(a))) {
                     checkSound.play()
                     store.dispatch({
                         type: "enemyKingAttacked",
