@@ -122,11 +122,10 @@ const Board = () => {
         encode()
 
         playerKingSpiderSense()
-        playerKingXray()
         enemyKingSpiderSense()
-        enemyKingXray()
-        opponentAttackedXray()
-        playerAttackedXray()
+
+
+        console.log(enemyQueen1)
     }
 
     useEffect(() => {
@@ -954,30 +953,75 @@ const Board = () => {
     const playerAttackedXrayArr = useRef([])
 
     const playerAttackedXray = () => {
-        let arr = [[], [], [], [], [], [], [], [], [], [],
+        let arr = [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
                     [], [], [], [], [], [], [], [], [], [],
-                    [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []]
+                    [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []]
+
+        let arrTech = []
 
         for (let i = 0; i < 10; i++) {
-            checkArrays(rookMoves, playerRooks[i], arr[i], playerSquaresRender, enemySquaresRender, true, false)
+            checkArrays(rookMoves, playerRooks[i], arrTech, playerSquaresRender, enemySquaresRender, true, false)
 
             arr[i].push(playerRooks[i])
         }
 
         for (let i = 0; i < 10; i++) {
-            checkArrays(whiteBishopMoves, playerBishops[i], arr[i + 10], playerSquaresRender, enemySquaresRender, true, false)
-            checkArrays(blackBishopMoves, playerBishops[i], arr[i + 10], playerSquaresRender, enemySquaresRender, true, false)
+            arr[i] = arrTech.filter(a => {
+                for (let j = 0; j < 8; j++) {
+                    if (rookMoves[j].includes(playerRooks[i]) && rookMoves[j].includes(a)) {
+                        return a
+                    }
+                }
+            })
+            arr[i].push(playerRooks[i])
+        }
+
+        for (let i = 0; i < 10; i++) {
+            arr[i] = arrTech.filter(a => {
+                for (let j = 8; j < 15; j++) {
+                    if (rookMoves[j].includes(playerRooks[i]) && rookMoves[j].includes(a)) {
+                        return a
+                    }
+                }
+            })
+            arr[i].push(playerRooks[i])
+        }
+
+        for (let i = 0; i < 10; i++) {
+            checkArrays(whiteBishopMoves, playerBishops[i], arr[i + 20], playerSquaresRender, enemySquaresRender, true, false)
+            checkArrays(blackBishopMoves, playerBishops[i], arr[i + 20], playerSquaresRender, enemySquaresRender, true, false)
 
             arr[i + 10].push(playerBishops[i])
         }
 
         for (let i = 0; i < 10; i++) {
-            checkArrays(whiteBishopMoves, playerQueens[i], arr[i + 20], playerSquaresRender, enemySquaresRender, true, false)
-            checkArrays(blackBishopMoves, playerQueens[i], arr[i + 20], playerSquaresRender, enemySquaresRender, true, false)
-            checkArrays(rookMoves, playerQueens[i], arr[i + 21], playerSquaresRender, enemySquaresRender, true, false)
+            checkArrays(whiteBishopMoves, playerQueens[i], arr[i + 30], playerSquaresRender, enemySquaresRender, true, false)
+            checkArrays(blackBishopMoves, playerQueens[i], arr[i + 30], playerSquaresRender, enemySquaresRender, true, false)
+            checkArrays(rookMoves, playerQueens[i], arrTech, playerSquaresRender, enemySquaresRender, true, false)
 
-            arr[i + 20].push(playerQueens[i])
-            arr[i + 21].push(playerQueens[i])
+            arr[i + 30].push(playerQueens[i])
+        }
+
+        for (let i = 0; i < 10; i++) {
+            arr[i + 31] = arrTech.filter(a => {
+                for (let j = 0; j < 8; j++) {
+                    if (rookMoves[j].includes(playerQueens[i]) && rookMoves[j].includes(a)) {
+                        return a
+                    }
+                }
+            })
+            arr[i + 31].push(playerQueens[i])
+        }
+
+        for (let i = 0; i < 10; i++) {
+            arr[i + 32] = arrTech.filter(a => {
+                for (let j = 8; j < 15; j++) {
+                    if (rookMoves[j].includes(playerQueens[i]) && rookMoves[j].includes(a)) {
+                        return a
+                    }
+                }
+            })
+            arr[i + 32].push(playerQueens[i])
         }
 
         playerAttackedXrayArr.current = arr
@@ -1695,6 +1739,7 @@ const Board = () => {
                 }
             }
         }
+        console.log(enemyQueen1)
     }
 
     function recordKnightMoves(i, arrMoves, excArr) {  
@@ -1856,7 +1901,8 @@ const Board = () => {
             setActiveStatePiece("")
             setPieceSquare(null)
         }
-
+        // console.log(opponentAttackedXrayArr.current)
+        
         if (!sandbox ? (playerSquaresRender.includes(i) && activeStatePiece !== piece) :
             (((/^o/.test(activePiece) && !/^p/.test(piece)) 
             || (/^p/.test(activePiece) && !/^o/.test(piece)) 
@@ -2035,7 +2081,7 @@ const Board = () => {
         }
 
         if (/^ph/.test(activePiece) && moveSquares.includes(i)) {
-            updateStateBoard(i, activePiece)
+            
 
             recordKnightMoves(i, checkedByPlayerArr.current, playerSquaresLive)
 
@@ -2073,6 +2119,7 @@ const Board = () => {
                 default:
                     break;
             }
+            updateStateBoard(i, activePiece)
 
             playerKnights = [playerKnight1, playerKnight2, playerKnight3, playerKnight4, playerKnight5, playerKnight6, playerKnight7, playerKnight8, playerKnight9, playerKnight01]
 
@@ -2086,7 +2133,7 @@ const Board = () => {
         } 
 
         if (/^pb/.test(activePiece) && moveSquares.includes(i)) {
-            updateStateBoard(i, activePiece)
+            
 
             checkArrays(blackBishopMoves, i, checkedByPlayerArr.current, playerSquaresLive, enemySquaresLive, true, true)
             checkArrays(whiteBishopMoves, i, checkedByPlayerArr.current, playerSquaresLive, enemySquaresLive, true, true)
@@ -2125,6 +2172,7 @@ const Board = () => {
                 default:
                     break;
             }
+            updateStateBoard(i, activePiece)
 
             playerBishops = [playerBishop1, playerBishop2, playerBishop3, playerBishop4, playerBishop5, playerBishop6, playerBishop7, playerBishop8, playerBishop9, playerBishop01]
 
@@ -2132,7 +2180,7 @@ const Board = () => {
         } 
 
         if (/^pr/.test(activePiece) && moveSquares.includes(i)) {
-            updateStateBoard(i, activePiece)
+            
 
             checkArrays(rookMoves, i, checkedByPlayerArr.current, playerSquaresLive, enemySquaresLive, true, true)
             
@@ -2170,6 +2218,7 @@ const Board = () => {
                 default:
                     break;
             }
+            updateStateBoard(i, activePiece)
 
             enemyRooks = [enemyRook1, enemyRook2, enemyRook3, enemyRook4, enemyRook5, enemyRook6, enemyRook7, enemyRook8, enemyRook9, enemyRook01]
 
@@ -2177,7 +2226,7 @@ const Board = () => {
         }
 
         if (/^pq/.test(activePiece) && moveSquares.includes(i)) {
-            updateStateBoard(i, activePiece)
+            
             
             checkArrays(rookMoves, i, checkedByPlayerArr.current, playerSquaresLive, enemySquaresLive, true, true)
             checkArrays(blackBishopMoves, i, checkedByPlayerArr.current, playerSquaresLive, enemySquaresLive, true, true)
@@ -2214,6 +2263,7 @@ const Board = () => {
                 default:
                     break;
             }
+            updateStateBoard(i, activePiece)
 
             playerQueens = [playerQueen1, playerQueen2, playerQueen3, playerQueen4, playerQueen5, playerQueen6, playerQueen7, playerQueen8, playerQueen9]
 
@@ -2221,15 +2271,17 @@ const Board = () => {
         } 
 
         if (/^pk/.test(activePiece) && moveSquares.includes(i) && !attackedByOpponentArr.current.includes(i)) {
+            
+           
+            playerKing = i
             updateStateBoard(i, activePiece)
             moveKing(i, activePiece)
-            playerKing = i
             playerKingSpiderSense()
             playerKingXray()
         } 
                 
         if (/^oh/.test(activePiece) && moveSquares.includes(i)) {
-            updateStateBoard(i, activePiece)
+            
             recordKnightMoves(i, checkedByOpponentArr.current, enemySquaresLive)
             
             switch (activePiece) {
@@ -2266,6 +2318,7 @@ const Board = () => {
                 default:
                     break;
             }
+            updateStateBoard(i, activePiece)
 
             enemyKnights = [enemyKnight1, enemyKnight2, enemyKnight3, enemyKnight4, enemyKnight5, enemyKnight6, enemyKnight7, enemyKnight8, enemyKnight9, enemyKnight01]
             
@@ -2279,7 +2332,7 @@ const Board = () => {
         } 
 
         if (/^ob/.test(activePiece) && moveSquares.includes(i)) {
-            updateStateBoard(i, activePiece)
+            
             checkArrays(whiteBishopMoves, i, checkedByOpponentArr.current, enemySquaresLive, playerSquaresLive, true, true)
             checkArrays(blackBishopMoves, i, checkedByOpponentArr.current, enemySquaresLive, playerSquaresLive, true, true)
             
@@ -2318,6 +2371,7 @@ const Board = () => {
                 default:
                     break;
             }
+            updateStateBoard(i, activePiece)
 
             enemyBishops = [enemyBishop1, enemyBishop2, enemyBishop3, enemyBishop4, enemyBishop5, enemyBishop6, enemyBishop7, enemyBishop8, enemyBishop9, enemyBishop01]
 
@@ -2326,7 +2380,7 @@ const Board = () => {
         } 
 
         if (/^or/.test(activePiece) && moveSquares.includes(i)) {
-            updateStateBoard(i, activePiece)
+            
             checkArrays(rookMoves, i, checkedByOpponentArr.current, enemySquaresLive, playerSquaresLive, true, true)
             
             
@@ -2364,7 +2418,7 @@ const Board = () => {
                 default:
                     break;
             }
-
+            updateStateBoard(i, activePiece)
             enemyRooks = [enemyRook1, enemyRook2, enemyRook3, enemyRook4, enemyRook5, enemyRook6, enemyRook7, enemyRook8, enemyRook9, enemyRook01]
             moveRook(i, activePiece)
 
@@ -2372,8 +2426,6 @@ const Board = () => {
         }
 
         if (/^oq/.test(activePiece) && moveSquares.includes(i)) {
-            updateStateBoard(i, activePiece)
-
             checkArrays(whiteBishopMoves, i, checkedByOpponentArr.current, enemySquaresLive, playerSquaresLive, true, true)
             checkArrays(blackBishopMoves, i, checkedByOpponentArr.current, enemySquaresLive, playerSquaresLive, true, true)
             checkArrays(rookMoves, i, checkedByOpponentArr.current, enemySquaresLive, playerSquaresLive, true, true)
@@ -2410,6 +2462,8 @@ const Board = () => {
                     break;
             }
 
+            updateStateBoard(i, activePiece)
+
             enemyQueens = [enemyQueen1, enemyQueen2, enemyQueen3, enemyQueen4, enemyQueen5, enemyQueen6, enemyQueen7, enemyQueen8, enemyQueen9]
 
             moveQueen(i, activePiece)
@@ -2418,9 +2472,11 @@ const Board = () => {
         } 
 
         if (/^ok/.test(activePiece) && moveSquares.includes(i) && !attackedByPlayerArr.current.includes(i)) {
+            
+            
+            enemyKing = i
             updateStateBoard(i, activePiece)
             moveKing(i, activePiece)
-            enemyKing = i
             enemyKingSpiderSense()
         } 
     }
@@ -2781,6 +2837,11 @@ const Board = () => {
         setLastMadeMove([i, null])
         setMoveSquares([])
         setPieceSquare(null)
+
+        playerKingXray()
+        enemyKingXray()
+        opponentAttackedXray()
+        playerAttackedXray()
     }  
 
     const moveKnight = (i, string) => {
@@ -3265,6 +3326,11 @@ const Board = () => {
                 setToMove("b")
             }
         }
+
+        playerKingXray()
+        enemyKingXray()
+        opponentAttackedXray()
+        playerAttackedXray()
     }
 
     const animateEnPassant = (coor1, coor2, string, i) => {
