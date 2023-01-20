@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 /* eslint-disable no-loop-func */
 /* eslint-disable react-hooks/exhaustive-deps */
 import whiteKing from "../../images/whiteKing.png"
@@ -38,7 +39,7 @@ const Board = () => {
     // const [enemyKingAttacked, setEnemyKingAttacked] = useState(false) // 6
     // const [playerKingAttacked, setPlayerKingAttacked] = useState(false) // 7
     // const [attackedByOpponentArr, setAttackedByOpponentArr] = useState([]) // 8
-    const [toMove, setToMove] = useState("w") // 6
+    // const [toMove, setToMove] = useState("w") // 6
     const [pawnPromotes, setPawnPromotes] = useState("")
 
     const board = useSelector(state => state.board)
@@ -118,15 +119,13 @@ const Board = () => {
 
         playerNewSquareForEngine = boardEntries.filter(([key, value]) => value[0] === pieceSquareForEngine.current).flat()[1][1]
 
-
         encode()
 
         playerKingSpiderSense()
         enemyKingSpiderSense()
-
-
-        console.log(enemyQueen1)
     }
+
+    const toMove = useRef("w")
 
     useEffect(() => {
         recordBoard()
@@ -137,9 +136,9 @@ const Board = () => {
         // stockfish.postMessage('setoption name Skill Level value -10/20')        
     }, [])
 
-    // useEffect(() => {
-    //     recordBoard()
-    // }, [board])
+    useEffect(() => {
+        recordBoard()
+    }, [board])
 
     useEffect(() => {
         if (notInitialRender.current) {
@@ -171,10 +170,10 @@ const Board = () => {
     }, [JSON.stringify(board)]);
 
     useEffect(() => {
-        if ((color === "white" && toMove === "b") || (color === "black" && toMove === "w")) {
+        if ((color === "white" && toMove.current === "b") || (color === "black" && toMove.current === "w")) {
             engineTurn()
         }
-    }, [toMove])
+    }, [toMove.current])
 
     let enPassantSquare = useRef(0)
 
@@ -218,9 +217,11 @@ const Board = () => {
             pieceSquareForEngine.current = enginePieceSquare      
 
             if (/^op/.test(enginePieceToMove)) {
-                updateStateBoard(engineWhereToMove, enginePieceToMove)
+                
                 
                 recordOpponentPawnAttacks(engineWhereToMove, checkedByOpponentArr.current)
+
+                updateStateBoard(engineWhereToMove, enginePieceToMove)
 
                 movePawn(engineWhereToMove, enginePieceToMove)
 
@@ -228,7 +229,7 @@ const Board = () => {
             } 
             
             if (/^ob/.test(enginePieceToMove)) {
-                updateStateBoard(engineWhereToMove, enginePieceToMove)
+                
                 
                 checkArrays(whiteBishopMoves, engineWhereToMove, checkedByOpponentArr.current, enemySquaresLive, playerSquaresLive, true, true)
                 checkArrays(blackBishopMoves, engineWhereToMove, checkedByOpponentArr.current, enemySquaresLive, playerSquaresLive, true, true)
@@ -268,6 +269,8 @@ const Board = () => {
                         break;
                 }
 
+                updateStateBoard(engineWhereToMove, enginePieceToMove)
+
                 enemyBishops = [enemyBishop1, enemyBishop2, enemyBishop3, enemyBishop4, enemyBishop5, enemyBishop6, enemyBishop7, enemyBishop8, enemyBishop9, enemyBishop01]
 
                 moveBishop(engineWhereToMove, enginePieceToMove)
@@ -276,7 +279,7 @@ const Board = () => {
             } 
             
             if (/^oh/.test(enginePieceToMove)) {
-                updateStateBoard(engineWhereToMove, enginePieceToMove)
+                
                 
                 recordKnightMoves(engineWhereToMove, checkedByOpponentArr.current, enemySquaresLive)
 
@@ -315,6 +318,8 @@ const Board = () => {
                         break;
                 }
 
+                updateStateBoard(engineWhereToMove, enginePieceToMove)
+
                 enemyKnights = [enemyKnight1, enemyKnight2, enemyKnight3, enemyKnight4, enemyKnight5, enemyKnight6, enemyKnight7, enemyKnight8, enemyKnight9, enemyKnight01]
 
                 moveKnight(engineWhereToMove, enginePieceToMove)
@@ -323,7 +328,6 @@ const Board = () => {
             } 
             
             if (/^or/.test(enginePieceToMove)) {
-                updateStateBoard(engineWhereToMove, enginePieceToMove)
                 
                 checkArrays(rookMoves, engineWhereToMove, checkedByOpponentArr.current, enemySquaresLive, playerSquaresLive, true, true)
 
@@ -362,6 +366,9 @@ const Board = () => {
                         break;
                 }
 
+                updateStateBoard(engineWhereToMove, enginePieceToMove)
+                
+
                 enemyRooks = [enemyRook1, enemyRook2, enemyRook3, enemyRook4, enemyRook5, enemyRook6, enemyRook7, enemyRook8, enemyRook9, enemyRook01]
 
                 moveRook(engineWhereToMove, enginePieceToMove)
@@ -370,7 +377,7 @@ const Board = () => {
             } 
             
             if (/^oq/.test(enginePieceToMove)) {
-                updateStateBoard(engineWhereToMove, enginePieceToMove)
+               
                 
                 checkArrays(whiteBishopMoves, engineWhereToMove, checkedByOpponentArr.current, enemySquaresLive, playerSquaresLive, true, true)
                 checkArrays(blackBishopMoves, engineWhereToMove, checkedByOpponentArr.current, enemySquaresLive, playerSquaresLive, true, true)
@@ -408,6 +415,8 @@ const Board = () => {
                         break;
                 }
 
+
+                updateStateBoard(engineWhereToMove, enginePieceToMove)
                 enemyQueens = [enemyQueen1, enemyQueen2, enemyQueen3, enemyQueen4, enemyQueen5, enemyQueen6, enemyQueen7, enemyQueen8, enemyQueen9]
 
                 moveQueen(engineWhereToMove, enginePieceToMove)
@@ -557,7 +566,7 @@ const Board = () => {
 
         let fenString = fenArrays.join("/")
 
-        fenString += ` ${toMove} `
+        fenString += ` ${toMove.current} `
 
         if (castlingPlayerMoved.pk && castlingPlayerMoved.pr1 && castlingPlayerMoved.pr2) {
                 if (color === "white") {
@@ -1739,7 +1748,6 @@ const Board = () => {
                 }
             }
         }
-        console.log(enemyQueen1)
     }
 
     function recordKnightMoves(i, arrMoves, excArr) {  
@@ -1817,6 +1825,11 @@ const Board = () => {
 
         if (arr2.length > 0) {
             arr = arr.filter(a => arr2.includes(a))
+        }
+
+        if (playerKingAttacked) {
+            // arr = arr.filter(a => opponentAttackedXrayArr.current.flat().includes(a))
+            console.log(opponentAttackedXrayArr.current)
         }
 
         for (const number of arr) {
@@ -1901,7 +1914,6 @@ const Board = () => {
             setActiveStatePiece("")
             setPieceSquare(null)
         }
-        // console.log(opponentAttackedXrayArr.current)
         
         if (!sandbox ? (playerSquaresRender.includes(i) && activeStatePiece !== piece) :
             (((/^o/.test(activePiece) && !/^p/.test(piece)) 
@@ -1964,9 +1976,6 @@ const Board = () => {
 
             if (/^pk/.test(piece)) {
                 attackedByOpponent()
-
-                // console.log(JSON.stringify(playerSquaresRender))
-                // console.log(enemyQueen1)
 
                 let arr = []
                 
@@ -2604,8 +2613,6 @@ const Board = () => {
 
                 captureSound.play()
             } else {
-                // console.log(checkedByOpponentArr.current.flat())
-                // console.log(playerKingSpiderSenseArr.current)
 
                 if (/^op/.test(string) && rookMoves[7].includes(i) && sandbox) {
                     setPawnPromotes(string)
@@ -2677,9 +2684,9 @@ const Board = () => {
             }
 
             if (color === "white") {
-                setToMove("w")
+                toMove.current = "w"
             } else {
-                setToMove("b")
+                toMove.current = "b"
             }
         }
 
@@ -2820,15 +2827,15 @@ const Board = () => {
             }
 
             if (color === "white") {
-                setToMove("b")
+                toMove.current = "b"
             } else {
-                setToMove("w")
+                toMove.current = "w"
             }
 
             checkedByPlayerArr.current = []
         }
 
-        if (color === "black" && toMove === "w") {
+        if (color === "black" && toMove.current === "w") {
             store.dispatch({
                 type: "moveCounter"
             })
@@ -3305,7 +3312,7 @@ const Board = () => {
             type: rookToMove
         })
 
-        encode()
+        // encode()
 
         setLastMadeMove([newSqKing, newSqRook])
 
@@ -3315,15 +3322,15 @@ const Board = () => {
 
         if (color === "white") {
             if (/^pr/.test(rookToMove)) {
-                setToMove("b")
+                toMove.current = "b"
             } else {
-                setToMove("w")
+                toMove.current = "w"
             }
         } else {
             if (/^or/.test(rookToMove)) {
-                setToMove("w")
+                toMove.current = "w"
             } else {
-                setToMove("b")
+                toMove.current = "b"
             }
         }
 
@@ -3375,7 +3382,7 @@ const Board = () => {
             type: string
         })
 
-        encode()
+        // encode()
 
         setLastMadeMove([i, 0])
 
@@ -3385,15 +3392,15 @@ const Board = () => {
 
         if (color === "white") {
             if (/^pp/.test(string)) {
-                setToMove("b")
+                toMove.current = "b"
             } else {
-                setToMove("w")
+                toMove.current = "w"
             }
         } else {
             if (/^op/.test(string)) {
-                setToMove("w")
+                toMove.current = "w"
             } else {
-                setToMove("b")
+                toMove.current = "b"
             }
         }
     }
