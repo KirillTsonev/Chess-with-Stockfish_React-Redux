@@ -58,13 +58,6 @@ const Board = () => {
     const halfMoveCounter = useSelector(state => state.halfMoveCounter)
     const sandbox = useSelector(state => state.sandbox)
 
-
-
-
-
-
-
-    
     let boardEntries = Object.entries(board)
     // const boardEntries = Object.entries(store.getState().board)
 
@@ -123,6 +116,9 @@ const Board = () => {
 
         playerKingSpiderSense()
         enemyKingSpiderSense()
+
+        protectedByPlayer()
+        protectedByOpponent()
     }
 
     const toMove = useRef("w")
@@ -842,10 +838,47 @@ const Board = () => {
 
 
 
+    const protectedByPlayerArr = useRef([])
 
+    const protectedByPlayer = () => {
+        let arr = []
 
+        playerRooks.forEach(a => checkArrays(rookMoves, a, arr, enemySquaresRender, playerSquaresRender, true, true))
 
+        playerKnights.forEach(a => recordKnightMoves(a, arr, enemySquaresRender))
 
+        playerBishops.forEach(a => checkArrays(whiteBishopMoves, a, arr, enemySquaresRender, playerSquaresRender, true, true))
+        playerBishops.forEach(a => checkArrays(blackBishopMoves, a, arr, enemySquaresRender, playerSquaresRender, true, true))
+
+        playerQueens.forEach(a => checkArrays(whiteBishopMoves, a, arr, enemySquaresRender, playerSquaresRender, true, true))
+        playerQueens.forEach(a => checkArrays(blackBishopMoves, a, arr, enemySquaresRender, playerSquaresRender, true, true))
+        playerQueens.forEach(a => checkArrays(rookMoves, a, arr, enemySquaresRender, playerSquaresRender, true, true))
+
+        enemyPawns.forEach(a => recordOpponentPawnAttacks(a, arr))
+
+        protectedByPlayerArr.current = arr
+    }
+
+    const protectedByOpponentArr = useRef([])
+
+    const protectedByOpponent = () => {
+        let arr = []
+
+        enemyRooks.forEach(a => checkArrays(rookMoves, a, arr, playerSquaresRender, enemySquaresRender, true, true))
+
+        enemyKnights.forEach(a => recordKnightMoves(a, arr, playerSquaresRender))
+
+        enemyBishops.forEach(a => checkArrays(whiteBishopMoves, a, arr, playerSquaresRender, enemySquaresRender, true, true))
+        enemyBishops.forEach(a => checkArrays(blackBishopMoves, a, arr, playerSquaresRender, enemySquaresRender, true, true))
+
+        enemyQueens.forEach(a => checkArrays(whiteBishopMoves, a, arr, playerSquaresRender, enemySquaresRender, true, true))
+        enemyQueens.forEach(a => checkArrays(blackBishopMoves, a, arr, playerSquaresRender, enemySquaresRender, true, true))
+        enemyQueens.forEach(a => checkArrays(rookMoves, a, arr, playerSquaresRender, enemySquaresRender, true, true))
+
+        enemyPawns.forEach(a => recordPlayerPawnAttacks(a, arr))
+
+        protectedByOpponentArr.current = arr
+    }
 
 
 
@@ -875,12 +908,6 @@ const Board = () => {
 
         enemyKingXrayArr.current = arr
     }
-
-
-
-
-
-
 
     const opponentAttackedXrayArr = useRef([])
 
@@ -1035,24 +1062,6 @@ const Board = () => {
 
         playerAttackedXrayArr.current = arr
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     let playerKingSpiderSenseArr = useRef([])
 
@@ -1827,10 +1836,10 @@ const Board = () => {
             arr = arr.filter(a => arr2.includes(a))
         }
 
-        if (playerKingAttacked) {
-            // arr = arr.filter(a => opponentAttackedXrayArr.current.flat().includes(a))
-            console.log(opponentAttackedXrayArr.current)
-        }
+        // if (playerKingAttacked) {
+        //     // arr = arr.filter(a => opponentAttackedXrayArr.current.flat().includes(a))
+        //     console.log(opponentAttackedXrayArr.current)
+        // }
 
         for (const number of arr) {
             arrMoves.push(number)
@@ -2003,9 +2012,13 @@ const Board = () => {
                             arr = arr.filter(x => x !== 63)
                         }
                         arr = arr.filter(a => !attackedByOpponentArr.current.includes(a))
+                                .filter(a => !protectedByOpponentArr.current.includes(a))
+
                         setMoveSquares(arr)
                     } else {
                         arr = arr.filter(a => !attackedByOpponentArr.current.includes(a))
+                                .filter(a => !protectedByOpponentArr.current.includes(a))
+                                
                         setMoveSquares(arr)
                     }
                 }
@@ -2079,10 +2092,13 @@ const Board = () => {
                         }
 
                         arr = arr.filter(a => !attackedByPlayerArr.current.includes(a))
+                                .filter(a => !protectedByPlayerArr.current.includes(a))
 
                         setMoveSquares(arr)
                     } else {
                         arr = arr.filter(a => !attackedByPlayerArr.current.includes(a))
+                                .filter(a => !protectedByPlayerArr.current.includes(a))
+
                         setMoveSquares(arr)
                     }
                 }
