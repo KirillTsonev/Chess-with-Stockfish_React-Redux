@@ -845,24 +845,24 @@ const Board = () => {
     const checkedByOpponentArr = useRef([])
 
 
-    const combThroughArrayPlus = (index, arrChecked, arrResult, ownArr, oppArr) => {
-        for (const subArr of arrChecked) {
-            if (subArr.includes(index)) {
-                for (let j = index + 1; j <= Math.max(...subArr); j++) {
-                    if (subArr.includes(j)) {
-                        if (ownArr.includes(j)) {
-                            break
-                        } else if (oppArr.includes(j)) {
-                            arrResult.push(j)
-                            break
-                        } else {
-                            arrResult.push(j)
-                        }
-                    } 
-                }
-            }
-        }
-    }
+    // const combThroughArrayPlus = (index, arrChecked, arrResult, ownArr, oppArr) => {
+    //     for (const subArr of arrChecked) {
+    //         if (subArr.includes(index)) {
+    //             for (let j = index + 1; j <= Math.max(...subArr); j++) {
+    //                 if (subArr.includes(j)) {
+    //                     if (ownArr.includes(j)) {
+    //                         break
+    //                     } else if (oppArr.includes(j)) {
+    //                         arrResult.push(j)
+    //                         break
+    //                     } else {
+    //                         arrResult.push(j)
+    //                     }
+    //                 } 
+    //             }
+    //         }
+    //     }
+    // }
 
     const combThroughSubArrayPlus = (index, subArr, arrResult, ownArr, oppArr) => {
         if (subArr.includes(index)) {
@@ -1970,7 +1970,7 @@ const Board = () => {
             arr.push(i - 7)
         }
 
-        if (arr2.length > 0) {
+        if (arr2.length > 0 && arr2.filter(a => playerSquaresRender.includes(a)).length === 2) {
             arr = arr.filter(a => arr2.includes(a))
         }
 
@@ -2014,7 +2014,7 @@ const Board = () => {
             arr.push(i + 7)
         }
 
-        if (arr2.length > 0) {
+        if (arr2.length > 0 && arr2.filter(a => enemySquaresRender.includes(a)).length === 2) {
             arr = arr.filter(a => arr2.includes(a))
         }
 
