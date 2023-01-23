@@ -203,7 +203,7 @@ const Board = () => {
     }, [JSON.stringify(board)]);
 
     useEffect(() => {
-        if ((color === "white" && toMove.current === "b") || (color === "black" && toMove.current === "w")) {
+        if (((color === "white" && toMove.current === "b") || (color === "black" && toMove.current === "w")) && !sandbox) {
             engineTurn()
         }
     }, [toMove.current])
@@ -474,9 +474,9 @@ const Board = () => {
         let string = `position fen ${stringToSend} moves ${playerPiece.current}${playerNewSquareForEngine}`
 
         // console.log(string)
-        // stockfish.postMessage(string)
+        stockfish.postMessage(string)
         // setTimeout(() => {
-            // stockfish.postMessage('go movetime 1000')
+            stockfish.postMessage('go movetime 1000')
         // }, 1000);
     }
 
@@ -2297,7 +2297,7 @@ const Board = () => {
                 if (playerKingAttacked && playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
                     let arrTech = playerKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
                     arr = arr.filter(a => arrTech.includes(a))
-                } else {
+                } else if (playerKingAttacked && !playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
                     arr = arr.filter(a => a === checkingPiece.current)
                 }
                 setMoveSquares(arr)
@@ -2310,7 +2310,7 @@ const Board = () => {
                 if (playerKingAttacked && playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
                     let arrTech = playerKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
                     arr = arr.filter(a => arrTech.includes(a))
-                } else {
+                } else if (playerKingAttacked && !playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
                     arr = arr.filter(a => a === checkingPiece.current)
                 }
                 setMoveSquares(arr)
@@ -2324,7 +2324,7 @@ const Board = () => {
                 if (playerKingAttacked && playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
                     let arrTech = playerKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
                     arr = arr.filter(a => arrTech.includes(a))
-                } else {
+                } else if (playerKingAttacked && !playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
                     arr = arr.filter(a => a === checkingPiece.current)
                 }
                 setMoveSquares(arr)
@@ -2389,7 +2389,7 @@ const Board = () => {
                 if (enemyKingAttacked && enemyKing8StarArr.current.flat().includes(checkingPiece.current)) {
                     let arrTech = enemyKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
                     arr = arr.filter(a => arrTech.includes(a))
-                } else {
+                } else if (enemyKingAttacked && !enemyKing8StarArr.current.flat().includes(checkingPiece.current)) {
                     arr = arr.filter(a => a === checkingPiece.current)
                 }
                 setMoveSquares(arr)
@@ -2402,7 +2402,7 @@ const Board = () => {
                 if (enemyKingAttacked && enemyKing8StarArr.current.flat().includes(checkingPiece.current)) {
                     let arrTech = enemyKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
                     arr = arr.filter(a => arrTech.includes(a))
-                } else {
+                } else if (enemyKingAttacked && !enemyKing8StarArr.current.flat().includes(checkingPiece.current)) {
                     arr = arr.filter(a => a === checkingPiece.current)
                 }
                 setMoveSquares(arr)
@@ -2417,7 +2417,7 @@ const Board = () => {
                 if (enemyKingAttacked && enemyKing8StarArr.current.flat().includes(checkingPiece.current)) {
                     let arrTech = enemyKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
                     arr = arr.filter(a => arrTech.includes(a))
-                } else {
+                } else if (enemyKingAttacked && !enemyKing8StarArr.current.flat().includes(checkingPiece.current)) {
                     arr = arr.filter(a => a === checkingPiece.current)
                 }
 
@@ -3761,8 +3761,6 @@ const Board = () => {
     }
 
     const animateEnPassant = (coor1, coor2, string, i) => {
-        captureSound.play()
-
         setMoveVar([coor1, coor2])
 
         let capturedPawn = i
@@ -3801,6 +3799,26 @@ const Board = () => {
         store.dispatch({
             type: string
         })
+
+        // attackedByPlayer()
+        // attackedByOpponent()
+
+        console.log(attackedByPlayerArr.current)
+
+        if (/^pp/.test(string)) {
+            if (attackedByPlayerArr.current.includes(enemyKing)) {
+                checkSound.play()
+                store.dispatch({
+                    type: "enemyKingAttacked",
+                    payload: true
+                })
+                // checkingPiece.current = i
+            } else {
+                captureSound.play()
+            }
+        } else {
+
+        }
 
         // encode()
 
