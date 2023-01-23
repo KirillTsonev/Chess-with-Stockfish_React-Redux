@@ -121,6 +121,36 @@ const Board = () => {
 
         playerKing8Star(playerKing)
         enemyKing8Star(enemyKing)
+
+        if (playerKingAttacked) {
+            for (let i = 0; i < 4; i++) {
+                if (enemyQueens.some(a => playerKing8StarArr.current[i].includes(a))
+                || enemyRooks.some(a => playerKing8StarArr.current[i].includes(a))) {
+                    checkingPiece.current = playerKing8StarArr.current[i].filter(a => enemySquaresRender.includes(a))
+                }
+            }
+            for (let i = 4; i < 8; i++) {
+                if (enemyQueens.some(a => playerKing8StarArr.current[i].includes(a))
+                || enemyBishops.some(a => playerKing8StarArr.current[i].includes(a))) {
+                    checkingPiece.current = playerKing8StarArr.current[i].filter(a => enemySquaresRender.includes(a))[0]
+                }
+            }
+        }
+
+        if (enemyKingAttacked) {
+            for (let i = 0; i < 4; i++) {
+                if (playerQueens.some(a => enemyKing8StarArr.current[i].includes(a))
+                || playerRooks.some(a => enemyKing8StarArr.current[i].includes(a))) {
+                    checkingPiece.current = enemyKing8StarArr.current[i].filter(a => playerSquaresRender.includes(a))
+                }
+            }
+            for (let i = 4; i < 8; i++) {
+                if (playerQueens.some(a => enemyKing8StarArr.current[i].includes(a))
+                || playerBishops.some(a => enemyKing8StarArr.current[i].includes(a))) {
+                    checkingPiece.current =enemyKing8StarArr.current[i].filter(a => playerSquaresRender.includes(a))[0]
+                }
+            }
+        }
     }
 
     const toMove = useRef("w")
@@ -229,7 +259,7 @@ const Board = () => {
 
                 movePawn(engineWhereToMove, enginePieceToMove)
 
-                checkedByOpponentArr.current = []
+                
             } 
             
             if (/^ob/.test(enginePieceToMove)) {
@@ -279,7 +309,6 @@ const Board = () => {
 
                 moveBishop(engineWhereToMove, enginePieceToMove)
 
-                checkedByOpponentArr.current = []
             } 
             
             if (/^oh/.test(enginePieceToMove)) {
@@ -327,8 +356,6 @@ const Board = () => {
                 enemyKnights = [enemyKnight1, enemyKnight2, enemyKnight3, enemyKnight4, enemyKnight5, enemyKnight6, enemyKnight7, enemyKnight8, enemyKnight9, enemyKnight01]
 
                 moveKnight(engineWhereToMove, enginePieceToMove)
-
-                checkedByOpponentArr.current = []
             } 
             
             if (/^or/.test(enginePieceToMove)) {
@@ -376,8 +403,6 @@ const Board = () => {
                 enemyRooks = [enemyRook1, enemyRook2, enemyRook3, enemyRook4, enemyRook5, enemyRook6, enemyRook7, enemyRook8, enemyRook9, enemyRook01]
 
                 moveRook(engineWhereToMove, enginePieceToMove)
-
-                checkedByOpponentArr.current = []
             } 
             
             if (/^oq/.test(enginePieceToMove)) {
@@ -424,8 +449,6 @@ const Board = () => {
                 enemyQueens = [enemyQueen1, enemyQueen2, enemyQueen3, enemyQueen4, enemyQueen5, enemyQueen6, enemyQueen7, enemyQueen8, enemyQueen9]
 
                 moveQueen(engineWhereToMove, enginePieceToMove)
-
-                checkedByOpponentArr.current = []
             } 
             
             if (/^ok/.test(enginePieceToMove)) {
@@ -441,6 +464,8 @@ const Board = () => {
     let playerNewSquareForEngine
 
     const engineTurn = () => {
+        
+
         let string = `position fen ${stringToSend} moves ${playerPiece.current}${playerNewSquareForEngine}`
 
         // console.log(string)
@@ -990,7 +1015,7 @@ const Board = () => {
         playerQueens.forEach(a => checkArrays(blackBishopMoves, a, arr, enemySquaresRender, playerSquaresRender, true, true))
         playerQueens.forEach(a => checkArrays(rookMoves, a, arr, enemySquaresRender, playerSquaresRender, true, true))
 
-        enemyPawns.forEach(a => recordOpponentPawnAttacks(a, arr))
+        enemyPawns.forEach(a => recordPlayerPawnAttacks(a, arr))
 
         protectedByPlayerArr.current = arr
     }
@@ -1011,7 +1036,7 @@ const Board = () => {
         enemyQueens.forEach(a => checkArrays(blackBishopMoves, a, arr, playerSquaresRender, enemySquaresRender, true, true))
         enemyQueens.forEach(a => checkArrays(rookMoves, a, arr, playerSquaresRender, enemySquaresRender, true, true))
 
-        enemyPawns.forEach(a => recordPlayerPawnAttacks(a, arr))
+        enemyPawns.forEach(a => recordOpponentPawnAttacks(a, arr))
 
         protectedByOpponentArr.current = arr
     }
@@ -1342,13 +1367,132 @@ const Board = () => {
         )
     }
 
-    const promotePawn = (pawn, pieceToPromoteToW, pieceToPromoteToB) => {
-        const pieceToPromoteTo = (color === "white" && /^p/.test(pawn)) ? pieceToPromoteToW : pieceToPromoteToB
+    const promotePawn = (pawn, pieceToPromoteTo, i) => {
+        if (/^pp/.test(pawn) && /^pq/.test(pieceToPromoteTo) && color === "white") {
+            pieceToPromoteTo = pieceToPromoteTo + "w"
+        }
+
+        if (/^pp/.test(pawn) && /^pq/.test(pieceToPromoteTo) && color === "black") {
+            pieceToPromoteTo = pieceToPromoteTo + "b"
+        }
+
+        if (/^op/.test(pawn) && /^oq/.test(pieceToPromoteTo) && color === "white") {
+            pieceToPromoteTo = pieceToPromoteTo + "b"
+        }
+
+        if (/^op/.test(pawn) && /^oq/.test(pieceToPromoteTo) && color === "black") {
+            pieceToPromoteTo = pieceToPromoteTo + "w"
+        }
 
         store.dispatch({
             type: "pawnPromotion",
             payload: {pawn, pieceToPromoteTo}
         })
+
+        if (/^ph/.test(pieceToPromoteTo)) {
+            recordKnightMoves(i + 1, checkedByPlayerArr.current, playerSquaresLive)
+            if (checkedByPlayerArr.current.includes(enemyKing)) {
+                checkSound.play()
+                store.dispatch({
+                    type: "enemyKingAttacked",
+                    payload: true
+                })
+            }
+        }
+
+        if (/^oh/.test(pieceToPromoteTo)) {
+            recordKnightMoves(i + 1, checkedByPlayerArr.current, enemySquaresRender)
+            if (checkedByPlayerArr.current.includes(playerKing)) {
+                checkSound.play()
+                store.dispatch({
+                    type: "playerKingAttacked",
+                    payload: true
+                })
+            }
+        }
+
+        if (/^pr/.test(pieceToPromoteTo)) {
+            checkArrays(rookMoves, i + 1, checkedByPlayerArr.current, playerSquaresLive, enemySquaresLive, true, true)
+            
+            if (checkedByPlayerArr.current.includes(enemyKing)) {
+                checkingPiece.current = i + 1
+                checkSound.play()
+                store.dispatch({
+                    type: "enemyKingAttacked",
+                    payload: true
+                })
+            }
+        }
+
+        if (/^or/.test(pieceToPromoteTo)) {
+            checkArrays(rookMoves, i + 1, checkedByPlayerArr.current, enemySquaresRender, playerSquaresRender, true, true)
+            
+            if (checkedByPlayerArr.current.includes(playerKing)) {
+                checkingPiece.current = i + 1
+                checkSound.play()
+                store.dispatch({
+                    type: "playerKingAttacked",
+                    payload: true
+                })
+            }
+        }
+
+        if (/^pb/.test(pieceToPromoteTo)) {
+            checkArrays(blackBishopMoves, i, checkedByPlayerArr.current, playerSquaresLive, enemySquaresLive, true, true)
+            checkArrays(whiteBishopMoves, i, checkedByPlayerArr.current, playerSquaresLive, enemySquaresLive, true, true)
+
+            if (checkedByPlayerArr.current.includes(enemyKing)) {
+                checkingPiece.current = i + 1
+                checkSound.play()
+                store.dispatch({
+                    type: "enemyKingAttacked",
+                    payload: true
+                })
+            }
+        }
+
+        if (/^ob/.test(pieceToPromoteTo)) {
+            checkArrays(whiteBishopMoves, i + 1, checkedByPlayerArr.current, enemySquaresRender, playerSquaresRender, true, true)
+            checkArrays(blackBishopMoves, i + 1, checkedByPlayerArr.current, enemySquaresRender, playerSquaresRender, true, true)
+            
+            if (checkedByPlayerArr.current.includes(playerKing)) {
+                checkingPiece.current = i + 1
+                checkSound.play()
+                store.dispatch({
+                    type: "playerKingAttacked",
+                    payload: true
+                })
+            }
+        }
+
+        if (/^pq/.test(pieceToPromoteTo)) {
+            checkArrays(rookMoves, i, checkedByPlayerArr.current, playerSquaresLive, enemySquaresLive, true, true)
+            checkArrays(blackBishopMoves, i, checkedByPlayerArr.current, playerSquaresLive, enemySquaresLive, true, true)
+            checkArrays(whiteBishopMoves, i, checkedByPlayerArr.current, playerSquaresLive, enemySquaresLive, true, true)
+            
+            if (checkedByPlayerArr.current.includes(enemyKing)) {
+                checkingPiece.current = i + 1
+                checkSound.play()
+                store.dispatch({
+                    type: "enemyKingAttacked",
+                    payload: true
+                })
+            }
+        }
+
+        if (/^oq/.test(pieceToPromoteTo)) {
+            checkArrays(whiteBishopMoves, i + 1, checkedByPlayerArr.current, enemySquaresRender, playerSquaresRender, true, true)
+            checkArrays(blackBishopMoves, i + 1, checkedByPlayerArr.current, enemySquaresRender, playerSquaresRender, true, true)
+            checkArrays(rookMoves, i + 1, checkedByPlayerArr.current, enemySquaresRender, playerSquaresRender, true, true)
+            if (checkedByPlayerArr.current.includes(playerKing)) {
+                checkingPiece.current = i + 1
+                checkSound.play()
+                store.dispatch({
+                    type: "playerKingAttacked",
+                    payload: true
+                })
+            }
+        }
 
         setPawnPromotes("")
     }
@@ -1394,6 +1538,76 @@ const Board = () => {
                         :
                         {transform: `translate(0px, 0px)` , transition: `all ${animationSpeed}s`}}>
                 </img>
+            )
+        }
+
+        const renderPlayerPromotion = (pawn, i) => {
+            return (
+                <div className="pawnPromotionPlayer" style={pawnPromotes === pawn ? {display: "block"} : {display: "none"}}>
+                    <div className="promotionPiece">
+                        <img 
+                        src={color === "white" ? whiteQueen : blackQueen} 
+                        alt="Player Queen" 
+                        className="piece"
+                        onClick={() => promotePawn(pawn, "pq", i)}/>
+                    </div>
+                    <div className="promotionPiece">
+                        <img 
+                        src={color === "white" ? whiteRook : blackRook} 
+                        alt="Player Rook" 
+                        className="piece"
+                        onClick={() => promotePawn(pawn, "pr", i)}/>
+                    </div>
+                    <div className="promotionPiece">
+                        <img 
+                        src={color === "white" ? whiteBishop : blackBishop} 
+                        alt="Player Bishop" 
+                        className="piece"
+                        onClick={() => promotePawn(pawn, "pb", i)}/>
+                    </div>
+                    <div className="promotionPiece">
+                        <img 
+                        src={color === "white" ? whiteKnight : blackKnight} 
+                        alt="Player Knight" 
+                        className="piece"
+                        onClick={() => promotePawn(pawn, "ph", i)}/>
+                    </div>
+                </div>
+            )
+        }
+    
+        const renderOpponentPromotion = (pawn, i) => {
+            return (
+                <div className="pawnPromotionOpponent" style={pawnPromotes === pawn ? {display: "block"} : {display: "none"}}>
+                    <div className="promotionPiece">
+                        <img 
+                        src={color === "white" ? blackKnight : whiteKnight} 
+                        alt="Opponent Knight" 
+                        className="piece"
+                        onClick={() => promotePawn(pawn, "oh", i)}/>
+                    </div>
+                    <div className="promotionPiece">
+                        <img 
+                        src={color === "white" ? blackBishop : whiteBishop} 
+                        alt="Opponent Bishop" 
+                        className="piece"
+                        onClick={() => promotePawn(pawn, "ob", i)}/>
+                    </div>
+                    <div className="promotionPiece">
+                        <img 
+                        src={color === "white" ? blackRook : whiteRook} 
+                        alt="Opponent Rook" 
+                        className="piece"
+                        onClick={() => promotePawn(pawn, "or", i)}/>
+                    </div>
+                    <div className="promotionPiece">
+                        <img 
+                        src={color === "white" ? blackQueen : whiteQueen} 
+                        alt="Opponent Queen" 
+                        className="piece"
+                        onClick={() => promotePawn(pawn, "oq", i)}/>
+                    </div>  
+                </div>
             )
         }
 
@@ -1496,42 +1710,42 @@ const Board = () => {
                 case "op1": 
                     return <div className="pawnContainer">
                         {renderEachPiece(a, blackPawn, whitePawn, "Black Pawn", "White Pawn", "op1")}
-                        {renderOpponentPromotion("op1")}
+                        {renderOpponentPromotion("op1", i)}
                     </div>
                 case "op2": 
                     return <div className="pawnContainer">
                         {renderEachPiece(a, blackPawn, whitePawn, "Black Pawn", "White Pawn", "op2")}
-                        {renderOpponentPromotion("op2")}
+                        {renderOpponentPromotion("op2", i)}
                     </div>
                 case "op3": 
                     return <div className="pawnContainer">
                         {renderEachPiece(a, blackPawn, whitePawn, "Black Pawn", "White Pawn", "op3")}
-                        {renderOpponentPromotion("op3")}
+                        {renderOpponentPromotion("op3", i)}
                     </div>
                 case "op4": 
                     return <div className="pawnContainer">
                         {renderEachPiece(a, blackPawn, whitePawn, "Black Pawn", "White Pawn", "op4")}
-                        {renderOpponentPromotion("op4")}
+                        {renderOpponentPromotion("op4", i)}
                     </div>
                 case "op5": 
                     return <div className="pawnContainer">
                         {renderEachPiece(a, blackPawn, whitePawn, "Black Pawn", "White Pawn", "op5")}
-                        {renderOpponentPromotion("op5")}
+                        {renderOpponentPromotion("op5", i)}
                     </div>
                 case "op6": 
                     return <div className="pawnContainer">
                         {renderEachPiece(a, blackPawn, whitePawn, "Black Pawn", "White Pawn", "op6")}
-                        {renderOpponentPromotion("op6")}
+                        {renderOpponentPromotion("op6", i)}
                     </div>
                 case "op7": 
                     return <div className="pawnContainer">
                         {renderEachPiece(a, blackPawn, whitePawn, "Black Pawn", "White Pawn", "op7")}
-                        {renderOpponentPromotion("op7")}
+                        {renderOpponentPromotion("op7", i)}
                     </div>
                 case "op8":
                     return <div className="pawnContainer">
                         {renderEachPiece(a, blackPawn, whitePawn, "Black Pawn", "White Pawn", "op8")}
-                        {renderOpponentPromotion("op8")}
+                        {renderOpponentPromotion("op8", i)}
                     </div>
                 case "pr1": 
                     return renderEachPiece(a, whiteRook, blackRook, "White Rook", "Black Rook", "pr1")
@@ -1630,118 +1844,48 @@ const Board = () => {
                 case "pp1":
                     return <div className="pawnContainer">
                         {renderEachPiece(a, whitePawn, blackPawn, "White Pawn", "Black Pawn", "pp1")}
-                        {renderPlayerPromotion("pp1")}
+                        {renderPlayerPromotion("pp1", i)}
                     </div>
                 case "pp2": 
                     return <div className="pawnContainer">
                         {renderEachPiece(a, whitePawn, blackPawn, "White Pawn", "Black Pawn", "pp2")}
-                        {renderPlayerPromotion("pp2")}
+                        {renderPlayerPromotion("pp2", i)}
                     </div>
                 case "pp3": 
                     return <div className="pawnContainer">
                         {renderEachPiece(a, whitePawn, blackPawn, "White Pawn", "Black Pawn", "pp3")}
-                        {renderPlayerPromotion("pp3")}
+                        {renderPlayerPromotion("pp3", i)}
                     </div>
                 case "pp4": 
                     return <div className="pawnContainer">
                         {renderEachPiece(a, whitePawn, blackPawn, "White Pawn", "Black Pawn", "pp4")}
-                        {renderPlayerPromotion("pp4")}
+                        {renderPlayerPromotion("pp4", i)}
                     </div>
                 case "pp5": 
                     return <div className="pawnContainer">
                         {renderEachPiece(a, whitePawn, blackPawn, "White Pawn", "Black Pawn", "pp5")}
-                        {renderPlayerPromotion("pp5")}
+                        {renderPlayerPromotion("pp5", i)}
                     </div>
                 case "pp6": 
                     return <div className="pawnContainer">
                         {renderEachPiece(a, whitePawn, blackPawn, "White Pawn", "Black Pawn", "pp6")}
-                        {renderPlayerPromotion("pp6")}
+                        {renderPlayerPromotion("pp6", i)}
                     </div>
                 case "pp7": 
                     return <div className="pawnContainer">
                         {renderEachPiece(a, whitePawn, blackPawn, "White Pawn", "Black Pawn", "pp7")}
-                        {renderPlayerPromotion("pp7")}
+                        {renderPlayerPromotion("pp7", i)}
                     </div>
                 case "pp8":
                     return <div className="pawnContainer">
                         {renderEachPiece(a, whitePawn, blackPawn, "White Pawn", "Black Pawn", "pp8")}
-                        {renderPlayerPromotion("pp8")}
+                        {renderPlayerPromotion("pp8", i)}
                     </div>
                 default:
                     return (
                         <div className="piece"></div>
                     )
             }
-        }
-
-        const renderPlayerPromotion = (pawn) => {
-            return (
-                <div className="pawnPromotionPlayer" style={pawnPromotes === pawn ? {display: "block"} : {display: "none"}}>
-                    <div className="promotionPiece">
-                        <img 
-                        src={color === "white" ? whiteQueen : blackQueen} 
-                        alt="Player Queen" 
-                        className="piece"
-                        onClick={() => promotePawn(pawn, "pqw", "pqb")}/>
-                    </div>
-                    <div className="promotionPiece">
-                        <img 
-                        src={color === "white" ? whiteRook : blackRook} 
-                        alt="Player Rook" 
-                        className="piece"
-                        onClick={() => promotePawn(pawn, "pr")}/>
-                    </div>
-                    <div className="promotionPiece">
-                        <img 
-                        src={color === "white" ? whiteBishop : blackBishop} 
-                        alt="Player Bishop" 
-                        className="piece"
-                        onClick={() => promotePawn(pawn, "pb")}/>
-                    </div>
-                    <div className="promotionPiece">
-                        <img 
-                        src={color === "white" ? whiteKnight : blackKnight} 
-                        alt="Player Knight" 
-                        className="piece"
-                        onClick={() => promotePawn(pawn, "ph")}/>
-                    </div>
-                </div>
-            )
-        }
-    
-        const renderOpponentPromotion = (pawn) => {
-            return (
-                <div className="pawnPromotionOpponent" style={pawnPromotes === pawn ? {display: "block"} : {display: "none"}}>
-                    <div className="promotionPiece">
-                        <img 
-                        src={color === "white" ? blackKnight : whiteKnight} 
-                        alt="Opponent Knight" 
-                        className="piece"
-                        onClick={() => promotePawn(pawn, "oh")}/>
-                    </div>
-                    <div className="promotionPiece">
-                        <img 
-                        src={color === "white" ? blackBishop : whiteBishop} 
-                        alt="Opponent Bishop" 
-                        className="piece"
-                        onClick={() => promotePawn(pawn, "ob")}/>
-                    </div>
-                    <div className="promotionPiece">
-                        <img 
-                        src={color === "white" ? blackRook : whiteRook} 
-                        alt="Opponent Rook" 
-                        className="piece"
-                        onClick={() => promotePawn(pawn, "or")}/>
-                    </div>
-                    <div className="promotionPiece">
-                        <img 
-                        src={color === "white" ? blackQueen : whiteQueen} 
-                        alt="Opponent Queen" 
-                        className="piece"
-                        onClick={() => promotePawn(pawn, "oqw", "oqb")}/>
-                    </div>  
-                </div>
-            )
         }
 
         return (
@@ -1975,6 +2119,7 @@ const Board = () => {
         }
 
         if (playerKingAttacked) {
+            
             let arrTech = playerKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
             arr = arr.filter(a => arrTech.includes(a))
         }
@@ -2062,6 +2207,8 @@ const Board = () => {
 
     function onSquareClick(i, piece) {
         // console.log(playerKing8StarArr.current)
+        // console.log(playerKing8StarArr.current)
+        // console.log(protectedByPlayerArr.current.includes(14))
 
         if (!moveSquares.includes(i) || (playerSquaresRender.includes(i) && activeStatePiece === piece)){
             setMoveSquares([])
@@ -2517,7 +2664,7 @@ const Board = () => {
             enemyKnights = [enemyKnight1, enemyKnight2, enemyKnight3, enemyKnight4, enemyKnight5, enemyKnight6, enemyKnight7, enemyKnight8, enemyKnight9, enemyKnight01]
             
             moveKnight(i, activePiece)
-            checkedByOpponentArr.current = []
+            
         } 
         
         if (/^op/.test(activePiece) && moveSquares.includes(i)) {
@@ -2570,7 +2717,7 @@ const Board = () => {
             enemyBishops = [enemyBishop1, enemyBishop2, enemyBishop3, enemyBishop4, enemyBishop5, enemyBishop6, enemyBishop7, enemyBishop8, enemyBishop9, enemyBishop01]
 
             moveBishop(i, activePiece)
-            checkedByOpponentArr.current = []
+            
         } 
 
         if (/^or/.test(activePiece) && moveSquares.includes(i)) {
@@ -2616,7 +2763,7 @@ const Board = () => {
             enemyRooks = [enemyRook1, enemyRook2, enemyRook3, enemyRook4, enemyRook5, enemyRook6, enemyRook7, enemyRook8, enemyRook9, enemyRook01]
             moveRook(i, activePiece)
 
-            checkedByOpponentArr.current = []
+        
         }
 
         if (/^oq/.test(activePiece) && moveSquares.includes(i)) {
@@ -2662,7 +2809,7 @@ const Board = () => {
 
             moveQueen(i, activePiece)
 
-            checkedByOpponentArr.current = []
+        
         } 
 
         if (/^ok/.test(activePiece) && moveSquares.includes(i) && !attackedByPlayerArr.current.includes(i)) {
@@ -2731,10 +2878,11 @@ const Board = () => {
         recordBoard()
     }
 
-    const animatePiece = (i, string, num1, num2) => {        
+    const animatePiece = (i, string, num1, num2) => {     
         setMoveVar([num1, num2])
 
         if (/^o/.test(string)) {
+            
             if (playerSquaresRender.includes(i)){
                 store.dispatch({
                     type: "halfMoveCounter/reset",
@@ -2751,7 +2899,14 @@ const Board = () => {
                 //         payload: false
                 //     })
                 // }
-                
+                if (/^ok/.test(string) && enemyKingAttacked) {
+                    captureSound.play()
+                    store.dispatch({
+                        type: "enemyKingAttacked",
+                        payload: false
+                    })
+                }
+
                 if (checkedByOpponentArr.current.flat().includes(playerKing)) {
                     checkSound.play()
                     store.dispatch({
@@ -2769,7 +2924,7 @@ const Board = () => {
                     })
                 } 
 
-                if ((playerKingSpiderSenseArr.current[0].includes(enemyQueen1) 
+                if ((enemyQueens.some(a => playerKingSpiderSenseArr.current[0].includes(a))
                     || enemyBishops.some(a => playerKingSpiderSenseArr.current[0].includes(a)))
                     && occupiedSquaresLive.filter(a => !enemyBishops.includes(a))
                                             .filter(a => !enemyQueens.includes(a))
@@ -2781,7 +2936,7 @@ const Board = () => {
                     })
                 }
 
-                if ((playerKingSpiderSenseArr.current[1].includes(enemyQueen1) 
+                if ((enemyQueens.some(a => playerKingSpiderSenseArr.current[1].includes(a))
                     || enemyRooks.some(a => playerKingSpiderSenseArr.current[1].includes(a)))
                     && occupiedSquaresLive.filter(a => !enemyQueens.includes(a))
                                             .filter(a => !enemyRooks.includes(a))
@@ -2795,6 +2950,29 @@ const Board = () => {
 
                 captureSound.play()
             } else {
+                if (/^ok/.test(string) && enemyKingAttacked) {
+                    moveSound.play()
+                    store.dispatch({
+                        type: "enemyKingAttacked",
+                        payload: false
+                    })
+                }
+
+                if (enemyKing8StarArr.current.flat().includes(i) && enemyKingAttacked) {
+                    moveSound.play()
+                    store.dispatch({
+                        type: "enemyKingAttacked",
+                        payload: false
+                    })
+                }
+                
+                if (checkedByPlayerArr.current.includes(i) && enemyKingAttacked) {
+                    moveSound.play()
+                    store.dispatch({
+                        type: "enemyKingAttacked",
+                        payload: false
+                    })
+                }
 
                 if (/^op/.test(string) && rookMoves[7].includes(i) && sandbox) {
                     setPawnPromotes(string)
@@ -2809,14 +2987,6 @@ const Board = () => {
                         type: "halfMoveCounter/increase",
                     })
                 }
-                
-                if (enemyKingAttacked && ((!checkedByPlayerArr.current.flat().includes(i) && /^ok/.test(string)) || checkedByPlayerArr.current.flat().includes(i))) {
-                    moveSound.play()
-                    store.dispatch({
-                        type: "enemyKingAttacked",
-                        payload: false
-                    })
-                } 
                 
                 if (checkedByOpponentArr.current.flat().includes(playerKing)) {
                     checkSound.play()
@@ -2835,7 +3005,7 @@ const Board = () => {
                     })
                 } 
 
-                if ((playerKingSpiderSenseArr.current[0].includes(enemyQueen1) 
+                if ((enemyQueens.some(a => playerKingSpiderSenseArr.current[0].includes(a))
                     || enemyBishops.some(a => playerKingSpiderSenseArr.current[0].includes(a)))
                     && occupiedSquaresLive.filter(a => !enemyBishops.includes(a))
                                             .filter(a => !enemyQueens.includes(a))
@@ -2845,9 +3015,10 @@ const Board = () => {
                         type: "playerKingAttacked",
                         payload: true
                     })
+                    
                 }
 
-                if ((playerKingSpiderSenseArr.current[1].includes(enemyQueen1) 
+                if ((enemyQueens.some(a => playerKingSpiderSenseArr.current[1].includes(a))
                     || enemyRooks.some(a => playerKingSpiderSenseArr.current[1].includes(a)))
                     && occupiedSquaresLive.filter(a => !enemyQueens.includes(a))
                                             .filter(a => !enemyRooks.includes(a))
@@ -2867,21 +3038,16 @@ const Board = () => {
             } else {
                 toMove.current = "b"
             }
+
+            checkedByPlayerArr.current = []
         }
 
         if (/^p/.test(string)) {
+            
             if (enemySquaresRender.includes(i)) {
                 store.dispatch({
                     type: "halfMoveCounter/reset",
                 })
-
-                // if (i === store.getState().checkingPiece[1]) {
-                //     captureSound.play()
-                //     store.dispatch({
-                //         type: "playerKingAttacked",
-                //         payload: false
-                //     })
-                // }
 
                 if (/^pp/.test(string) && rookMoves[0].includes(i)) {
                     setPawnPromotes(string)
@@ -2895,6 +3061,14 @@ const Board = () => {
                     })
                     checkingPiece.current = i
                 } 
+
+                if (/^pk/.test(string) && playerKingAttacked) {
+                    captureSound.play()
+                    store.dispatch({
+                        type: "playerKingAttacked",
+                        payload: false
+                    })
+                }
                 
                 if (!checkedByPlayerArr.current.flat().includes(enemyKing) && enemyKingAttacked) {
                     captureSound.play()
@@ -2904,11 +3078,11 @@ const Board = () => {
                     })
                 } 
 
-                if ((enemyKingSpiderSenseArr.current[0].includes(playerQueen1) 
+                if ((playerQueens.some(a => enemyKingSpiderSenseArr.current[0].includes(a)) 
                     || playerBishops.some(a => enemyKingSpiderSenseArr.current[0].includes(a)))
                     && occupiedSquaresLive.filter(a => !playerQueens.includes(a))
                                             .filter(a => !playerBishops.includes(a))
-                                            .every(a => !enemyKingSpiderSenseArr.current[1].includes(a))) {
+                                            .every(a => !enemyKingSpiderSenseArr.current[0].includes(a))) {
                     checkSound.play()
                     store.dispatch({
                         type: "enemyKingAttacked",
@@ -2917,7 +3091,7 @@ const Board = () => {
                     
                 }
 
-                if ((enemyKingSpiderSenseArr.current[1].includes(playerQueen1) 
+                if ((playerQueens.some(a => enemyKingSpiderSenseArr.current[1].includes(a)) 
                     || playerRooks.some(a => enemyKingSpiderSenseArr.current[1].includes(a)))
                     && occupiedSquaresLive.filter(a => !playerQueens.includes(a))
                                             .filter(a => !playerRooks.includes(a))
@@ -2944,14 +3118,30 @@ const Board = () => {
                         type: "halfMoveCounter/increase",
                     })
                 }
-                
-                if ((!checkedByOpponentArr.current.flat().includes(i) && /^pk/.test(string)) || checkedByOpponentArr.current.flat().includes(i)) {
+
+                if (checkedByOpponentArr.current.includes(i) && playerKingAttacked) {
                     moveSound.play()
                     store.dispatch({
                         type: "playerKingAttacked",
                         payload: false
                     })
-                } 
+                }
+
+                if (playerKing8StarArr.current.flat().includes(i) && playerKingAttacked) {
+                    moveSound.play()
+                    store.dispatch({
+                        type: "playerKingAttacked",
+                        payload: false
+                    })
+                }
+
+                if (/^pk/.test(string) && playerKingAttacked) {
+                    moveSound.play()
+                    store.dispatch({
+                        type: "playerKingAttacked",
+                        payload: false
+                    })
+                }
                 
                 if (checkedByPlayerArr.current.flat().includes(enemyKing)) {
                     checkSound.play()
@@ -2960,7 +3150,6 @@ const Board = () => {
                         payload: true
                     })
                     checkingPiece.current = i
-                    
                 } 
                 
                 if (!checkedByPlayerArr.current.flat().includes(enemyKing) && enemyKingAttacked) {
@@ -2971,11 +3160,11 @@ const Board = () => {
                     })
                 } 
 
-                if ((enemyKingSpiderSenseArr.current[0].includes(playerQueen1) 
+                if ((playerQueens.some(a => enemyKingSpiderSenseArr.current[0].includes(a)) 
                     || playerBishops.some(a => enemyKingSpiderSenseArr.current[0].includes(a)))
                     && occupiedSquaresLive.filter(a => !playerQueens.includes(a))
                                             .filter(a => !playerBishops.includes(a))
-                                            .every(a => !enemyKingSpiderSenseArr.current[1].includes(a))) {
+                                            .every(a => !enemyKingSpiderSenseArr.current[0].includes(a))) {
                     checkSound.play()
                     store.dispatch({
                         type: "enemyKingAttacked",
@@ -2984,7 +3173,7 @@ const Board = () => {
                     
                 }
 
-                if ((enemyKingSpiderSenseArr.current[1].includes(playerQueen1) 
+                if ((playerQueens.some(a => enemyKingSpiderSenseArr.current[1].includes(a)) 
                     || playerRooks.some(a => enemyKingSpiderSenseArr.current[1].includes(a)))
                     && occupiedSquaresLive.filter(a => !playerQueens.includes(a))
                                             .filter(a => !playerRooks.includes(a))
@@ -3005,7 +3194,7 @@ const Board = () => {
                 toMove.current = "w"
             }
 
-            checkedByPlayerArr.current = []
+            checkedByOpponentArr.current = []
         }
 
         if (color === "black" && toMove.current === "w") {
