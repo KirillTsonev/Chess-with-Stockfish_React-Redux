@@ -932,7 +932,7 @@ const Board = () => {
 
     const playerHorseSafety = () => {
         let arr = []
-
+        
         recordKnightMoves(playerKing, arr, playerSquaresRender)
 
         playerHorseSafetyArr.current = arr
@@ -2023,10 +2023,11 @@ const Board = () => {
             }
         }
         
+        
         for (const subArr of arrayChecked) {
             if (subArr.includes(i)) {
                 for (let j = i + 1; j <= Math.max(...subArr); j++) {
-                    if (subArr.includes(j) && arr2.length < 1) {
+                    if (subArr.includes(j) && arr2.length === 0) {
                         if (ownArr.includes(j) && exclude1) {
                             break
                         } else if (oppArr.includes(j) && j !== playerKing && j !== enemyKing && exclude2) {
@@ -2035,13 +2036,12 @@ const Board = () => {
                         } else {
                             arr.push(j)
                         }
-                    } 
-                    else if (subArr.includes(j) && arr2.includes(j) && !ownArr.includes(j)) {
+                    } else if (subArr.includes(j) && arr2.includes(j) && !ownArr.includes(j)) {
                         arr.push(j)
                     }
                 }
                 for (let j = i - 1; j >= Math.min(...subArr); j--) {
-                    if (subArr.includes(j) && arr2.length < 1) {
+                    if (subArr.includes(j) && arr2.length === 0) {
                         if (ownArr.includes(j) && exclude1) {
                             break
                         } else if (oppArr.includes(j) && j !== playerKing && j !== enemyKing && exclude2) {
@@ -2050,8 +2050,8 @@ const Board = () => {
                         } else {
                             arr.push(j)
                         }
-                    } 
-                    else if (subArr.includes(j) && arr2.includes(j) && !ownArr.includes(j)) {
+                        
+                    } else if (subArr.includes(j) && arr2.includes(j) && !ownArr.includes(j)) {
                         arr.push(j)
                     }
                 }
@@ -2096,13 +2096,19 @@ const Board = () => {
                     arr = arr.filter(a => arr2.includes(a))
                 }
             }
-            if (playerKingAttacked && playerSquaresRender.includes(i)) {
+            if (playerKingAttacked && playerSquaresRender.includes(i) && i !== playerKing && playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
                 let arrTech = playerKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
                 arr = arr.filter(a => arrTech.includes(a))
+            } else if (playerKingAttacked && !playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
+                arr = arr.filter(a => playerHorseSafetyArr.current.includes(a))
+                
             }
-            if (enemyKingAttacked && enemySquaresRender.includes(i)) {
+            if (enemyKingAttacked && enemySquaresRender.includes(i) && i !== enemyKing && enemyKing8StarArr.current.flat().includes(checkingPiece.current)) {
                 let arrTech = enemyKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
                 arr = arr.filter(a => arrTech.includes(a))
+            } else if (enemyKingAttacked && !enemyKing8StarArr.current.flat().includes(checkingPiece.current)) {
+                arr = arr.filter(a => enemyHorseSafetyArr.current.includes(a))
+                
             }
             for (const number of arr) {
                 arrMoves.push(number)
@@ -2148,11 +2154,9 @@ const Board = () => {
             let arrTech = playerKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
             
             arr = arr.filter(a => arrTech.includes(a))
-        } 
-        // else if (playerKingAttacked && !playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
-        //     arr = arr.filter(a => playerHorseSafetyArr.current.includes(a))
-            
-        // }
+        } else if (playerKingAttacked && !playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
+            arr = arr.filter(a => playerHorseSafetyArr.current.includes(a))
+        }
 
         for (const number of arr) {
             arrMoves.push(number)
@@ -2193,9 +2197,11 @@ const Board = () => {
             arr = arr.filter(a => arr2.includes(a))
         }
 
-        if (enemyKingAttacked && enemySquaresRender.includes(i)) {
+        if (enemyKingAttacked && enemyKing8StarArr.current.flat().includes(checkingPiece.current)) {
             let arrTech = enemyKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
             arr = arr.filter(a => arrTech.includes(a))
+        } else if (enemyKingAttacked && !enemyKing8StarArr.current.flat().includes(checkingPiece.current)) {
+            arr = arr.filter(a => enemyHorseSafetyArr.current.includes(a))
         }
 
         for (const number of arr) {
@@ -2237,8 +2243,8 @@ const Board = () => {
 
     function onSquareClick(i, piece) {
         // console.log(playerKing8StarArr.current)
-        // console.log(checkingPiece.current)
-        console.log(playerHorseSafetyArr.current)
+        // console.log(!playerKing8StarArr.current.flat().includes(checkingPiece.current) && playerKingAttacked)
+        // console.log(playerHorseSafetyArr.current)
         // console.log(protectedByPlayerArr.current.includes(14))
 
         if (!moveSquares.includes(i) || (playerSquaresRender.includes(i) && activeStatePiece === piece)){
@@ -2288,9 +2294,11 @@ const Board = () => {
             if (/^pr/.test(piece)) {
                 let arr = []
                 checkArrays(rookMoves, i, arr, playerSquaresRender, enemySquaresRender, true, true)
-                if (playerKingAttacked) {
+                if (playerKingAttacked && playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
                     let arrTech = playerKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
                     arr = arr.filter(a => arrTech.includes(a))
+                } else {
+                    arr = arr.filter(a => a === checkingPiece.current)
                 }
                 setMoveSquares(arr)
             }
@@ -2299,9 +2307,11 @@ const Board = () => {
                 let arr = []
                 checkArrays(blackBishopMoves, i, arr, playerSquaresRender, enemySquaresRender, true, true)
                 checkArrays(whiteBishopMoves, i, arr, playerSquaresRender, enemySquaresRender, true, true)
-                if (playerKingAttacked) {
+                if (playerKingAttacked && playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
                     let arrTech = playerKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
                     arr = arr.filter(a => arrTech.includes(a))
+                } else {
+                    arr = arr.filter(a => a === checkingPiece.current)
                 }
                 setMoveSquares(arr)
             }
@@ -2311,9 +2321,11 @@ const Board = () => {
                 checkArrays(rookMoves, i, arr, playerSquaresRender, enemySquaresRender, true, true)
                 checkArrays(blackBishopMoves, i, arr, playerSquaresRender, enemySquaresRender, true, true)
                 checkArrays(whiteBishopMoves, i, arr, playerSquaresRender, enemySquaresRender, true, true)
-                if (playerKingAttacked) {
+                if (playerKingAttacked && playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
                     let arrTech = playerKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
                     arr = arr.filter(a => arrTech.includes(a))
+                } else {
+                    arr = arr.filter(a => a === checkingPiece.current)
                 }
                 setMoveSquares(arr)
             }
@@ -2374,9 +2386,11 @@ const Board = () => {
             if (/^or/.test(piece)) {
                 let arr = []
                 checkArrays(rookMoves, i, arr, enemySquaresRender, playerSquaresRender, true, true)
-                if (enemyKingAttacked && enemySquaresRender.includes(i)) {
+                if (enemyKingAttacked && enemyKing8StarArr.current.flat().includes(checkingPiece.current)) {
                     let arrTech = enemyKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
                     arr = arr.filter(a => arrTech.includes(a))
+                } else {
+                    arr = arr.filter(a => a === checkingPiece.current)
                 }
                 setMoveSquares(arr)
             }
@@ -2385,22 +2399,26 @@ const Board = () => {
                 let arr = []
                 checkArrays(whiteBishopMoves, i, arr, enemySquaresRender, playerSquaresRender, true, true)
                 checkArrays(blackBishopMoves, i, arr, enemySquaresRender, playerSquaresRender, true, true)
-                if (enemyKingAttacked && enemySquaresRender.includes(i)) {
+                if (enemyKingAttacked && enemyKing8StarArr.current.flat().includes(checkingPiece.current)) {
                     let arrTech = enemyKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
                     arr = arr.filter(a => arrTech.includes(a))
+                } else {
+                    arr = arr.filter(a => a === checkingPiece.current)
                 }
                 setMoveSquares(arr)
             }
 
-            if (/^oqw/.test(piece) || /^oqb/.test(piece)) {
+            if (/^oq/.test(piece)) {
                 let arr = []
 
                 checkArrays(rookMoves, i, arr, enemySquaresRender, playerSquaresRender, true, true)
                 checkArrays(blackBishopMoves, i, arr, enemySquaresRender, playerSquaresRender, true, true)
                 checkArrays(whiteBishopMoves, i, arr, enemySquaresRender, playerSquaresRender, true, true)
-                if (enemyKingAttacked && enemySquaresRender.includes(i)) {
+                if (enemyKingAttacked && enemyKing8StarArr.current.flat().includes(checkingPiece.current)) {
                     let arrTech = enemyKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
                     arr = arr.filter(a => arrTech.includes(a))
+                } else {
+                    arr = arr.filter(a => a === checkingPiece.current)
                 }
 
                 setMoveSquares(arr)
