@@ -122,11 +122,13 @@ const Board = () => {
         playerKing8Star(playerKing)
         enemyKing8Star(enemyKing)
 
+       
+
         if (playerKingAttacked) {
             for (let i = 0; i < 4; i++) {
                 if (enemyQueens.some(a => playerKing8StarArr.current[i].includes(a))
                 || enemyRooks.some(a => playerKing8StarArr.current[i].includes(a))) {
-                    checkingPiece.current = playerKing8StarArr.current[i].filter(a => enemySquaresRender.includes(a))
+                    checkingPiece.current = playerKing8StarArr.current[i].filter(a => enemySquaresRender.includes(a))[0]
                 }
             }
             for (let i = 4; i < 8; i++) {
@@ -141,7 +143,7 @@ const Board = () => {
             for (let i = 0; i < 4; i++) {
                 if (playerQueens.some(a => enemyKing8StarArr.current[i].includes(a))
                 || playerRooks.some(a => enemyKing8StarArr.current[i].includes(a))) {
-                    checkingPiece.current = enemyKing8StarArr.current[i].filter(a => playerSquaresRender.includes(a))
+                    checkingPiece.current = enemyKing8StarArr.current[i].filter(a => playerSquaresRender.includes(a))[0]
                 }
             }
             for (let i = 4; i < 8; i++) {
@@ -151,6 +153,9 @@ const Board = () => {
                 }
             }
         }
+
+        playerHorseSafety()
+        enemyHorseSafety()
     }
 
     const toMove = useRef("w")
@@ -921,6 +926,26 @@ const Board = () => {
                 } 
             }
         }
+    }
+
+    const playerHorseSafetyArr = useRef([])
+
+    const playerHorseSafety = () => {
+        let arr = []
+
+        recordKnightMoves(playerKing, arr, playerSquaresRender)
+
+        playerHorseSafetyArr.current = arr
+    }
+
+    const enemyHorseSafetyArr = useRef([])
+
+    const enemyHorseSafety = () => {
+        let arr = []
+
+        recordKnightMoves(enemyKing, arr, enemySquaresRender)
+
+        enemyHorseSafetyArr.current = arr
     }
 
     const playerKing8StarArr = useRef([])
@@ -2118,11 +2143,16 @@ const Board = () => {
             arr = arr.filter(a => arr2.includes(a))
         }
 
-        if (playerKingAttacked) {
+        if (playerKingAttacked && playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
             
             let arrTech = playerKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
+            
             arr = arr.filter(a => arrTech.includes(a))
-        }
+        } 
+        // else if (playerKingAttacked && !playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
+        //     arr = arr.filter(a => playerHorseSafetyArr.current.includes(a))
+            
+        // }
 
         for (const number of arr) {
             arrMoves.push(number)
@@ -2207,7 +2237,8 @@ const Board = () => {
 
     function onSquareClick(i, piece) {
         // console.log(playerKing8StarArr.current)
-        // console.log(playerKing8StarArr.current)
+        // console.log(checkingPiece.current)
+        console.log(playerHorseSafetyArr.current)
         // console.log(protectedByPlayerArr.current.includes(14))
 
         if (!moveSquares.includes(i) || (playerSquaresRender.includes(i) && activeStatePiece === piece)){
@@ -2892,13 +2923,14 @@ const Board = () => {
                     setPawnPromotes(string)
                 }
                 
-                // if (i === store.getState().checkingPiece[1]) {
-                //     captureSound.play()
-                //     store.dispatch({
-                //         type: "enemyKingAttacked",
-                //         payload: false
-                //     })
-                // }
+                if (enemyKingAttacked) {
+                    captureSound.play()
+                    store.dispatch({
+                        type: "enemyKingAttacked",
+                        payload: false
+                    })
+                }
+
                 if (/^ok/.test(string) && enemyKingAttacked) {
                     captureSound.play()
                     store.dispatch({
@@ -3048,6 +3080,14 @@ const Board = () => {
                 store.dispatch({
                     type: "halfMoveCounter/reset",
                 })
+
+                if (playerKingAttacked) {
+                    captureSound.play()
+                    store.dispatch({
+                        type: "playerKingAttacked",
+                        payload: false
+                    })
+                }
 
                 if (/^pp/.test(string) && rookMoves[0].includes(i)) {
                     setPawnPromotes(string)
