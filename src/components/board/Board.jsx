@@ -208,7 +208,7 @@ const Board = () => {
         }
     }, [toMove.current])
 
-    let enPassantSquare = useRef(0)
+    let enPassantSquare = useRef([0, ""])
 
     let pieceSquareForEngine = useRef(1)
 
@@ -256,7 +256,38 @@ const Board = () => {
                 
                 recordOpponentPawnAttacks(engineWhereToMove, checkedByOpponentArr.current)
 
+                switch (enginePieceToMove) {
+                    case "op1":
+                        enemyPawn1 = engineWhereToMove
+                        break;
+                    case "op2":
+                        enemyPawn2 = engineWhereToMove
+                        break;
+                    case "op3":
+                        enemyPawn3 = engineWhereToMove
+                        break;
+                    case "op4":
+                        enemyPawn4 = engineWhereToMove
+                        break;
+                    case "op5":
+                        enemyPawn5 = engineWhereToMove
+                        break;
+                    case "op6":
+                        enemyPawn6 = engineWhereToMove
+                        break;
+                    case "op7":
+                        enemyPawn7 = engineWhereToMove
+                        break;
+                    case "op8":
+                        enemyPawn8 = engineWhereToMove
+                        break;
+                    default:
+                        break;
+                }
+
                 updateStateBoard(engineWhereToMove, enginePieceToMove)
+
+                enemyPawns = [enemyPawn1, enemyPawn2, enemyPawn3, enemyPawn4, enemyPawn5, enemyPawn6, enemyPawn7, enemyPawn8]
 
                 movePawn(engineWhereToMove, enginePieceToMove)
 
@@ -648,8 +679,8 @@ const Board = () => {
             }
         }
 
-        if (enPassantSquare.current) {
-            fenString += boardEntries.filter(([key, value]) => value[0] === enPassantSquare.current).flat()[1][1]
+        if (enPassantSquare.current[0]) {
+            fenString += boardEntries.filter(([key, value]) => value[0] === enPassantSquare.current[0]).flat()[1][1]
         } else {
             fenString += "-"
         }
@@ -2139,11 +2170,11 @@ const Board = () => {
             arr = [i - 8]
         }
 
-        if ((enemySquaresRender.includes(i - 9) || (rookMoves[3].includes(i) && i - 9 === enPassantSquare.current)) && !knightLimits[0].includes(i)) {
+        if ((enemySquaresRender.includes(i - 9) || (rookMoves[3].includes(i) && i - 9 === enPassantSquare.current[0])) && !knightLimits[0].includes(i)) {
             arr.push(i - 9)
         }
 
-        if ((enemySquaresRender.includes(i - 7) || (rookMoves[3].includes(i) && i - 7 === enPassantSquare.current)) && !knightLimits[3].includes(i)) {
+        if ((enemySquaresRender.includes(i - 7) || (rookMoves[3].includes(i) && i - 7 === enPassantSquare.current[0])) && !knightLimits[3].includes(i)) {
             arr.push(i - 7)
         }
 
@@ -2187,11 +2218,11 @@ const Board = () => {
             arr = [i + 8]
         }
 
-        if ((playerSquaresRender.includes(i + 9) || (rookMoves[4].includes(i) && i + 9 === enPassantSquare.current)) && !knightLimits[3].includes(i)) {
+        if ((playerSquaresRender.includes(i + 9) || (rookMoves[4].includes(i) && i + 9 === enPassantSquare.current[0])) && !knightLimits[3].includes(i)) {
             arr.push(i + 9)
         }
 
-        if ((playerSquaresRender.includes(i + 7) || (rookMoves[4].includes(i) && i + 7 === enPassantSquare.current)) && !knightLimits[1].includes(i)) {
+        if ((playerSquaresRender.includes(i + 7) || (rookMoves[4].includes(i) && i + 7 === enPassantSquare.current[0])) && !knightLimits[1].includes(i)) {
             arr.push(i + 7)
         }
 
@@ -2245,7 +2276,7 @@ const Board = () => {
 
     function onSquareClick(i, piece) {
 
-        console.log(enPassantSquare.current)
+        // console.log(/^pp/.test(enPassantSquare.current[1]))
 
         if (!moveSquares.includes(i) || (playerSquaresRender.includes(i) && activeStatePiece === piece)){
             setMoveSquares([])
@@ -3151,6 +3182,10 @@ const Board = () => {
                 toMove.current = "b"
             }
 
+            if (/^pp/.test(enPassantSquare.current[1])) {
+                enPassantSquare.current = [0, ""]
+            }
+
             checkedByPlayerArr.current = []
         }
 
@@ -3317,6 +3352,10 @@ const Board = () => {
                     type: "moveCounter"
                 })
             }
+
+            if (/^op/.test(enPassantSquare.current[1])) {
+                enPassantSquare.current = [0, ""]
+            }
         }
 
 
@@ -3363,7 +3402,7 @@ const Board = () => {
     }
 
     function movePawn(i, string) {
-        if (i === enPassantSquare.current) {
+        if (i === enPassantSquare.current[0]) {
             switch (pieceSquareForEngine.current - i) {
                 case -9:
                     animateEnPassant(-80, -80, string, i)
@@ -3392,11 +3431,11 @@ const Board = () => {
                     animatePiece(i, string, 80, 80)
                     break;
                 case 16:
-                    enPassantSquare.current = i + 8
+                    enPassantSquare.current = [i + 8, string]
                     animatePiece(i, string, 0, 160)
                     break;
                 case -16: 
-                    enPassantSquare.current = i - 8
+                    enPassantSquare.current = [i - 8, string]
                     animatePiece(i, string, 0, -160)
                     break;
                 case -8: 
