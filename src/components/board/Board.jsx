@@ -200,7 +200,7 @@ const Board = () => {
         } else {
             notInitialRender.current = true
         }
-    }, [JSON.stringify(board)]);
+    }, [JSON.stringify(board)])
 
     useEffect(() => {
         if (((color === "white" && toMove.current === "b") || (color === "black" && toMove.current === "w")) && !sandbox) {
@@ -241,11 +241,7 @@ const Board = () => {
                 payload: enginePieceSquare
             })
 
-            if (color === "white") {
-                store.dispatch({
-                    type: "moveCounter"
-                })
-            }
+
 
             // console.log(engineOldSquare)
             // console.log(engineNewSquare)
@@ -461,6 +457,12 @@ const Board = () => {
                 moveKing(engineWhereToMove, enginePieceToMove)
                 
                 enemyKingSpiderSense()
+            }
+
+            if (color === "white") {
+                store.dispatch({
+                    type: "moveCounter"
+                })
             }
         }
     });
@@ -2243,7 +2245,7 @@ const Board = () => {
 
     function onSquareClick(i, piece) {
 
-        // console.log(protectedByPlayerArr.current.includes(6))
+        console.log(enPassantSquare.current)
 
         if (!moveSquares.includes(i) || (playerSquaresRender.includes(i) && activeStatePiece === piece)){
             setMoveSquares([])
@@ -3137,6 +3139,12 @@ const Board = () => {
                 moveSound.play()
             }
 
+            if (color === "white" && toMove.current === "b") {
+                store.dispatch({
+                    type: "moveCounter"
+                })
+            }
+
             if (color === "white") {
                 toMove.current = "w"
             } else {
@@ -3303,13 +3311,15 @@ const Board = () => {
             }
 
             checkedByOpponentArr.current = []
+
+            if (color === "black" && toMove.current === "w") {
+                store.dispatch({
+                    type: "moveCounter"
+                })
+            }
         }
 
-        if (color === "black" && toMove.current === "w") {
-            store.dispatch({
-                type: "moveCounter"
-            })
-        }
+
 
         setLastMadeMove([i, null])
         setMoveSquares([])
@@ -3896,7 +3906,6 @@ const Board = () => {
         recordBoard()
 
         if (/^pp/.test(string)) {
-
             if ((playerQueens.some(a => enemyKingSpiderSenseArr.current[0].includes(a)) 
                 || playerBishops.some(a => enemyKingSpiderSenseArr.current[0].includes(a)))
                 && occupiedSquaresLive.filter(a => !playerSquaresLive.includes(a))
