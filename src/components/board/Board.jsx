@@ -2157,7 +2157,7 @@ const Board = () => {
                 arr2 = subArr
             }
         }
-        
+
         if (pawnsFirstMove[piece]) {
             arr = [i - 8, i - 16]
         } else {
@@ -2180,6 +2180,8 @@ const Board = () => {
 
         if (arr2.length > 0 && arr2.filter(a => playerSquaresRender.includes(a)).length === 2) {
             arr = arr.filter(a => arr2.includes(a))
+        } else {
+            arr = arr.filter(a => arr2.includes(a))
         }
 
         if (playerKingAttacked && playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
@@ -2199,7 +2201,7 @@ const Board = () => {
     const recordOpponentPawnMoves = (i, piece, arrMoves) => {    
         let arr = []
         let arr2 = []
-
+        
         for (const subArr of playerAttackedXrayArr.current) {
             if (subArr.includes(i) && subArr.includes(enemyKing)) {
                 arr2 = subArr
@@ -2227,6 +2229,8 @@ const Board = () => {
         }
 
         if (arr2.length > 0 && arr2.filter(a => enemySquaresRender.includes(a)).length === 2) {
+            arr = arr.filter(a => arr2.includes(a))
+        } else {
             arr = arr.filter(a => arr2.includes(a))
         }
 
