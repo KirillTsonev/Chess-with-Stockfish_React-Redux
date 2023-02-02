@@ -3933,7 +3933,7 @@ const Board = () => {
             }
         }
 
-        moveSound.play()
+        captureSound.play()
         // encode()
 
         setLastMadeMove([i, 0])
