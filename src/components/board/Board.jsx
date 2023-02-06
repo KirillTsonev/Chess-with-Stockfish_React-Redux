@@ -3042,10 +3042,6 @@ const Board = () => {
             }
             
         }
-        // console.log(store.getState().moves[8])
-        console.log(store.getState().moves[13])
-        // console.log(store.getState().moves[12] === store.getState().moves[4])
-        // console.log(store.getState().moves[12] === store.getState().moves[8])
     }
     
     const animatePiece = (i, string, num1, num2) => {     

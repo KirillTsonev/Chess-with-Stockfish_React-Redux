@@ -6,6 +6,7 @@ import "./behavior.sass"
 const Behavior = () => {
     const numbers = useSelector(state => state.numbers)
     const animations = useSelector(state => state.animations)
+    const moves = useSelector(state => state.moves)
 
     const onNumbersChoice = (boolean) => {
         store.dispatch({
@@ -19,6 +20,14 @@ const Behavior = () => {
             type: "behavior/animationSpeed",
             payload: speed
         })
+    }
+
+    const renderMoves = () => {
+        return (
+            <div className="behavior__moves">
+                {moves.slice(1).map((a, i) => <div className="behavior__moves-item">{i + 1}</div>)}
+            </div>
+        )
     }
 
     return (
@@ -38,6 +47,9 @@ const Behavior = () => {
                     <div className={`behavior__option ${animations === "average" ? "active" : null}`} onClick={() => onAnimationChoice("average")}>Normal</div>
                     <div className={`behavior__option ${animations === "none" ? "active" : null}`} onClick={() => onAnimationChoice("none")}>None</div>
                 </div>
+            </div>
+            <div className="behavior__container">
+                {renderMoves()}
             </div>
         </div>
     )
