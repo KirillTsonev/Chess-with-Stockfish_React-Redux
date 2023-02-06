@@ -2170,11 +2170,11 @@ const Board = () => {
             arr = [i + 8]
         }
 
-        if ((playerSquaresRender.includes(i + 9) || (rookMoves[4].includes(i) && i + 9 === enPassantSquare.current[0])) && !knightLimits[3].includes(i)) {
+        if ((playerSquaresRender.includes(i + 7) || (rookMoves[4].includes(i) && i + 7 === enPassantSquare.current[0])) && !knightLimits[0].includes(i)) {
             arr.push(i + 7)
         }
 
-        if ((playerSquaresRender.includes(i + 7) || (rookMoves[4].includes(i) && i + 7 === enPassantSquare.current[0])) && !knightLimits[0].includes(i)) {
+        if ((playerSquaresRender.includes(i + 9) || (rookMoves[4].includes(i) && i + 9 === enPassantSquare.current[0])) && !knightLimits[3].includes(i)) {
             arr.push(i + 9)
         }
 
@@ -2201,11 +2201,11 @@ const Board = () => {
         let arr = []
 
         if (!knightLimits[0].includes(i)) {
-            arr.push(i + 9)
+            arr.push(i + 7)
         }
 
         if (!knightLimits[3].includes(i)) {
-            arr.push(i + 7)
+            arr.push(i + 9)
         }
 
         for (const number of arr) {
@@ -2985,18 +2985,45 @@ const Board = () => {
     }
 
     const checkGameEnd = () => {
-        let arrPlayer = []
-        let arrEnemy = []
+        let arrPlayerCheckmate = []
+        let arrEnemyCheckmate = []
+        let arrPlayerStalemate = []
+        let arrEnemyStalemate = []
 
-        recordPlayerKingMoves(playerKing, arrPlayer)
-        recordEnemyKingMoves(enemyKing, arrEnemy)
+        recordPlayerKingMoves(playerKing, arrPlayerCheckmate)
+        recordEnemyKingMoves(enemyKing, arrEnemyCheckmate)
 
-        if ((playerKingAttacked && !attackedByPlayerArr.current.includes(checkingPiece.current) && arrPlayer.length === 0) ||
-            (enemyKingAttacked && !attackedByOpponentArr.current.includes(checkingPiece.current) && arrEnemy.length === 0)) {
+        if ((playerKingAttacked && !attackedByPlayerArr.current.includes(checkingPiece.current) && arrPlayerCheckmate.length === 0) ||
+            (enemyKingAttacked && !attackedByOpponentArr.current.includes(checkingPiece.current) && arrEnemyCheckmate.length === 0)) {
             gameEndSound.play()
         }
 
+        playerRooks.forEach(a => checkArrays(rookMoves, a, arrPlayerStalemate, playerSquaresRender, enemySquaresRender, true, true))
+        playerKnights.forEach(a => recordKnightMoves(a, arrPlayerStalemate, playerSquaresRender))
+        playerBishops.forEach(a => checkArrays(whiteBishopMoves, a, arrPlayerStalemate, playerSquaresRender, enemySquaresRender, true, true))
+        playerBishops.forEach(a => checkArrays(blackBishopMoves, a, arrPlayerStalemate, playerSquaresRender, enemySquaresRender, true, true))
+        playerQueens.forEach(a => checkArrays(whiteBishopMoves, a, arrPlayerStalemate, playerSquaresRender, enemySquaresRender, true, true))
+        playerQueens.forEach(a => checkArrays(blackBishopMoves, a, arrPlayerStalemate, playerSquaresRender, enemySquaresRender, true, true))
+        playerQueens.forEach(a => checkArrays(rookMoves, a, arrPlayerStalemate, playerSquaresRender, enemySquaresRender, true, true))
+        playerPawns.forEach(a => recordPlayerPawnMoves(a, null, arrPlayerStalemate))
+        recordPlayerKingMoves(playerKing, arrPlayerStalemate)
 
+        enemyRooks.forEach(a => checkArrays(rookMoves, a, arrEnemyStalemate, enemySquaresRender, playerSquaresRender, true, true))
+        enemyKnights.forEach(a => recordKnightMoves(a, arrEnemyStalemate, enemySquaresRender))
+        enemyBishops.forEach(a => checkArrays(whiteBishopMoves, a, arrEnemyStalemate, enemySquaresRender, playerSquaresRender, true, true))
+        enemyBishops.forEach(a => checkArrays(blackBishopMoves, a, arrEnemyStalemate, enemySquaresRender, playerSquaresRender, true, true))
+        enemyQueens.forEach(a => checkArrays(whiteBishopMoves, a, arrEnemyStalemate, enemySquaresRender, playerSquaresRender, true, true))
+        enemyQueens.forEach(a => checkArrays(blackBishopMoves, a, arrEnemyStalemate, enemySquaresRender, playerSquaresRender, true, true))
+        enemyQueens.forEach(a => checkArrays(rookMoves, a, arrEnemyStalemate, enemySquaresRender, playerSquaresRender, true, true))
+        enemyPawns.forEach(a => recordOpponentPawnMoves(a, null, arrEnemyStalemate))
+        recordEnemyKingMoves(enemyKing, arrEnemyStalemate)
+
+        arrPlayerStalemate = arrPlayerStalemate.filter(a => a > 0 && a < 65)
+        arrEnemyStalemate = arrEnemyStalemate.filter(a => a > 0 && a < 65)
+
+        if (arrPlayerStalemate.length === 0 || arrEnemyStalemate.length === 0) {
+            gameEndSound.play()
+        }
     }
 
     const animatePiece = (i, string, num1, num2) => {     
