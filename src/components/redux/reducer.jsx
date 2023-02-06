@@ -110,14 +110,19 @@ const initialState = {
     },
     moveCounter: 1,
     halfMoveCounter: 0,
-    checkingPiece: [],
     enemyKingAttacked: false,
     playerKingAttacked: false,
     sandbox: true,
+    moves: [],
 }
 
 function boardReducer(state = initialState, action) {
     switch (action.type) {
+        case "recordMoves": 
+            return {
+                ...state,
+                moves: [...state.moves, action.payload]
+            }
         case "sandbox":
             return {
                 ...state,
@@ -148,11 +153,6 @@ function boardReducer(state = initialState, action) {
                 ...state,
                 playerKingAttacked: action.payload
             }
-        // case "checkingPiece":
-        //     return {
-        //         ...state,
-        //         checkingPiece: [...action.payload]
-        //     }
         case "optionsOff":
             return {
                 ...state,

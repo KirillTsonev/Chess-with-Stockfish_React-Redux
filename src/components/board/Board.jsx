@@ -28,11 +28,11 @@ import { useState, useEffect, useRef } from "react"
 import "./board.sass"
 
 const Board = () => {
-    const [activeStatePiece, setActiveStatePiece] = useState("") //1
-    const [moveSquares, setMoveSquares] = useState([]) //2
-    const [pieceSquare, setPieceSquare] = useState(null) //3
-    const [moveVar, setMoveVar] = useState([0, 0]) // 4
-    const [lastMadeMove, setLastMadeMove] = useState([]) // 5
+    const [activeStatePiece, setActiveStatePiece] = useState("")
+    const [moveSquares, setMoveSquares] = useState([])
+    const [pieceSquare, setPieceSquare] = useState(null)
+    const [moveVar, setMoveVar] = useState([0, 0]) 
+    const [lastMadeMove, setLastMadeMove] = useState([]) 
     const [pawnPromotes, setPawnPromotes] = useState("")
 
     const board = useSelector(state => state.board)
@@ -47,6 +47,7 @@ const Board = () => {
     const playerKingAttacked = useSelector(state => state.playerKingAttacked)
     const halfMoveCounter = useSelector(state => state.halfMoveCounter)
     const sandbox = useSelector(state => state.sandbox)
+    const moves = useSelector(state => state.moves)
 
     let boardEntries = Object.entries(board)
 
@@ -146,14 +147,16 @@ const Board = () => {
 
         playerHorseSafety()
         enemyHorseSafety()
-
-        checkGameEnd()
     }
 
     const toMove = useRef("w")
 
     useEffect(() => {
         recordBoard()
+        store.dispatch({
+            type: "recordMoves",
+            payload: JSON.stringify(board)
+        })
         stockfish.postMessage('uci')
         stockfish.postMessage('isready')
         stockfish.postMessage('ucinewgame')
@@ -2320,6 +2323,7 @@ const Board = () => {
     }
 
     function onSquareClick(i, piece) {
+        checkGameEnd()
         if (!moveSquares.includes(i) || (playerSquaresRender.includes(i) && activeStatePiece === piece)){
             setMoveSquares([])
             setActiveStatePiece("")
@@ -2981,6 +2985,12 @@ const Board = () => {
             }
         } 
 
+        store.dispatch({
+            type: "recordMoves",
+            payload: JSON.stringify(store.getState().board)
+        })
+
+        checkGameEnd()
         recordBoard()
     }
 
@@ -3024,6 +3034,18 @@ const Board = () => {
         if (arrPlayerStalemate.length === 0 || arrEnemyStalemate.length === 0) {
             gameEndSound.play()
         }
+
+        for (let i = 0; i < moves.length; i++) {
+            if (store.getState().moves[i] === store.getState().moves[i + 4] && store.getState().moves[i] === store.getState().moves[i + 8]) {
+                gameEndSound.play()
+                
+            }
+            
+        }
+        // console.log(store.getState().moves[8])
+        console.log(store.getState().moves[13])
+        // console.log(store.getState().moves[12] === store.getState().moves[4])
+        // console.log(store.getState().moves[12] === store.getState().moves[8])
     }
     
     const animatePiece = (i, string, num1, num2) => {     
