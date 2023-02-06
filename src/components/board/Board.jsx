@@ -3025,7 +3025,7 @@ const Board = () => {
             gameEndSound.play()
         }
     }
-
+    
     const animatePiece = (i, string, num1, num2) => {     
         setMoveVar([num1, num2])
 
