@@ -18,6 +18,7 @@ import moveSoundFile from "../../sounds/move.ogg"
 import captureSoundFile from "../../sounds/capture.ogg"
 import checkSoundFile from "../../sounds/check.ogg"
 import castlingSoundFile from "../../sounds/castling.ogg"
+import gameEndSoundFile from "../../sounds/gameEnd.ogg"
 
 import store from "../redux/store"
 
@@ -145,6 +146,8 @@ const Board = () => {
 
         playerHorseSafety()
         enemyHorseSafety()
+
+        checkGameEnd()
     }
 
     const toMove = useRef("w")
@@ -691,6 +694,7 @@ const Board = () => {
     const captureSound = new Audio(captureSoundFile)
     const castlingSound = new Audio(castlingSoundFile)
     const checkSound = new Audio(checkSoundFile)
+    const gameEndSound = new Audio(gameEndSoundFile)
 
     const knightLimits = [
         [], [], [], []
@@ -2167,12 +2171,11 @@ const Board = () => {
         }
 
         if ((playerSquaresRender.includes(i + 9) || (rookMoves[4].includes(i) && i + 9 === enPassantSquare.current[0])) && !knightLimits[3].includes(i)) {
-            arr.push(i + 9)
+            arr.push(i + 7)
         }
 
         if ((playerSquaresRender.includes(i + 7) || (rookMoves[4].includes(i) && i + 7 === enPassantSquare.current[0])) && !knightLimits[0].includes(i)) {
-            arr.push(i + 7)
-            
+            arr.push(i + 9)
         }
 
         if (arr2.filter(a => enemySquaresRender.includes(a)).length === 1) {
@@ -2198,11 +2201,11 @@ const Board = () => {
         let arr = []
 
         if (!knightLimits[0].includes(i)) {
-            arr.push(i + 7)
+            arr.push(i + 9)
         }
 
         if (!knightLimits[3].includes(i)) {
-            arr.push(i + 9)
+            arr.push(i + 7)
         }
 
         for (const number of arr) {
@@ -2214,11 +2217,101 @@ const Board = () => {
         let arr = []
 
         if (!knightLimits[0].includes(i)) {
-            arr.push(i - 7)
+            arr.push(i - 9)
         }
 
         if (!knightLimits[3].includes(i)) {
-            arr.push(i - 9)
+            arr.push(i - 7)
+        }
+
+        for (const number of arr) {
+            arrMoves.push(number)
+        }
+    }
+
+    const recordPlayerKingMoves = (i, arrMoves) => {
+        let arr = []
+
+        attackedByOpponent()
+
+        if (castlingPlayerMoved.pk && castlingPlayerMoved.pr2 && castlingPlayerMoved.pr1) {
+            arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9, i + 2, i - 2]
+        } else if (castlingPlayerMoved.pk && castlingPlayerMoved.pr2) {
+            arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9, i + 2]
+        } else if (castlingPlayerMoved.pk && castlingPlayerMoved.pr1) {
+            arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9, i - 2]
+        } else if (knightLimits[0].includes(i)) {
+            arr = [i - 8, i - 7, i + 1, i + 8, i + 9]
+        } else if (knightLimits[3].includes(i)) {
+            arr = [i - 9, i - 8, i - 1, i + 7, i + 8]
+        } else {
+            arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9]
+        }
+
+        for (const number of arr) {
+            if (playerSquaresRender.includes(number)) {
+                arr = arr.filter(x => x !== number)
+                if (!arr.includes(60) && i === 61) {
+                    arr = arr.filter(x => x !== 59)
+                }
+                if (!arr.includes(62) && i === 61) {
+                    arr = arr.filter(x => x !== 63)
+                }
+                arr = arr.filter(a => !attackedByOpponentArr.current.includes(a))
+                        .filter(a => !protectedByOpponentArr.current.includes(a))
+                        .filter(a => a > 0 && a < 65)
+            } else {
+                arr = arr.filter(a => !attackedByOpponentArr.current.includes(a))
+                        .filter(a => !protectedByOpponentArr.current.includes(a))
+                        .filter(a => a > 0 && a < 65)
+            }
+        }
+
+        for (const number of arr) {
+            arrMoves.push(number)
+        }
+    }
+
+    const recordEnemyKingMoves = (i, arrMoves) => {
+        let arr = []
+        
+        attackedByPlayer()                
+        
+        if (castlingEnemyMoved.ok && castlingEnemyMoved.or2 && castlingEnemyMoved.or1) {
+            arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9, i + 2, i - 2]
+        } else if (castlingEnemyMoved.ok && castlingEnemyMoved.or2) {
+            arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9, i + 2]
+        } else if (castlingEnemyMoved.ok && castlingEnemyMoved.or1) {
+            arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9, i - 2]
+        } else if (knightLimits[0].includes(i)) {
+            arr = [i - 8, i - 7, i + 1, i + 8, i + 9]
+        } else if (knightLimits[3].includes(i)) {
+            arr = [i - 9, i - 8, i - 1, i + 7, i + 8]
+        } else {
+            arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9]
+        }
+
+        for (const number of arr) {
+            if (enemySquaresRender.includes(number)) {
+
+                arr = arr.filter(x => x !== number)
+
+                if (!arr.includes(4) && i === 5) {
+                    arr = arr.filter(x => x !== 3)
+                }
+
+                if (!arr.includes(6) && i === 5) {
+                    arr = arr.filter(x => x !== 7)
+                }
+
+                arr = arr.filter(a => !attackedByPlayerArr.current.includes(a))
+                        .filter(a => !protectedByPlayerArr.current.includes(a))
+                        .filter(a => a > 0 && a < 65)
+            } else {
+                arr = arr.filter(a => !attackedByPlayerArr.current.includes(a))
+                        .filter(a => !protectedByPlayerArr.current.includes(a))
+                        .filter(a => a > 0 && a < 65)
+            }
         }
 
         for (const number of arr) {
@@ -2311,44 +2404,9 @@ const Board = () => {
             }
 
             if (/^pk/.test(piece)) {
-                attackedByOpponent()
-
                 let arr = []
-                
-                if (castlingPlayerMoved[piece.slice(0, 2)] && castlingPlayerMoved.pr2 && castlingPlayerMoved.pr1) {
-                    arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9, i + 2, i - 2]
-                } else if (castlingPlayerMoved[piece.slice(0, 2)] && castlingPlayerMoved.pr2) {
-                    arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9, i + 2]
-                } else if (castlingPlayerMoved[piece.slice(0, 2)] && castlingPlayerMoved.pr1) {
-                    arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9, i - 2]
-                } else if (knightLimits[0].includes(i)) {
-                    arr = [i - 8, i - 7, i + 1, i + 8, i + 9]
-                } else if (knightLimits[3].includes(i)) {
-                    arr = [i - 9, i - 8, i - 1, i + 7, i + 8]
-                } else {
-                    arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9]
-                }
-
-                for (const number of arr) {
-                    if (playerSquaresRender.includes(number)) {
-                        arr = arr.filter(x => x !== number)
-                        if (!arr.includes(60) && i === 61) {
-                            arr = arr.filter(x => x !== 59)
-                        }
-                        if (!arr.includes(62) && i === 61) {
-                            arr = arr.filter(x => x !== 63)
-                        }
-                        arr = arr.filter(a => !attackedByOpponentArr.current.includes(a))
-                                .filter(a => !protectedByOpponentArr.current.includes(a))
-
-                        setMoveSquares(arr)
-                    } else {
-                        arr = arr.filter(a => !attackedByOpponentArr.current.includes(a))
-                                .filter(a => !protectedByOpponentArr.current.includes(a))
-
-                        setMoveSquares(arr)
-                    }
-                }
+                recordPlayerKingMoves(i, arr)
+                setMoveSquares(arr)
             }
 
             if (/^oh/.test(piece)) {   
@@ -2405,54 +2463,13 @@ const Board = () => {
             }
 
             if (/^ok/.test(piece)) {
-                attackedByPlayer()                
-
                 let arr = []
-                
-                if (castlingEnemyMoved[piece.slice(0, 2)] && castlingEnemyMoved.or2 && castlingEnemyMoved.or1) {
-                    arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9, i + 2, i - 2]
-                } else if (castlingEnemyMoved[piece.slice(0, 2)] && castlingEnemyMoved.or2) {
-                    arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9, i + 2]
-                } else if (castlingEnemyMoved[piece.slice(0, 2)] && castlingEnemyMoved.or1) {
-                    arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9, i - 2]
-                } else if (knightLimits[0].includes(i)) {
-                    arr = [i - 8, i - 7, i + 1, i + 8, i + 9]
-                } else if (knightLimits[3].includes(i)) {
-                    arr = [i - 9, i - 8, i - 1, i + 7, i + 8]
-                } else {
-                    arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9]
-                }
-
-                for (const number of arr) {
-                    if (enemySquaresRender.includes(number)) {
-
-                        arr = arr.filter(x => x !== number)
-
-                        if (!arr.includes(4) && i === 5) {
-                            arr = arr.filter(x => x !== 3)
-                        }
-
-                        if (!arr.includes(6) && i === 5) {
-                            arr = arr.filter(x => x !== 7)
-                        }
-
-                        arr = arr.filter(a => !attackedByPlayerArr.current.includes(a))
-                                .filter(a => !protectedByPlayerArr.current.includes(a))
-
-                        setMoveSquares(arr)
-                    } else {
-                        arr = arr.filter(a => !attackedByPlayerArr.current.includes(a))
-                                .filter(a => !protectedByPlayerArr.current.includes(a))
-
-                        setMoveSquares(arr)
-                    }
-                }
+                recordEnemyKingMoves(i, arr)
+                setMoveSquares(arr)
             }
         }
 
         if (/^ph/.test(activePiece) && moveSquares.includes(i)) {
-            
-
             recordKnightMoves(i, checkedByPlayerArr.current, playerSquaresLive)
 
             switch (activePiece) {
@@ -2965,6 +2982,24 @@ const Board = () => {
         } 
 
         recordBoard()
+    }
+
+    const checkGameEnd = () => {
+        let arrPlayer = []
+        let arrEnemy = []
+
+        recordPlayerKingMoves(playerKing, arrPlayer)
+        recordEnemyKingMoves(enemyKing, arrEnemy)
+
+        if ((playerKingAttacked && !attackedByPlayerArr.current.includes(checkingPiece.current) && arrPlayer.length === 0) ||
+            (enemyKingAttacked && !attackedByOpponentArr.current.includes(checkingPiece.current) && arrEnemy.length === 0)) {
+            gameEndSound.play()
+        }
+
+        if ((playerKingAttacked && !attackedByPlayerArr.current.includes(checkingPiece.current) && arrPlayer.length === 0) ||
+            (enemyKingAttacked && !attackedByOpponentArr.current.includes(checkingPiece.current) && arrEnemy.length === 0)) {
+            gameEndSound.play()
+        }
     }
 
     const animatePiece = (i, string, num1, num2) => {     
