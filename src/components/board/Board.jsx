@@ -2996,10 +2996,7 @@ const Board = () => {
             gameEndSound.play()
         }
 
-        if ((playerKingAttacked && !attackedByPlayerArr.current.includes(checkingPiece.current) && arrPlayer.length === 0) ||
-            (enemyKingAttacked && !attackedByOpponentArr.current.includes(checkingPiece.current) && arrEnemy.length === 0)) {
-            gameEndSound.play()
-        }
+
     }
 
     const animatePiece = (i, string, num1, num2) => {     
