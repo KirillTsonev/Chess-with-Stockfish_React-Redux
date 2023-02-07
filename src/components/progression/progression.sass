@@ -1,37 +1,39 @@
 .progression
     border: solid green 10px
-    height: 600px
-    width: 250px
-    padding: 20px
+    height: 660px
+    width: 300px
     color: white
-    &__container
-        display: flex
-        justify-content: space-between
-        align-items: center
-        padding: 5px 0
+    background: #262421
     &__moves
         &-container
             display: flex
+            width: 280px
+            justify-content: center
+            height: 100px
+            overflow-y: scroll
         &__grid
             display: grid
-            grid-template: 30px / 80px 80px
+            grid-template: 30px / 120px 100px
             grid-auto-rows: 30px
-            column-gap: 20px
-            row-gap: 10px
-            margin: 20px auto
+            margin: 0 auto
             &-item
-                background: red
-                text-align: center
                 cursor: pointer
                 line-height: 30px
+                user-select: none
+                padding: 0 10px
+                &:hover
+                    background: #3692E7
         &__numbers
             display: grid
-            grid-template: 30px / 30px
+            grid-template: 30px / 40px
             grid-auto-rows: 30px
-            row-gap: 10px
-            margin: 20px auto
+            margin: 0 auto
             &-body
                 text-align: center
-                background: green
-                width: 30px
+                background: #302E2C
+                width: 40px
                 line-height: 30px
+                user-select: none
+
+.activeMove
+    background: #2A4053

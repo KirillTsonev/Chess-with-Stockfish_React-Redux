@@ -25,18 +25,18 @@ const Behavior = () => {
         <div className="behavior">
             <div className="behavior__container">
                 <div className="behavior__body">Visible numbers:</div>
-                <div className={`behavior__option ${numbers ? "active" : null}`}  onClick={() => onNumbersChoice(true)}>On</div>
-                <div className={`behavior__option ${!numbers ? "active" : null}`} onClick={() => onNumbersChoice(false)}>Off</div>
+                <div className={`behavior__option ${numbers ? "activeOption" : null}`}  onClick={() => onNumbersChoice(true)}>On</div>
+                <div className={`behavior__option ${!numbers ? "activeOption" : null}`} onClick={() => onNumbersChoice(false)}>Off</div>
             </div>
             <div className="behavior__container">
                 <div className="behavior__body">Animation speed:</div>
                 <div>
-                    <div className={`behavior__option ${animations === "slow" ? "active" : null}`}  onClick={() => onAnimationChoice("slow")}>Slow</div>
-                    <div className={`behavior__option ${animations === "fast" ? "active" : null}`}  onClick={() => onAnimationChoice("fast")}>Fast</div>
+                    <div className={`behavior__option ${animations === "slow" ? "activeOption" : null}`}  onClick={() => onAnimationChoice("slow")}>Slow</div>
+                    <div className={`behavior__option ${animations === "fast" ? "activeOption" : null}`}  onClick={() => onAnimationChoice("fast")}>Fast</div>
                 </div>
                 <div>
-                    <div className={`behavior__option ${animations === "average" ? "active" : null}`} onClick={() => onAnimationChoice("average")}>Normal</div>
-                    <div className={`behavior__option ${animations === "none" ? "active" : null}`} onClick={() => onAnimationChoice("none")}>None</div>
+                    <div className={`behavior__option ${animations === "average" ? "activeOption" : null}`} onClick={() => onAnimationChoice("average")}>Normal</div>
+                    <div className={`behavior__option ${animations === "none" ? "activeOption" : null}`} onClick={() => onAnimationChoice("none")}>None</div>
                 </div>
             </div>
         </div>

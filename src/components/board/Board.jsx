@@ -3207,7 +3207,7 @@ const Board = () => {
                 moveSound.play()
             }
 
-            if (color === "white" && toMove.current === "b") {
+            if (color === "white" && toMove.current === "b" && sandbox) {
                 store.dispatch({
                     type: "moveCounter"
                 })
@@ -3890,8 +3890,9 @@ const Board = () => {
         recordBoard()
 
         if (/^pr/.test(rookToMove)) {
-            
-
+            store.dispatch({
+                type: "moveNumbers"
+            })
             if ((playerRooks.some(a => enemyKingSpiderSenseArr.current[1].includes(a)))
                 && occupiedSquaresLive.filter(a => !playerSquaresLive.includes(a))
                                         .every(a => !enemyKingSpiderSenseArr.current[1].includes(a))) {
@@ -3987,6 +3988,10 @@ const Board = () => {
         recordBoard()
 
         if (/^pp/.test(string)) {
+            store.dispatch({
+                type: "moveNumbers"
+            })
+            
             if ((playerQueens.some(a => enemyKingSpiderSenseArr.current[0].includes(a)) 
                 || playerBishops.some(a => enemyKingSpiderSenseArr.current[0].includes(a)))
                 && occupiedSquaresLive.filter(a => !playerSquaresLive.includes(a))
