@@ -48,6 +48,7 @@ const Board = () => {
     const halfMoveCounter = useSelector(state => state.halfMoveCounter)
     const sandbox = useSelector(state => state.sandbox)
     const moves = useSelector(state => state.moves)
+    const currentMove = useSelector(state => state.currentMove)
 
     let boardEntries = Object.entries(board)
 
@@ -155,7 +156,7 @@ const Board = () => {
         recordBoard()
         store.dispatch({
             type: "recordMoves",
-            payload: JSON.stringify(board)
+            payload: board
         })
         stockfish.postMessage('uci')
         stockfish.postMessage('isready')
@@ -1842,7 +1843,7 @@ const Board = () => {
 
         return (
             <div className="piecesGrid">
-                {boardEntries.map((a, i) => renderEntries(a[0], i))}
+                {currentMove ? Object.entries(moves[currentMove]).map((a, i) => renderEntries(a[0], i)) : boardEntries.map((a, i) => renderEntries(a[0], i))}
             </div>
         )
     }
@@ -2323,18 +2324,17 @@ const Board = () => {
     }
 
     function onSquareClick(i, piece) {
-        checkGameEnd()
         if (!moveSquares.includes(i) || (playerSquaresRender.includes(i) && activeStatePiece === piece)){
             setMoveSquares([])
             setActiveStatePiece("")
             setPieceSquare(null)
         }
         
-        if (!sandbox ? (playerSquaresRender.includes(i) && activeStatePiece !== piece) :
+        if (!sandbox ? (playerSquaresRender.includes(i) && activeStatePiece !== piece && !currentMove) :
             (((/^o/.test(activePiece) && !/^p/.test(piece)) 
             || (/^p/.test(activePiece) && !/^o/.test(piece)) 
             || !activeStatePiece) 
-            && (occupiedSquaresRender.includes(i) && activeStatePiece !== piece))) {
+            && (occupiedSquaresRender.includes(i) && activeStatePiece !== piece)) && !currentMove) {
             setMoveSquares([])
             setPieceSquare(i)
             setActiveStatePiece(piece)
@@ -2987,7 +2987,7 @@ const Board = () => {
 
         store.dispatch({
             type: "recordMoves",
-            payload: JSON.stringify(store.getState().board)
+            payload: store.getState().board
         })
 
         checkGameEnd()

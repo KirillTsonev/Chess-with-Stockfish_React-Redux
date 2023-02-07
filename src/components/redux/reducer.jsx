@@ -114,10 +114,16 @@ const initialState = {
     playerKingAttacked: false,
     sandbox: true,
     moves: [],
+    currentMove: null,
 }
 
 function boardReducer(state = initialState, action) {
     switch (action.type) {
+        case "currentMove":
+            return {
+                ...state,
+                currentMove: action.payload
+            }
         case "recordMoves": 
             return {
                 ...state,
