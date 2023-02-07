@@ -9,3 +9,29 @@
         justify-content: space-between
         align-items: center
         padding: 5px 0
+    &__moves
+        &-container
+            display: flex
+        &__grid
+            display: grid
+            grid-template: 30px / 80px 80px
+            grid-auto-rows: 30px
+            column-gap: 20px
+            row-gap: 10px
+            margin: 20px auto
+            &-item
+                background: red
+                text-align: center
+                cursor: pointer
+                line-height: 30px
+        &__numbers
+            display: grid
+            grid-template: 30px / 30px
+            grid-auto-rows: 30px
+            row-gap: 10px
+            margin: 20px auto
+            &-body
+                text-align: center
+                background: green
+                width: 30px
+                line-height: 30px

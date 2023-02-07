@@ -109,20 +109,32 @@ const initialState = {
         or2: true
     },
     moveCounter: 1,
+    moveNumbers: [],
     halfMoveCounter: 0,
     enemyKingAttacked: false,
     playerKingAttacked: false,
     sandbox: true,
     moves: [],
+    highlightMove: [],
     currentMove: null,
 }
 
 function boardReducer(state = initialState, action) {
     switch (action.type) {
+        case "moveNumbers":
+            return {
+                ...state,
+                moveNumbers: [...state.moveNumbers, state.moveCounter + 1]
+            }
+        case "highlightMove":
+            return {
+                ...state,
+                highlightMove: [...state.highlightMove, action.payload]
+            }
         case "currentMove":
             return {
                 ...state,
-                currentMove: action.payload
+                currentMove: action.payload,
             }
         case "recordMoves": 
             return {

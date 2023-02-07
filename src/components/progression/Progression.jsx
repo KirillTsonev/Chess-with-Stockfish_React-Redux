@@ -5,6 +5,7 @@ import "./progression.sass"
 
 const Progression = () => {
     const moves = useSelector(state => state.moves)
+    const moveNumbers = useSelector(state => state.moveNumbers)
 
     const onMoveClick = (i) => {
         if (i + 1 === moves.length) {
@@ -22,8 +23,13 @@ const Progression = () => {
 
     const renderMoves = () => {
         return (
-            <div className="behavior__moves">
-                {moves.slice(1).map((a, i) => <div className="behavior__moves-item" onClick={() => onMoveClick(i + 1)}>{i + 1}</div>)}
+            <div className="progression__moves-container">
+                <div className="progression__moves__numbers">
+                    {moveNumbers.map(a => <div className="progression__moves__numbers-body">{a - 1}</div>)}
+                </div>
+                <div className="progression__moves__grid">
+                    {moves.slice(1).map((a, i) => <div className="progression__moves__grid-item" onClick={() => onMoveClick(i + 1)}>{i + 1}</div>)}
+                </div>
             </div>
         )
     }

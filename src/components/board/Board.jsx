@@ -32,7 +32,7 @@ const Board = () => {
     const [moveSquares, setMoveSquares] = useState([])
     const [pieceSquare, setPieceSquare] = useState(null)
     const [moveVar, setMoveVar] = useState([0, 0]) 
-    const [lastMadeMove, setLastMadeMove] = useState([]) 
+    // const [lastMadeMove, setLastMadeMove] = useState([]) 
     const [pawnPromotes, setPawnPromotes] = useState("")
 
     const board = useSelector(state => state.board)
@@ -49,6 +49,7 @@ const Board = () => {
     const sandbox = useSelector(state => state.sandbox)
     const moves = useSelector(state => state.moves)
     const currentMove = useSelector(state => state.currentMove)
+    const highlightMove = useSelector(state => state.highlightMove)
 
     let boardEntries = Object.entries(board)
 
@@ -1272,49 +1273,57 @@ const Board = () => {
                 {arr1.map((a, i) => <div key={i + 1} className={`${i % 2 === 0 ? "white" : "black"} ${i + 1 === pieceSquare ? "highlight" : null}`}>
                     {moveSquares.includes(i + 1) && !occupiedSquaresRender.includes(i + 1) ? <div className="activeSquare"></div> : null}
                     {moveSquares.includes(i + 1) && occupiedSquaresRender.includes(i + 1) ? <div className="enemySquare"><div></div></div> : null}
-                    {lastMadeMove[0] === i + 1 || lastMadeMove[1] === i + 1 ? <div className="lastMadeMove"></div> : null}
+                    {(highlightMove.slice(-1)[0] === i + 1 && !currentMove) || 
+                        (currentMove && highlightMove[currentMove - 1] === i + 1) ? <div className="lastMadeMove"></div> : null}
                 </div>)}
 
                 {arr2.map((a, i) => <div key={i + 9} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 9 === pieceSquare ? "highlight" : null}`}>
                     {moveSquares.includes(i + 9) && !occupiedSquaresRender.includes(i + 9) ? <div className="activeSquare"></div> : null}
                     {moveSquares.includes(i + 9) && occupiedSquaresRender.includes(i + 9) ? <div className="enemySquare"><div></div></div> : null}
-                    {lastMadeMove[0] === i + 9 ? <div className="lastMadeMove"></div> : null}
+                    {(highlightMove.slice(-1)[0] === i + 9 && !currentMove) || 
+                        (currentMove && highlightMove[currentMove - 1] === i + 9) ? <div className="lastMadeMove"></div> : null}
                 </div>)}
 
                 {arr3.map((a, i) => <div key={i + 17} className={`${i % 2 === 0 ? "white" : "black"} ${i + 17 === pieceSquare ? "highlight" : null}`}>
                     {moveSquares.includes(i + 17) && !occupiedSquaresRender.includes(i + 17) ? <div className="activeSquare"></div> : null}
                     {moveSquares.includes(i + 17) && occupiedSquaresRender.includes(i + 17) ? <div className="enemySquare"><div></div></div> : null}
-                    {lastMadeMove[0] === i + 17 ? <div className="lastMadeMove"></div> : null}
+                    {(highlightMove.slice(-1)[0] === i + 17 && !currentMove) || 
+                        (currentMove && highlightMove[currentMove - 1] === i + 17) ? <div className="lastMadeMove"></div> : null}
                 </div>)}
 
                 {arr4.map((a, i) => <div key={i + 25} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 25 === pieceSquare ? "highlight" : null}`}>
                     {moveSquares.includes(i + 25) && !occupiedSquaresRender.includes(i + 25) ? <div className="activeSquare"></div> : null}
                     {moveSquares.includes(i + 25) && occupiedSquaresRender.includes(i + 25) ? <div className="enemySquare"><div></div></div> : null}
-                    {lastMadeMove[0] === i + 25 ? <div className="lastMadeMove"></div> : null}
+                    {(highlightMove.slice(-1)[0] === i + 25 && !currentMove) || 
+                        (currentMove && highlightMove[currentMove - 1] === i + 25) ? <div className="lastMadeMove"></div> : null}
                 </div>)}
 
                 {arr5.map((a, i) => <div key={i + 33} className={`${i % 2 === 0 ? "white" : "black"} ${i + 33 === pieceSquare ? "highlight" : null}`}>
                     {moveSquares.includes(i + 33) && !occupiedSquaresRender.includes(i + 33) ? <div className="activeSquare"></div> : null}
                     {moveSquares.includes(i + 33) && occupiedSquaresRender.includes(i + 33) ? <div className="enemySquare"><div></div></div> : null}
-                    {lastMadeMove[0] === i + 33 ? <div className="lastMadeMove"></div> : null}
+                    {(highlightMove.slice(-1)[0] === i + 33 && !currentMove) || 
+                        (currentMove && highlightMove[currentMove - 1] === i + 33) ? <div className="lastMadeMove"></div> : null}
                 </div>)}
 
                 {arr6.map((a, i) => <div key={i + 41} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 41 === pieceSquare ? "highlight" : null}`}>
                     {moveSquares.includes(i + 41) && !occupiedSquaresRender.includes(i + 41) ? <div className="activeSquare"></div> : null}
                     {moveSquares.includes(i + 41) && occupiedSquaresRender.includes(i + 41) ? <div className="enemySquare"><div></div></div> : null}
-                    {lastMadeMove[0] === i + 41 ? <div className="lastMadeMove"></div> : null}
+                    {(highlightMove.slice(-1)[0] === i + 41 && !currentMove) || 
+                        (currentMove && highlightMove[currentMove - 1] === i + 41) ? <div className="lastMadeMove"></div> : null}
                 </div>)}
 
                 {arr7.map((a, i) => <div key={i + 49} className={`${i % 2 === 0 ? "white" : "black"} ${i + 49 === pieceSquare ? "highlight" : null}`}>
                     {moveSquares.includes(i + 49) && !occupiedSquaresRender.includes(i + 49) ? <div className="activeSquare"></div> : null}
                     {moveSquares.includes(i + 49) && occupiedSquaresRender.includes(i + 49) ? <div className="enemySquare"><div></div></div> : null}
-                    {lastMadeMove[0] === i + 49 ? <div className="lastMadeMove"></div> : null}
+                    {(highlightMove.slice(-1)[0] === i + 49 && !currentMove) || 
+                        (currentMove && highlightMove[currentMove - 1] === i + 49) ? <div className="lastMadeMove"></div> : null}
                 </div>)}
 
                 {arr8.map((a, i) => <div key={i + 57} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 57 === pieceSquare ? "highlight" : null}`} >
                     {moveSquares.includes(i + 57) && !occupiedSquaresRender.includes(i + 57) ? <div className="activeSquare"></div> : null}
                     {moveSquares.includes(i + 57) && occupiedSquaresRender.includes(i + 57) ? <div className="enemySquare"><div></div></div> : null}
-                    {lastMadeMove[0] === i + 57 || lastMadeMove[1] === i + 57 ? <div className="lastMadeMove"></div> : null}
+                    {(highlightMove.slice(-1)[0] === i + 57 && !currentMove) || 
+                        (currentMove && highlightMove[currentMove - 1] === i + 57) ? <div className="lastMadeMove"></div> : null}
                 </div>)}
             </div>
         )
@@ -2959,6 +2968,11 @@ const Board = () => {
             payload: i
         })
 
+        store.dispatch({
+            type: "highlightMove",
+            payload: i
+        })
+
         if (/^o/.test(string)) {
             if (playerSquaresRender.includes(i)) {
                 store.dispatch({
@@ -2985,10 +2999,7 @@ const Board = () => {
             }
         } 
 
-        store.dispatch({
-            type: "recordMoves",
-            payload: store.getState().board
-        })
+
 
         checkGameEnd()
         recordBoard()
@@ -3216,6 +3227,9 @@ const Board = () => {
         }
 
         if (/^p/.test(string)) {
+            store.dispatch({
+                type: "moveNumbers"
+            })
             
             if (enemySquaresRender.includes(i)) {
                 store.dispatch({
@@ -3384,12 +3398,16 @@ const Board = () => {
             }
         }
 
-        setLastMadeMove([i, null])
         setMoveSquares([])
         setPieceSquare(null)
 
         playerKingXray()
         enemyKingXray()
+
+        store.dispatch({
+            type: "recordMoves",
+            payload: store.getState().board
+        })
     }  
 
     const moveKnight = (i, string) => {
@@ -3898,7 +3916,7 @@ const Board = () => {
 
         // encode()
 
-        setLastMadeMove([newSqKing, newSqRook])
+        // setLastMadeMove([newSqKing, newSqRook])
 
         setMoveSquares([])
 
@@ -3918,6 +3936,10 @@ const Board = () => {
             }
         }
 
+        store.dispatch({
+            type: "recordMoves",
+            payload: store.getState().board
+        })
         playerKingXray()
         enemyKingXray()
     }
@@ -4013,7 +4035,6 @@ const Board = () => {
         captureSound.play()
         // encode()
 
-        setLastMadeMove([i, 0])
 
         setMoveSquares([])
 
@@ -4032,6 +4053,10 @@ const Board = () => {
                 toMove.current = "b"
             }
         }
+        store.dispatch({
+            type: "recordMoves",
+            payload: store.getState().board
+        })
     }
 
     const moveKing = (i, string) => {
