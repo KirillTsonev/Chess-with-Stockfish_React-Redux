@@ -168,6 +168,7 @@ const Board = () => {
 
     useEffect(() => {
         recordBoard()
+        checkGameEnd()
     }, [board])
 
     useEffect(() => {
@@ -1225,7 +1226,7 @@ const Board = () => {
 
         enemyPawns.forEach(a => recordOpponentPawnAttacks(a, arr))
 
-        recordEnemyKingMoves(enemyKing, arr)
+        recordEnemyKingAttacks(enemyKing, arr)
 
         attackedByOpponentArr.current = arr
     }
@@ -1246,7 +1247,7 @@ const Board = () => {
 
         playerPawns.forEach(a => recordPlayerPawnAttacks(a, arr))
 
-        recordPlayerKingMoves(playerKing, arr)
+        recordPlayerKingAttacks(playerKing, arr)
 
         attackedByPlayerArr.current = arr
     }
@@ -2249,8 +2250,6 @@ const Board = () => {
     const recordPlayerKingMoves = (i, arrMoves) => {
         let arr = []
 
-        
-
         if (castlingPlayerMoved.pk && castlingPlayerMoved.pr2 && castlingPlayerMoved.pr1) {
             arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9, i + 2, i - 2]
         } else if (castlingPlayerMoved.pk && castlingPlayerMoved.pr2) {
@@ -2282,6 +2281,22 @@ const Board = () => {
                         .filter(a => !protectedByOpponentArr.current.includes(a))
                         .filter(a => a > 0 && a < 65)
             }
+        }
+
+        for (const number of arr) {
+            arrMoves.push(number)
+        }
+    }
+
+    const recordPlayerKingAttacks = (i, arrMoves) => {
+        let arr = []
+
+        if (knightLimits[0].includes(i)) {
+            arr = [i - 8, i - 7, i + 1, i + 8, i + 9]
+        } else if (knightLimits[3].includes(i)) {
+            arr = [i - 9, i - 8, i - 1, i + 7, i + 8]
+        } else {
+            arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9]
         }
 
         for (const number of arr) {
@@ -2327,6 +2342,22 @@ const Board = () => {
                         .filter(a => !protectedByPlayerArr.current.includes(a))
                         .filter(a => a > 0 && a < 65)
             }
+        }
+
+        for (const number of arr) {
+            arrMoves.push(number)
+        }
+    }
+
+    const recordEnemyKingAttacks = (i, arrMoves) => {
+        let arr = []              
+        
+        if (knightLimits[0].includes(i)) {
+            arr = [i - 8, i - 7, i + 1, i + 8, i + 9]
+        } else if (knightLimits[3].includes(i)) {
+            arr = [i - 9, i - 8, i - 1, i + 7, i + 8]
+        } else {
+            arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9]
         }
 
         for (const number of arr) {
@@ -2419,6 +2450,7 @@ const Board = () => {
             }
 
             if (/^pk/.test(piece)) {
+                attackedByOpponent()
                 let arr = []
                 recordPlayerKingMoves(i, arr)
                 setMoveSquares(arr)
@@ -2478,6 +2510,7 @@ const Board = () => {
             }
 
             if (/^ok/.test(piece)) {
+                attackedByPlayer()  
                 let arr = []
                 recordEnemyKingMoves(i, arr)
                 setMoveSquares(arr)
@@ -2704,7 +2737,7 @@ const Board = () => {
 
         if (/^pk/.test(activePiece) && moveSquares.includes(i) && !attackedByOpponentArr.current.includes(i)) {
             
-            attackedByOpponent()
+            
             playerKing = i
             updateStateBoard(i, activePiece)
             moveKing(i, activePiece)
@@ -2934,7 +2967,7 @@ const Board = () => {
         } 
 
         if (/^ok/.test(activePiece) && moveSquares.includes(i) && !attackedByPlayerArr.current.includes(i)) {
-            attackedByPlayer()  
+            
             enemyKing = i
             updateStateBoard(i, activePiece)
             moveKing(i, activePiece)
@@ -3004,19 +3037,37 @@ const Board = () => {
 
         checkGameEnd()
         recordBoard()
+    
     }
 
     const checkGameEnd = () => {
+        attackedByOpponent()
+        attackedByPlayer()
+
         let arrPlayerCheckmate = []
         let arrEnemyCheckmate = []
         let arrPlayerStalemate = []
         let arrEnemyStalemate = []
-
+        
         recordPlayerKingMoves(playerKing, arrPlayerCheckmate)
         recordEnemyKingMoves(enemyKing, arrEnemyCheckmate)
 
-        if ((playerKingAttacked && !attackedByPlayerArr.current.includes(checkingPiece.current) && arrPlayerCheckmate.length === 0) ||
-            (enemyKingAttacked && !attackedByOpponentArr.current.includes(checkingPiece.current) && arrEnemyCheckmate.length === 0)) {
+        if ((playerKingAttacked &&
+                !attackedByPlayerArr.current.includes(checkingPiece.current) && 
+                arrPlayerCheckmate.length === 0 &&
+                (playerKing8StarArr.current.forEach(a => {
+                    if (a.includes(checkingPiece.current) && attackedByPlayerArr.current.some(b => a.includes(b))) {
+                        return true
+                    }
+                }))) ||
+            (enemyKingAttacked &&
+                !attackedByOpponentArr.current.includes(checkingPiece.current) &&
+                arrEnemyCheckmate.length === 0  &&
+                (enemyKing8StarArr.current.forEach(a => {
+                    if (a.includes(checkingPiece.current) && attackedByOpponentArr.current.some(b => a.includes(b))) {
+                        return true
+                    }
+                })))) {
             gameEndSound.play()
         }
 
@@ -3048,11 +3099,11 @@ const Board = () => {
         }
 
         for (let i = 0; i < moves.length; i++) {
-            if (store.getState().moves[i] === store.getState().moves[i + 4] && store.getState().moves[i] === store.getState().moves[i + 8]) {
-                gameEndSound.play()
-                
-            }
             
+            if (JSON.stringify(store.getState().moves[i]) === JSON.stringify(store.getState().moves[i + 4]) && 
+                JSON.stringify(store.getState().moves[i]) === JSON.stringify(store.getState().moves[i + 8])) {
+                gameEndSound.play()
+            }
         }
     }
     
@@ -3409,6 +3460,8 @@ const Board = () => {
             type: "recordMoves",
             payload: store.getState().board
         })
+
+        
     }  
 
     const moveKnight = (i, string) => {
