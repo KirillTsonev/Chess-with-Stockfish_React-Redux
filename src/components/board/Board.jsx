@@ -1225,6 +1225,8 @@ const Board = () => {
 
         enemyPawns.forEach(a => recordOpponentPawnAttacks(a, arr))
 
+        recordEnemyKingMoves(enemyKing, arr)
+
         attackedByOpponentArr.current = arr
     }
 
@@ -1243,6 +1245,8 @@ const Board = () => {
         playerQueens.forEach(a => checkArrays(rookMoves, a, arr, playerSquaresRender, enemySquaresRender, true, true))
 
         playerPawns.forEach(a => recordPlayerPawnAttacks(a, arr))
+
+        recordPlayerKingMoves(playerKing, arr)
 
         attackedByPlayerArr.current = arr
     }
@@ -2245,7 +2249,7 @@ const Board = () => {
     const recordPlayerKingMoves = (i, arrMoves) => {
         let arr = []
 
-        attackedByOpponent()
+        
 
         if (castlingPlayerMoved.pk && castlingPlayerMoved.pr2 && castlingPlayerMoved.pr1) {
             arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9, i + 2, i - 2]
@@ -2286,9 +2290,7 @@ const Board = () => {
     }
 
     const recordEnemyKingMoves = (i, arrMoves) => {
-        let arr = []
-        
-        attackedByPlayer()                
+        let arr = []              
         
         if (castlingEnemyMoved.ok && castlingEnemyMoved.or2 && castlingEnemyMoved.or1) {
             arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9, i + 2, i - 2]
@@ -2702,7 +2704,7 @@ const Board = () => {
 
         if (/^pk/.test(activePiece) && moveSquares.includes(i) && !attackedByOpponentArr.current.includes(i)) {
             
-           
+            attackedByOpponent()
             playerKing = i
             updateStateBoard(i, activePiece)
             moveKing(i, activePiece)
@@ -2932,8 +2934,7 @@ const Board = () => {
         } 
 
         if (/^ok/.test(activePiece) && moveSquares.includes(i) && !attackedByPlayerArr.current.includes(i)) {
-            
-            
+            attackedByPlayer()  
             enemyKing = i
             updateStateBoard(i, activePiece)
             moveKing(i, activePiece)
