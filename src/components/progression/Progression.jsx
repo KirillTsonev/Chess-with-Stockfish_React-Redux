@@ -5,9 +5,11 @@ import { useRef, useEffect, useState } from "react"
 import "./progression.sass"
 
 const Progression = () => {
-    const [minutes, setMinutes] = useState(10)
-    const [seconds, setSeconds] = useState(0)
-    const [miliseconds, setMiliseconds] = useState(0)
+    const [playerMinutes, setPlayerMinutes] = useState(null)
+    const [playerSeconds, setPlayerSeconds] = useState(null)
+    const [opponentMinutes, setOpponentMinutes] = useState(null)
+    const [opponentSeconds, setOpponentSeconds] = useState(null)
+    const [miliseconds, setMiliseconds] = useState(null)
 
     const moves = useSelector(state => state.moves)
     const moveNumbers = useSelector(state => state.moveNumbers)
@@ -22,7 +24,8 @@ const Progression = () => {
     }, [moves]);
 
     useEffect(() => {
-        timer(Date.now() + 600000)
+        timer(Date.now() + 600000, setPlayerMinutes, setPlayerSeconds)
+        timer(Date.now() + 600000, setOpponentMinutes, setOpponentSeconds)
     }, [])
 
     const onMoveClick = (i) => {
@@ -39,7 +42,7 @@ const Progression = () => {
         }
     }
 
-    const timer = (deadline) => {
+    const timer = (deadline, setterMinutes, settterSeconds) => {
         function getTimeRemaining(endtime) {
             const t = endtime - Date.now()
             const minutes = Math.floor((t / 1000 / 60) % 60)
@@ -76,8 +79,8 @@ const Progression = () => {
             function updateClock() {
                 const t = getTimeRemaining(endtime)
     
-                setMinutes(getZero(t.minutes))
-                setSeconds(getZero(t.seconds))
+                setterMinutes(getZero(t.minutes))
+                settterSeconds(getZero(t.seconds))
     
                 if (t.total <= 0) {
                     clearInterval(timeInterval)
@@ -92,7 +95,7 @@ const Progression = () => {
         return (
             <div className="progression">
                 <div className="progression__timer__container">
-                    <div>{minutes} : {seconds}</div>
+                    <div>{playerMinutes} : {playerSeconds}</div>
                 </div>
                 <div className="progression__moves__container">
                     <div className="progression__moves__numbers">
@@ -106,7 +109,7 @@ const Progression = () => {
                     </div>
                 </div>
                 <div className="progression__timer__container">
-                    <div>{minutes} : {seconds}</div>
+                    <div>{opponentMinutes} : {opponentSeconds}</div>
                 </div>
             </div>
         )
