@@ -2380,13 +2380,8 @@ const Board = () => {
             setPieceSquare(null)
         }
         
-        if (!sandbox ? (playerSquaresRender.includes(i) && activeStatePiece !== piece && !currentMove) :
-            (((/^o/.test(activePiece) && !/^p/.test(piece)) 
-            || (/^p/.test(activePiece) && !/^o/.test(piece)) 
-            || !activeStatePiece) 
-            && (occupiedSquaresRender.includes(i) && activeStatePiece !== piece)) && !currentMove) {
+        if (occupiedSquaresRender.includes(i) && activeStatePiece !== piece) {
             setMoveSquares([])
-            
             setActiveStatePiece(piece)
 
             pieceSquareForEngine.current = i
@@ -2406,7 +2401,7 @@ const Board = () => {
                 })
             }
 
-            if ((color === "white" && toMove === "w") || (color === "black" && toMove === "b")) {
+            if (((color === "white" && toMove === "w") || (color === "black" && toMove === "b")) && playerSquaresRender.includes(i)) {
                 setPieceSquare(i)
 
                 if (/^ph/.test(piece)) {   
@@ -2466,7 +2461,7 @@ const Board = () => {
                     recordPlayerKingMoves(i, arr)
                     setMoveSquares(arr)
                 }
-            } else {
+            } else if (((color === "white" && toMove === "b") || (color === "black" && toMove === "w")) && sandbox && enemySquaresRender.includes(i)) {
                 setPieceSquare(i)
 
                 if (/^oh/.test(piece)) {   
@@ -3107,6 +3102,10 @@ const Board = () => {
                 JSON.stringify(store.getState().moves[i]) === JSON.stringify(store.getState().moves[i + 8])) {
                 gameEndSound.play()
             }
+        }
+
+        if (halfMoveCounter === 50) {
+            gameEndSound.play()
         }
     }
     
@@ -3921,7 +3920,7 @@ const Board = () => {
         }
     }
 
-    const animateCastling = (coor1, coor2, newSqKing, rookOldSq, newSqRook, rookToMove) => {
+    const animateCastling = (coor1, coor2, rookOldSq, newSqRook, rookToMove) => {
         castlingSound.play()
 
         setMoveVar([coor1, coor2])
@@ -4162,10 +4161,10 @@ const Board = () => {
         if (/^pk/.test(string)) {
             switch (pieceSquareForEngine.current - i) {
                 case -2:
-                    animateCastling(-160, 0, i, 64, 62, "pr2")
+                    animateCastling(-160, 0, 64, 62, "pr2")
                     break;
                 case 2:
-                    animateCastling(160, 0, i, 57, 60, "pr1")
+                    animateCastling(160, 0, 57, 60, "pr1")
                     break;
                 default:
                     break;
@@ -4174,10 +4173,10 @@ const Board = () => {
         if (/^ok/.test(string)) {
             switch (pieceSquareForEngine.current - i) {
                 case 2:
-                    animateCastling(160, 0, i, 1, 4, "or2")
+                    animateCastling(160, 0, 1, 4, "or2")
                     break;
                 case -2:
-                    animateCastling(-160, 0, i, 8, 6, "or1")
+                    animateCastling(-160, 0, 8, 6, "or1")
                     break;
                 default:
                     break;

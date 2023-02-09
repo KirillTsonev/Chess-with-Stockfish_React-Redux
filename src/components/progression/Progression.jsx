@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import store from "../redux/store"
 import { useSelector } from "react-redux"
 import { useRef, useEffect, useState } from "react"
@@ -11,7 +12,6 @@ const Progression = () => {
     const [playerSeconds, setPlayerSeconds] = useState("00")
     const [opponentMinutes, setOpponentMinutes] = useState(time / 1000 / 60)
     const [opponentSeconds, setOpponentSeconds] = useState("00")
-    const [miliseconds, setMiliseconds] = useState(null)
 
     const moves = useSelector(state => state.moves)
     const moveNumbers = useSelector(state => state.moveNumbers)
