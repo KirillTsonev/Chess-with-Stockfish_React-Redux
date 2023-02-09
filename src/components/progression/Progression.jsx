@@ -14,19 +14,31 @@ const Progression = () => {
     const moves = useSelector(state => state.moves)
     const moveNumbers = useSelector(state => state.moveNumbers)
     const currentMove = useSelector(state => state.currentMove)
+    const toMove = useSelector(state => state.toMove)
+    const color = useSelector(state => state.color)
 
     const bottomRef = useRef(null)
+    const elapsedPlayer = useRef(1000)
+    const elapsedOpponent = useRef(1000)
 
     useEffect(() => {
         bottomRef.current?.scrollIntoView({
             behavior: "smooth"
-        });
-    }, [moves]);
+        })
+        // if (moves.length === 2) {
+        //     opponentTimer(Date.now() + 600000)
+        // }
+        if (moves.length === 2) {
+            playerTimer(600000)
+        }
+    }, [moves])
 
     useEffect(() => {
-        timer(Date.now() + 600000, setPlayerMinutes, setPlayerSeconds)
-        timer(Date.now() + 600000, setOpponentMinutes, setOpponentSeconds)
-    }, [])
+        if (moves.length > 2) {
+            playerTimer(600000)
+        }
+        // opponentTimer(Date.now() + 600000)
+    }, [toMove])
 
     const onMoveClick = (i) => {
         if (i + 1 === moves.length) {
@@ -42,7 +54,81 @@ const Progression = () => {
         }
     }
 
-    const timer = (deadline, setterMinutes, settterSeconds) => {
+    const playerTimer = (deadline) => {
+        function getTimeRemaining(endtime) {
+            let t
+            if ((color === "white" && store.getState().toMove === "w") || (color === "black" && store.getState().toMove === "b")) {
+                t = endtime - elapsedPlayer.current
+            } else if ((color === "white" && store.getState().toMove === "b") || (color === "black" && store.getState().toMove === "w")) {
+                t = endtime - elapsedOpponent.current
+            }
+            
+            const minutes = Math.floor((t / 1000 / 60) % 60)
+            const seconds = Math.floor((t / 1000) % 60)
+    
+            if (t <= 0) {
+                return {
+                    "total": 0,
+                    "minutes": 0,
+                    "seconds": 0,
+                }
+            } else {
+                return {
+                    "total": t,
+                    "minutes": minutes,
+                    "seconds": seconds,
+                }
+            }
+        }
+    
+        function getZero(num){
+            if (num >= 0 && num < 10) { 
+                return '0' + num
+            } else {
+                return num
+            }
+        }
+    
+        const timePlayerInterval = setInterval(updatePlayerClock, 1000)
+
+        function updatePlayerClock() {
+            const t = getTimeRemaining(deadline)
+
+            setPlayerMinutes(getZero(t.minutes))
+            setPlayerSeconds(getZero(t.seconds))
+
+            if ((color === "white" && store.getState().toMove === "w") || (color === "black" && store.getState().toMove === "b")) {
+                elapsedPlayer.current += 1000
+            }
+            
+            if (t.total <= 0 || (color === "white" && store.getState().toMove === "b") || (color === "black" && store.getState().toMove === "w")) {
+                clearInterval(timePlayerInterval)
+            }
+        }
+
+        const timeOpponentInterval = setInterval(updateOpponentClock, 1000)
+
+        function updateOpponentClock() {
+            
+            const t = getTimeRemaining(deadline)
+
+            setOpponentMinutes(getZero(t.minutes))
+            setOpponentSeconds(getZero(t.seconds))
+
+            if ((color === "white" && store.getState().toMove === "b") || (color === "black" && store.getState().toMove === "w")) {
+                elapsedOpponent.current += 1000
+            }
+            
+            if (t.total <= 0 || (color === "white" && store.getState().toMove === "w") || (color === "black" && store.getState().toMove === "b")) {
+                clearInterval(timeOpponentInterval)
+            }
+        }
+
+        updatePlayerClock()
+        updateOpponentClock()
+    }
+
+    const opponentTimer = (deadline) => {
         function getTimeRemaining(endtime) {
             const t = endtime - Date.now()
             const minutes = Math.floor((t / 1000 / 60) % 60)
@@ -79,8 +165,8 @@ const Progression = () => {
             function updateClock() {
                 const t = getTimeRemaining(endtime)
     
-                setterMinutes(getZero(t.minutes))
-                settterSeconds(getZero(t.seconds))
+                setOpponentMinutes(getZero(t.minutes))
+                setOpponentSeconds(getZero(t.seconds))
     
                 if (t.total <= 0) {
                     clearInterval(timeInterval)
@@ -95,7 +181,7 @@ const Progression = () => {
         return (
             <div className="progression">
                 <div className="progression__timer__container">
-                    <div>{playerMinutes} : {playerSeconds}</div>
+                    <div>{opponentMinutes} : {opponentSeconds}</div>
                 </div>
                 <div className="progression__moves__container">
                     <div className="progression__moves__numbers">
@@ -109,7 +195,7 @@ const Progression = () => {
                     </div>
                 </div>
                 <div className="progression__timer__container">
-                    <div>{opponentMinutes} : {opponentSeconds}</div>
+                    <div>{playerMinutes} : {playerSeconds}</div>
                 </div>
             </div>
         )

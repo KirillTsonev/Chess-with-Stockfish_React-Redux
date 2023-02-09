@@ -1,5 +1,4 @@
 const initialState = {
-    opponent: "",
     color: "white",
     time: "",
     difficulty: "",
@@ -117,10 +116,16 @@ const initialState = {
     moves: [],
     highlightMove: [],
     currentMove: null,
+    toMove: "w",
 }
 
 function boardReducer(state = initialState, action) {
     switch (action.type) {
+        case "toMove":
+            return {
+                ...state,
+                toMove: action.payload
+            }
         case "moveNumbers":
             return {
                 ...state,

@@ -50,6 +50,7 @@ const Board = () => {
     const moves = useSelector(state => state.moves)
     const currentMove = useSelector(state => state.currentMove)
     const highlightMove = useSelector(state => state.highlightMove)
+    const toMove = useSelector(state => state.toMove)
 
     let boardEntries = Object.entries(board)
 
@@ -151,7 +152,7 @@ const Board = () => {
         enemyHorseSafety()
     }
 
-    const toMove = useRef("w")
+    // const toMove = useRef("w")
 
     useEffect(() => {
         recordBoard()
@@ -201,10 +202,10 @@ const Board = () => {
     }, [JSON.stringify(board)])
 
     useEffect(() => {
-        if (((color === "white" && toMove.current === "b") || (color === "black" && toMove.current === "w")) && !sandbox) {
+        if (((color === "white" && toMove === "b") || (color === "black" && toMove === "w")) && !sandbox) {
             engineTurn()
         }
-    }, [toMove.current])
+    }, [toMove])
 
     let enPassantSquare = useRef([0, ""])
 
@@ -500,7 +501,7 @@ const Board = () => {
 
         let string = `position fen ${stringToSend} moves ${playerPiece.current}${playerNewSquareForEngine}`
 
-        // console.log(string)
+        console.log(string)
         stockfish.postMessage(string)
         // setTimeout(() => {
             stockfish.postMessage('go movetime 1000')
@@ -627,7 +628,7 @@ const Board = () => {
 
         let fenString = fenArrays.join("/")
 
-        fenString += ` ${toMove.current} `
+        fenString += ` ${toMove} `
 
         if (castlingPlayerMoved.pk && castlingPlayerMoved.pr1 && castlingPlayerMoved.pr2) {
                 if (color === "white") {
@@ -3253,16 +3254,22 @@ const Board = () => {
                 moveSound.play()
             }
 
-            if (color === "white" && toMove.current === "b" && sandbox) {
+            if (color === "white" && toMove === "b" && sandbox) {
                 store.dispatch({
                     type: "moveCounter"
                 })
             }
 
             if (color === "white") {
-                toMove.current = "w"
+                store.dispatch({
+                    type: "toMove",
+                    payload: "w"
+                })
             } else {
-                toMove.current = "b"
+                store.dispatch({
+                    type: "toMove",
+                    payload: "b"
+                })
             }
 
             if (/^pp/.test(enPassantSquare.current[1])) {
@@ -3426,14 +3433,20 @@ const Board = () => {
             }
 
             if (color === "white") {
-                toMove.current = "b"
+                store.dispatch({
+                    type: "toMove",
+                    payload: "b"
+                })
             } else {
-                toMove.current = "w"
+                store.dispatch({
+                    type: "toMove",
+                    payload: "w"
+                })
             }
 
             checkedByOpponentArr.current = []
 
-            if (color === "black" && toMove.current === "w") {
+            if (color === "black" && toMove === "w") {
                 store.dispatch({
                     type: "moveCounter"
                 })
@@ -3973,15 +3986,27 @@ const Board = () => {
 
         if (color === "white") {
             if (/^pr/.test(rookToMove)) {
-                toMove.current = "b"
+                store.dispatch({
+                    type: "toMove",
+                    payload: "b"
+                })
             } else {
-                toMove.current = "w"
+                store.dispatch({
+                    type: "toMove",
+                    payload: "w"
+                })
             }
         } else {
             if (/^or/.test(rookToMove)) {
-                toMove.current = "w"
+                store.dispatch({
+                    type: "toMove",
+                    payload: "w"
+                })
             } else {
-                toMove.current = "b"
+                store.dispatch({
+                    type: "toMove",
+                    payload: "b"
+                })
             }
         }
 
@@ -4093,17 +4118,30 @@ const Board = () => {
 
         setPieceSquare(null)
 
+
         if (color === "white") {
             if (/^pp/.test(string)) {
-                toMove.current = "b"
+                store.dispatch({
+                    type: "toMove",
+                    payload: "b"
+                })
             } else {
-                toMove.current = "w"
+                store.dispatch({
+                    type: "toMove",
+                    payload: "w"
+                })
             }
         } else {
             if (/^op/.test(string)) {
-                toMove.current = "w"
+                store.dispatch({
+                    type: "toMove",
+                    payload: "w"
+                })
             } else {
-                toMove.current = "b"
+                store.dispatch({
+                    type: "toMove",
+                    payload: "b"
+                })
             }
         }
         store.dispatch({
