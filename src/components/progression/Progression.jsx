@@ -19,8 +19,8 @@ const Progression = () => {
     const color = useSelector(state => state.color)
 
     const bottomRef = useRef(null)
-    const elapsedPlayer = useRef(1000)
-    const elapsedOpponent = useRef(1000)
+    const elapsedPlayer = useRef(0)
+    const elapsedOpponent = useRef(0)
 
     useEffect(() => {
         bottomRef.current?.scrollIntoView({
