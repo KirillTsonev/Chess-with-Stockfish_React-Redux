@@ -6,16 +6,15 @@ import { useRef, useEffect, useState } from "react"
 import "./progression.sass"
 
 const Progression = () => {
-    const time = useSelector(state => state.time)
-
-    const [playerMinutes, setPlayerMinutes] = useState(time / 1000 / 60)
+    const [playerMinutes, setPlayerMinutes] = useState(0)
     const [playerSeconds, setPlayerSeconds] = useState("00")
-    const [opponentMinutes, setOpponentMinutes] = useState(time / 1000 / 60)
+    const [opponentMinutes, setOpponentMinutes] = useState(0)
     const [opponentSeconds, setOpponentSeconds] = useState("00")
 
     const moves = useSelector(state => state.moves)
     const moveNumbers = useSelector(state => state.moveNumbers)
     const currentMove = useSelector(state => state.currentMove)
+    const time = useSelector(state => state.time)
     const color = useSelector(state => state.color)
     const notationArr = useSelector(state => state.notationArr)
 
@@ -28,9 +27,23 @@ const Progression = () => {
             behavior: "smooth"
         })
         if (moves.length > 1) {
-            playerTimer(600000)
+            playerTimer(time)
         }
     }, [moves])
+
+    useEffect(() => {
+        let startingTime = time / 1000 / 60
+        setPlayerMinutes(getZero(startingTime))
+        setOpponentMinutes(getZero(startingTime))
+    }, []);
+
+    function getZero(num){
+        if (num >= 0 && num < 10) { 
+            return '0' + num
+        } else {
+            return num
+        }
+    }
 
     const onMoveClick = (i) => {
         if (i + 1 === moves.length) {
@@ -63,14 +76,6 @@ const Progression = () => {
                     "minutes": minutes,
                     "seconds": seconds,
                 }
-            }
-        }
-    
-        function getZero(num){
-            if (num >= 0 && num < 10) { 
-                return '0' + num
-            } else {
-                return num
             }
         }
     

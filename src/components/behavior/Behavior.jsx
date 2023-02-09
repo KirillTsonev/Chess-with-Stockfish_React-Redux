@@ -6,6 +6,7 @@ import "./behavior.sass"
 const Behavior = () => {
     const numbers = useSelector(state => state.numbers)
     const animations = useSelector(state => state.animations)
+    const coordinates = useSelector(state => state.coordinates)
 
     const onNumbersChoice = (boolean) => {
         store.dispatch({
@@ -18,6 +19,13 @@ const Behavior = () => {
         store.dispatch({
             type: "behavior/animationSpeed",
             payload: speed
+        })
+    }
+
+    const onCoordinatesChoice = (boolean) => {
+        store.dispatch({
+            type: "behavior/coordinates",
+            payload: boolean
         })
     }
 
@@ -38,6 +46,11 @@ const Behavior = () => {
                     <div className={`behavior__option ${animations === "average" ? "activeOption" : null}`} onClick={() => onAnimationChoice("average")}>Normal</div>
                     <div className={`behavior__option ${animations === "none" ? "activeOption" : null}`} onClick={() => onAnimationChoice("none")}>None</div>
                 </div>
+            </div>
+            <div className="behavior__container">
+                <div className="behavior__body">Coordinates:</div>
+                <div className={`behavior__option ${coordinates ? "activeOption" : null}`}  onClick={() => onCoordinatesChoice(true)}>On</div>
+                <div className={`behavior__option ${!coordinates ? "activeOption" : null}`} onClick={() => onCoordinatesChoice(false)}>Off</div>
             </div>
         </div>
     )

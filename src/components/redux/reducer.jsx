@@ -118,10 +118,16 @@ const initialState = {
     currentMove: null,
     toMove: "w",
     notationArr: [],
+    coordinates: true,
 }
 
 function boardReducer(state = initialState, action) {
     switch (action.type) {
+        case "behavior/coordinates":
+            return {
+                ...state,
+                coordinates: action.payload
+            }
         case "notationArr":
             return {
                 ...state,
