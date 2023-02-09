@@ -1,6 +1,6 @@
 const initialState = {
     color: "white",
-    time: "",
+    time: 600000,
     difficulty: "",
     options: false,
     animations: "fast",

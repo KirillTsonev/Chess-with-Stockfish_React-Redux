@@ -5,16 +5,17 @@ import { useRef, useEffect, useState } from "react"
 import "./progression.sass"
 
 const Progression = () => {
-    const [playerMinutes, setPlayerMinutes] = useState(null)
-    const [playerSeconds, setPlayerSeconds] = useState(null)
-    const [opponentMinutes, setOpponentMinutes] = useState(null)
-    const [opponentSeconds, setOpponentSeconds] = useState(null)
+    const time = useSelector(state => state.time)
+
+    const [playerMinutes, setPlayerMinutes] = useState(time / 1000 / 60)
+    const [playerSeconds, setPlayerSeconds] = useState("00")
+    const [opponentMinutes, setOpponentMinutes] = useState(time / 1000 / 60)
+    const [opponentSeconds, setOpponentSeconds] = useState("00")
     const [miliseconds, setMiliseconds] = useState(null)
 
     const moves = useSelector(state => state.moves)
     const moveNumbers = useSelector(state => state.moveNumbers)
     const currentMove = useSelector(state => state.currentMove)
-    const toMove = useSelector(state => state.toMove)
     const color = useSelector(state => state.color)
 
     const bottomRef = useRef(null)
@@ -78,7 +79,7 @@ const Progression = () => {
             }
         }
     
-        const timePlayerInterval = setInterval(updatePlayerClock, 1000)
+        const timePlayerInterval = setInterval(updatePlayerClock, 100)
 
         function updatePlayerClock() {
             const tPlayer = getTimeRemaining(deadline, elapsedPlayer.current)
@@ -88,7 +89,7 @@ const Progression = () => {
             setPlayerSeconds(getZero(tPlayer.seconds))
 
             if ((color === "white" && store.getState().toMove === "w") || (color === "black" && store.getState().toMove === "b")) {
-                elapsedPlayer.current += 1000
+                elapsedPlayer.current += 100
             }
             
             if (tPlayer.total <= 0 || (color === "white" && store.getState().toMove === "b") || (color === "black" && store.getState().toMove === "w")) {
@@ -96,7 +97,7 @@ const Progression = () => {
             }
         }
 
-        const timeOpponentInterval = setInterval(updateOpponentClock, 1000)
+        const timeOpponentInterval = setInterval(updateOpponentClock, 100)
 
         function updateOpponentClock() {
             
@@ -106,7 +107,7 @@ const Progression = () => {
             setOpponentSeconds(getZero(tOpponent.seconds))
 
             if ((color === "white" && store.getState().toMove === "b") || (color === "black" && store.getState().toMove === "w")) {
-                elapsedOpponent.current += 1000
+                elapsedOpponent.current += 100
             }
             
             if (tOpponent.total <= 0 || (color === "white" && store.getState().toMove === "w") || (color === "black" && store.getState().toMove === "b")) {
