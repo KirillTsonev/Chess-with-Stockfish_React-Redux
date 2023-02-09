@@ -2409,7 +2409,7 @@ const Board = () => {
             setPieceSquare(null)
         }
         
-        if (occupiedSquaresRender.includes(i) && activePiece !== piece) {
+        if (occupiedSquaresRender.includes(i) && activePiece !== piece && !currentMove) {
             if (((color === "white" && toMove === "w") || (color === "black" && toMove === "b")) && playerSquaresRender.includes(i)) {
                 setMoveSquares([])
 
