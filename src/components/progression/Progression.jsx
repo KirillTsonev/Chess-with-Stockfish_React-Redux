@@ -31,12 +31,6 @@ const Progression = () => {
         }
     }, [moves])
 
-    // useEffect(() => {
-    //     if (moves.length > 2) {
-    //         playerTimer(600000)
-    //     }
-    // }, [toMove])
-
     const onMoveClick = (i) => {
         if (i + 1 === moves.length) {
             store.dispatch({
@@ -84,7 +78,6 @@ const Progression = () => {
         function updatePlayerClock() {
             const tPlayer = getTimeRemaining(deadline, elapsedPlayer.current)
             
-
             setPlayerMinutes(getZero(tPlayer.minutes))
             setPlayerSeconds(getZero(tPlayer.seconds))
 
@@ -100,7 +93,6 @@ const Progression = () => {
         const timeOpponentInterval = setInterval(updateOpponentClock, 100)
 
         function updateOpponentClock() {
-            
             const tOpponent = getTimeRemaining(deadline, elapsedOpponent.current)
 
             setOpponentMinutes(getZero(tOpponent.minutes))

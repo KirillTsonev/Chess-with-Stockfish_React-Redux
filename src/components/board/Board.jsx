@@ -1402,8 +1402,8 @@ const Board = () => {
         }
 
         if (/^pb/.test(pieceToPromoteTo)) {
-            checkArrays(blackBishopMoves, i, checkedByPlayerArr.current, playerSquaresLive, enemySquaresLive, true, true)
-            checkArrays(whiteBishopMoves, i, checkedByPlayerArr.current, playerSquaresLive, enemySquaresLive, true, true)
+            checkArrays(blackBishopMoves, i + 1, checkedByPlayerArr.current, playerSquaresLive, enemySquaresLive, true, true)
+            checkArrays(whiteBishopMoves, i + 1, checkedByPlayerArr.current, playerSquaresLive, enemySquaresLive, true, true)
 
             if (checkedByPlayerArr.current.includes(enemyKing)) {
                 checkingPiece.current = i + 1
@@ -1430,9 +1430,9 @@ const Board = () => {
         }
 
         if (/^pq/.test(pieceToPromoteTo)) {
-            checkArrays(rookMoves, i, checkedByPlayerArr.current, playerSquaresLive, enemySquaresLive, true, true)
-            checkArrays(blackBishopMoves, i, checkedByPlayerArr.current, playerSquaresLive, enemySquaresLive, true, true)
-            checkArrays(whiteBishopMoves, i, checkedByPlayerArr.current, playerSquaresLive, enemySquaresLive, true, true)
+            checkArrays(rookMoves, i + 1, checkedByPlayerArr.current, playerSquaresLive, enemySquaresLive, true, true)
+            checkArrays(blackBishopMoves, i + 1, checkedByPlayerArr.current, playerSquaresLive, enemySquaresLive, true, true)
+            checkArrays(whiteBishopMoves, i + 1, checkedByPlayerArr.current, playerSquaresLive, enemySquaresLive, true, true)
             
             if (checkedByPlayerArr.current.includes(enemyKing)) {
                 checkingPiece.current = i + 1
@@ -2386,7 +2386,7 @@ const Board = () => {
             || !activeStatePiece) 
             && (occupiedSquaresRender.includes(i) && activeStatePiece !== piece)) && !currentMove) {
             setMoveSquares([])
-            setPieceSquare(i)
+            
             setActiveStatePiece(piece)
 
             pieceSquareForEngine.current = i
@@ -2406,123 +2406,131 @@ const Board = () => {
                 })
             }
 
-            if (/^ph/.test(piece)) {   
-                let arr = []
-                recordKnightMoves(i, arr, playerSquaresRender)
-                setMoveSquares(arr)
-            }
+            if ((color === "white" && toMove === "w") || (color === "black" && toMove === "b")) {
+                setPieceSquare(i)
 
-            if (/^pp/.test(piece)) {
-                let arr = []
-                recordPlayerPawnMoves(i, piece, arr)
-                setMoveSquares(arr)
-            }
-
-            if (/^pr/.test(piece)) {
-                let arr = []
-                checkArrays(rookMoves, i, arr, playerSquaresRender, enemySquaresRender, true, true)
-                if (playerKingAttacked && playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
-                    let arrTech = playerKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
-                    arr = arr.filter(a => arrTech.includes(a))
-                } else if (playerKingAttacked && !playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
-                    arr = arr.filter(a => a === checkingPiece.current)
+                if (/^ph/.test(piece)) {   
+                    let arr = []
+                    recordKnightMoves(i, arr, playerSquaresRender)
+                    setMoveSquares(arr)
                 }
-                setMoveSquares(arr)
-            }
-
-            if (/^pb/.test(piece)) {
-                let arr = []
-                checkArrays(blackBishopMoves, i, arr, playerSquaresRender, enemySquaresRender, true, true)
-                checkArrays(whiteBishopMoves, i, arr, playerSquaresRender, enemySquaresRender, true, true)
-                if (playerKingAttacked && playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
-                    let arrTech = playerKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
-                    arr = arr.filter(a => arrTech.includes(a))
-                } else if (playerKingAttacked && !playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
-                    arr = arr.filter(a => a === checkingPiece.current)
+    
+                if (/^pp/.test(piece)) {
+                    let arr = []
+                    recordPlayerPawnMoves(i, piece, arr)
+                    setMoveSquares(arr)
                 }
-                setMoveSquares(arr)
-            }
-
-            if (/^pq/.test(piece)) {
-                let arr = []
-                checkArrays(rookMoves, i, arr, playerSquaresRender, enemySquaresRender, true, true)
-                checkArrays(blackBishopMoves, i, arr, playerSquaresRender, enemySquaresRender, true, true)
-                checkArrays(whiteBishopMoves, i, arr, playerSquaresRender, enemySquaresRender, true, true)
-                if (playerKingAttacked && playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
-                    let arrTech = playerKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
-                    arr = arr.filter(a => arrTech.includes(a))
-                } else if (playerKingAttacked && !playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
-                    arr = arr.filter(a => a === checkingPiece.current)
+    
+                if (/^pr/.test(piece)) {
+                    let arr = []
+                    checkArrays(rookMoves, i, arr, playerSquaresRender, enemySquaresRender, true, true)
+                    if (playerKingAttacked && playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
+                        let arrTech = playerKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
+                        arr = arr.filter(a => arrTech.includes(a))
+                    } else if (playerKingAttacked && !playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
+                        arr = arr.filter(a => a === checkingPiece.current)
+                    }
+                    setMoveSquares(arr)
                 }
-                setMoveSquares(arr)
-            }
-
-            if (/^pk/.test(piece)) {
-                attackedByOpponent()
-                let arr = []
-                recordPlayerKingMoves(i, arr)
-                setMoveSquares(arr)
-            }
-
-            if (/^oh/.test(piece)) {   
-                let arr = []
-                recordKnightMoves(i, arr, enemySquaresRender)
-                setMoveSquares(arr)
-            }
-
-            if (/^op/.test(piece)) {
-                let arr = []
-                recordOpponentPawnMoves(i, piece, arr)
-                setMoveSquares(arr)
-            }
-
-            if (/^or/.test(piece)) {
-                let arr = []
-                checkArrays(rookMoves, i, arr, enemySquaresRender, playerSquaresRender, true, true)
-                if (enemyKingAttacked && enemyKing8StarArr.current.flat().includes(checkingPiece.current)) {
-                    let arrTech = enemyKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
-                    arr = arr.filter(a => arrTech.includes(a))
-                } else if (enemyKingAttacked && !enemyKing8StarArr.current.flat().includes(checkingPiece.current)) {
-                    arr = arr.filter(a => a === checkingPiece.current)
+    
+                if (/^pb/.test(piece)) {
+                    let arr = []
+                    checkArrays(blackBishopMoves, i, arr, playerSquaresRender, enemySquaresRender, true, true)
+                    checkArrays(whiteBishopMoves, i, arr, playerSquaresRender, enemySquaresRender, true, true)
+                    if (playerKingAttacked && playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
+                        let arrTech = playerKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
+                        arr = arr.filter(a => arrTech.includes(a))
+                    } else if (playerKingAttacked && !playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
+                        arr = arr.filter(a => a === checkingPiece.current)
+                    }
+                    setMoveSquares(arr)
                 }
-                setMoveSquares(arr)
-            }
-
-            if (/^ob/.test(piece)) {
-                let arr = []
-                checkArrays(whiteBishopMoves, i, arr, enemySquaresRender, playerSquaresRender, true, true)
-                checkArrays(blackBishopMoves, i, arr, enemySquaresRender, playerSquaresRender, true, true)
-                if (enemyKingAttacked && enemyKing8StarArr.current.flat().includes(checkingPiece.current)) {
-                    let arrTech = enemyKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
-                    arr = arr.filter(a => arrTech.includes(a))
-                } else if (enemyKingAttacked && !enemyKing8StarArr.current.flat().includes(checkingPiece.current)) {
-                    arr = arr.filter(a => a === checkingPiece.current)
+    
+                if (/^pq/.test(piece)) {
+                    let arr = []
+                    checkArrays(rookMoves, i, arr, playerSquaresRender, enemySquaresRender, true, true)
+                    checkArrays(blackBishopMoves, i, arr, playerSquaresRender, enemySquaresRender, true, true)
+                    checkArrays(whiteBishopMoves, i, arr, playerSquaresRender, enemySquaresRender, true, true)
+                    if (playerKingAttacked && playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
+                        let arrTech = playerKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
+                        arr = arr.filter(a => arrTech.includes(a))
+                    } else if (playerKingAttacked && !playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
+                        arr = arr.filter(a => a === checkingPiece.current)
+                    }
+                    setMoveSquares(arr)
                 }
-                setMoveSquares(arr)
-            }
-
-            if (/^oq/.test(piece)) {
-                let arr = []
-
-                checkArrays(rookMoves, i, arr, enemySquaresRender, playerSquaresRender, true, true)
-                checkArrays(blackBishopMoves, i, arr, enemySquaresRender, playerSquaresRender, true, true)
-                checkArrays(whiteBishopMoves, i, arr, enemySquaresRender, playerSquaresRender, true, true)
-                if (enemyKingAttacked && enemyKing8StarArr.current.flat().includes(checkingPiece.current)) {
-                    let arrTech = enemyKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
-                    arr = arr.filter(a => arrTech.includes(a))
-                } else if (enemyKingAttacked && !enemyKing8StarArr.current.flat().includes(checkingPiece.current)) {
-                    arr = arr.filter(a => a === checkingPiece.current)
+    
+                if (/^pk/.test(piece)) {
+                    attackedByOpponent()
+                    let arr = []
+                    recordPlayerKingMoves(i, arr)
+                    setMoveSquares(arr)
                 }
+            } else {
+                setPieceSquare(i)
 
-                setMoveSquares(arr)
+                if (/^oh/.test(piece)) {   
+                    let arr = []
+                    recordKnightMoves(i, arr, enemySquaresRender)
+                    setMoveSquares(arr)
+                }
+    
+                if (/^op/.test(piece)) {
+                    let arr = []
+                    recordOpponentPawnMoves(i, piece, arr)
+                    setMoveSquares(arr)
+                }
+    
+                if (/^or/.test(piece)) {
+                    let arr = []
+                    checkArrays(rookMoves, i, arr, enemySquaresRender, playerSquaresRender, true, true)
+                    if (enemyKingAttacked && enemyKing8StarArr.current.flat().includes(checkingPiece.current)) {
+                        let arrTech = enemyKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
+                        arr = arr.filter(a => arrTech.includes(a))
+                    } else if (enemyKingAttacked && !enemyKing8StarArr.current.flat().includes(checkingPiece.current)) {
+                        arr = arr.filter(a => a === checkingPiece.current)
+                    }
+                    setMoveSquares(arr)
+                }
+    
+                if (/^ob/.test(piece)) {
+                    let arr = []
+                    checkArrays(whiteBishopMoves, i, arr, enemySquaresRender, playerSquaresRender, true, true)
+                    checkArrays(blackBishopMoves, i, arr, enemySquaresRender, playerSquaresRender, true, true)
+                    if (enemyKingAttacked && enemyKing8StarArr.current.flat().includes(checkingPiece.current)) {
+                        let arrTech = enemyKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
+                        arr = arr.filter(a => arrTech.includes(a))
+                    } else if (enemyKingAttacked && !enemyKing8StarArr.current.flat().includes(checkingPiece.current)) {
+                        arr = arr.filter(a => a === checkingPiece.current)
+                    }
+                    setMoveSquares(arr)
+                }
+    
+                if (/^oq/.test(piece)) {
+                    let arr = []
+    
+                    checkArrays(rookMoves, i, arr, enemySquaresRender, playerSquaresRender, true, true)
+                    checkArrays(blackBishopMoves, i, arr, enemySquaresRender, playerSquaresRender, true, true)
+                    checkArrays(whiteBishopMoves, i, arr, enemySquaresRender, playerSquaresRender, true, true)
+                    if (enemyKingAttacked && enemyKing8StarArr.current.flat().includes(checkingPiece.current)) {
+                        let arrTech = enemyKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
+                        arr = arr.filter(a => arrTech.includes(a))
+                    } else if (enemyKingAttacked && !enemyKing8StarArr.current.flat().includes(checkingPiece.current)) {
+                        arr = arr.filter(a => a === checkingPiece.current)
+                    }
+    
+                    setMoveSquares(arr)
+                }
+    
+                if (/^ok/.test(piece)) {
+                    attackedByPlayer()  
+                    let arr = []
+                    recordEnemyKingMoves(i, arr)
+                    setMoveSquares(arr)
+                }
             }
 
-            if (/^ok/.test(piece)) {
-                attackedByPlayer()  
-                let arr = []
-                recordEnemyKingMoves(i, arr)
-                setMoveSquares(arr)
-            }
+            
         }
 
         if (/^ph/.test(activePiece) && moveSquares.includes(i)) {
