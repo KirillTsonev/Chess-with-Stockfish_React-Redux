@@ -3150,6 +3150,48 @@ const Board = () => {
                     type: "halfMoveCounter/reset",
                 })
 
+                if (/^op/.test(string)) {
+                    store.dispatch({
+                        type: "notationArr",
+                        payload: `${board[string][1].slice(0, 1)}x${playerNewSquareForEngine.current}`
+                    })
+                }
+
+                if (/^oh/.test(string)) {
+                    store.dispatch({
+                        type: "notationArr",
+                        payload: `♘x${playerNewSquareForEngine.current}`
+                    })
+                }
+
+                if (/^ob/.test(string)) {
+                    store.dispatch({
+                        type: "notationArr",
+                        payload: `♗x${playerNewSquareForEngine.current}`
+                    })
+                }
+
+                if (/^or/.test(string)) {
+                    store.dispatch({
+                        type: "notationArr",
+                        payload: `♖x${playerNewSquareForEngine.current}`
+                    })
+                }
+
+                if (/^oq/.test(string)) {
+                    store.dispatch({
+                        type: "notationArr",
+                        payload: `♕x${playerNewSquareForEngine.current}`
+                    })
+                }
+
+                if (/^ok/.test(string)) {
+                    store.dispatch({
+                        type: "notationArr",
+                        payload: `♔x${playerNewSquareForEngine.current}`
+                    })
+                }
+
                 if (/^op/.test(string) && rookMoves[7].includes(i) && sandbox) {
                     setPawnPromotes(string)
                 }
@@ -3211,6 +3253,48 @@ const Board = () => {
 
                 captureSound.play()
             } else {
+                if (/^op/.test(string)) {
+                    store.dispatch({
+                        type: "notationArr",
+                        payload: playerNewSquareForEngine.current
+                    })
+                }
+
+                if (/^oh/.test(string)) {
+                    store.dispatch({
+                        type: "notationArr",
+                        payload: `♘${playerNewSquareForEngine.current}`
+                    })
+                }
+
+                if (/^ob/.test(string)) {
+                    store.dispatch({
+                        type: "notationArr",
+                        payload: `♗${playerNewSquareForEngine.current}`
+                    })
+                }
+
+                if (/^or/.test(string)) {
+                    store.dispatch({
+                        type: "notationArr",
+                        payload: `♖${playerNewSquareForEngine.current}`
+                    })
+                }
+
+                if (/^oq/.test(string)) {
+                    store.dispatch({
+                        type: "notationArr",
+                        payload: `♕${playerNewSquareForEngine.current}`
+                    })
+                }
+
+                if (/^ok/.test(string)) {
+                    store.dispatch({
+                        type: "notationArr",
+                        payload: `♔${playerNewSquareForEngine.current}`
+                    })
+                }
+
                 if (/^ok/.test(string) && enemyKingAttacked) {
                     moveSound.play()
                     store.dispatch({
@@ -3327,6 +3411,48 @@ const Board = () => {
                     type: "halfMoveCounter/reset",
                 })
 
+                if (/^pp/.test(string)) {
+                    store.dispatch({
+                        type: "notationArr",
+                        payload: `${board[string][1].slice(0, 1)}x${playerNewSquareForEngine.current}`
+                    })
+                }
+
+                if (/^ph/.test(string)) {
+                    store.dispatch({
+                        type: "notationArr",
+                        payload: `♘x${playerNewSquareForEngine.current}`
+                    })
+                }
+
+                if (/^pb/.test(string)) {
+                    store.dispatch({
+                        type: "notationArr",
+                        payload: `♗x${playerNewSquareForEngine.current}`
+                    })
+                }
+
+                if (/^pr/.test(string)) {
+                    store.dispatch({
+                        type: "notationArr",
+                        payload: `♖x${playerNewSquareForEngine.current}`
+                    })
+                }
+
+                if (/^pq/.test(string)) {
+                    store.dispatch({
+                        type: "notationArr",
+                        payload: `♕x${playerNewSquareForEngine.current}`
+                    })
+                }
+
+                if (/^pk/.test(string)) {
+                    store.dispatch({
+                        type: "notationArr",
+                        payload: `♔x${playerNewSquareForEngine.current}`
+                    })
+                }
+
                 if (playerKingAttacked) {
                     captureSound.play()
                     store.dispatch({
@@ -3392,6 +3518,48 @@ const Board = () => {
 
                 captureSound.play()
             } else {
+                if (/^pp/.test(string)) {
+                    store.dispatch({
+                        type: "notationArr",
+                        payload: playerNewSquareForEngine.current
+                    })
+                }
+
+                if (/^ph/.test(string)) {
+                    store.dispatch({
+                        type: "notationArr",
+                        payload: `♘${playerNewSquareForEngine.current}`
+                    })
+                }
+
+                if (/^pb/.test(string)) {
+                    store.dispatch({
+                        type: "notationArr",
+                        payload: `♗${playerNewSquareForEngine.current}`
+                    })
+                }
+
+                if (/^pr/.test(string)) {
+                    store.dispatch({
+                        type: "notationArr",
+                        payload: `♖${playerNewSquareForEngine.current}`
+                    })
+                }
+
+                if (/^pq/.test(string)) {
+                    store.dispatch({
+                        type: "notationArr",
+                        payload: `♕${playerNewSquareForEngine.current}`
+                    })
+                }
+
+                if (/^pk/.test(string)) {
+                    store.dispatch({
+                        type: "notationArr",
+                        payload: `♔${playerNewSquareForEngine.current}`
+                    })
+                }
+
                 if (/^pp/.test(string) && rookMoves[0].includes(i)) {
                     setPawnPromotes(string)
                 }
@@ -3511,8 +3679,6 @@ const Board = () => {
             type: "recordMoves",
             payload: store.getState().board
         })
-
-        
     }  
 
     const moveKnight = (i, string) => {
@@ -3989,6 +4155,8 @@ const Board = () => {
             enemyRook2 = newSqRook
         }
 
+
+
         playerRooks = [playerRook1, playerRook2, playerRook3, playerRook4, playerRook5, playerRook6, playerRook7, playerRook8, playerRook9, playerRook01]
         enemyRooks = [enemyRook1, enemyRook2, enemyRook3, enemyRook4, enemyRook5, enemyRook6, enemyRook7, enemyRook8, enemyRook9, enemyRook01]
 
@@ -4108,6 +4276,11 @@ const Board = () => {
             store.dispatch({
                 type: "moveNumbers"
             })
+
+            store.dispatch({
+                type: "notationArr",
+                payload: `${board[string][1].slice(0, 1)}x${playerNewSquareForEngine.current}`
+            })
             
             if ((playerQueens.some(a => enemyKingSpiderSenseArr.current[0].includes(a)) 
                 || playerBishops.some(a => enemyKingSpiderSenseArr.current[0].includes(a)))
@@ -4199,24 +4372,40 @@ const Board = () => {
             switch (pieceSquareForEngine.current - i) {
                 case -2:
                     animateCastling(-160, 0, 64, 62, "pr2")
-                    break;
+                    store.dispatch({
+                        type: "notationArr",
+                        payload: "O-O"
+                    })
+                    break
                 case 2:
                     animateCastling(160, 0, 57, 60, "pr1")
-                    break;
+                    store.dispatch({
+                        type: "notationArr",
+                        payload: "O-O-O"
+                    })
+                    break
                 default:
-                    break;
+                    break
             }
         }
         if (/^ok/.test(string)) {
             switch (pieceSquareForEngine.current - i) {
                 case 2:
                     animateCastling(160, 0, 1, 4, "or2")
-                    break;
+                    store.dispatch({
+                        type: "notationArr",
+                        payload: "O-O-O"
+                    })
+                    break
                 case -2:
                     animateCastling(-160, 0, 8, 6, "or1")
-                    break;
+                    store.dispatch({
+                        type: "notationArr",
+                        payload: "O-O"
+                    })
+                    break
                 default:
-                    break;
+                    break
             }
         }
         switch (pieceSquareForEngine.current - i) {

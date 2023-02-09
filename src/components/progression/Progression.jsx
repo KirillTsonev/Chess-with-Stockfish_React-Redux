@@ -17,6 +17,7 @@ const Progression = () => {
     const moveNumbers = useSelector(state => state.moveNumbers)
     const currentMove = useSelector(state => state.currentMove)
     const color = useSelector(state => state.color)
+    const notationArr = useSelector(state => state.notationArr)
 
     const bottomRef = useRef(null)
     const elapsedPlayer = useRef(0)
@@ -125,7 +126,7 @@ const Progression = () => {
                         {moves.slice(1).map((a, i) => 
                             <div className={`${(i === currentMove - 1) || (i + 2 === moves.length && !currentMove) ? "activeMove" : null} progression__moves__grid-item`} 
                                 onClick={() => onMoveClick(i + 1)}
-                                ref={(i + 2 === moves.length && !currentMove) ? bottomRef : null}>{i + 1}</div>)}
+                                ref={(i + 2 === moves.length && !currentMove) ? bottomRef : null}>{notationArr[i]}</div>)}
                     </div>
                 </div>
                 <div className="progression__timer__container">
