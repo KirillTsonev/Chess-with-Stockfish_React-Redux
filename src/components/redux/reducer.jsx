@@ -117,10 +117,16 @@ const initialState = {
     highlightMove: [],
     currentMove: null,
     toMove: "w",
+    notationArr: [],
 }
 
 function boardReducer(state = initialState, action) {
     switch (action.type) {
+        case "notationArr":
+            return {
+                ...state,
+                notationArr: [...state.notationArr, action.payload]
+            }
         case "toMove":
             return {
                 ...state,

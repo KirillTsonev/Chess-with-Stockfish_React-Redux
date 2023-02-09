@@ -28,7 +28,7 @@ import { useState, useEffect, useRef } from "react"
 import "./board.sass"
 
 const Board = () => {
-    const [activeStatePiece, setActiveStatePiece] = useState("")
+    // const [activeStatePiece, setActiveStatePiece] = useState("")
     const [moveSquares, setMoveSquares] = useState([])
     const [pieceSquare, setPieceSquare] = useState(null)
     const [moveVar, setMoveVar] = useState([0, 0]) 
@@ -101,7 +101,6 @@ const Board = () => {
         playerSquaresLive =  Object.values(justPlayerLive).map(a => a = a[0])
         occupiedSquaresLive = Object.values(justOccupiedLive).map(a => a = a[0])
 
-        playerNewSquareForEngine = boardEntries.filter(([key, value]) => value[0] === pieceSquareForEngine.current).flat()[1][1]
 
         encode()
 
@@ -175,7 +174,10 @@ const Board = () => {
     useEffect(() => {
         if (notInitialRender.current) {
             const movePiece = setTimeout(() => {
-                setActiveStatePiece("")
+                store.dispatch({
+                    type: "activePiece",
+                    payload: ""
+                })
                 setMoveVar([0, 0])
             }, store.getState().animations === "none" ? 0 : 50)
             const resetPiece = setTimeout(() => {
@@ -207,9 +209,10 @@ const Board = () => {
         }
     }, [toMove])
 
-    let enPassantSquare = useRef([0, ""])
+    const enPassantSquare = useRef([0, ""])
 
-    let pieceSquareForEngine = useRef(1)
+    const pieceSquareForEngine = useRef(1)
+    const pieceNewSquare = useRef(1)
 
     const notInitialRender = useRef(false)
 
@@ -229,15 +232,16 @@ const Board = () => {
             const enginePieceSquare = boardEntries.filter(([key, value]) => value[1] === engineOldSquare).flat()[1][0]
             const engineWhereToMove = boardEntries.filter(([key, value]) => value[1] === engineNewSquare).flat()[1][0]
 
-            setActiveStatePiece(enginePieceToMove)
+            store.dispatch({
+                type: "activePiece",
+                payload: enginePieceToMove
+            })
 
             store.dispatch({
                 type: "oldSquare",
                 payload: enginePieceSquare
             })
-
-
-
+            
             // console.log(engineOldSquare)
             // console.log(engineNewSquare)
             // console.log(enginePieceToMove)
@@ -494,12 +498,12 @@ const Board = () => {
     });
 
     let playerPiece = useRef(null)
-    let playerNewSquareForEngine
+    let playerNewSquareForEngine = useRef(null)
 
     const engineTurn = () => {
         
 
-        let string = `position fen ${stringToSend} moves ${playerPiece.current}${playerNewSquareForEngine}`
+        let string = `position fen ${stringToSend} moves ${playerPiece.current}${playerNewSquareForEngine.current}`
 
         console.log(string)
         stockfish.postMessage(string)
@@ -1470,7 +1474,7 @@ const Board = () => {
                         key={a}
                         alt={alt1}
                         className="piece"
-                        style={activeStatePiece === `${piece}`
+                        style={activePiece === `${piece}`
                             ?
                             {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
                             :
@@ -1481,7 +1485,7 @@ const Board = () => {
                         key={a}
                         alt={alt2}
                         className="piece"
-                        style={activeStatePiece === `${piece}`
+                        style={activePiece === `${piece}`
                             ?
                             {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
                             :
@@ -1496,7 +1500,7 @@ const Board = () => {
                     key={a}
                     alt={alt}
                     className={`${(/^ok/.test(piece) && enemyKingAttacked) || (/^pk/.test(piece) && playerKingAttacked) ? "kingInCheck" : null} piece`}
-                    style={activeStatePiece === `${piece}`
+                    style={activePiece === `${piece}`
                         ?
                         {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
                         :
@@ -2374,34 +2378,47 @@ const Board = () => {
 
     function onSquareClick(i, piece) {
         checkGameEnd()
-        if (!moveSquares.includes(i) || (playerSquaresRender.includes(i) && activeStatePiece === piece)){
+        
+        if (((!moveSquares.includes(i) && moveSquares.length > 0) || activePiece === piece) && 
+            ((((color === "white" && toMove === "b") || (color === "black" && toMove === "w")) && !playerSquaresRender.includes(i)) ||
+            (((color === "white" && toMove === "w") || (color === "black" && toMove === "b")) && !enemySquaresRender.includes(i)))){
             setMoveSquares([])
-            setActiveStatePiece("")
+            store.dispatch({
+                type: "activePiece",
+                payload: ""
+            })
             setPieceSquare(null)
+            console.log("asd")
         }
         
-        if (occupiedSquaresRender.includes(i) && activeStatePiece !== piece) {
-            setMoveSquares([])
-            setActiveStatePiece(piece)
-
-            pieceSquareForEngine.current = i
-            playerPiece.current = boardEntries.filter(([key, value]) => value[0] === pieceSquareForEngine.current).flat()[1][1]
+        if (occupiedSquaresRender.includes(i) && activePiece !== piece) {
             
-            if (store.getState().activePiece !== piece) {
+
+
+            if (((color === "white" && toMove === "w") || (color === "black" && toMove === "b")) && playerSquaresRender.includes(i)) {
+                setMoveSquares([])
+
+                // if (store.getState().activePiece !== piece) {
+                //     store.dispatch({
+                //         type: "activePiece",
+                //         payload: piece
+                //     })
+                // }
+    
+                if (store.getState().oldSquare !== i) {
+                    store.dispatch({
+                        type: "oldSquare",
+                        payload: i
+                    })
+                }
+
                 store.dispatch({
                     type: "activePiece",
                     payload: piece
                 })
-            }
 
-            if (store.getState().oldSquare !== i) {
-                store.dispatch({
-                    type: "oldSquare",
-                    payload: i
-                })
-            }
-
-            if (((color === "white" && toMove === "w") || (color === "black" && toMove === "b")) && playerSquaresRender.includes(i)) {
+                pieceSquareForEngine.current = i
+                playerPiece.current = boardEntries.filter(([key, value]) => value[0] === pieceSquareForEngine.current).flat()[1][1]
                 setPieceSquare(i)
 
                 if (/^ph/.test(piece)) {   
@@ -2462,7 +2479,27 @@ const Board = () => {
                     setMoveSquares(arr)
                 }
             } else if (((color === "white" && toMove === "b") || (color === "black" && toMove === "w")) && sandbox && enemySquaresRender.includes(i)) {
+                setMoveSquares([])
+                // if (store.getState().activePiece !== piece) {
+                //     store.dispatch({
+                //         type: "activePiece",
+                //         payload: piece
+                //     })
+                // }
+    
+                if (store.getState().oldSquare !== i) {
+                    store.dispatch({
+                        type: "oldSquare",
+                        payload: i
+                    })
+                }
+                store.dispatch({
+                    type: "activePiece",
+                    payload: piece
+                })
                 setPieceSquare(i)
+                pieceSquareForEngine.current = i
+                playerPiece.current = boardEntries.filter(([key, value]) => value[0] === pieceSquareForEngine.current).flat()[1][1]
 
                 if (/^oh/.test(piece)) {   
                     let arr = []
@@ -2574,6 +2611,7 @@ const Board = () => {
 
         if (/^pp/.test(activePiece) && moveSquares.includes(i)) {
             
+            
             recordPlayerPawnMoves(i, activePiece, checkedByPlayerArr.current)
             switch (activePiece) {
                 case "pp1":
@@ -2605,6 +2643,7 @@ const Board = () => {
             }
             updateStateBoard(i, activePiece)
             playerPawns = [playerPawn1, playerPawn2, playerPawn3, playerPawn4, playerPawn5, playerPawn6, playerPawn7, playerPawn8]
+           
             movePawn(i, activePiece)
         } 
 
@@ -3013,6 +3052,9 @@ const Board = () => {
             payload: i
         })
 
+        pieceNewSquare.current = i
+        playerNewSquareForEngine.current = boardEntries.filter(([key, value]) => value[0] === pieceNewSquare.current).flat()[1][1]
+
         store.dispatch({
             type: "highlightMove",
             payload: i
@@ -3109,7 +3151,7 @@ const Board = () => {
         }
     }
     
-    const animatePiece = (i, string, num1, num2) => {     
+    const animatePiece = (i, string, num1, num2) => {    
         setMoveVar([num1, num2])
 
         if (/^o/.test(string)) {
