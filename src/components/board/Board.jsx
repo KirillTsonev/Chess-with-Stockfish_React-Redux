@@ -32,7 +32,7 @@ const Board = () => {
     const [moveSquares, setMoveSquares] = useState([])
     const [pieceSquare, setPieceSquare] = useState(null)
     const [moveVar, setMoveVar] = useState([0, 0]) 
-    const [lastMadeMove, setLastMadeMove] = useState([]) 
+    // const [lastMadeMove, setLastMadeMove] = useState([]) 
     const [pawnPromotes, setPawnPromotes] = useState("")
 
     const board = useSelector(state => state.board)
