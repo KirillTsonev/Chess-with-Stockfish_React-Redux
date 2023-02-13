@@ -152,8 +152,6 @@ const Board = () => {
         enemyHorseSafety()
     }
 
-    // const toMove = useRef("w")
-
     useEffect(() => {
         recordBoard()
         store.dispatch({
