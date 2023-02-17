@@ -28,7 +28,6 @@ import { useState, useEffect, useRef } from "react"
 import "./board.sass"
 
 const Board = () => {
-    // const [activeStatePiece, setActiveStatePiece] = useState("")
     const [moveSquares, setMoveSquares] = useState([])
     const [pieceSquare, setPieceSquare] = useState(null)
     const [moveVar, setMoveVar] = useState([0, 0]) 
