@@ -514,7 +514,7 @@ const Board = () => {
     const encode = () => {
         const fenEncode = (arr) => {
             switch (arr[0]) {
-                case "or1": case "or2":
+                case "or1": case "or2": case "or3": case "or4": case "or5": case "or6": case "or7": case "or8": 
                     if (color === "white") {
                         return arr = "r"
                     } else {
