@@ -91,7 +91,7 @@ const checkCastlingMoved = store => next => action => {
 
 const pawnPromotion = store => next => action => {
     const func = (action) => {
-        let board = store.getState().board
+        const board = store.getState().board
         let asArray = Object.entries(board)
         const pawn = action.payload.pawn
         let piece = action.payload.pieceToPromoteTo

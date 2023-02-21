@@ -220,8 +220,9 @@ const Board = () => {
     const stockfish = new Worker(wasmSupported ? 'stockfish.wasm.js' : 'stockfish.js')
     
     stockfish.addEventListener('message', function(e) {
-        // console.log(e.data)
+        
         if (/^bestmove/.test(e.data)) {
+            console.log(e.data.split(" "))
             const engineOldSquare = e.data.slice(9, 11)
             const engineNewSquare = e.data.slice(11, 13)
 
@@ -287,11 +288,23 @@ const Board = () => {
 
                 movePawn(engineWhereToMove, enginePieceToMove)
 
-                
+                if (e.data.split(" ")[1].length === 5) {
+                    if (e.data.split(" ")[1].slice(4) === "q") {
+                        promotePawn(enginePieceToMove, "oq", engineWhereToMove)
+                    }
+                    if (e.data.split(" ")[1].slice(4) === "r") {
+                        promotePawn(enginePieceToMove, "or", engineWhereToMove)
+                    }
+                    if (e.data.split(" ")[1].slice(4) === "b") {
+                        promotePawn(enginePieceToMove, "ob", engineWhereToMove)
+                    }
+                    if (e.data.split(" ")[1].slice(4) === "k") {
+                        promotePawn(enginePieceToMove, "oh", engineWhereToMove)
+                    }
+                }
             } 
             
             if (/^ob/.test(enginePieceToMove)) {
-                
                 
                 checkArrays(whiteBishopMoves, engineWhereToMove, checkedByOpponentArr.current, enemySquaresLive, playerSquaresLive, true, true)
                 checkArrays(blackBishopMoves, engineWhereToMove, checkedByOpponentArr.current, enemySquaresLive, playerSquaresLive, true, true)
