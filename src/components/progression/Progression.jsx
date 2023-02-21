@@ -3,6 +3,8 @@ import store from "../redux/store"
 import { useSelector } from "react-redux"
 import { useRef, useEffect, useState } from "react"
 
+import flip from "../../icons/flip.png"
+
 import "./progression.sass"
 
 const Progression = () => {
@@ -125,9 +127,11 @@ const Progression = () => {
                 <div className="progression__pieceGain">
                     {pieceGainOpponent.sort().reverse().join("")}
                 </div>
+                
                 <div className="progression__timer__container">
                     {opponentMinutes} : {opponentSeconds}
                 </div>
+
                 <div className="progression__moves__container">
                     <div className="progression__moves__numbers">
                         {moveNumbers.map(a => <div className="progression__moves__numbers-body">{a - 1}</div>)}
@@ -139,11 +143,16 @@ const Progression = () => {
                                 ref={(i + 2 === moves.length && !currentMove) ? bottomRef : null}>{notationArr[i]}</div>)}
                     </div>
                 </div>
+
                 <div className="progression__timer__container">
                     {playerMinutes} : {playerSeconds}
                 </div>
+
                 <div className="progression__pieceGain">
                     {pieceGainPlayer.sort().reverse().join("")}
+                </div>
+
+                <div className="progression__buttons">
                 </div>
             </div>
         )

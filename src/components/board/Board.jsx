@@ -222,7 +222,7 @@ const Board = () => {
     stockfish.addEventListener('message', function(e) {
         
         if (/^bestmove/.test(e.data)) {
-            console.log(e.data.split(" "))
+            // console.log(e.data.split(" "))
             const engineOldSquare = e.data.slice(9, 11)
             const engineNewSquare = e.data.slice(11, 13)
 

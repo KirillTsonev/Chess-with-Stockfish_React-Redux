@@ -112,7 +112,7 @@ const initialState = {
     halfMoveCounter: 0,
     enemyKingAttacked: false,
     playerKingAttacked: false,
-    sandbox: false,
+    sandbox: true,
     moves: [],
     highlightMove: [],
     currentMove: null,
