@@ -29,7 +29,7 @@ const Progression = () => {
     const bottomRef = useRef(null)
     const elapsedPlayer = useRef(0)
     const elapsedOpponent = useRef(0)
-    const prevCounter = useRef(1)
+    const counter = useRef(0)
 
     useEffect(() => {
         bottomRef.current?.scrollIntoView({
@@ -39,6 +39,8 @@ const Progression = () => {
         if (moves.length > 1) {
             playerTimer(time)
         }
+
+        counter.current = moves.length - 1
     }, [moves])
 
     useEffect(() => {
@@ -71,13 +73,13 @@ const Progression = () => {
                 type: "currentMove",
                 payload: null
             })
-            prevCounter.current = 1
+            counter.current = moves.length - 1
         } else {
             store.dispatch({
                 type: "currentMove",
                 payload: i
             })
-            prevCounter.current = moves.length - i
+            counter.current = i
         }
     }
 
@@ -144,15 +146,14 @@ const Progression = () => {
             type: "currentMove",
             payload: "0"
         })
-        prevCounter.current = moves.length
     }
 
     const onPrevClick = () => {
-        if (prevCounter.current < moves.length - 1) {
-            prevCounter.current++
+        if (counter.current > 1) {
+            counter.current--
             store.dispatch({
                 type: "currentMove",
-                payload: moves.length - prevCounter.current
+                payload: counter.current
             })
         } else {
             store.dispatch({
@@ -163,11 +164,25 @@ const Progression = () => {
     }
 
     const onNextClick = () => {
-
+        if (counter.current < moves.length - 1) {
+            counter.current++
+            store.dispatch({
+                type: "currentMove",
+                payload: counter.current
+            })
+        } else {
+            store.dispatch({
+                type: "currentMove",
+                payload: null
+            })
+        }
     }
 
     const onLastClick = () => {
-
+        store.dispatch({
+            type: "currentMove",
+            payload: null
+        })
     }
 
     const renderProgression = () => {
@@ -204,8 +219,8 @@ const Progression = () => {
                 <div className="progression__buttons">
                     <img src={first} alt="First" className="progression__buttons-button" onClick={() => onFirstClick()}/>
                     <img src={prev} alt="Previous" className="progression__buttons-button" onClick={() => onPrevClick()}/>
-                    <img src={next} alt="Next" className="progression__buttons-button"/>
-                    <img src={last} alt="Last" className="progression__buttons-button"/>
+                    <img src={next} alt="Next" className="progression__buttons-button" onClick={() => onNextClick()}/>
+                    <img src={last} alt="Last" className="progression__buttons-button" onClick={() => onLastClick()}/>
                 </div>
             </div>
         )
