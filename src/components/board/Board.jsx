@@ -1488,7 +1488,7 @@ const Board = () => {
                 (color === "white"
                     ?
                     <img src={src1}
-                        key={a}
+                        key={piece}
                         alt={alt1}
                         className="piece"
                         style={activePiece === `${piece}`
@@ -1499,7 +1499,7 @@ const Board = () => {
                     </img>
                     : 
                     <img src={src2}
-                        key={a}
+                        key={piece}
                         alt={alt2}
                         className="piece"
                         style={activePiece === `${piece}`
@@ -1514,7 +1514,7 @@ const Board = () => {
         const renderRoyals = (a, src, alt, piece) => {
             return (
                 <img src={src}
-                    key={a}
+                    key={piece}
                     alt={alt}
                     className={`${(/^ok/.test(piece) && enemyKingAttacked) || (/^pk/.test(piece) && playerKingAttacked) ? "kingInCheck" : null} piece`}
                     style={activePiece === `${piece}`
@@ -1616,6 +1616,8 @@ const Board = () => {
                     return renderEachPiece(a, blackRook, whiteRook, "Black Rook", "White Rook", "or8")
                 case "or9":
                     return renderEachPiece(a, blackRook, whiteRook, "Black Rook", "White Rook", "or9")
+                case "or01":
+                    return renderEachPiece(a, blackRook, whiteRook, "Black Rook", "White Rook", "or01")
                 case "oh1": 
                     return renderEachPiece(a, blackKnight, whiteKnight, "Black Knight", "White Knight", "oh1")
                 case "oh2":
@@ -1634,6 +1636,8 @@ const Board = () => {
                     return renderEachPiece(a, blackKnight, whiteKnight, "Black Knight", "White Knight", "oh8")
                 case "oh9":
                     return renderEachPiece(a, blackKnight, whiteKnight, "Black Knight", "White Knight", "oh9")
+                case "oh01":
+                    return renderEachPiece(a, blackKnight, whiteKnight, "Black Knight", "White Knight", "oh01")
                 case "ob1": 
                     return renderEachPiece(a, blackBishop, whiteBishop, "Black Bishop", "White Bishop", "ob1")
                 case "ob2":
@@ -1652,6 +1656,8 @@ const Board = () => {
                     return renderEachPiece(a, blackBishop, whiteBishop, "Black Bishop", "White Bishop", "ob8") 
                 case "ob9":
                     return renderEachPiece(a, blackBishop, whiteBishop, "Black Bishop", "White Bishop", "ob9") 
+                case "ob01":
+                    return renderEachPiece(a, blackBishop, whiteBishop, "Black Bishop", "White Bishop", "ob01") 
                 case "okw":
                     return renderRoyals(a, whiteKing, "White King", "okw") 
                 case "okb":
@@ -1750,6 +1756,8 @@ const Board = () => {
                     return renderEachPiece(a, whiteRook, blackRook, "White Rook", "Black Rook", "pr8")
                 case "pr9":
                     return renderEachPiece(a, whiteRook, blackRook, "White Rook", "Black Rook", "pr9")
+                case "pr01":
+                    return renderEachPiece(a, whiteRook, blackRook, "White Rook", "Black Rook", "pr01")
                 case "ph1":
                     return renderEachPiece(a, whiteKnight, blackKnight, "White Knight", "Black Knight", "ph1")
                 case "ph2":
@@ -1768,6 +1776,8 @@ const Board = () => {
                     return renderEachPiece(a, whiteKnight, blackKnight, "White Knight", "Black Knight", "ph8")
                 case "ph9":
                     return renderEachPiece(a, whiteKnight, blackKnight, "White Knight", "Black Knight", "ph9")
+                case "ph01":
+                    return renderEachPiece(a, whiteKnight, blackKnight, "White Knight", "Black Knight", "ph01")
                 case "pb1": 
                     return renderEachPiece(a, whiteBishop, blackBishop, "White Bishop", "Black Bishop", "pb1")
                 case "pb2":
@@ -1786,6 +1796,8 @@ const Board = () => {
                     return renderEachPiece(a, whiteBishop, blackBishop, "White Bishop", "Black Bishop", "pb8")
                 case "pb9":
                     return renderEachPiece(a, whiteBishop, blackBishop, "White Bishop", "Black Bishop", "pb9")
+                case "pb01":
+                    return renderEachPiece(a, whiteBishop, blackBishop, "White Bishop", "Black Bishop", "pb01")
                 case "pkw":
                     return renderRoyals(a, whiteKing, "White King", "pkw")
                 case "pkb":
@@ -1905,56 +1917,56 @@ const Board = () => {
             <div className="movementGrid">
                 <div className="pawnPromotionOverlay" style={pawnPromotes ? {display: "block"} : {display: "none"}}></div>
 
-                {arr1.map((a, i) => <div key={i + 1} 
+                {arr1.map((a, i) => <div key={i + 1 * 2} 
                                         onClick={() => onSquareClick(i + 1, boardEntries[i][0])}
                                         className="movementSquare">
                                             {numbers ? i + 1 : ""}
                                             {moveSquares.includes(i + 1) ? <div className="highlightSquare"><div></div></div> : null}
                                     </div>)}
                                     
-                {arr2.map((a, i) => <div key={i + 9}
+                {arr2.map((a, i) => <div key={i + 9 * 2}
                                         onClick={() => onSquareClick(i + 9, boardEntries[i + 8][0])}
                                         className="movementSquare">
                                             {numbers ? i + 9 : ""}
                                             {moveSquares.includes(i + 9) ? <div className="highlightSquare"><div></div></div> : null}
                                     </div>)}
 
-                {arr3.map((a, i) => <div key={i + 17} 
+                {arr3.map((a, i) => <div key={i + 17 * 2} 
                                         onClick={() => onSquareClick(i + 17, boardEntries[i + 16][0])}
                                         className="movementSquare">
                                             {numbers ? i + 17 : ""}
                                             {moveSquares.includes(i + 17) ? <div className="highlightSquare"><div></div></div> : null}
                                     </div>)}
 
-                {arr4.map((a, i) => <div key={i + 25}
+                {arr4.map((a, i) => <div key={i + 25 * 2}
                                         onClick={() => onSquareClick(i + 25, boardEntries[i + 24][0])}
                                         className="movementSquare">
                                             {numbers ? i + 25 : ""}
                                             {moveSquares.includes(i + 25) ? <div className="highlightSquare"><div></div></div> : null}
                                     </div>)}
 
-                {arr5.map((a, i) => <div key={i + 33} 
+                {arr5.map((a, i) => <div key={i + 33 * 2} 
                                         onClick={() => onSquareClick(i + 33, boardEntries[i + 32][0])}
                                         className="movementSquare">
                                             {numbers ? i + 33 : ""}
                                             {moveSquares.includes(i + 33) ? <div className="highlightSquare"><div></div></div> : null}
                                     </div>)}
 
-                {arr6.map((a, i) => <div key={i + 41}
+                {arr6.map((a, i) => <div key={i + 41 * 2}
                                         onClick={() => onSquareClick(i + 41, boardEntries[i + 40][0])}
                                         className="movementSquare">
                                             {numbers ? i + 41 : ""}
                                             {moveSquares.includes(i + 41) ? <div className="highlightSquare"><div></div></div> : null}
                                     </div>)}
 
-                {arr7.map((a, i) => <div key={i + 49}
+                {arr7.map((a, i) => <div key={i + 49 * 2}
                                         onClick={() => onSquareClick(i + 49, boardEntries[i + 48][0])}
                                         className="movementSquare">
                                             {numbers ? i + 49 : ""}
                                             {moveSquares.includes(i + 49) ? <div className="highlightSquare"><div></div></div> : null}
                                     </div>)}
 
-                {arr8.map((a, i) => <div key={i + 57} 
+                {arr8.map((a, i) => <div key={i + 57 * 2} 
                                         onClick={() => onSquareClick(i + 57, boardEntries[i + 56][0])}
                                         className="movementSquare">
                                             {numbers ? i + 57 : ""}
