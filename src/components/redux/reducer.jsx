@@ -119,10 +119,22 @@ const initialState = {
     toMove: "w",
     notationArr: [],
     coordinates: true,
+    pieceGainPlayer: [],
+    pieceGainOpponent: [],
 }
 
 function boardReducer(state = initialState, action) {
     switch (action.type) {
+        case "pieceGainPlayer":
+            return {
+                ...state,
+                pieceGainPlayer: [...state.pieceGainPlayer, action.payload]
+            }
+        case "pieceGainOpponent":
+            return {
+                ...state,
+                pieceGainOpponent: [...state.pieceGainOpponent, action.payload]
+            }
         case "behavior/coordinates":
             return {
                 ...state,

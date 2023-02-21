@@ -17,6 +17,8 @@ const Progression = () => {
     const time = useSelector(state => state.time)
     const color = useSelector(state => state.color)
     const notationArr = useSelector(state => state.notationArr)
+    const pieceGainPlayer = useSelector(state => state.pieceGainPlayer)
+    const pieceGainOpponent = useSelector(state => state.pieceGainOpponent)
 
     const bottomRef = useRef(null)
     const elapsedPlayer = useRef(0)
@@ -120,8 +122,11 @@ const Progression = () => {
     const renderMoves = () => {
         return (
             <div className="progression">
+                <div className="progression__pieceGain">
+                    {pieceGainOpponent.sort().reverse().join("")}
+                </div>
                 <div className="progression__timer__container">
-                    <div>{opponentMinutes} : {opponentSeconds}</div>
+                    {opponentMinutes} : {opponentSeconds}
                 </div>
                 <div className="progression__moves__container">
                     <div className="progression__moves__numbers">
@@ -135,7 +140,10 @@ const Progression = () => {
                     </div>
                 </div>
                 <div className="progression__timer__container">
-                    <div>{playerMinutes} : {playerSeconds}</div>
+                    {playerMinutes} : {playerSeconds}
+                </div>
+                <div className="progression__pieceGain">
+                    {pieceGainPlayer.sort().reverse().join("")}
                 </div>
             </div>
         )

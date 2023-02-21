@@ -3163,6 +3163,41 @@ const Board = () => {
         if (/^o/.test(string)) {
             
             if (playerSquaresRender.includes(i)){
+                if (playerPawns.includes(i)) {
+                    store.dispatch({
+                        type: "pieceGainOpponent",
+                        payload: "♙"
+                    })  
+                }
+
+                if (playerKnights.includes(i)) {
+                    store.dispatch({
+                        type: "pieceGainOpponent",
+                        payload: "♘"
+                    })  
+                }
+
+                if (playerBishops.includes(i)) {
+                    store.dispatch({
+                        type: "pieceGainOpponent",
+                        payload: "♗"
+                    })  
+                }
+
+                if (playerRooks.includes(i)) {
+                    store.dispatch({
+                        type: "pieceGainOpponent",
+                        payload: "♖"
+                    })  
+                }
+
+                if (playerQueens.includes(i)) {
+                    store.dispatch({
+                        type: "pieceGainOpponent",
+                        payload: "♕"
+                    })  
+                }
+
                 store.dispatch({
                     type: "halfMoveCounter/reset",
                 })
@@ -3427,6 +3462,41 @@ const Board = () => {
                 store.dispatch({
                     type: "halfMoveCounter/reset",
                 })
+
+                if (enemyPawns.includes(i)) {
+                    store.dispatch({
+                        type: "pieceGainPlayer",
+                        payload: "♙"
+                    })  
+                }
+
+                if (enemyKnights.includes(i)) {
+                    store.dispatch({
+                        type: "pieceGainPlayer",
+                        payload: "♘"
+                    })  
+                }
+
+                if (enemyBishops.includes(i)) {
+                    store.dispatch({
+                        type: "pieceGainPlayer",
+                        payload: "♗"
+                    })  
+                }
+
+                if (enemyRooks.includes(i)) {
+                    store.dispatch({
+                        type: "pieceGainPlayer",
+                        payload: "♖"
+                    })  
+                }
+
+                if (enemyQueens.includes(i)) {
+                    store.dispatch({
+                        type: "pieceGainPlayer",
+                        payload: "♕"
+                    })  
+                }
 
                 if (/^pp/.test(string)) {
                     store.dispatch({
