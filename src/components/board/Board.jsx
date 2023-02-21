@@ -2418,7 +2418,8 @@ const Board = () => {
         }
     }
 
-    function onSquareClick(i, piece) {        
+    function onSquareClick(i, piece) {      
+        // checkGameEnd()  
         if (((!moveSquares.includes(i) && moveSquares.length > 0) || activePiece === piece) && 
             ((((color === "white" && toMove === "b") || (color === "black" && toMove === "w")) && !playerSquaresRender.includes(i)) ||
             (((color === "white" && toMove === "w") || (color === "black" && toMove === "b")) && !enemySquaresRender.includes(i)))){
@@ -3119,9 +3120,7 @@ const Board = () => {
             }
         } 
 
-
-
-        checkGameEnd()
+        // checkGameEnd()
         recordBoard()
     
     }
@@ -3138,12 +3137,17 @@ const Board = () => {
         recordPlayerKingMoves(playerKing, arrPlayerCheckmate)
         recordEnemyKingMoves(enemyKing, arrEnemyCheckmate)
 
+        
+
         if ((playerKingAttacked && !attackedByPlayerArr.current.includes(checkingPiece.current) && arrPlayerCheckmate.length === 0 &&
             playerKing8StarArr.current.some(a => !attackedByPlayerArr.current.some(b => a.includes(b))) &&
             playerKing8StarArr.current.some(a => a.includes(checkingPiece.current))) ||
             (enemyKingAttacked && !attackedByOpponentArr.current.includes(checkingPiece.current) && arrEnemyCheckmate.length === 0 &&
             enemyKing8StarArr.current.some(a => !attackedByOpponentArr.current.some(b => a.includes(b))) &&
             enemyKing8StarArr.current.some(a => a.includes(checkingPiece.current)))) {
+            
+            console.log(arrPlayerCheckmate)
+
             gameEndSound.play()
         }
 
@@ -3171,6 +3175,7 @@ const Board = () => {
         arrEnemyStalemate = arrEnemyStalemate.filter(a => a > 0 && a < 65)
 
         if (arrPlayerStalemate.length === 0 || arrEnemyStalemate.length === 0 || occupiedSquaresRender.length === 2 || halfMoveCounter === 50) {
+            console.log(arrEnemyStalemate)
             gameEndSound.play()
         }
 
@@ -3613,8 +3618,6 @@ const Board = () => {
                     })
                     
                 }
-
-                console.log(playerRooks)
 
                 if ((playerQueens.some(a => enemyKingSpiderSenseArr.current[1].includes(a)) 
                     || playerRooks.some(a => enemyKingSpiderSenseArr.current[1].includes(a)))
