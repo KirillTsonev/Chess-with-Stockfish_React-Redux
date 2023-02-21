@@ -1900,7 +1900,7 @@ const Board = () => {
 
         return (
             <div className="piecesGrid">
-                {currentMove ? Object.entries(moves[currentMove]).map((a, i) => renderEntries(a[0], i)) : boardEntries.map((a, i) => renderEntries(a[0], i))}
+                {currentMove === null ? boardEntries.map((a, i) => renderEntries(a[0], i)) : Object.entries(moves[currentMove]).map((a, i) => renderEntries(a[0], i))}
             </div>
         )
     }
@@ -3137,8 +3137,6 @@ const Board = () => {
         recordPlayerKingMoves(playerKing, arrPlayerCheckmate)
         recordEnemyKingMoves(enemyKing, arrEnemyCheckmate)
 
-        
-
         if ((playerKingAttacked && !attackedByPlayerArr.current.includes(checkingPiece.current) && arrPlayerCheckmate.length === 0 &&
             playerKing8StarArr.current.some(a => !attackedByPlayerArr.current.some(b => a.includes(b))) &&
             playerKing8StarArr.current.some(a => a.includes(checkingPiece.current))) ||
@@ -3146,7 +3144,7 @@ const Board = () => {
             enemyKing8StarArr.current.some(a => !attackedByOpponentArr.current.some(b => a.includes(b))) &&
             enemyKing8StarArr.current.some(a => a.includes(checkingPiece.current)))) {
             
-            console.log(arrPlayerCheckmate)
+            // console.log(arrPlayerCheckmate)
 
             gameEndSound.play()
         }

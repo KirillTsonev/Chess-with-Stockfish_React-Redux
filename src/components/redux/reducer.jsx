@@ -1,6 +1,7 @@
 const initialState = {
     color: "white",
     time: 600000,
+    increment: 1000,
     difficulty: "",
     options: false,
     animations: "fast",
@@ -125,6 +126,11 @@ const initialState = {
 
 function boardReducer(state = initialState, action) {
     switch (action.type) {
+        case "increment":
+            return {
+                ...state,
+                increment: action.payload
+            }
         case "pieceGainPlayer":
             return {
                 ...state,
@@ -165,6 +171,11 @@ function boardReducer(state = initialState, action) {
                 ...state,
                 currentMove: action.payload,
             }
+        // case "prevMove":
+        //     return {
+        //         ...state,
+        //         currentMove: state.currentMove - 1
+        //     }
         case "recordMoves": 
             return {
                 ...state,

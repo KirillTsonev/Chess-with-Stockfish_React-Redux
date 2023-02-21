@@ -3,7 +3,10 @@ import store from "../redux/store"
 import { useSelector } from "react-redux"
 import { useRef, useEffect, useState } from "react"
 
-import flip from "../../icons/flip.png"
+import first from "../../icons/first.png"
+import prev from "../../icons/previous.png"
+import next from "../../icons/next.png"
+import last from "../../icons/last.png"
 
 import "./progression.sass"
 
@@ -21,19 +24,32 @@ const Progression = () => {
     const notationArr = useSelector(state => state.notationArr)
     const pieceGainPlayer = useSelector(state => state.pieceGainPlayer)
     const pieceGainOpponent = useSelector(state => state.pieceGainOpponent)
+    const increment = useSelector(state => state.increment)
 
     const bottomRef = useRef(null)
     const elapsedPlayer = useRef(0)
     const elapsedOpponent = useRef(0)
+    const prevCounter = useRef(1)
 
     useEffect(() => {
         bottomRef.current?.scrollIntoView({
             behavior: "smooth"
         })
+
         if (moves.length > 1) {
             playerTimer(time)
         }
     }, [moves])
+
+    useEffect(() => {
+        if ((color === "white" && store.getState().toMove === "b") || (color === "black" && store.getState().toMove === "w")) {
+            elapsedPlayer.current -= increment
+        }
+
+        if ((color === "white" && store.getState().toMove === "w") || (color === "black" && store.getState().toMove === "b")) {
+            elapsedOpponent.current -= increment
+        }
+    }, [store.getState().toMove])
 
     useEffect(() => {
         let startingTime = time / 1000 / 60
@@ -55,11 +71,13 @@ const Progression = () => {
                 type: "currentMove",
                 payload: null
             })
+            prevCounter.current = 1
         } else {
             store.dispatch({
                 type: "currentMove",
                 payload: i
             })
+            prevCounter.current = moves.length - i
         }
     }
 
@@ -121,7 +139,38 @@ const Progression = () => {
         updatePlayerClock()
     }
 
-    const renderMoves = () => {
+    const onFirstClick = () => {
+        store.dispatch({
+            type: "currentMove",
+            payload: "0"
+        })
+        prevCounter.current = moves.length
+    }
+
+    const onPrevClick = () => {
+        if (prevCounter.current < moves.length - 1) {
+            prevCounter.current++
+            store.dispatch({
+                type: "currentMove",
+                payload: moves.length - prevCounter.current
+            })
+        } else {
+            store.dispatch({
+                type: "currentMove",
+                payload: "0"
+            })
+        }
+    }
+
+    const onNextClick = () => {
+
+    }
+
+    const onLastClick = () => {
+
+    }
+
+    const renderProgression = () => {
         return (
             <div className="progression">
                 <div className="progression__pieceGain">
@@ -153,6 +202,10 @@ const Progression = () => {
                 </div>
 
                 <div className="progression__buttons">
+                    <img src={first} alt="First" className="progression__buttons-button" onClick={() => onFirstClick()}/>
+                    <img src={prev} alt="Previous" className="progression__buttons-button" onClick={() => onPrevClick()}/>
+                    <img src={next} alt="Next" className="progression__buttons-button"/>
+                    <img src={last} alt="Last" className="progression__buttons-button"/>
                 </div>
             </div>
         )
@@ -160,7 +213,7 @@ const Progression = () => {
 
     return (
         <div>
-            {renderMoves()}
+            {renderProgression()}
         </div>
     )
 }
