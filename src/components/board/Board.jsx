@@ -50,7 +50,6 @@ const Board = () => {
     const highlightMove = useSelector(state => state.highlightMove)
     const toMove = useSelector(state => state.toMove)
     const coordinates = useSelector(state => state.coordinates)
-    const sounds = useSelector(state => state.sounds)
 
     let boardEntries = Object.entries(board)
 
