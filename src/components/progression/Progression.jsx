@@ -125,7 +125,10 @@ const Progression = () => {
                 elapsedPlayer.current += 100
             }
             
-            if (tPlayer.total <= 0 || (color === "white" && store.getState().toMove === "b") || (color === "black" && store.getState().toMove === "w")) {
+            if (tPlayer.total <= 0 || 
+                (color === "white" && store.getState().toMove === "b") || 
+                (color === "black" && store.getState().toMove === "w") ||
+                store.getState().gameEnd) {
                 clearInterval(timePlayerInterval)
             }
         }
@@ -143,7 +146,10 @@ const Progression = () => {
                 elapsedOpponent.current += 100
             }
             
-            if (tOpponent.total <= 0 || (color === "white" && store.getState().toMove === "w") || (color === "black" && store.getState().toMove === "b")) {
+            if (tOpponent.total <= 0 || 
+                (color === "white" && store.getState().toMove === "w") || 
+                (color === "black" && store.getState().toMove === "b") ||
+                store.getState().gameEnd) {
                 clearInterval(timeOpponentInterval)
             }
         }

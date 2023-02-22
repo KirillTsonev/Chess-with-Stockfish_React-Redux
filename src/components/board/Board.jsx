@@ -3165,6 +3165,10 @@ const Board = () => {
             if (sounds) {
                 gameEndSound.play()
             }
+
+            store.dispatch({
+                type: "gameEnd"
+            })
             
         }
 
@@ -3192,10 +3196,13 @@ const Board = () => {
         arrEnemyStalemate = arrEnemyStalemate.filter(a => a > 0 && a < 65)
 
         if (arrPlayerStalemate.length === 0 || arrEnemyStalemate.length === 0 || occupiedSquaresRender.length === 2 || halfMoveCounter === 50) {
-            console.log(arrEnemyStalemate)
+            // console.log(arrEnemyStalemate)
             if (sounds) {
                 gameEndSound.play()
             }
+            store.dispatch({
+                type: "gameEnd"
+            })
         }
 
         for (let i = 0; i < moves.length; i++) {
@@ -3204,6 +3211,9 @@ const Board = () => {
                     if (sounds) {
                         gameEndSound.play()
                     }
+                    store.dispatch({
+                        type: "gameEnd"
+                    })
             }
         }
     }
