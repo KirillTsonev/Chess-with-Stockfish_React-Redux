@@ -50,6 +50,7 @@ const Board = () => {
     const highlightMove = useSelector(state => state.highlightMove)
     const toMove = useSelector(state => state.toMove)
     const coordinates = useSelector(state => state.coordinates)
+    const sounds = useSelector(state => state.sounds)
 
     let boardEntries = Object.entries(board)
 
@@ -1390,7 +1391,9 @@ const Board = () => {
         if (/^ph/.test(pieceToPromoteTo)) {
             recordKnightMoves(i + 1, checkedByPlayerArr.current, playerSquaresLive)
             if (checkedByPlayerArr.current.includes(enemyKing)) {
-                checkSound.play()
+                if (sounds) {
+                    checkSound.play()
+                }
                 store.dispatch({
                     type: "enemyKingAttacked",
                     payload: true
@@ -1401,7 +1404,9 @@ const Board = () => {
         if (/^oh/.test(pieceToPromoteTo)) {
             recordKnightMoves(i + 1, checkedByPlayerArr.current, enemySquaresRender)
             if (checkedByPlayerArr.current.includes(playerKing)) {
-                checkSound.play()
+                if (sounds) {
+                    checkSound.play()
+                }
                 store.dispatch({
                     type: "playerKingAttacked",
                     payload: true
@@ -1414,7 +1419,9 @@ const Board = () => {
             
             if (checkedByPlayerArr.current.includes(enemyKing)) {
                 checkingPiece.current = i + 1
-                checkSound.play()
+                if (sounds) {
+                    checkSound.play()
+                }
                 store.dispatch({
                     type: "enemyKingAttacked",
                     payload: true
@@ -1427,7 +1434,9 @@ const Board = () => {
             
             if (checkedByPlayerArr.current.includes(playerKing)) {
                 checkingPiece.current = i + 1
-                checkSound.play()
+                if (sounds) {
+                    checkSound.play()
+                }
                 store.dispatch({
                     type: "playerKingAttacked",
                     payload: true
@@ -1441,7 +1450,9 @@ const Board = () => {
 
             if (checkedByPlayerArr.current.includes(enemyKing)) {
                 checkingPiece.current = i + 1
-                checkSound.play()
+                if (sounds) {
+                    checkSound.play()
+                }
                 store.dispatch({
                     type: "enemyKingAttacked",
                     payload: true
@@ -1455,7 +1466,9 @@ const Board = () => {
             
             if (checkedByPlayerArr.current.includes(playerKing)) {
                 checkingPiece.current = i + 1
-                checkSound.play()
+                if (sounds) {
+                    checkSound.play()
+                }
                 store.dispatch({
                     type: "playerKingAttacked",
                     payload: true
@@ -1470,7 +1483,9 @@ const Board = () => {
             
             if (checkedByPlayerArr.current.includes(enemyKing)) {
                 checkingPiece.current = i + 1
-                checkSound.play()
+                if (sounds) {
+                    checkSound.play()
+                }
                 store.dispatch({
                     type: "enemyKingAttacked",
                     payload: true
@@ -1484,7 +1499,9 @@ const Board = () => {
             checkArrays(rookMoves, i + 1, checkedByPlayerArr.current, enemySquaresRender, playerSquaresRender, true, true)
             if (checkedByPlayerArr.current.includes(playerKing)) {
                 checkingPiece.current = i + 1
-                checkSound.play()
+                if (sounds) {
+                    checkSound.play()
+                }
                 store.dispatch({
                     type: "playerKingAttacked",
                     payload: true
@@ -3145,8 +3162,10 @@ const Board = () => {
             enemyKing8StarArr.current.some(a => a.includes(checkingPiece.current)))) {
             
             // console.log(arrPlayerCheckmate)
-
-            gameEndSound.play()
+            if (sounds) {
+                gameEndSound.play()
+            }
+            
         }
 
         playerRooks.forEach(a => checkArrays(rookMoves, a, arrPlayerStalemate, playerSquaresRender, enemySquaresRender, true, true))
@@ -3174,13 +3193,17 @@ const Board = () => {
 
         if (arrPlayerStalemate.length === 0 || arrEnemyStalemate.length === 0 || occupiedSquaresRender.length === 2 || halfMoveCounter === 50) {
             console.log(arrEnemyStalemate)
-            gameEndSound.play()
+            if (sounds) {
+                gameEndSound.play()
+            }
         }
 
         for (let i = 0; i < moves.length; i++) {
             if (JSON.stringify(store.getState().moves[i]) === JSON.stringify(store.getState().moves[i + 4]) && 
                 JSON.stringify(store.getState().moves[i]) === JSON.stringify(store.getState().moves[i + 8])) {
-                gameEndSound.play()
+                    if (sounds) {
+                        gameEndSound.play()
+                    }
             }
         }
     }
@@ -3277,7 +3300,10 @@ const Board = () => {
                 }
                 
                 if (enemyKingAttacked) {
-                    captureSound.play()
+                    
+                    if (sounds) {
+                        captureSound.play()
+                    }
                     store.dispatch({
                         type: "enemyKingAttacked",
                         payload: false
@@ -3285,7 +3311,9 @@ const Board = () => {
                 }
 
                 if (/^ok/.test(string) && enemyKingAttacked) {
-                    captureSound.play()
+                    if (sounds) {
+                        captureSound.play()
+                    }
                     store.dispatch({
                         type: "enemyKingAttacked",
                         payload: false
@@ -3302,7 +3330,9 @@ const Board = () => {
                 // } 
                 
                 if (!checkedByOpponentArr.current.flat().includes(playerKing)) {
-                    captureSound.play()
+                    if (sounds) {
+                        captureSound.play()
+                    }
                     store.dispatch({
                         type: "playerKingAttacked",
                         payload: false
@@ -3313,7 +3343,9 @@ const Board = () => {
                     || enemyBishops.some(a => playerKingSpiderSenseArr.current[0].includes(a)))
                     && occupiedSquaresLive.filter(a => !enemySquaresLive.includes(a))
                                             .every(a => !playerKingSpiderSenseArr.current[0].includes(a))) {
-                    checkSound.play()
+                    if (sounds) {
+                        checkSound.play()
+                    }
                     store.dispatch({
                         type: "playerKingAttacked",
                         payload: true
@@ -3324,14 +3356,18 @@ const Board = () => {
                     || enemyRooks.some(a => playerKingSpiderSenseArr.current[1].includes(a)))
                     && occupiedSquaresLive.filter(a => !enemySquaresLive.includes(a))
                                             .every(a => !playerKingSpiderSenseArr.current[1].includes(a))) {
-                    checkSound.play()
+                                                if (sounds) {
+                                                    checkSound.play()
+                                                }
                     store.dispatch({
                         type: "playerKingAttacked",
                         payload: true
                     })
                 }
 
-                captureSound.play()
+                if (sounds) {
+                    captureSound.play()
+                }
             } else {
                 if (/^op/.test(string)) {
                     store.dispatch({
@@ -3376,7 +3412,9 @@ const Board = () => {
                 }
 
                 if (/^ok/.test(string) && enemyKingAttacked) {
-                    moveSound.play()
+                    if (sounds) {
+                        moveSound.play()
+                    }
                     store.dispatch({
                         type: "enemyKingAttacked",
                         payload: false
@@ -3384,7 +3422,9 @@ const Board = () => {
                 }
 
                 if (enemyKing8StarArr.current.flat().includes(i) && enemyKingAttacked) {
-                    moveSound.play()
+                    if (sounds) {
+                        moveSound.play()
+                    }
                     store.dispatch({
                         type: "enemyKingAttacked",
                         payload: false
@@ -3392,7 +3432,9 @@ const Board = () => {
                 }
                 
                 if (checkedByPlayerArr.current.includes(i) && enemyKingAttacked) {
-                    moveSound.play()
+                    if (sounds) {
+                        moveSound.play()
+                    }
                     store.dispatch({
                         type: "enemyKingAttacked",
                         payload: false
@@ -3414,7 +3456,9 @@ const Board = () => {
                 }
                 
                 if (checkedByOpponentArr.current.flat().includes(playerKing)) {
-                    checkSound.play()
+                    if (sounds) {
+                        checkSound.play()
+                    }
                     store.dispatch({
                         type: "playerKingAttacked",
                         payload: true
@@ -3423,7 +3467,9 @@ const Board = () => {
                 } 
                 
                 if (!checkedByOpponentArr.current.flat().includes(playerKing)) {
-                    moveSound.play()
+                    if (sounds) {
+                        moveSound.play()
+                    }
                     store.dispatch({
                         type: "playerKingAttacked",
                         payload: false
@@ -3434,7 +3480,9 @@ const Board = () => {
                     || enemyBishops.some(a => playerKingSpiderSenseArr.current[0].includes(a)))
                     && occupiedSquaresLive.filter(a => !enemySquaresLive.includes(a))
                                             .every(a => !playerKingSpiderSenseArr.current[0].includes(a))) {
-                    checkSound.play()
+                    if (sounds) {
+                        checkSound.play()
+                    }
                     store.dispatch({
                         type: "playerKingAttacked",
                         payload: true
@@ -3446,14 +3494,18 @@ const Board = () => {
                     || enemyRooks.some(a => playerKingSpiderSenseArr.current[1].includes(a)))
                     && occupiedSquaresLive.filter(a => !enemySquaresLive.includes(a))
                                             .every(a => !playerKingSpiderSenseArr.current[1].includes(a))) {
-                    checkSound.play()
+                    if (sounds) {
+                        checkSound.play()
+                    }
                     store.dispatch({
                         type: "playerKingAttacked",
                         payload: true
                     })
                 }
                 
-                moveSound.play()
+                if (sounds) {
+                    moveSound.play()
+                }
             }
 
             if (color === "white" && toMove === "b" && sandbox) {
@@ -3569,7 +3621,9 @@ const Board = () => {
                 }
 
                 if (playerKingAttacked) {
-                    captureSound.play()
+                    if (sounds) {
+                        captureSound.play()
+                    }
                     store.dispatch({
                         type: "playerKingAttacked",
                         payload: false
@@ -3590,7 +3644,9 @@ const Board = () => {
                 // } 
 
                 if (/^pk/.test(string) && playerKingAttacked) {
-                    captureSound.play()
+                    if (sounds) {
+                        captureSound.play()
+                    }
                     store.dispatch({
                         type: "playerKingAttacked",
                         payload: false
@@ -3598,7 +3654,9 @@ const Board = () => {
                 }
                 
                 if (!checkedByPlayerArr.current.flat().includes(enemyKing) && enemyKingAttacked) {
-                    captureSound.play()
+                    if (sounds) {
+                        captureSound.play()
+                    }
                     store.dispatch({
                         type: "enemyKingAttacked",
                         payload: false
@@ -3609,7 +3667,9 @@ const Board = () => {
                     || playerBishops.some(a => enemyKingSpiderSenseArr.current[0].includes(a)))
                     && occupiedSquaresLive.filter(a => !playerSquaresLive.includes(a))
                                             .every(a => !enemyKingSpiderSenseArr.current[0].includes(a))) {
-                    checkSound.play()
+                    if (sounds) {
+                        checkSound.play()
+                    }
                     store.dispatch({
                         type: "enemyKingAttacked",
                         payload: true
@@ -3621,7 +3681,9 @@ const Board = () => {
                     || playerRooks.some(a => enemyKingSpiderSenseArr.current[1].includes(a)))
                     && occupiedSquaresLive.filter(a => !playerSquaresLive.includes(a))
                                             .every(a => !enemyKingSpiderSenseArr.current[1].includes(a))) {
-                    checkSound.play()
+                    if (sounds) {
+                        checkSound.play()
+                    }
                     store.dispatch({
                         type: "enemyKingAttacked",
                         payload: true
@@ -3629,7 +3691,9 @@ const Board = () => {
                     
                 }
 
-                captureSound.play()
+                if (sounds) {
+                    captureSound.play()
+                }
             } else {
                 if (/^pp/.test(string)) {
                     store.dispatch({
@@ -3688,7 +3752,9 @@ const Board = () => {
                 }
 
                 if (checkedByOpponentArr.current.includes(i) && playerKingAttacked) {
-                    moveSound.play()
+                    if (sounds) {
+                        moveSound.play()
+                    }
                     store.dispatch({
                         type: "playerKingAttacked",
                         payload: false
@@ -3696,7 +3762,9 @@ const Board = () => {
                 }
 
                 if (playerKing8StarArr.current.flat().includes(i) && playerKingAttacked) {
-                    moveSound.play()
+                    if (sounds) {
+                        moveSound.play()
+                    }
                     store.dispatch({
                         type: "playerKingAttacked",
                         payload: false
@@ -3704,7 +3772,9 @@ const Board = () => {
                 }
 
                 if (/^pk/.test(string) && playerKingAttacked) {
-                    moveSound.play()
+                    if (sounds) {
+                        moveSound.play()
+                    }
                     store.dispatch({
                         type: "playerKingAttacked",
                         payload: false
@@ -3712,7 +3782,9 @@ const Board = () => {
                 }
                 
                 if (checkedByPlayerArr.current.flat().includes(enemyKing)) {
-                    checkSound.play()
+                    if (sounds) {
+                        checkSound.play()
+                    }
                     store.dispatch({
                         type: "enemyKingAttacked",
                         payload: true
@@ -3721,7 +3793,9 @@ const Board = () => {
                 } 
                 
                 if (!checkedByPlayerArr.current.flat().includes(enemyKing) && enemyKingAttacked) {
-                    moveSound.play()
+                    if (sounds) {
+                        moveSound.play()
+                    }
                     store.dispatch({
                         type: "enemyKingAttacked",
                         payload: false
@@ -3732,7 +3806,9 @@ const Board = () => {
                     || playerBishops.some(a => enemyKingSpiderSenseArr.current[0].includes(a)))
                     && occupiedSquaresLive.filter(a => !playerSquaresLive.includes(a))
                                             .every(a => !enemyKingSpiderSenseArr.current[0].includes(a))) {
-                    checkSound.play()
+                    if (sounds) {
+                        checkSound.play()
+                    }
                     store.dispatch({
                         type: "enemyKingAttacked",
                         payload: true
@@ -3744,14 +3820,18 @@ const Board = () => {
                     || playerRooks.some(a => enemyKingSpiderSenseArr.current[1].includes(a)))
                     && occupiedSquaresLive.filter(a => !playerSquaresLive.includes(a))
                                             .every(a => !enemyKingSpiderSenseArr.current[1].includes(a))) {
-                    checkSound.play()
+                    if (sounds) {
+                        checkSound.play()
+                    }
                     store.dispatch({
                         type: "enemyKingAttacked",
                         payload: true
                     })
                 }
 
-                moveSound.play()
+                if (sounds) {
+                    moveSound.play()
+                }
             }
 
             if (color === "white") {
@@ -4237,7 +4317,9 @@ const Board = () => {
     }
 
     const animateCastling = (coor1, coor2, rookOldSq, newSqRook, rookToMove) => {
-        castlingSound.play()
+        if (sounds) {
+           castlingSound.play()
+        }
 
         setMoveVar([coor1, coor2])
 
@@ -4282,7 +4364,9 @@ const Board = () => {
             if ((playerRooks.some(a => enemyKingSpiderSenseArr.current[1].includes(a)))
                 && occupiedSquaresLive.filter(a => !playerSquaresLive.includes(a))
                                         .every(a => !enemyKingSpiderSenseArr.current[1].includes(a))) {
-                checkSound.play()
+                if (sounds) {
+                    checkSound.play()
+                }
                 store.dispatch({
                     type: "enemyKingAttacked",
                     payload: true
@@ -4293,7 +4377,9 @@ const Board = () => {
             if ((enemyRooks.some(a => playerKingSpiderSenseArr.current[1].includes(a)))
                 && occupiedSquaresLive.filter(a => !enemySquaresLive.includes(a))
                                         .every(a => !playerKingSpiderSenseArr.current[1].includes(a))) {
-                checkSound.play()
+                if (sounds) {
+                    checkSound.play()
+                }
                 store.dispatch({
                     type: "playerKingAttacked",
                     payload: true
@@ -4399,7 +4485,9 @@ const Board = () => {
                 || playerBishops.some(a => enemyKingSpiderSenseArr.current[0].includes(a)))
                 && occupiedSquaresLive.filter(a => !playerSquaresLive.includes(a))
                                         .every(a => !enemyKingSpiderSenseArr.current[0].includes(a))) {
-                checkSound.play()
+                if (sounds) {
+                    checkSound.play()
+                }
                 store.dispatch({
                     type: "enemyKingAttacked",
                     payload: true
@@ -4410,7 +4498,9 @@ const Board = () => {
                 || playerRooks.some(a => enemyKingSpiderSenseArr.current[1].includes(a)))
                 && occupiedSquaresLive.filter(a => !playerSquaresLive.includes(a))
                                         .every(a => !enemyKingSpiderSenseArr.current[1].includes(a))) {
-                checkSound.play()
+                if (sounds) {
+                    checkSound.play()
+                }
                 store.dispatch({
                     type: "enemyKingAttacked",
                     payload: true
@@ -4421,7 +4511,9 @@ const Board = () => {
                 || enemyBishops.some(a => playerKingSpiderSenseArr.current[0].includes(a)))
                 && occupiedSquaresLive.filter(a => !enemySquaresLive.includes(a))
                                         .every(a => !playerKingSpiderSenseArr.current[0].includes(a))) {
-                checkSound.play()
+                if (sounds) {
+                    checkSound.play()
+                }
                 store.dispatch({
                     type: "playerKingAttacked",
                     payload: true
@@ -4432,7 +4524,9 @@ const Board = () => {
                 || enemyRooks.some(a => playerKingSpiderSenseArr.current[1].includes(a)))
                 && occupiedSquaresLive.filter(a => !enemySquaresLive.includes(a))
                                         .every(a => !playerKingSpiderSenseArr.current[1].includes(a))) {
-                checkSound.play()
+                if (sounds) {
+                    checkSound.play()
+                }
                 store.dispatch({
                     type: "playerKingAttacked",
                     payload: true
@@ -4440,7 +4534,9 @@ const Board = () => {
             }
         }
 
-        captureSound.play()
+        if (sounds) {
+            captureSound.play()
+        }
         // encode()
 
 
