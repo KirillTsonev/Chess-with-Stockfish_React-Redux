@@ -9,6 +9,7 @@ const Behavior = () => {
     const animations = useSelector(state => state.animations)
     const coordinates = useSelector(state => state.coordinates)
     const sounds = useSelector(state => state.sounds)
+    const milliseconds = useSelector(state => state.milliseconds)
 
     useEffect(() => {
         if (localStorage.getItem("speed")) {
@@ -33,6 +34,12 @@ const Behavior = () => {
             store.dispatch({
                 type: "sounds",
                 payload: JSON.parse(localStorage.getItem("sounds"))
+            })
+        }
+        if (localStorage.getItem("milliseconds")) {
+            store.dispatch({
+                type: "milliseconds",
+                payload: JSON.parse(localStorage.getItem("milliseconds"))
             })
         }
     }, [])
@@ -67,6 +74,14 @@ const Behavior = () => {
             payload: boolean
         })
         localStorage.setItem("sounds", boolean)
+    }
+
+    const onMillisecondsChoice = (boolean) => {
+        store.dispatch({
+            type: "milliseconds",
+            payload: boolean
+        })
+        localStorage.setItem("milliseconds", boolean)
     }
 
     return (
@@ -104,6 +119,13 @@ const Behavior = () => {
                         onClick={() => onSoundChoice(true)}>On</div>
                 <div className={`behavior__option ${!sounds ? "activeOption" : null}`}
                         onClick={() => onSoundChoice(false)}>Off</div>
+            </div>
+            <div className="behavior__container">
+                <div className="behavior__body">Timer milliseconds:</div>
+                <div className={`behavior__option ${milliseconds ? "activeOption" : null}`}
+                        onClick={() => onMillisecondsChoice(true)}>On</div>
+                <div className={`behavior__option ${!milliseconds ? "activeOption" : null}`}
+                        onClick={() => onMillisecondsChoice(false)}>Off</div>
             </div>
         </div>
     )

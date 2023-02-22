@@ -30,6 +30,7 @@ const Progression = () => {
     const pieceGainPlayer = useSelector(state => state.pieceGainPlayer)
     const pieceGainOpponent = useSelector(state => state.pieceGainOpponent)
     const increment = useSelector(state => state.increment)
+    const milliseconds = useSelector(state => state.milliseconds)
 
     const bottomRef = useRef(null)
     const elapsedPlayer = useRef(0)
@@ -217,7 +218,7 @@ const Progression = () => {
                 </div>
                 
                 <div className="progression__timer__container">
-                    {opponentMinutes}:{opponentSeconds}<span>:{opponentMiliseconds}</span>
+                    {opponentMinutes}:{opponentSeconds}<span style={milliseconds ? {display: "inline"} : {display: "none"}}>:{opponentMiliseconds}</span>
                 </div>
 
                 <div className="progression__moves__container">
@@ -233,7 +234,7 @@ const Progression = () => {
                 </div>
 
                 <div className="progression__timer__container">
-                    {playerMinutes}:{playerSeconds}<span>:{playerMiliseconds}</span>
+                    {playerMinutes}:{playerSeconds}<span style={milliseconds ? {display: "inline"} : {display: "none"}}>:{playerMiliseconds}</span>
                 </div>
 
                 <div className="progression__pieceGain">
