@@ -1914,80 +1914,62 @@ const Board = () => {
     }
 
     const renderMovement = () => {
-        let arr1 = []
-        let arr2 = []
-        let arr3 = []
-        let arr4 = []
-        let arr5 = []
-        let arr6 = []
-        let arr7 = []
-        let arr8 = []
-
-        for(let i = 0; i < 8; i++) {
-            arr1.push("1")
-            arr2.push("1")
-            arr3.push("1")
-            arr4.push("1")
-            arr5.push("1")
-            arr6.push("1")
-            arr7.push("1")
-            arr8.push("1")
-        }
+        let arr = [0, 0, 0, 0, 0, 0, 0, 0]
 
         return (
             <div className="movementGrid">
                 <div className="pawnPromotionOverlay" style={pawnPromotes ? {display: "block"} : {display: "none"}}></div>
 
-                {arr1.map((a, i) => <div key={i + 1 * 100} 
+                {arr.map((a, i) => <div key={i + 1 * 100} 
                                         onClick={() => onSquareClick(i + 1, boardEntries[i][0])}
                                         className="movementSquare">
                                             {numbers ? i + 1 : ""}
                                             {moveSquares.includes(i + 1) ? <div className="highlightSquare"><div></div></div> : null}
                                     </div>)}
                                     
-                {arr2.map((a, i) => <div key={i + 9 * 100}
+                {arr.map((a, i) => <div key={i + 9 * 100}
                                         onClick={() => onSquareClick(i + 9, boardEntries[i + 8][0])}
                                         className="movementSquare">
                                             {numbers ? i + 9 : ""}
                                             {moveSquares.includes(i + 9) ? <div className="highlightSquare"><div></div></div> : null}
                                     </div>)}
 
-                {arr3.map((a, i) => <div key={i + 17 * 100} 
+                {arr.map((a, i) => <div key={i + 17 * 100} 
                                         onClick={() => onSquareClick(i + 17, boardEntries[i + 16][0])}
                                         className="movementSquare">
                                             {numbers ? i + 17 : ""}
                                             {moveSquares.includes(i + 17) ? <div className="highlightSquare"><div></div></div> : null}
                                     </div>)}
 
-                {arr4.map((a, i) => <div key={i + 25 * 100}
+                {arr.map((a, i) => <div key={i + 25 * 100}
                                         onClick={() => onSquareClick(i + 25, boardEntries[i + 24][0])}
                                         className="movementSquare">
                                             {numbers ? i + 25 : ""}
                                             {moveSquares.includes(i + 25) ? <div className="highlightSquare"><div></div></div> : null}
                                     </div>)}
 
-                {arr5.map((a, i) => <div key={i + 33 * 100} 
+                {arr.map((a, i) => <div key={i + 33 * 100} 
                                         onClick={() => onSquareClick(i + 33, boardEntries[i + 32][0])}
                                         className="movementSquare">
                                             {numbers ? i + 33 : ""}
                                             {moveSquares.includes(i + 33) ? <div className="highlightSquare"><div></div></div> : null}
                                     </div>)}
 
-                {arr6.map((a, i) => <div key={i + 41 * 100}
+                {arr.map((a, i) => <div key={i + 41 * 100}
                                         onClick={() => onSquareClick(i + 41, boardEntries[i + 40][0])}
                                         className="movementSquare">
                                             {numbers ? i + 41 : ""}
                                             {moveSquares.includes(i + 41) ? <div className="highlightSquare"><div></div></div> : null}
                                     </div>)}
 
-                {arr7.map((a, i) => <div key={i + 49 * 100}
+                {arr.map((a, i) => <div key={i + 49 * 100}
                                         onClick={() => onSquareClick(i + 49, boardEntries[i + 48][0])}
                                         className="movementSquare">
                                             {numbers ? i + 49 : ""}
                                             {moveSquares.includes(i + 49) ? <div className="highlightSquare"><div></div></div> : null}
                                     </div>)}
 
-                {arr8.map((a, i) => <div key={i + 57 * 100} 
+                {arr.map((a, i) => <div key={i + 57 * 100} 
                                         onClick={() => onSquareClick(i + 57, boardEntries[i + 56][0])}
                                         className="movementSquare">
                                             {numbers ? i + 57 : ""}
