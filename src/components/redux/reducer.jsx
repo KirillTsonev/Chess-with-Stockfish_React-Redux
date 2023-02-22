@@ -127,6 +127,11 @@ const initialState = {
 
 function boardReducer(state = initialState, action) {
     switch (action.type) {
+        case "sounds":
+            return {
+                ...state,
+                sounds: action.payload
+            }
         case "gameEnd": 
             return {
                 ...state,
