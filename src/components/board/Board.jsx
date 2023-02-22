@@ -1272,31 +1272,11 @@ const Board = () => {
     }
 
     const renderBoard = () => {
-        let arr1 = []
-        let arr2 = []
-        let arr3 = []
-        let arr4 = []
-        let arr5 = []
-        let arr6 = []
-        let arr7 = []
-        let arr8 = []
-
-        for(let i = 0; i < 8; i++) {
-            arr1.push("1")
-            arr2.push("1")
-            arr3.push("1")
-            arr4.push("1")
-            arr5.push("1")
-            arr6.push("1")
-            arr7.push("1")
-            arr8.push("1")
-        }
-
         let letters = ["a", "b", "c", "d", "e", "f", "g", "h"]
 
         return (
             <div className="board">
-                {arr1.map((a, i) => <div key={i + 1 * 300} className={`${i % 2 === 0 ? "white" : "black"} ${i + 1 === pieceSquare ? "highlight" : null}`}>
+                {letters.map((a, i) => <div key={i + 1 * 300} className={`${i % 2 === 0 ? "white" : "black"} ${i + 1 === pieceSquare ? "highlight" : null}`}>
                     {moveSquares.includes(i + 1) && !occupiedSquaresRender.includes(i + 1) ? <div className="activeSquare"></div> : null}
                     {moveSquares.includes(i + 1) && occupiedSquaresRender.includes(i + 1) ? <div className="enemySquare"><div></div></div> : null}
                     {(highlightMove.slice(-1)[0] === i + 1 && !currentMove) || 
@@ -1305,7 +1285,7 @@ const Board = () => {
                     {coordinates && i + 1 === 8 && color === "black" ? <div className="numbers">1</div> : null}
                 </div>)}
 
-                {arr2.map((a, i) => <div key={i + 9 * 300} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 9 === pieceSquare ? "highlight" : null}`}>
+                {letters.map((a, i) => <div key={i + 9 * 300} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 9 === pieceSquare ? "highlight" : null}`}>
                     {moveSquares.includes(i + 9) && !occupiedSquaresRender.includes(i + 9) ? <div className="activeSquare"></div> : null}
                     {moveSquares.includes(i + 9) && occupiedSquaresRender.includes(i + 9) ? <div className="enemySquare"><div></div></div> : null}
                     {(highlightMove.slice(-1)[0] === i + 9 && !currentMove) || 
@@ -1314,7 +1294,7 @@ const Board = () => {
                     {coordinates && i + 9 === 16 && color === "black" ? <div className="numbers">2</div> : null}
                 </div>)}
 
-                {arr3.map((a, i) => <div key={i + 17 * 300} className={`${i % 2 === 0 ? "white" : "black"} ${i + 17 === pieceSquare ? "highlight" : null}`}>
+                {letters.map((a, i) => <div key={i + 17 * 300} className={`${i % 2 === 0 ? "white" : "black"} ${i + 17 === pieceSquare ? "highlight" : null}`}>
                     {moveSquares.includes(i + 17) && !occupiedSquaresRender.includes(i + 17) ? <div className="activeSquare"></div> : null}
                     {moveSquares.includes(i + 17) && occupiedSquaresRender.includes(i + 17) ? <div className="enemySquare"><div></div></div> : null}
                     {(highlightMove.slice(-1)[0] === i + 17 && !currentMove) || 
@@ -1323,7 +1303,7 @@ const Board = () => {
                     {coordinates && i + 17 === 24 && color === "black" ? <div className="numbers">3</div> : null}
                 </div>)}
 
-                {arr4.map((a, i) => <div key={i + 25 * 300} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 25 === pieceSquare ? "highlight" : null}`}>
+                {letters.map((a, i) => <div key={i + 25 * 300} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 25 === pieceSquare ? "highlight" : null}`}>
                     {moveSquares.includes(i + 25) && !occupiedSquaresRender.includes(i + 25) ? <div className="activeSquare"></div> : null}
                     {moveSquares.includes(i + 25) && occupiedSquaresRender.includes(i + 25) ? <div className="enemySquare"><div></div></div> : null}
                     {(highlightMove.slice(-1)[0] === i + 25 && !currentMove) || 
@@ -1332,7 +1312,7 @@ const Board = () => {
                     {coordinates && i + 25 === 32 && color === "black" ? <div className="numbers">4</div> : null}
                 </div>)}
 
-                {arr5.map((a, i) => <div key={i + 33 * 300} className={`${i % 2 === 0 ? "white" : "black"} ${i + 33 === pieceSquare ? "highlight" : null}`}>
+                {letters.map((a, i) => <div key={i + 33 * 300} className={`${i % 2 === 0 ? "white" : "black"} ${i + 33 === pieceSquare ? "highlight" : null}`}>
                     {moveSquares.includes(i + 33) && !occupiedSquaresRender.includes(i + 33) ? <div className="activeSquare"></div> : null}
                     {moveSquares.includes(i + 33) && occupiedSquaresRender.includes(i + 33) ? <div className="enemySquare"><div></div></div> : null}
                     {(highlightMove.slice(-1)[0] === i + 33 && !currentMove) || 
@@ -1341,7 +1321,7 @@ const Board = () => {
                     {coordinates && i + 33 === 40 && color === "black" ? <div className="numbers">5</div> : null}
                 </div>)}
 
-                {arr6.map((a, i) => <div key={i + 41 * 300} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 41 === pieceSquare ? "highlight" : null}`}>
+                {letters.map((a, i) => <div key={i + 41 * 300} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 41 === pieceSquare ? "highlight" : null}`}>
                     {moveSquares.includes(i + 41) && !occupiedSquaresRender.includes(i + 41) ? <div className="activeSquare"></div> : null}
                     {moveSquares.includes(i + 41) && occupiedSquaresRender.includes(i + 41) ? <div className="enemySquare"><div></div></div> : null}
                     {(highlightMove.slice(-1)[0] === i + 41 && !currentMove) || 
@@ -1350,7 +1330,7 @@ const Board = () => {
                     {coordinates && i + 41 === 48 && color === "black" ? <div className="numbers">6</div> : null}
                 </div>)}
 
-                {arr7.map((a, i) => <div key={i + 49 * 300} className={`${i % 2 === 0 ? "white" : "black"} ${i + 49 === pieceSquare ? "highlight" : null}`}>
+                {letters.map((a, i) => <div key={i + 49 * 300} className={`${i % 2 === 0 ? "white" : "black"} ${i + 49 === pieceSquare ? "highlight" : null}`}>
                     {moveSquares.includes(i + 49) && !occupiedSquaresRender.includes(i + 49) ? <div className="activeSquare"></div> : null}
                     {moveSquares.includes(i + 49) && occupiedSquaresRender.includes(i + 49) ? <div className="enemySquare"><div></div></div> : null}
                     {(highlightMove.slice(-1)[0] === i + 49 && !currentMove) || 
@@ -1359,7 +1339,7 @@ const Board = () => {
                     {coordinates && i + 49 === 56 && color === "black" ? <div className="numbers">7</div> : null}
                 </div>)}
 
-                {arr8.map((a, i) => <div key={i + 57 * 300} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 57 === pieceSquare ? "highlight" : null}`} >
+                {letters.map((a, i) => <div key={i + 57 * 300} className={`${i % 2 !== 0 ? "white" : "black"} ${i + 57 === pieceSquare ? "highlight" : null}`} >
                     {moveSquares.includes(i + 57) && !occupiedSquaresRender.includes(i + 57) ? <div className="activeSquare"></div> : null}
                     {moveSquares.includes(i + 57) && occupiedSquaresRender.includes(i + 57) ? <div className="enemySquare"><div></div></div> : null}
                     {(highlightMove.slice(-1)[0] === i + 57 && !currentMove) || 
