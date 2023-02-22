@@ -254,7 +254,8 @@ const Progression = () => {
 
                 <div className="progression__resign" 
                         style={resignConfirm ? {display: "none"} : {display: "block"}} 
-                        onClick={() => onResignClick()}>
+                        onClick={() => onResignClick()}
+                        title="Resign">
                     <img src={resign} 
                             alt="Resign" 
                             className="progression__resign-img"/>
@@ -262,7 +263,8 @@ const Progression = () => {
 
                 <div className="progression__resign__confirm">
                     <div className="progression__resign__confirm-btn" 
-                            style={resignConfirm ? {display: "block"} : {display: "none"}}>
+                            style={resignConfirm ? {display: "block"} : {display: "none"}}
+                            title="Resign">
                         <img src={resign} 
                                 alt="Resign" 
                                 className="progression__resign-img" 
@@ -272,7 +274,8 @@ const Progression = () => {
                             alt="Cancel" 
                             style={resignConfirm ? {display: "block"} : {display: "none"}} 
                             className="progression__resign__confirm-cancel"
-                            onClick={() => onResignCancel()}/>
+                            onClick={() => onResignCancel()}
+                            title="Cancel"/>
                 </div>
             </div>
         )
