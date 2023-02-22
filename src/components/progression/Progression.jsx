@@ -15,8 +15,10 @@ import "./progression.sass"
 const Progression = () => {
     const [playerMinutes, setPlayerMinutes] = useState(0)
     const [playerSeconds, setPlayerSeconds] = useState("00")
+    const [playerMiliseconds, setPlayerMiliseconds] = useState("0")
     const [opponentMinutes, setOpponentMinutes] = useState(0)
     const [opponentSeconds, setOpponentSeconds] = useState("00")
+    const [opponentMiliseconds, setOpponentMiliseconds] = useState("0")
     const [resignConfirm, setResignConfirm] = useState(false)
 
     const moves = useSelector(state => state.moves)
@@ -91,17 +93,20 @@ const Progression = () => {
             const t = endtime - elapsed
             const minutes = Math.floor((t / 1000 / 60) % 60)
             const seconds = Math.floor((t / 1000) % 60)
+            const miliseconds = Math.floor((t / 10) % 100) / 10
             if (t <= 0) {
                 return {
                     "total": 0,
                     "minutes": 0,
                     "seconds": 0,
+                    "miliseconds": 0
                 }
             } else {
                 return {
                     "total": t,
                     "minutes": minutes,
                     "seconds": seconds,
+                    "miliseconds": miliseconds
                 }
             }
         }
@@ -113,6 +118,7 @@ const Progression = () => {
             
             setPlayerMinutes(getZero(tPlayer.minutes))
             setPlayerSeconds(getZero(tPlayer.seconds))
+            setPlayerMiliseconds(tPlayer.miliseconds)
 
             if ((color === "white" && store.getState().toMove === "w") || (color === "black" && store.getState().toMove === "b")) {
                 elapsedPlayer.current += 100
@@ -130,6 +136,7 @@ const Progression = () => {
 
             setOpponentMinutes(getZero(tOpponent.minutes))
             setOpponentSeconds(getZero(tOpponent.seconds))
+            setOpponentMiliseconds(tOpponent.miliseconds)
 
             if ((color === "white" && store.getState().toMove === "b") || (color === "black" && store.getState().toMove === "w")) {
                 elapsedOpponent.current += 100
@@ -210,7 +217,7 @@ const Progression = () => {
                 </div>
                 
                 <div className="progression__timer__container">
-                    {opponentMinutes} : {opponentSeconds}
+                    {opponentMinutes}:{opponentSeconds}<span>:{opponentMiliseconds}</span>
                 </div>
 
                 <div className="progression__moves__container">
@@ -226,7 +233,7 @@ const Progression = () => {
                 </div>
 
                 <div className="progression__timer__container">
-                    {playerMinutes} : {playerSeconds}
+                    {playerMinutes}:{playerSeconds}<span>:{playerMiliseconds}</span>
                 </div>
 
                 <div className="progression__pieceGain">
