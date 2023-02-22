@@ -80,17 +80,15 @@ const Behavior = () => {
             </div>
             <div className="behavior__container">
                 <div className="behavior__body">Animation speed:</div>
-                <div>
-                    <div className={`behavior__option ${animations === "slow" ? "activeOption" : null}`} 
-                            onClick={() => onAnimationChoice("slow")}>Slow</div>
-                    <div className={`behavior__option ${animations === "fast" ? "activeOption" : null}`}
-                            onClick={() => onAnimationChoice("fast")}>Fast</div>
-                </div>
-                <div>
-                    <div className={`behavior__option ${animations === "average" ? "activeOption" : null}`}
-                            onClick={() => onAnimationChoice("average")}>Normal</div>
+                <div>           
                     <div className={`behavior__option ${animations === "none" ? "activeOption" : null}`}
                             onClick={() => onAnimationChoice("none")}>None</div>
+                    <div className={`behavior__option ${animations === "slow" ? "activeOption" : null}`} 
+                            onClick={() => onAnimationChoice("slow")}>Slow</div>
+                    <div className={`behavior__option ${animations === "average" ? "activeOption" : null}`}
+                            onClick={() => onAnimationChoice("average")}>Normal</div>
+                    <div className={`behavior__option ${animations === "fast" ? "activeOption" : null}`}
+                            onClick={() => onAnimationChoice("fast")}>Fast</div>
                 </div>
             </div>
             <div className="behavior__container">
