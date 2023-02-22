@@ -7,6 +7,8 @@ import first from "../../icons/first.png"
 import prev from "../../icons/previous.png"
 import next from "../../icons/next.png"
 import last from "../../icons/last.png"
+import resign from "../../icons/resign.png"
+import cancel from "../../icons/x.png"
 
 import "./progression.sass"
 
@@ -15,6 +17,7 @@ const Progression = () => {
     const [playerSeconds, setPlayerSeconds] = useState("00")
     const [opponentMinutes, setOpponentMinutes] = useState(0)
     const [opponentSeconds, setOpponentSeconds] = useState("00")
+    const [resignConfirm, setResignConfirm] = useState(false)
 
     const moves = useSelector(state => state.moves)
     const moveNumbers = useSelector(state => state.moveNumbers)
@@ -185,6 +188,20 @@ const Progression = () => {
         })
     }
 
+    const onResignClick = () => {
+        setResignConfirm(true)
+    }
+
+    const onResignConfirm = () => {
+        store.dispatch({
+            type: "gameEnd"
+        })
+    }
+
+    const onResignCancel = () => {
+        setResignConfirm(false)
+    }
+
     const renderProgression = () => {
         return (
             <div className="progression">
@@ -217,10 +234,45 @@ const Progression = () => {
                 </div>
 
                 <div className="progression__buttons">
-                    <img src={first} alt="First" className="progression__buttons-button" onClick={() => onFirstClick()}/>
-                    <img src={prev} alt="Previous" className="progression__buttons-button" onClick={() => onPrevClick()}/>
-                    <img src={next} alt="Next" className="progression__buttons-button" onClick={() => onNextClick()}/>
-                    <img src={last} alt="Last" className="progression__buttons-button" onClick={() => onLastClick()}/>
+                    <img src={first} 
+                            alt="First" 
+                            className="progression__buttons-button" 
+                            onClick={() => onFirstClick()}/>
+                    <img src={prev} 
+                            alt="Previous" 
+                            className="progression__buttons-button" 
+                            onClick={() => onPrevClick()}/>
+                    <img src={next} 
+                            alt="Next" 
+                            className="progression__buttons-button" 
+                            onClick={() => onNextClick()}/>
+                    <img src={last} 
+                            alt="Last" 
+                            className="progression__buttons-button" 
+                            onClick={() => onLastClick()}/>
+                </div>
+
+                <div className="progression__resign" 
+                        style={resignConfirm ? {display: "none"} : {display: "block"}} 
+                        onClick={() => onResignClick()}>
+                    <img src={resign} 
+                            alt="Resign" 
+                            className="progression__resign-img"/>
+                </div>
+
+                <div className="progression__resign__confirm">
+                    <div className="progression__resign__confirm-btn" 
+                            style={resignConfirm ? {display: "block"} : {display: "none"}}>
+                        <img src={resign} 
+                                alt="Resign" 
+                                className="progression__resign-img" 
+                                onClick={() => onResignConfirm()}/>
+                    </div>
+                    <img src={cancel} 
+                            alt="Cancel" 
+                            style={resignConfirm ? {display: "block"} : {display: "none"}} 
+                            className="progression__resign__confirm-cancel"
+                            onClick={() => onResignCancel()}/>
                 </div>
             </div>
         )

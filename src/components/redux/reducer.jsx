@@ -122,10 +122,16 @@ const initialState = {
     coordinates: true,
     pieceGainPlayer: [],
     pieceGainOpponent: [],
+    gameEnd: false,
 }
 
 function boardReducer(state = initialState, action) {
     switch (action.type) {
+        case "gameEnd": 
+            return {
+                ...state,
+                gameEnd: true
+            }
         case "increment":
             return {
                 ...state,
