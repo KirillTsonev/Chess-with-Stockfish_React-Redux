@@ -163,6 +163,7 @@ const Progression = () => {
             type: "currentMove",
             payload: "0"
         })
+        counter.current = 0
     }
 
     const onPrevClick = () => {
@@ -200,6 +201,7 @@ const Progression = () => {
             type: "currentMove",
             payload: null
         })
+        counter.current = moves.length - 1
     }
 
     const onResignClick = () => {

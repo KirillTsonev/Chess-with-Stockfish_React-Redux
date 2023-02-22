@@ -155,7 +155,7 @@ const Board = () => {
         recordBoard()
         store.dispatch({
             type: "recordMoves",
-            payload: board
+            payload: JSON.stringify(board)
         })
         stockfish.postMessage('uci')
         stockfish.postMessage('isready')
@@ -1915,9 +1915,15 @@ const Board = () => {
             }
         }
 
+        console.log(moves)
+
         return (
             <div className="piecesGrid">
-                {currentMove === null ? boardEntries.map((a, i) => renderEntries(a[0], i)) : Object.entries(moves[currentMove]).map((a, i) => renderEntries(a[0], i))}
+                {currentMove === null 
+                    ? 
+                    boardEntries.map((a, i) => renderEntries(a[0], i))
+                    : 
+                    Object.entries(JSON.parse(moves[currentMove])).map((a, i) => renderEntries(a[0], i))}
             </div>
         )
     }
@@ -3161,7 +3167,6 @@ const Board = () => {
             enemyKing8StarArr.current.some(a => !attackedByOpponentArr.current.some(b => a.includes(b))) &&
             enemyKing8StarArr.current.some(a => a.includes(checkingPiece.current)))) {
             
-            // console.log(arrPlayerCheckmate)
             if (sounds) {
                 gameEndSound.play()
             }
@@ -3196,7 +3201,7 @@ const Board = () => {
         arrEnemyStalemate = arrEnemyStalemate.filter(a => a > 0 && a < 65)
 
         if (arrPlayerStalemate.length === 0 || arrEnemyStalemate.length === 0 || occupiedSquaresRender.length === 2 || halfMoveCounter === 50) {
-            // console.log(arrEnemyStalemate)
+ 
             if (sounds) {
                 gameEndSound.play()
             }
@@ -3880,7 +3885,7 @@ const Board = () => {
 
         store.dispatch({
             type: "recordMoves",
-            payload: store.getState().board
+            payload: JSON.stringify(store.getState().board)
         })
     }  
 
@@ -4433,7 +4438,7 @@ const Board = () => {
 
         store.dispatch({
             type: "recordMoves",
-            payload: store.getState().board
+            payload: JSON.stringify(store.getState().board)
         })
         playerKingXray()
         enemyKingXray()
@@ -4582,7 +4587,7 @@ const Board = () => {
         }
         store.dispatch({
             type: "recordMoves",
-            payload: store.getState().board
+            payload: JSON.stringify(store.getState().board)
         })
     }
 
