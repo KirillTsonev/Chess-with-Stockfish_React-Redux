@@ -126,10 +126,16 @@ const initialState = {
     milliseconds: true,
     moveSquares: [],
     pieceSquare: null,
+    moveVar: [0, 0],
 }
 
 function boardReducer(state = initialState, action) {
     switch (action.type) {
+        case "setMoveVar":
+            return {
+                ...state,
+                moveVar: action.payload
+            }
         case "pieceSquare":
             return {
                 ...state,

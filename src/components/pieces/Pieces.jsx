@@ -28,7 +28,6 @@ import { useState, useEffect, useRef, useMemo } from "react"
 import "./pieces.sass"
 
 const Pieces = () => {
-    const [moveVar, setMoveVar] = useState([0, 0]) 
     const [pawnPromotes, setPawnPromotes] = useState("")
 
     const board = useSelector(state => state.board)
@@ -49,6 +48,7 @@ const Pieces = () => {
     const sounds = useSelector(state => state.sounds)
     const moveSquares = useSelector(state => state.moveSquares)
     const pieceSquare = useSelector(state => state.pieceSquare)
+    const moveVar = useSelector(state => state.moveVar)
 
     const animations = useSelector(state => state.animations)
 
@@ -176,8 +176,12 @@ const Pieces = () => {
                     type: "activePiece",
                     payload: ""
                 })
-                setMoveVar([0, 0])
+                store.dispatch({
+                    type: "setMoveVar",
+                    payload: [0, 0]
+                })
             }, store.getState().animations === "none" ? 0 : 50)
+
             const resetPiece = setTimeout(() => {
                 store.dispatch({
                     type: "activePiece",
@@ -191,7 +195,8 @@ const Pieces = () => {
                     type: "newSquare",
                     payload: null
                 })
-            }, 150);
+            }, 150)
+
             return () => {
                 clearTimeout(movePiece)
                 clearTimeout(resetPiece)
@@ -3159,7 +3164,10 @@ const Pieces = () => {
     }
     
     const animatePiece = (i, string, num1, num2) => {    
-        setMoveVar([num1, num2])
+        store.dispatch({
+            type: "setMoveVar",
+            payload: [num1, num2]
+        })
 
         if (/^o/.test(string)) {
             
@@ -4277,7 +4285,10 @@ const Pieces = () => {
            castlingSound.play()
         }
 
-        setMoveVar([coor1, coor2])
+        store.dispatch({
+            type: "setMoveVar",
+            payload: [coor1, coor2]
+        })
 
         store.dispatch({
             type: "oldSquare",
@@ -4392,7 +4403,10 @@ const Pieces = () => {
     }
 
     const animateEnPassant = (coor1, coor2, string, i) => {
-        setMoveVar([coor1, coor2])
+        store.dispatch({
+            type: "setMoveVar",
+            payload: [coor1, coor2]
+        })
 
         let capturedPawn = i
 
