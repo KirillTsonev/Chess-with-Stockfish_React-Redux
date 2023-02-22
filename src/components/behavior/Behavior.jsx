@@ -1,4 +1,5 @@
 import store from "../redux/store"
+import { useEffect } from "react"
 import { useSelector } from "react-redux"
 
 import "./behavior.sass"
@@ -9,11 +10,39 @@ const Behavior = () => {
     const coordinates = useSelector(state => state.coordinates)
     const sounds = useSelector(state => state.sounds)
 
+    useEffect(() => {
+        if (localStorage.getItem("speed")) {
+            store.dispatch({
+                type: "behavior/animationSpeed",
+                payload: localStorage.getItem("speed")
+            })
+        }
+        if (localStorage.getItem("numbers")) {
+            store.dispatch({
+                type: "behavior/numbers",
+                payload: JSON.parse(localStorage.getItem("numbers"))
+            })
+        }
+        if (localStorage.getItem("coordinates")) {
+            store.dispatch({
+                type: "behavior/coordinates",
+                payload: JSON.parse(localStorage.getItem("coordinates"))
+            })
+        }
+        if (localStorage.getItem("sounds")) {
+            store.dispatch({
+                type: "sounds",
+                payload: JSON.parse(localStorage.getItem("sounds"))
+            })
+        }
+    }, [])
+
     const onNumbersChoice = (boolean) => {
         store.dispatch({
             type: "behavior/numbers",
             payload: boolean
         })
+        localStorage.setItem("numbers", boolean)
     }
 
     const onAnimationChoice = (speed) => {
@@ -21,6 +50,7 @@ const Behavior = () => {
             type: "behavior/animationSpeed",
             payload: speed
         })
+        localStorage.setItem("speed", speed)
     }
 
     const onCoordinatesChoice = (boolean) => {
@@ -28,6 +58,7 @@ const Behavior = () => {
             type: "behavior/coordinates",
             payload: boolean
         })
+        localStorage.setItem("coordinates", boolean)
     }
 
     const onSoundChoice = (boolean) => {
@@ -35,6 +66,7 @@ const Behavior = () => {
             type: "sounds",
             payload: boolean
         })
+        localStorage.setItem("sounds", boolean)
     }
 
     return (
