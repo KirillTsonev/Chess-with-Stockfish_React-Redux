@@ -23,7 +23,7 @@ import gameEndSoundFile from "../../sounds/gameEnd.ogg"
 import store from "../redux/store"
 
 import { useSelector } from "react-redux"
-import { useState, useEffect, useRef, useMemo, useCallback } from "react"
+import { useState, useEffect, useRef, useMemo } from "react"
 
 import "./board.sass"
 
