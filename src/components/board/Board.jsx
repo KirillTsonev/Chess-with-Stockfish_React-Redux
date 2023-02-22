@@ -1,9 +1,6 @@
-/* eslint-disable array-callback-return */
-/* eslint-disable no-loop-func */
 /* eslint-disable react-hooks/exhaustive-deps */
-
 import { useSelector } from "react-redux"
-import { useState, useEffect } from "react"
+import { useEffect } from "react"
 
 import "./board.sass"
 
