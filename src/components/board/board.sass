@@ -1,6 +1,3 @@
-.container
-    position: relative
-
 .board
     display: flex
     flex-wrap: wrap
@@ -40,36 +37,8 @@
     color: black
     font-weight: 700
 
-.piece
-    padding: 2px 5px 8px 5px
-    width: 80px
-    height: 80px
-
 .highlight
     background: #17ce2980
-
-.piecesGrid
-    position: absolute
-    width: 640px
-    height: 640px
-    left: calc(50% - 320px)
-    top: 10px
-    display: flex
-    flex-wrap: wrap
-
-.movementGrid
-    position: absolute
-    width: 640px
-    height: 640px
-    left: calc(50% - 320px)
-    top: 10px
-    display: flex
-    flex-wrap: wrap
-
-    color: orange
-    font-size: 30px
-    user-select: none
-    font-weight: 700
 
 .movementSquare
     width: 80px
@@ -132,83 +101,3 @@
     background: #cece1780
     height: 80px
     width: 80px
-
-.highlightSquare
-    width: 80px
-    height: 80px
-    position: relative
-    &:hover
-        &::before
-            content: ""
-            border: 20px solid transparent
-            border-bottom: none
-            border-top-color: #1cce31
-            position: absolute
-            transform: rotate(-45deg)
-            bottom: -3px
-            right: -13px
-        &::after
-            content: ""
-            border: 20px solid transparent
-            border-bottom: none
-            border-top-color: #1cce31
-            position: absolute
-            transform: rotate(45deg)
-            bottom: -3px
-            left: -13px
-        div
-            position: relative
-            &::before
-                content: ""
-                border: 20px solid transparent
-                border-bottom: none
-                border-top-color: #1cce31
-                position: absolute
-                transform: rotate(-135deg)
-                top: -3px
-                right: -13px
-            &::after
-                content: ""
-                border: 20px solid transparent
-                border-bottom: none
-                border-top-color: #1cce31
-                position: absolute
-                transform: rotate(135deg)
-                top: -3px
-                left: -13px
-
-.kingInCheck
-    box-shadow: inset 0 0 35px red
-
-.pawnPromotionPlayer
-    position: absolute
-    z-index: 5
-    top: 0
-
-.pawnPromotionOpponent
-    position: absolute
-    z-index: 5
-    bottom: 0
-
-.pawnContainer
-    position: relative
-    height: 80px
-
-.promotionPiece
-    height: 80px
-    cursor: pointer
-    background: #d4d4d4
-    border-radius: 100%
-    transition: all .5s
-    &:hover
-        border-radius: 0
-        background: #1cce31
-        img
-            transition: all .5s
-            transform: scale(1.2)
-
-.pawnPromotionOverlay
-    background: #00000068
-    width: 100%
-    height: 100%
-    position: absolute

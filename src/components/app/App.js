@@ -1,4 +1,5 @@
 import Board from '../board/Board';
+import Pieces from '../pieces/Pieces';
 import Options from '../options/Options';
 import Behavior from '../behavior/Behavior';
 import Progression from '../progression/Progression';
@@ -11,7 +12,10 @@ function App() {
       <Options></Options>
       <div className='visible'>
         <Behavior></Behavior>
-        <Board></Board>
+        <div className='threeGrids'>
+          <Board></Board>
+          <Pieces></Pieces>
+        </div>
         <Progression></Progression>
       </div>
     </div>

@@ -124,10 +124,22 @@ const initialState = {
     pieceGainOpponent: [],
     gameEnd: false,
     milliseconds: true,
+    moveSquares: [],
+    pieceSquare: null,
 }
 
 function boardReducer(state = initialState, action) {
     switch (action.type) {
+        case "pieceSquare":
+            return {
+                ...state,
+                pieceSquare: action.payload
+            }
+        case "moveSquares":
+            return {
+                ...state,
+                moveSquares: action.payload
+            }
         case "milliseconds":
             return {
                 ...state,
