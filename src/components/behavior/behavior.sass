@@ -1,20 +1,18 @@
 .behavior
     border: solid green 10px
-    height: 660px
     width: 300px
     padding: 20px
-    color: white
     &__container
         display: flex
         justify-content: space-between
         align-items: center
         padding: 5px 0
     &__option
-        border: solid 1px white
         padding: 5px 10px
         cursor: pointer
         user-select: none
         text-align: center
+        margin-top: 5px
     &__switch
         position: relative 
         display: flex
@@ -46,3 +44,13 @@
 
 .activeOption
     background: #1abe0b
+
+.option-dark
+    border: solid 2px white
+
+.option-light
+    border: solid 2px black
+
+.bg-darker
+    background: #262421
+    color: white

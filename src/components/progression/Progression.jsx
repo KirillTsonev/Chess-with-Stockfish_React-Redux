@@ -239,11 +239,11 @@ const Progression = () => {
                     {pieceGainOpponent.sort().reverse().join("")}
                 </div>
                 
-                <div className={`${darkTheme ? "bg-dark" : "bg-light"} progression__timer__container`}>
+                <div className={`${darkTheme ? "bg-dark" : "bg-light"} progression__timer`}>
                     {opponentMinutes}:{opponentSeconds}<span style={milliseconds ? {display: "inline"} : {display: "none"}}>:{opponentMiliseconds}</span>
                 </div>
 
-                <div className="progression__moves__container">
+                <div className="progression__moves">
                     <div className="progression__moves__numbers">
                         {moveNumbers.map(a => <div className={`${darkTheme ? "bg-dark" : "bg-light"} progression__moves__numbers-body`}>{a - 1}</div>)}
                     </div>
@@ -257,7 +257,7 @@ const Progression = () => {
                     </div>
                 </div>
 
-                <div className={`${darkTheme ? "bg-dark" : "bg-light"} progression__timer__container`}>
+                <div className={`${darkTheme ? "bg-dark" : "bg-light"} progression__timer`}>
                     {playerMinutes}:{playerSeconds}<span style={milliseconds ? {display: "inline"} : {display: "none"}}>:{playerMiliseconds}</span>
                 </div>
 

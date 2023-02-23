@@ -1,28 +1,24 @@
 .progression
     border: solid green 10px
-    min-height: 1px
     width: 300px
-    display: flex
-    flex-direction: column
-    justify-content: center
     padding: 20px 0
+    position: relative
+    top: calc( 50% - 265px )
     &__timer
-        &__container
-            font-size: 40px
-            font-weight: 700
-            text-align: center
-            height: 60px
-            padding: 8px
-            line-height: 40px
-            span
-                font-size: 25px
+        font-size: 40px
+        font-weight: 700
+        text-align: center
+        height: 60px
+        padding: 8px
+        line-height: 40px
+        span
+            font-size: 25px
     &__moves
-        &__container
-            display: flex
-            width: 280px
-            height: 150px
-            justify-content: center
-            overflow-y: scroll
+        display: flex
+        width: 280px
+        height: 150px
+        justify-content: center
+        overflow-y: scroll
         &__grid
             display: grid
             grid-template: 30px / 112px 111px
