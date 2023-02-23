@@ -110,7 +110,7 @@ const Behavior = () => {
                 <div className={`behavior__switch-ball ${ballLeft ? "behavior__switch-ball-right" : "behavior__switch-ball-left"}`}></div>
                 <div>🌜</div>
             </div>
-            {/* <div className="behavior__container">
+            <div className="behavior__container">
                 <div className="behavior__body">Visible numbers:</div>
                 <div className="behavior__option">
                     <div className={`behavior__option-body ${numbers ? "activeOption" : null} ${darkTheme ? "option-dark" : "option-light"}`}
@@ -118,7 +118,7 @@ const Behavior = () => {
                     <div className={`behavior__option-body ${!numbers ? "activeOption" : null} ${darkTheme ? "option-dark" : "option-light"}`}
                             onClick={() => onNumbersChoice(false)}>Off</div>
                 </div>
-            </div> */}
+            </div>
             <div className="behavior__container">
                 <div className="behavior__body">Animation speed:</div>
                 <div className="behavior__optionAnim">           

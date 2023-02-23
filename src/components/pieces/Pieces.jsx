@@ -50,6 +50,7 @@ const Pieces = () => {
     const pieceSquare = useSelector(state => state.pieceSquare)
     const moveVar = useSelector(state => state.moveVar)
     const gameEnd = useSelector(state => state.gameEnd)
+    const options = useSelector(state => state.options)
 
     const animations = useSelector(state => state.animations)
 
@@ -103,7 +104,7 @@ const Pieces = () => {
         occupiedSquaresLive = Object.values(justOccupiedLive).map(a => a = a[0])
 
 
-        encode()
+      
 
         playerKingSpiderSense()
         enemyKingSpiderSense()
@@ -211,7 +212,7 @@ const Pieces = () => {
         if (((color === "white" && toMove === "b") || (color === "black" && toMove === "w")) && !sandbox) {
             engineTurn()
         }
-    }, [toMove])
+    }, [toMove, options])
 
     const enPassantSquare = useRef([0, ""])
 
@@ -518,14 +519,37 @@ const Pieces = () => {
     let playerNewSquareForEngine = useRef(null)
 
     const engineTurn = () => {
-        
+        encode()
 
         let string = `position fen ${stringToSend} moves ${playerPiece.current}${playerNewSquareForEngine.current}`
 
         console.log(string)
-        stockfish.postMessage(string)
-        // setTimeout(() => {
+        if (moves.length === 1) {
+            setTimeout(() => {
+                pieceSquareForEngine.current = 12
+                
+                store.dispatch({
+                    type: "oldSquare",
+                    payload: 12
+                })
+                
+                store.dispatch({
+                    type: "pieceSquare",
+                    payload: 12
+                })
+
+                enemyPawn4 = 12
+                updateStateBoard(28, "op4")
+                enemyPawns = [enemyPawn1, enemyPawn2, enemyPawn3, enemyPawn4, enemyPawn5, enemyPawn6, enemyPawn7, enemyPawn8]
+                movePawn(28, "op4")
+            }, 1000);
+        } else {
+            stockfish.postMessage(string)
             stockfish.postMessage('go movetime 1000')
+        }
+        
+        // setTimeout(() => {
+            
         // }, 1000);
     }
 
@@ -2873,6 +2897,7 @@ const Pieces = () => {
                 default:
                     break;
             }
+
             updateStateBoard(i, activePiece)
             enemyPawns = [enemyPawn1, enemyPawn2, enemyPawn3, enemyPawn4, enemyPawn5, enemyPawn6, enemyPawn7, enemyPawn8]
             movePawn(i, activePiece)

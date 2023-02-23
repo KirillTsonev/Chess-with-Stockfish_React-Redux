@@ -1,7 +1,7 @@
 const initialState = {
-    color: "white",
-    time: 600000,
-    increment: 1000,
+    color: "",
+    time: 0,
+    increment: 0,
     difficulty: "",
     options: true,
     animations: "fast",
@@ -113,7 +113,7 @@ const initialState = {
     halfMoveCounter: 0,
     enemyKingAttacked: false,
     playerKingAttacked: false,
-    sandbox: true,
+    sandbox: null,
     moves: [],
     highlightMove: [],
     currentMove: null,
@@ -134,6 +134,16 @@ const initialState = {
 
 function boardReducer(state = initialState, action) {
     switch (action.type) {
+        case "setTime":
+            return {
+                ...state,
+                time: action.payload
+            }
+        case "increment":
+            return {
+                ...state,
+                increment: action.payload
+            }
         case "newGame": 
             return {
                 newGame: true
@@ -177,11 +187,6 @@ function boardReducer(state = initialState, action) {
             return {
                 ...state,
                 gameEnd: true
-            }
-        case "increment":
-            return {
-                ...state,
-                increment: action.payload
             }
         case "pieceGainPlayer":
             return {

@@ -74,7 +74,7 @@ const Progression = () => {
         let startingTime = time / 1000 / 60
         setPlayerMinutes(getZero(startingTime))
         setOpponentMinutes(getZero(startingTime))
-    }, []);
+    }, [time]);
 
     function getZero(num){
         if (num >= 0 && num < 10) { 

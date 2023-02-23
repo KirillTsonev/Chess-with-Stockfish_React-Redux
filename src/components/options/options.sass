@@ -1,28 +1,36 @@
-.optionsContainer
+.options
     width: 100%
     height: 100%
     position: absolute
     background: white
-    background: #69b0e7
+    background: url("../../images/bg.jpg") center center / cover no-repeat
     font-size: 20px
     transition: all .3s
     z-index: 10
-    // display: none
-    &__side
-        background: #308dd5
-        width: 400px
-        height: 150px
+    &__outer
+        width: 500px
+        height: 250px
         position: absolute
-        top: calc(50% - 75px)
-        left: calc(50% - 200px)
-        padding: 30px
+        top: calc(50% - 125px)
+        left: calc(50% - 250px)
+        overflow: hidden
+    &__inner
+    &__body
+        width: 500px
+        height: 250px
+        background: green
+        padding: 40px
+        display: flex
+        flex-direction: column
+        justify-content: space-between
     &__qheader
         text-align: center
-    &__acontainer
+    &__container
         display: flex
         justify-content: space-around
         margin-top: 20px
-    &__aoption
+    &__choice
         cursor: pointer
         user-select: none
+        text-align: center
 
