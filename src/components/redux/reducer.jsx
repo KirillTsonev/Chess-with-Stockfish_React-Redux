@@ -127,10 +127,16 @@ const initialState = {
     moveSquares: [],
     pieceSquare: null,
     moveVar: [0, 0],
+    darkTheme: false,
 }
 
 function boardReducer(state = initialState, action) {
     switch (action.type) {
+        case "darkTheme":
+            return {
+                ...state,
+                darkTheme: action.payload
+            }
         case "setMoveVar":
             return {
                 ...state,

@@ -3,12 +3,19 @@ import store from "../redux/store"
 import { useSelector } from "react-redux"
 import { useRef, useEffect, useState } from "react"
 
-import first from "../../icons/first.png"
-import prev from "../../icons/previous.png"
-import next from "../../icons/next.png"
-import last from "../../icons/last.png"
-import resign from "../../icons/resign.png"
+import firstDark from "../../icons/first-dark.png"
+import prevDark from "../../icons/prev-dark.png"
+import nextDark from "../../icons/next-dark.png"
+import lastDark from "../../icons/last-dark.png"
+import resignDark from "../../icons/resign-dark.png"
+import firstLight from "../../icons/first-light.png"
+import prevLight from "../../icons/prev-light.png"
+import nextLight from "../../icons/next-light.png"
+import lastLight from "../../icons/last-light.png"
+import resignLight from "../../icons/resign-light.png"
 import cancel from "../../icons/x.png"
+
+import gameEndSoundFile from "../../sounds/gameEnd.ogg"
 
 import "./progression.sass"
 
@@ -31,11 +38,14 @@ const Progression = () => {
     const pieceGainOpponent = useSelector(state => state.pieceGainOpponent)
     const increment = useSelector(state => state.increment)
     const milliseconds = useSelector(state => state.milliseconds)
+    const darkTheme = useSelector(state => state.darkTheme)
 
     const bottomRef = useRef(null)
     const elapsedPlayer = useRef(0)
     const elapsedOpponent = useRef(0)
     const counter = useRef(0)
+
+    const gameEndSound = new Audio(gameEndSoundFile)
 
     useEffect(() => {
         bottomRef.current?.scrollIntoView({
@@ -205,13 +215,17 @@ const Progression = () => {
     }
 
     const onResignClick = () => {
-        setResignConfirm(true)
+        if (moves.length > 1) {
+            setResignConfirm(true)
+        }
     }
 
     const onResignConfirm = () => {
         store.dispatch({
             type: "gameEnd"
         })
+        gameEndSound.play()
+        setResignConfirm(false)
     }
 
     const onResignCancel = () => {
@@ -220,28 +234,30 @@ const Progression = () => {
 
     const renderProgression = () => {
         return (
-            <div className="progression">
+            <div className={`${darkTheme ? "bg-darker" : null} progression`}>
                 <div className="progression__pieceGain">
                     {pieceGainOpponent.sort().reverse().join("")}
                 </div>
                 
-                <div className="progression__timer__container">
+                <div className={`${darkTheme ? "bg-dark" : "bg-light"} progression__timer__container`}>
                     {opponentMinutes}:{opponentSeconds}<span style={milliseconds ? {display: "inline"} : {display: "none"}}>:{opponentMiliseconds}</span>
                 </div>
 
                 <div className="progression__moves__container">
                     <div className="progression__moves__numbers">
-                        {moveNumbers.map(a => <div className="progression__moves__numbers-body">{a - 1}</div>)}
+                        {moveNumbers.map(a => <div className={`${darkTheme ? "bg-dark" : "bg-light"} progression__moves__numbers-body`}>{a - 1}</div>)}
                     </div>
                     <div className="progression__moves__grid">
                         {moves.slice(1).map((a, i) => 
-                            <div className={`${(i === currentMove - 1) || (i + 2 === moves.length && !currentMove) ? "activeMove" : null} progression__moves__grid-item`} 
+                            <div className={`${((i === currentMove - 1) || (i + 2 === moves.length && !currentMove)) && darkTheme ? "activeMoveDark" : null}
+                                    ${((i === currentMove - 1) || (i + 2 === moves.length && !currentMove)) && !darkTheme ? "activeMoveLight" : null} 
+                                    progression__moves__grid-item`} 
                                 onClick={() => onMoveClick(i + 1)}
                                 ref={(i + 2 === moves.length && !currentMove) ? bottomRef : null}>{notationArr[i]}</div>)}
                     </div>
                 </div>
 
-                <div className="progression__timer__container">
+                <div className={`${darkTheme ? "bg-dark" : "bg-light"} progression__timer__container`}>
                     {playerMinutes}:{playerSeconds}<span style={milliseconds ? {display: "inline"} : {display: "none"}}>:{playerMiliseconds}</span>
                 </div>
 
@@ -250,29 +266,29 @@ const Progression = () => {
                 </div>
 
                 <div className="progression__buttons">
-                    <img src={first} 
+                    <img src={darkTheme ? firstDark : firstLight} 
                             alt="First" 
                             className="progression__buttons-button" 
                             onClick={() => onFirstClick()}/>
-                    <img src={prev} 
+                    <img src={darkTheme ? prevDark : prevLight} 
                             alt="Previous" 
                             className="progression__buttons-button" 
                             onClick={() => onPrevClick()}/>
-                    <img src={next} 
+                    <img src={darkTheme ? nextDark : nextLight} 
                             alt="Next" 
                             className="progression__buttons-button" 
                             onClick={() => onNextClick()}/>
-                    <img src={last} 
+                    <img src={darkTheme ? lastDark : lastLight} 
                             alt="Last" 
                             className="progression__buttons-button" 
                             onClick={() => onLastClick()}/>
                 </div>
 
-                <div className="progression__resign" 
-                        style={resignConfirm ? {display: "none"} : {display: "block"}} 
+                <div className={`${darkTheme ? "bg-dark" : "bg-light"}  progression__resign`}
+                        style={resignConfirm ? {display: "none"} : {display: "block"}}
                         onClick={() => onResignClick()}
                         title="Resign">
-                    <img src={resign} 
+                    <img src={darkTheme ? resignDark : resignLight} 
                             alt="Resign" 
                             className="progression__resign-img"/>
                 </div>
@@ -281,7 +297,7 @@ const Progression = () => {
                     <div className="progression__resign__confirm-btn" 
                             style={resignConfirm ? {display: "block"} : {display: "none"}}
                             title="Resign">
-                        <img src={resign} 
+                        <img src={darkTheme ? resignDark : resignLight} 
                                 alt="Resign" 
                                 className="progression__resign-img" 
                                 onClick={() => onResignConfirm()}/>

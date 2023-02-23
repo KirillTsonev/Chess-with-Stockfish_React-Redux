@@ -1,10 +1,12 @@
 import store from "../redux/store"
-import { useEffect } from "react"
+import { useState, useEffect } from "react"
 import { useSelector } from "react-redux"
 
 import "./behavior.sass"
 
 const Behavior = () => {
+    const [ballLeft, setBallLeft] = useState(false)
+
     const numbers = useSelector(state => state.numbers)
     const animations = useSelector(state => state.animations)
     const coordinates = useSelector(state => state.coordinates)
@@ -42,7 +44,23 @@ const Behavior = () => {
                 payload: JSON.parse(localStorage.getItem("milliseconds"))
             })
         }
+        if (localStorage.getItem("darkTheme")) {
+            setBallLeft(JSON.parse(localStorage.getItem("darkTheme")))
+            store.dispatch({
+                type: "darkTheme",
+                payload: JSON.parse(localStorage.getItem("darkTheme"))
+            })
+        }
     }, [])
+
+    const onChangeTheme = () => {
+        setBallLeft(!ballLeft)
+        store.dispatch({
+            type: "darkTheme",
+            payload: !ballLeft
+        })
+        localStorage.setItem("darkTheme", !ballLeft)
+    }
 
     const onNumbersChoice = (boolean) => {
         store.dispatch({
@@ -86,6 +104,11 @@ const Behavior = () => {
 
     return (
         <div className="behavior">
+            <div className="behavior__switch" onClick={() => onChangeTheme()}>
+                <div>🌞</div>
+                <div className={`behavior__switch-ball ${ballLeft ? "behavior__switch-ball-right" : "behavior__switch-ball-left"}`}></div>
+                <div>🌜</div>
+            </div>
             <div className="behavior__container">
                 <div className="behavior__body">Visible numbers:</div>
                 <div className={`behavior__option ${numbers ? "activeOption" : null}`}
