@@ -311,6 +311,8 @@ const Progression = () => {
                         onClick={() => onResignCancel()}
                         title="Cancel"/>
             </div>
+
+            <div className="progression__new" style={gameEnd && moves.length > 1 ? {display: "block"} : {display: "none"}}>New Game</div>
         </div>
     )
 }
