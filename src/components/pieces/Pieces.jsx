@@ -1456,7 +1456,7 @@ const Pieces = () => {
                 <img src={src}
                     key={a}
                     alt={alt}
-                    className={`${(/^ok/.test(a) && enemyKingAttacked) || (/^pk/.test(a) && playerKingAttacked) ? "kingInCheck" : null} piece ${a}`}
+                    className={`${(/^ok/.test(a) && enemyKingAttacked) || (/^pk/.test(a) && playerKingAttacked) ? "kingInCheck" : null} piece `}
                     style={activePiece === `${a}`
                         ?
                         {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
@@ -3116,7 +3116,10 @@ const Pieces = () => {
             store.dispatch({
                 type: "gameEnd"
             })
-            
+            store.dispatch({
+                type: "modalOpen",
+                payload: true
+            })
         }
 
         playerRooks.forEach(a => checkArrays(rookMoves.current, a, arrPlayerStalemate, playerSquaresRender, enemySquaresRender, true, true))
@@ -3150,6 +3153,10 @@ const Pieces = () => {
             store.dispatch({
                 type: "gameEnd"
             })
+            store.dispatch({
+                type: "modalOpen",
+                payload: true
+            })
         }
 
         for (let i = 0; i < moves.length; i++) {
@@ -3160,6 +3167,10 @@ const Pieces = () => {
                     }
                     store.dispatch({
                         type: "gameEnd"
+                    })
+                    store.dispatch({
+                        type: "modalOpen",
+                        payload: true
                     })
             }
         }

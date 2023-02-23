@@ -3,6 +3,7 @@ import Pieces from '../pieces/Pieces'
 import Options from '../options/Options'
 import Behavior from '../behavior/Behavior'
 import Progression from '../progression/Progression'
+import Modal from '../modal/Modal'
 
 import { useSelector } from 'react-redux'
 
@@ -18,13 +19,14 @@ function App() {
         <div>
           <Behavior></Behavior>
         </div>
-        <div className='threeGrids'>
+        <div className="threeGrids">
           <Board></Board>
           <Pieces></Pieces>
         </div>
         <div>
           <Progression></Progression>
         </div>
+        <Modal></Modal>
       </div>
     </div>
   );

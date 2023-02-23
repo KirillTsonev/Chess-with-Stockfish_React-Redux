@@ -1,0 +1,88 @@
+.overlay
+    display: none
+    position: absolute
+    background: #00000079
+    width: 100%
+    height: 100%
+    top: 0
+    left: 0
+    overflow: hidden
+    
+.modal
+    display: none
+    position: absolute
+    width: 500px
+    height: 300px
+    border: solid green 10px
+    box-shadow: 15px 15px 15px black
+    left: calc( 50% - 250px )
+    top: calc( 50% - 150px )
+    user-select: none
+    padding: 20px
+    &__heading
+        text-align: center
+        font-size: 30px
+    &__close
+        position: absolute
+        right: 10px
+        top: 10px
+        cursor: pointer
+    &__new
+        background: green
+        width: 150px
+        height: 50px
+        border-radius: 10px
+        font-size: 25px
+        line-height: 25px
+        text-align: center
+        padding: 10px
+        cursor: pointer
+        position: absolute
+        bottom: 30px
+        left: calc( 50% - 75px )
+        transition: all .3s
+        &:hover
+            left: calc( 50% - 70px )
+            bottom: 35px
+            box-shadow: -1px 1px 1px #006400, -2px 2px 1px #006400, -3px 3px 1px #006400, -4px 4px 1px #006400, -5px 5px 1px #006400
+
+.bg-dark
+    background: #302E2C
+    color: white
+    svg
+        height: 20px
+        width: 20px
+        fill: white
+
+// .bg-darker
+//     background: #262421
+//     color: white
+
+.bg-light
+    background: #F0F0F0
+    svg
+        height: 20px
+        width: 20px
+        fill: black
+
+@keyframes fadeIn
+    0%
+        opacity: 0
+    100%
+        opacity: 1
+
+@keyframes fadeUp
+    0%
+        opacity: 0
+        transform: translateY(300px)
+    100%
+        opacity: 1
+        transform: translateY(0px)        
+
+.activeOverlay
+    display: block
+    animation: fadeIn 1.5s 1 linear
+
+.activeModal
+    display: block
+    animation: fadeUp 1.5s 1 linear

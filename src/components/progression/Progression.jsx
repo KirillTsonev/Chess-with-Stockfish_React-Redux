@@ -216,14 +216,16 @@ const Progression = () => {
     }
 
     const onResignClick = () => {
-        if (moves.length > 1 && !gameEnd) {
-            setResignConfirm(true)
-        }
+        setResignConfirm(true)
     }
 
     const onResignConfirm = () => {
         store.dispatch({
             type: "gameEnd"
+        })
+        store.dispatch({
+            type: "modalOpen",
+            payload: true
         })
         gameEndSound.play()
         setResignConfirm(false)
@@ -285,7 +287,7 @@ const Progression = () => {
             </div>
 
             <div className={`${darkTheme ? "bg-dark" : "bg-light"}  progression__resign`}
-                    style={resignConfirm ? {display: "none"} : {display: "block"}}
+                    style={resignConfirm || gameEnd || moves.length === 1 ? {display: "none"} : {display: "block"}}
                     onClick={() => onResignClick()}
                     title="Resign">
                 <img src={darkTheme ? resignDark : resignLight} 
@@ -296,11 +298,11 @@ const Progression = () => {
             <div className="progression__resign__confirm">
                 <div className="progression__resign__confirm-btn" 
                         style={resignConfirm ? {display: "block"} : {display: "none"}}
-                        title="Resign">
+                        title="Resign"
+                        onClick={() => onResignConfirm()}>
                     <img src={darkTheme ? resignDark : resignLight} 
                             alt="Resign" 
-                            className="progression__resign-img" 
-                            onClick={() => onResignConfirm()}/>
+                            className="progression__resign-img"/>
                 </div>
                 <img src={cancel} 
                         alt="Cancel" 

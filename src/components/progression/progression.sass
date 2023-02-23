@@ -4,6 +4,7 @@
     padding: 20px 0
     position: relative
     top: calc( 50% - 265px )
+    height: 530px
     &__timer
         font-size: 40px
         font-weight: 700
@@ -61,10 +62,12 @@
         height: 50px
         padding: 5px
         margin: 10px auto
-        transition: background .3s
+        transition: all .3s
         cursor: pointer
         &:hover
             background: #008000
+            box-shadow: -1px 1px 1px #006400, -2px 2px 1px #006400, -3px 3px 1px #006400, -4px 4px 1px #006400, -5px 5px 1px #006400
+            transform: translate(5px, -5px)
         &-img
             display: block
             width: 40px
@@ -81,10 +84,9 @@
                 padding: 5px
                 margin: 10px auto
                 cursor: pointer
-                box-shadow: -1px 1px 1px #006400, -2px 2px 1px #006400, -3px 3px 1px #006400, -4px 4px 1px #006400, -5px 5px 1px #006400, -6px 6px 1px #006400
+                box-shadow: -1px 1px 1px #006400, -2px 2px 1px #006400, -3px 3px 1px #006400, -4px 4px 1px #006400, -5px 5px 1px #006400
                 position: relative
-                bottom: 5px
-                left: 20px
+                transform: translate(20px, -5px)
             &-cancel
                 height: 30px
                 width: 30px
@@ -105,9 +107,9 @@
     background: #302E2C
     color: white
 
-.bg-darker
-    background: #262421
-    color: white
+// .bg-darker
+//     background: #262421
+//     color: white
 
 .bg-light
     background: #F0F0F0
