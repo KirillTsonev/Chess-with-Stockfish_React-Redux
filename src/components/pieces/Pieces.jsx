@@ -3165,7 +3165,11 @@ const Pieces = () => {
         }
     }
     
-    const animatePiece = (i, string, num1, num2) => {    
+    const animatePiece = (i, string, num1, num2) => {   
+        if (moves.length === 1) {
+            gameEndSound.play()
+        } 
+
         store.dispatch({
             type: "setMoveVar",
             payload: [num1, num2]
