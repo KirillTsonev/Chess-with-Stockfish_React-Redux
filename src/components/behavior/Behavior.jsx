@@ -102,7 +102,7 @@ const Behavior = () => {
         })
         localStorage.setItem("milliseconds", boolean)
     }
-    
+
     return (
         <div className={`${darkTheme ? "bg-darker" : null} behavior`}>
             <div className="behavior__switch" onClick={() => onChangeTheme()}>
@@ -112,44 +112,52 @@ const Behavior = () => {
             </div>
             <div className="behavior__container">
                 <div className="behavior__body">Visible numbers:</div>
-                <div className={`behavior__option ${numbers ? "activeOption" : null} ${darkTheme ? "option-dark" : "option-light"}`}
-                        onClick={() => onNumbersChoice(true)}>On</div>
-                <div className={`behavior__option ${!numbers ? "activeOption" : null} ${darkTheme ? "option-dark" : "option-light"}`}
-                        onClick={() => onNumbersChoice(false)}>Off</div>
+                <div className="behavior__option">
+                    <div className={`behavior__option-body ${numbers ? "activeOption" : null} ${darkTheme ? "option-dark" : "option-light"}`}
+                            onClick={() => onNumbersChoice(true)}>On</div>
+                    <div className={`behavior__option-body ${!numbers ? "activeOption" : null} ${darkTheme ? "option-dark" : "option-light"}`}
+                            onClick={() => onNumbersChoice(false)}>Off</div>
+                </div>
             </div>
             <div className="behavior__container">
                 <div className="behavior__body">Animation speed:</div>
-                <div>           
-                    <div className={`behavior__option ${animations === "none" ? "activeOption" : null} ${darkTheme ? "option-dark" : "option-light"}`}
+                <div className="behavior__optionAnim">           
+                    <div className={`behavior__option-body ${animations === "none" ? "activeOption" : null} ${darkTheme ? "option-dark" : "option-light"}`}
                             onClick={() => onAnimationChoice("none")}>None</div>
-                    <div className={`behavior__option ${animations === "slow" ? "activeOption" : null} ${darkTheme ? "option-dark" : "option-light"}`} 
+                    <div className={`behavior__option-body ${animations === "slow" ? "activeOption" : null} ${darkTheme ? "option-dark" : "option-light"}`} 
                             onClick={() => onAnimationChoice("slow")}>Slow</div>
-                    <div className={`behavior__option ${animations === "average" ? "activeOption" : null} ${darkTheme ? "option-dark" : "option-light"}`}
+                    <div className={`behavior__option-body ${animations === "average" ? "activeOption" : null} ${darkTheme ? "option-dark" : "option-light"}`}
                             onClick={() => onAnimationChoice("average")}>Normal</div>
-                    <div className={`behavior__option ${animations === "fast" ? "activeOption" : null} ${darkTheme ? "option-dark" : "option-light"}`}
+                    <div className={`behavior__option-body ${animations === "fast" ? "activeOption" : null} ${darkTheme ? "option-dark" : "option-light"}`}
                             onClick={() => onAnimationChoice("fast")}>Fast</div>
                 </div>
             </div>
             <div className="behavior__container">
                 <div className="behavior__body">Coordinates:</div>
-                <div className={`behavior__option ${coordinates ? "activeOption" : null} ${darkTheme ? "option-dark" : "option-light"}`}
-                        onClick={() => onCoordinatesChoice(true)}>On</div>
-                <div className={`behavior__option ${!coordinates ? "activeOption" : null} ${darkTheme ? "option-dark" : "option-light"}`}
-                        onClick={() => onCoordinatesChoice(false)}>Off</div>
+                <div className="behavior__option">
+                    <div className={`behavior__option-body ${coordinates ? "activeOption" : null} ${darkTheme ? "option-dark" : "option-light"}`}
+                            onClick={() => onCoordinatesChoice(true)}>On</div>
+                    <div className={`behavior__option-body ${!coordinates ? "activeOption" : null} ${darkTheme ? "option-dark" : "option-light"}`}
+                            onClick={() => onCoordinatesChoice(false)}>Off</div>
+                </div>
             </div>
             <div className="behavior__container">
                 <div className="behavior__body">Sounds:</div>
-                <div className={`behavior__option ${sounds ? "activeOption" : null} ${darkTheme ? "option-dark" : "option-light"}`}
-                        onClick={() => onSoundChoice(true)}>On</div>
-                <div className={`behavior__option ${!sounds ? "activeOption" : null} ${darkTheme ? "option-dark" : "option-light"}`}
-                        onClick={() => onSoundChoice(false)}>Off</div>
+                <div className="behavior__option">
+                    <div className={`behavior__option-body ${sounds ? "activeOption" : null} ${darkTheme ? "option-dark" : "option-light"}`}
+                            onClick={() => onSoundChoice(true)}>On</div>
+                    <div className={`behavior__option-body ${!sounds ? "activeOption" : null} ${darkTheme ? "option-dark" : "option-light"}`}
+                            onClick={() => onSoundChoice(false)}>Off</div>
+                </div>
             </div>
             <div className="behavior__container">
                 <div className="behavior__body">Timer milliseconds:</div>
-                <div className={`behavior__option ${milliseconds ? "activeOption" : null} ${darkTheme ? "option-dark" : "option-light"}`}
-                        onClick={() => onMillisecondsChoice(true)}>On</div>
-                <div className={`behavior__option ${!milliseconds ? "activeOption" : null} ${darkTheme ? "option-dark" : "option-light"}`}
-                        onClick={() => onMillisecondsChoice(false)}>Off</div>
+                <div className="behavior__option">
+                    <div className={`behavior__option-body ${milliseconds ? "activeOption" : null} ${darkTheme ? "option-dark" : "option-light"}`}
+                            onClick={() => onMillisecondsChoice(true)}>On</div>
+                    <div className={`behavior__option-body ${!milliseconds ? "activeOption" : null} ${darkTheme ? "option-dark" : "option-light"}`}
+                            onClick={() => onMillisecondsChoice(false)}>Off</div>
+                </div>
             </div>
         </div>
     )

@@ -180,7 +180,7 @@ const Pieces = () => {
                     type: "setMoveVar",
                     payload: [0, 0]
                 })
-            }, store.getState().animations === "none" ? 0 : 50)
+            }, animations === "none" ? 0 : 50)
 
             const resetPiece = setTimeout(() => {
                 store.dispatch({
@@ -715,7 +715,9 @@ const Pieces = () => {
         } else if (animations === "average") {
             animationSpeed.current = .5
         } else if (animations === "slow") {
-            animationSpeed.current = .7
+            animationSpeed.current = .8
+        } else {
+            animationSpeed.current = 0
         }
     }, [animations])
 

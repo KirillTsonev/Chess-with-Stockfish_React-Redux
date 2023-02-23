@@ -3,18 +3,25 @@
     width: 300px
     padding: 20px
     position: relative
-    top: calc( 50% - 229px )
+    top: calc( 50% - 234px )
     &__container
         display: flex
         justify-content: space-between
         align-items: center
         padding: 5px 0
     &__option
-        padding: 5px 10px
-        cursor: pointer
-        user-select: none
-        text-align: center
-        margin-top: 5px
+        display: flex
+        &-body
+            padding: 5px 10px
+            cursor: pointer
+            user-select: none
+            text-align: center
+            margin: 5px 2px 0 2px
+            transition: background .3s
+            &:hover
+                background: orange
+    &__optionAnim
+        width: 98px
     &__switch
         position: relative 
         display: flex
@@ -28,7 +35,7 @@
         padding: 0 5px
         cursor: pointer
         user-select: none
-        margin: 0 auto
+        margin: 0 auto 10px auto
         &-ball
             top: 3px
             position: absolute
