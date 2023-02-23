@@ -49,6 +49,7 @@ const Pieces = () => {
     const moveSquares = useSelector(state => state.moveSquares)
     const pieceSquare = useSelector(state => state.pieceSquare)
     const moveVar = useSelector(state => state.moveVar)
+    const gameEnd = useSelector(state => state.gameEnd)
 
     const animations = useSelector(state => state.animations)
 
@@ -2350,7 +2351,7 @@ const Pieces = () => {
             })
         }
         
-        if (occupiedSquaresRender.includes(i) && activePiece !== piece && !currentMove) {
+        if (occupiedSquaresRender.includes(i) && activePiece !== piece && !currentMove && !gameEnd) {
             if (((color === "white" && toMove === "w") || (color === "black" && toMove === "b")) && playerSquaresRender.includes(i)) {
                 store.dispatch({
                     type:"moveSquares",
@@ -3186,6 +3187,12 @@ const Pieces = () => {
             payload: [num1, num2]
         })
 
+        if ((color === "white" && toMove === "w") || (color === "black" && toMove === "w")) {
+            store.dispatch({
+                type: "moveNumbers"
+            })
+        }
+
         if (/^o/.test(string)) {
             
             if (playerSquaresRender.includes(i)){
@@ -3509,9 +3516,6 @@ const Pieces = () => {
         }
 
         if (/^p/.test(string)) {
-            store.dispatch({
-                type: "moveNumbers"
-            })
             
             if (enemySquaresRender.includes(i)) {
                 store.dispatch({
@@ -4334,7 +4338,11 @@ const Pieces = () => {
             enemyRook2 = newSqRook
         }
 
-
+        if ((color === "white" && toMove === "w") || (color === "black" && toMove === "b")) {
+            store.dispatch({
+                type: "moveNumbers"
+            })
+        }
 
         playerRooks = [playerRook1, playerRook2, playerRook3, playerRook4, playerRook5, playerRook6, playerRook7, playerRook8, playerRook9, playerRook01]
         enemyRooks = [enemyRook1, enemyRook2, enemyRook3, enemyRook4, enemyRook5, enemyRook6, enemyRook7, enemyRook8, enemyRook9, enemyRook01]
@@ -4342,9 +4350,6 @@ const Pieces = () => {
         recordBoard()
 
         if (/^pr/.test(rookToMove)) {
-            store.dispatch({
-                type: "moveNumbers"
-            })
             if ((playerRooks.some(a => enemyKingSpiderSenseArr.current[1].includes(a)))
                 && occupiedSquaresLive.filter(a => !playerSquaresLive.includes(a))
                                         .every(a => !enemyKingSpiderSenseArr.current[1].includes(a))) {

@@ -19,6 +19,12 @@ const Modal = () => {
         })
     }
 
+    const onNewGame = () => {
+        store.dispatch({
+            type: "newGame"
+        })
+    }
+
     return (
         <div className={`overlay ${gameEnd && modal ? "activeOverlay" : null}`}>
             <div className={`modal ${darkTheme ? "bg-dark" : "bg-light"} ${gameEnd && modal ? "activeModal" : null}`}>
@@ -32,7 +38,7 @@ const Modal = () => {
                         29.0226 28.0825 28.8385 28.4489 28.4721C29.1837 27.7376 29.1837 26.55 28.4489 25.8155L17.1568 14.5231Z"/>
                     </svg>
                 </div>
-                <div className="modal__new">New Game</div>
+                <div className="modal__new" onClick={() => onNewGame()}>New Game</div>
             </div>
         </div>
     )

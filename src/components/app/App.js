@@ -11,6 +11,11 @@ import "./app.sass"
 
 function App() {
   const darkTheme = useSelector(state => state.darkTheme)
+  const newGame = useSelector(state => state.newGame)
+
+  if (newGame) {
+    window.location.reload()
+  }
 
   return (
     <div className="app" style={darkTheme ? {background: "#161512"} : null}>

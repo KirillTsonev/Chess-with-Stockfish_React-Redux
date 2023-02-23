@@ -3,7 +3,7 @@ const initialState = {
     time: 600000,
     increment: 1000,
     difficulty: "",
-    options: false,
+    options: true,
     animations: "fast",
     sounds: true,
     numbers: false,
@@ -14,10 +14,10 @@ const initialState = {
         or1: [1, "a8"],
         oh1: [2, "b8"],
         ob1: [3, "c8"],
-        // okw1: [4, "d8"],
+        okw: [4, "d8"],
         oqb1: [4, "d8"],
         okb: [5, "e8"],
-        // oqw: [5, "e8"],
+        oqw1: [5, "e8"],
         ob2: [6, "f8"],
         oh2: [7, "g8"],
         or2: [8, "h8"],
@@ -72,10 +72,10 @@ const initialState = {
         pr1: [57, "a1"],
         ph1: [58, "b1"],
         pb1: [59, "c1"],
-        // pkb1: [60, "d1"],
+        pkb: [60, "d1"],
         pqw1: [60, "d1"],
         pkw: [61, "e1"],
-        // pqb: [61, "e1"],
+        pqb1: [61, "e1"],
         pb2: [62, "f1"],
         ph2: [63, "g1"],
         pr2: [64, "h1"],
@@ -109,7 +109,7 @@ const initialState = {
         or2: true
     },
     moveCounter: 1,
-    moveNumbers: [],
+    moveNumbers: [1],
     halfMoveCounter: 0,
     enemyKingAttacked: false,
     playerKingAttacked: false,
@@ -127,12 +127,17 @@ const initialState = {
     moveSquares: [],
     pieceSquare: null,
     moveVar: [0, 0],
-    darkTheme: false,
+    darkTheme: true,
     modalOpen: false,
+    newGame: false
 }
 
 function boardReducer(state = initialState, action) {
     switch (action.type) {
+        case "newGame": 
+            return {
+                newGame: true
+            }
         case "modalOpen": 
             return {
                 ...state,
@@ -206,7 +211,7 @@ function boardReducer(state = initialState, action) {
         case "moveNumbers":
             return {
                 ...state,
-                moveNumbers: [...state.moveNumbers, state.moveCounter + 1]
+                moveNumbers: [...state.moveNumbers, state.moveNumbers.length + 1]
             }
         case "highlightMove":
             return {
@@ -264,7 +269,7 @@ function boardReducer(state = initialState, action) {
                 options: false
             }
         case "color/white":
-            const { oqw, okw, pqb, pkb, ...boardRest1 } = state.board
+            const { oqw1, okw, pqb1, pkb, ...boardRest1 } = state.board
 
             return {
                 ...state,
@@ -274,7 +279,7 @@ function boardReducer(state = initialState, action) {
                 },
             }
         case "color/black":
-            const { oqb, okb, pqw, pkw, ...boardRest2 } = state.board
+            const { oqb1, okb, pqw1, pkw, ...boardRest2 } = state.board
 
             return {
                 ...state,

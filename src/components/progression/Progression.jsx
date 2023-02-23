@@ -235,6 +235,12 @@ const Progression = () => {
         setResignConfirm(false)
     }
 
+    const onNewGame = () => {
+        store.dispatch({
+            type: "newGame"
+        })
+    }
+
     return (
         <div className={`${darkTheme ? "bg-darker" : null} progression`}>
             <div className="progression__pieceGain">
@@ -247,7 +253,7 @@ const Progression = () => {
 
             <div className="progression__moves">
                 <div className="progression__moves__numbers">
-                    {moveNumbers.map(a => <div className={`${darkTheme ? "bg-dark" : "bg-light"} progression__moves__numbers-body`}>{a - 1}</div>)}
+                    {moveNumbers.slice(1).map(a => <div className={`${darkTheme ? "bg-dark" : "bg-light"} progression__moves__numbers-body`}>{a - 1}</div>)}
                 </div>
                 <div className="progression__moves__grid">
                     {moves.slice(1).map((a, i) => 
@@ -312,7 +318,9 @@ const Progression = () => {
                         title="Cancel"/>
             </div>
 
-            <div className="progression__new" style={gameEnd && moves.length > 1 ? {display: "block"} : {display: "none"}}>New Game</div>
+            <div className="progression__new"
+                    style={gameEnd && moves.length > 1 ? {display: "block"} : {display: "none"}}
+                    onClick={() => onNewGame()}>New Game</div>
         </div>
     )
 }
