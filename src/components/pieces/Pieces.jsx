@@ -2330,7 +2330,7 @@ const Pieces = () => {
     }
 
     function onSquareClick(i, piece) {      
-        checkGameEnd()  
+        // checkGameEnd()  
         if (((!moveSquares.includes(i) && moveSquares.length > 0) || activePiece === piece) && 
             ((((color === "white" && toMove === "b") || (color === "black" && toMove === "w")) && !playerSquaresRender.includes(i)) ||
             (((color === "white" && toMove === "w") || (color === "black" && toMove === "b")) && !enemySquaresRender.includes(i)))){

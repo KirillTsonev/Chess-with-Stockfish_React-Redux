@@ -15,12 +15,16 @@ function App() {
     <div className="app" style={darkTheme ? {background: "#161512"} : null}>
       <Options></Options>
       <div className='visible'>
-        <Behavior></Behavior>
+        <div>
+          <Behavior></Behavior>
+        </div>
         <div className='threeGrids'>
           <Board></Board>
           <Pieces></Pieces>
         </div>
-        <Progression></Progression>
+        <div>
+          <Progression></Progression>
+        </div>
       </div>
     </div>
   );

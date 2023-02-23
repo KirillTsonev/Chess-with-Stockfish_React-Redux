@@ -102,7 +102,7 @@ const Behavior = () => {
         })
         localStorage.setItem("milliseconds", boolean)
     }
-
+    
     return (
         <div className={`${darkTheme ? "bg-darker" : null} behavior`}>
             <div className="behavior__switch" onClick={() => onChangeTheme()}>

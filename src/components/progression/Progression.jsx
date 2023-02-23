@@ -39,6 +39,7 @@ const Progression = () => {
     const increment = useSelector(state => state.increment)
     const milliseconds = useSelector(state => state.milliseconds)
     const darkTheme = useSelector(state => state.darkTheme)
+    const gameEnd = useSelector(state => state.gameEnd)
 
     const bottomRef = useRef(null)
     const elapsedPlayer = useRef(0)
@@ -215,7 +216,7 @@ const Progression = () => {
     }
 
     const onResignClick = () => {
-        if (moves.length > 1) {
+        if (moves.length > 1 && !gameEnd) {
             setResignConfirm(true)
         }
     }
@@ -232,90 +233,82 @@ const Progression = () => {
         setResignConfirm(false)
     }
 
-    const renderProgression = () => {
-        return (
-            <div className={`${darkTheme ? "bg-darker" : null} progression`}>
-                <div className="progression__pieceGain">
-                    {pieceGainOpponent.sort().reverse().join("")}
-                </div>
-                
-                <div className={`${darkTheme ? "bg-dark" : "bg-light"} progression__timer`}>
-                    {opponentMinutes}:{opponentSeconds}<span style={milliseconds ? {display: "inline"} : {display: "none"}}>:{opponentMiliseconds}</span>
-                </div>
+    return (
+        <div className={`${darkTheme ? "bg-darker" : null} progression`}>
+            <div className="progression__pieceGain">
+                {pieceGainOpponent.sort().reverse().join("")}
+            </div>
+            
+            <div className={`${darkTheme ? "bg-dark" : "bg-light"} progression__timer`}>
+                {opponentMinutes}:{opponentSeconds}<span style={milliseconds ? {display: "inline"} : {display: "none"}}>:{opponentMiliseconds}</span>
+            </div>
 
-                <div className="progression__moves">
-                    <div className="progression__moves__numbers">
-                        {moveNumbers.map(a => <div className={`${darkTheme ? "bg-dark" : "bg-light"} progression__moves__numbers-body`}>{a - 1}</div>)}
-                    </div>
-                    <div className="progression__moves__grid">
-                        {moves.slice(1).map((a, i) => 
-                            <div className={`${((i === currentMove - 1) || (i + 2 === moves.length && !currentMove)) && darkTheme ? "activeMoveDark" : null}
-                                    ${((i === currentMove - 1) || (i + 2 === moves.length && !currentMove)) && !darkTheme ? "activeMoveLight" : null} 
-                                    progression__moves__grid-item`} 
-                                onClick={() => onMoveClick(i + 1)}
-                                ref={(i + 2 === moves.length && !currentMove) ? bottomRef : null}>{notationArr[i]}</div>)}
-                    </div>
+            <div className="progression__moves">
+                <div className="progression__moves__numbers">
+                    {moveNumbers.map(a => <div className={`${darkTheme ? "bg-dark" : "bg-light"} progression__moves__numbers-body`}>{a - 1}</div>)}
                 </div>
-
-                <div className={`${darkTheme ? "bg-dark" : "bg-light"} progression__timer`}>
-                    {playerMinutes}:{playerSeconds}<span style={milliseconds ? {display: "inline"} : {display: "none"}}>:{playerMiliseconds}</span>
+                <div className="progression__moves__grid">
+                    {moves.slice(1).map((a, i) => 
+                        <div className={`${((i === currentMove - 1) || (i + 2 === moves.length && !currentMove)) && darkTheme ? "activeMoveDark" : null}
+                                ${((i === currentMove - 1) || (i + 2 === moves.length && !currentMove)) && !darkTheme ? "activeMoveLight" : null} 
+                                progression__moves__grid-item`} 
+                            onClick={() => onMoveClick(i + 1)}
+                            ref={(i + 2 === moves.length && !currentMove) ? bottomRef : null}>{notationArr[i]}</div>)}
                 </div>
+            </div>
 
-                <div className="progression__pieceGain">
-                    {pieceGainPlayer.sort().reverse().join("")}
-                </div>
+            <div className={`${darkTheme ? "bg-dark" : "bg-light"} progression__timer`}>
+                {playerMinutes}:{playerSeconds}<span style={milliseconds ? {display: "inline"} : {display: "none"}}>:{playerMiliseconds}</span>
+            </div>
 
-                <div className="progression__buttons">
-                    <img src={darkTheme ? firstDark : firstLight} 
-                            alt="First" 
-                            className="progression__buttons-button" 
-                            onClick={() => onFirstClick()}/>
-                    <img src={darkTheme ? prevDark : prevLight} 
-                            alt="Previous" 
-                            className="progression__buttons-button" 
-                            onClick={() => onPrevClick()}/>
-                    <img src={darkTheme ? nextDark : nextLight} 
-                            alt="Next" 
-                            className="progression__buttons-button" 
-                            onClick={() => onNextClick()}/>
-                    <img src={darkTheme ? lastDark : lastLight} 
-                            alt="Last" 
-                            className="progression__buttons-button" 
-                            onClick={() => onLastClick()}/>
-                </div>
+            <div className="progression__pieceGain">
+                {pieceGainPlayer.sort().reverse().join("")}
+            </div>
 
-                <div className={`${darkTheme ? "bg-dark" : "bg-light"}  progression__resign`}
-                        style={resignConfirm ? {display: "none"} : {display: "block"}}
-                        onClick={() => onResignClick()}
+            <div className="progression__buttons">
+                <img src={darkTheme ? firstDark : firstLight} 
+                        alt="First" 
+                        className="progression__buttons-button" 
+                        onClick={() => onFirstClick()}/>
+                <img src={darkTheme ? prevDark : prevLight} 
+                        alt="Previous" 
+                        className="progression__buttons-button" 
+                        onClick={() => onPrevClick()}/>
+                <img src={darkTheme ? nextDark : nextLight} 
+                        alt="Next" 
+                        className="progression__buttons-button" 
+                        onClick={() => onNextClick()}/>
+                <img src={darkTheme ? lastDark : lastLight} 
+                        alt="Last" 
+                        className="progression__buttons-button" 
+                        onClick={() => onLastClick()}/>
+            </div>
+
+            <div className={`${darkTheme ? "bg-dark" : "bg-light"}  progression__resign`}
+                    style={resignConfirm ? {display: "none"} : {display: "block"}}
+                    onClick={() => onResignClick()}
+                    title="Resign">
+                <img src={darkTheme ? resignDark : resignLight} 
+                        alt="Resign" 
+                        className="progression__resign-img"/>
+            </div>
+
+            <div className="progression__resign__confirm">
+                <div className="progression__resign__confirm-btn" 
+                        style={resignConfirm ? {display: "block"} : {display: "none"}}
                         title="Resign">
                     <img src={darkTheme ? resignDark : resignLight} 
                             alt="Resign" 
-                            className="progression__resign-img"/>
+                            className="progression__resign-img" 
+                            onClick={() => onResignConfirm()}/>
                 </div>
-
-                <div className="progression__resign__confirm">
-                    <div className="progression__resign__confirm-btn" 
-                            style={resignConfirm ? {display: "block"} : {display: "none"}}
-                            title="Resign">
-                        <img src={darkTheme ? resignDark : resignLight} 
-                                alt="Resign" 
-                                className="progression__resign-img" 
-                                onClick={() => onResignConfirm()}/>
-                    </div>
-                    <img src={cancel} 
-                            alt="Cancel" 
-                            style={resignConfirm ? {display: "block"} : {display: "none"}} 
-                            className="progression__resign__confirm-cancel"
-                            onClick={() => onResignCancel()}
-                            title="Cancel"/>
-                </div>
+                <img src={cancel} 
+                        alt="Cancel" 
+                        style={resignConfirm ? {display: "block"} : {display: "none"}} 
+                        className="progression__resign__confirm-cancel"
+                        onClick={() => onResignCancel()}
+                        title="Cancel"/>
             </div>
-        )
-    }
-
-    return (
-        <div>
-            {renderProgression()}
         </div>
     )
 }
