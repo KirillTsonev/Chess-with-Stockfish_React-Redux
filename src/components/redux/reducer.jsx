@@ -14,10 +14,8 @@ const initialState = {
         or1: [1, "a8"],
         oh1: [2, "b8"],
         ob1: [3, "c8"],
-        okw: [4, "d8"],
         oqb1: [4, "d8"],
         okb: [5, "e8"],
-        oqw1: [5, "e8"],
         ob2: [6, "f8"],
         oh2: [7, "g8"],
         or2: [8, "h8"],
@@ -72,10 +70,8 @@ const initialState = {
         pr1: [57, "a1"],
         ph1: [58, "b1"],
         pb1: [59, "c1"],
-        pkb: [60, "d1"],
         pqw1: [60, "d1"],
         pkw: [61, "e1"],
-        pqb1: [61, "e1"],
         pb2: [62, "f1"],
         ph2: [63, "g1"],
         pr2: [64, "h1"],
@@ -134,6 +130,11 @@ const initialState = {
 
 function boardReducer(state = initialState, action) {
     switch (action.type) {
+        case "setBoard": 
+            return {
+                ...state,
+                board: action.payload
+            }
         case "setTime":
             return {
                 ...state,
@@ -274,24 +275,14 @@ function boardReducer(state = initialState, action) {
                 options: false
             }
         case "color/white":
-            const { oqw1, okw, pqb1, pkb, ...boardRest1 } = state.board
-
             return {
                 ...state,
-                color: "white",
-                board: {
-                    ...boardRest1
-                },
+                color: "white"
             }
         case "color/black":
-            const { oqb1, okb, pqw1, pkw, ...boardRest2 } = state.board
-
             return {
                 ...state,
-                color: "black",
-                board: {
-                    ...boardRest2
-                },
+                color: "black"
             }
         case "behavior/numbers":
             return {

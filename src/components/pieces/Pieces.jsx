@@ -163,7 +163,8 @@ const Pieces = () => {
         stockfish.postMessage('isready')
         stockfish.postMessage('ucinewgame')
         
-        // stockfish.postMessage('setoption name Skill Level value -10/20')        
+        // stockfish.postMessage('setoption name Skill Level value -10/20')      
+        // setoption name Skill Level value 0  
     }, [])
 
     useEffect(() => {
@@ -228,9 +229,9 @@ const Pieces = () => {
     const stockfish = new Worker(wasmSupported ? 'stockfish.wasm.js' : 'stockfish.js')
     
     stockfish.addEventListener('message', function(e) {
-        
+        // console.log(e.data)
         if (/^bestmove/.test(e.data)) {
-            // console.log(e.data.split(" "))
+            console.log(e.data)
             const engineOldSquare = e.data.slice(9, 11)
             const engineNewSquare = e.data.slice(11, 13)
 
@@ -257,8 +258,6 @@ const Pieces = () => {
             pieceSquareForEngine.current = enginePieceSquare      
 
             if (/^op/.test(enginePieceToMove)) {
-                
-                
                 recordOpponentPawnAttacks(engineWhereToMove, checkedByOpponentArr.current)
 
                 switch (enginePieceToMove) {
@@ -507,11 +506,6 @@ const Pieces = () => {
                 enemyKingSpiderSense()
             }
 
-            if (color === "white") {
-                store.dispatch({
-                    type: "moveCounter"
-                })
-            }
         }
     });
 
@@ -522,35 +516,17 @@ const Pieces = () => {
         encode()
 
         let string = `position fen ${stringToSend} moves ${playerPiece.current}${playerNewSquareForEngine.current}`
-
-        console.log(string)
+        
         if (moves.length === 1) {
             setTimeout(() => {
-                pieceSquareForEngine.current = 12
-                
-                store.dispatch({
-                    type: "oldSquare",
-                    payload: 12
-                })
-                
-                store.dispatch({
-                    type: "pieceSquare",
-                    payload: 12
-                })
-
-                enemyPawn4 = 12
-                updateStateBoard(28, "op4")
-                enemyPawns = [enemyPawn1, enemyPawn2, enemyPawn3, enemyPawn4, enemyPawn5, enemyPawn6, enemyPawn7, enemyPawn8]
-                movePawn(28, "op4")
+                stockfish.postMessage("position startpos")
+                stockfish.postMessage("go movetime 1000")
             }, 1000);
         } else {
+            console.log(string)
             stockfish.postMessage(string)
-            stockfish.postMessage('go movetime 1000')
+            stockfish.postMessage("go movetime 1000")
         }
-        
-        // setTimeout(() => {
-            
-        // }, 1000);
     }
 
     let stringToSend
@@ -559,81 +535,111 @@ const Pieces = () => {
         const fenEncode = (arr) => {
             switch (arr[0]) {
                 case "or1": case "or2": case "or3": case "or4": case "or5": case "or6": case "or7": case "or8": case "or9": 
-                    if (color === "white") {
-                        return arr = "r"
-                    } else {
-                        return arr = "R"
-                    }
+                    return arr = "r"
                 case "oh1": case "oh2":
-                    if (color === "white") {
-                        return arr = "n"
-                    } else {
-                        return arr = "N"
-                    }
+                    return arr = "n"
                 case "ob1": case "ob2":
-                    if (color === "white") {
-                        return arr = "b"
-                    } else {
-                        return arr = "B"
-                    }
+                    return arr = "b"
                 case "oqw1": case "oqb1": case "oqw2": case "oqb2": case "oqw3": case "oqb3": case "oqw4": case "oqb4":
-                    if (color === "white") {
-                        return arr = "q"
-                    } else {
-                        return arr = "Q"
-                    }
+                    return arr = "q"
                 case "okw": case "okb":
-                    if (color === "white") {
-                        return arr = "k"
-                    } else {
-                        return arr = "K"
-                    }
+                    return arr = "k"
                 case "op1": case "op2": case "op3": case "op4": case "op5": case "op6": case "op7": case "op8":
-                    if (color === "white") {
-                        return arr = "p"
-                    } else {
-                        return arr = "P"
-                    }
+                    return arr = "p"
                 case "pr1": case "pr2":
-                    if (color === "white") {
-                        return arr = "R"
-                    } else {
-                        return arr = "r"
-                    }
+                    return arr = "R"
                 case "ph1": case "ph2":
-                    if (color === "white") {
-                        return arr = "N"
-                    } else {
-                        return arr = "n"
-                    }
+                    return arr = "N"
                 case "pb1": case "pb2":
-                    if (color === "white") {
-                        return arr = "B"
-                    } else {
-                        return arr = "b"
-                    }
+                    return arr = "B"
                 case "pqw1": case "pqb1": case "pqw2": case "pqb2": case "pqw3": case "pqb3": case "pqw4": case "pqb4":
-                    if (color === "white") {
-                        return arr = "Q"
-                    } else {
-                        return arr = "q"
-                    }
+                    return arr = "Q"
                 case "pkw": case "pkb":
-                    if (color === "white") {
-                        return arr = "K"
-                    } else {
-                        return arr = "k"
-                    }
+                    return arr = "K"
                 case "pp1": case "pp2": case "pp3": case "pp4": case "pp5": case "pp6": case "pp7": case "pp8":
-                    if (color === "white") {
-                        return arr = "P"
-                    } else {
-                        return arr = "p"
-                    }
+                    return arr = "P"
                 default:
                     return arr = 1
             }
         }
+        // const fenEncode = (arr) => {
+        //     switch (arr[0]) {
+        //         case "or1": case "or2": case "or3": case "or4": case "or5": case "or6": case "or7": case "or8": case "or9": 
+        //             if (color === "white") {
+        //                 return arr = "r"
+        //             } else {
+        //                 return arr = "R"
+        //             }
+        //         case "oh1": case "oh2":
+        //             if (color === "white") {
+        //                 return arr = "n"
+        //             } else {
+        //                 return arr = "N"
+        //             }
+        //         case "ob1": case "ob2":
+        //             if (color === "white") {
+        //                 return arr = "b"
+        //             } else {
+        //                 return arr = "B"
+        //             }
+        //         case "oqw1": case "oqb1": case "oqw2": case "oqb2": case "oqw3": case "oqb3": case "oqw4": case "oqb4":
+        //             if (color === "white") {
+        //                 return arr = "q"
+        //             } else {
+        //                 return arr = "Q"
+        //             }
+        //         case "okw": case "okb":
+        //             if (color === "white") {
+        //                 return arr = "k"
+        //             } else {
+        //                 return arr = "K"
+        //             }
+        //         case "op1": case "op2": case "op3": case "op4": case "op5": case "op6": case "op7": case "op8":
+        //             if (color === "white") {
+        //                 return arr = "p"
+        //             } else {
+        //                 return arr = "P"
+        //             }
+        //         case "pr1": case "pr2":
+        //             if (color === "white") {
+        //                 return arr = "R"
+        //             } else {
+        //                 return arr = "r"
+        //             }
+        //         case "ph1": case "ph2":
+        //             if (color === "white") {
+        //                 return arr = "N"
+        //             } else {
+        //                 return arr = "n"
+        //             }
+        //         case "pb1": case "pb2":
+        //             if (color === "white") {
+        //                 return arr = "B"
+        //             } else {
+        //                 return arr = "b"
+        //             }
+        //         case "pqw1": case "pqb1": case "pqw2": case "pqb2": case "pqw3": case "pqb3": case "pqw4": case "pqb4":
+        //             if (color === "white") {
+        //                 return arr = "Q"
+        //             } else {
+        //                 return arr = "q"
+        //             }
+        //         case "pkw": case "pkb":
+        //             if (color === "white") {
+        //                 return arr = "K"
+        //             } else {
+        //                 return arr = "k"
+        //             }
+        //         case "pp1": case "pp2": case "pp3": case "pp4": case "pp5": case "pp6": case "pp7": case "pp8":
+        //             if (color === "white") {
+        //                 return arr = "P"
+        //             } else {
+        //                 return arr = "p"
+        //             }
+        //         default:
+        //             return arr = 1
+        //     }
+        // }
 
         const fen = boardEntries.map(a => fenEncode(a))
 
@@ -3218,6 +3224,8 @@ const Pieces = () => {
             })
         }
 
+     
+
         if (/^o/.test(string)) {
             
             if (playerSquaresRender.includes(i)){
@@ -3515,12 +3523,6 @@ const Pieces = () => {
                 }
             }
 
-            if (color === "white" && toMove === "b" && sandbox) {
-                store.dispatch({
-                    type: "moveCounter"
-                })
-            }
-
             if (color === "white") {
                 store.dispatch({
                     type: "toMove",
@@ -3530,6 +3532,12 @@ const Pieces = () => {
                 store.dispatch({
                     type: "toMove",
                     payload: "b"
+                })
+            }
+
+            if ((color === "black" && toMove === "w") || (color === "white" && toMove === "b")) {
+                store.dispatch({
+                    type: "moveCounter"
                 })
             }
 
@@ -3847,14 +3855,6 @@ const Pieces = () => {
                 store.dispatch({
                     type: "toMove",
                     payload: "w"
-                })
-            }
-
-            
-
-            if (color === "black" && toMove === "w") {
-                store.dispatch({
-                    type: "moveCounter"
                 })
             }
 
