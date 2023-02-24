@@ -184,6 +184,10 @@ const Options = () => {
         })
     }
 
+    const onBack = () => {
+        setMultipler(multiplier - 1)
+    }
+
     return (
         <div className="options" style={options ? {opacity: "1", visibility: "visible"} : {opacity: "0", visibility: "hidden"}}>
             <div className="options__helpMode" style={helpMode ? {opacity: "1", visibility: "visible"} : {opacity: "0", visibility: "hidden"}}>
@@ -204,6 +208,7 @@ const Options = () => {
                         </div>
                     </div>
                     <div className="options__body">
+                        <div className="options__back" onClick={() => onBack()}>Back</div>
                         <div className="options__heading">Choose the color of your pieces</div>
                         <div className="options__container">
                             <div className="options__choice" onClick={() => setColor("color/white")}>White</div>
@@ -211,6 +216,7 @@ const Options = () => {
                         </div>
                     </div>
                     <div className="options__bodyTime">
+                        <div className="options__back" onClick={() => onBack()}>Back</div>
                         <div className="options__heading">Choose the time control <span onMouseEnter={() => setHelpTime(true)} 
                                                                                         onMouseLeave={() => setHelpTime(false)}
                                                                                         className="options__question">?</span></div>
