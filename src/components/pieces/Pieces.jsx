@@ -1488,7 +1488,7 @@ const Pieces = () => {
         const renderRoyals = (a, src, alt) => {
             return (
                 <div className={`${color === "black" && !sandbox ? "reverse" : null}`}
-                    style={color === "black" && !sandbox ? {height: "80px"} : null}>
+                    style={{height: "80px"}}>
                     <img src={src}
                         key={a}
                         alt={alt}
@@ -2150,6 +2150,62 @@ const Pieces = () => {
         }
     }
 
+    const recordPlayerPawnMovesReverse = (i, piece, arrMoves) => {    
+        let arr = []
+        let arr2 = []
+        for (let k = 0; k < 4; k++) {
+            if (playerKing8StarXrayArr.current[k].includes(i)
+                && (enemyRooks.some(a => playerKing8StarXrayArr.current[k].includes(a)) 
+                || enemyQueens.some(a => playerKing8StarXrayArr.current[k].includes(a)))) {
+                arr2 = playerKing8StarXrayArr.current[k]
+            }
+        }
+        for (let k = 4; k < 8; k++) {
+            if (playerKing8StarXrayArr.current[k].includes(i)
+                && (enemyBishops.some(a => playerKing8StarXrayArr.current[k].includes(a)) 
+                || enemyQueens.some(a => playerKing8StarXrayArr.current[k].includes(a)))) {
+                arr2 = playerKing8StarXrayArr.current[k]
+            }
+        }
+
+        if (pawnsFirstMove[piece]) {
+            arr = [i + 8, i + 16]
+        } else {
+            arr = [i + 8]
+        }
+        
+        if (occupiedSquaresRender.includes(i + 8)) {
+            arr = []
+        } else if (occupiedSquaresRender.includes(i + 16)) {
+            arr = [i + 8]
+        }
+
+        if ((enemySquaresRender.includes(i + 9) || (rookMoves.current[3].includes(i) && i + 9 === enPassantSquare.current[0])) && !knightLimits.current[0].includes(i)) {
+            arr.push(i + 9)
+        }
+
+        if ((enemySquaresRender.includes(i + 7) || (rookMoves.current[3].includes(i) && i + 7 === enPassantSquare.current[0])) && !knightLimits.current[3].includes(i)) {
+            arr.push(i + 7)
+        }
+
+        if (arr2.filter(a => playerSquaresRender.includes(a)).length === 1) {
+            arr = arr.filter(a => arr2.includes(a))
+        } 
+
+        if (playerKingAttacked && playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
+            
+            let arrTech = playerKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
+            
+            arr = arr.filter(a => arrTech.includes(a))
+        } else if (playerKingAttacked && !playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
+            arr = arr.filter(a => playerHorseSafetyArr.current.includes(a))
+        }
+
+        for (const number of arr) {
+            arrMoves.push(number)
+        }
+    }
+
     const recordOpponentPawnMoves = (i, piece, arrMoves) => {    
         let arr = []
         let arr2 = []
@@ -2174,7 +2230,7 @@ const Pieces = () => {
         } else {
             arr = [i + 8]
         }
-        
+
         if (occupiedSquaresRender.includes(i + 8)) {
             arr = []
         } else if (occupiedSquaresRender.includes(i + 16)) {
@@ -2369,7 +2425,7 @@ const Pieces = () => {
     }
 
     function onSquareClick(i, piece) {      
-        // checkGameEnd()  
+        checkGameEnd()  
         if (((!moveSquares.includes(i) && moveSquares.length > 0) || activePiece === piece) && 
             ((((color === "white" && toMove === "b") || (color === "black" && toMove === "w")) && !playerSquaresRender.includes(i)) ||
             (((color === "white" && toMove === "w") || (color === "black" && toMove === "b")) && !enemySquaresRender.includes(i)))){
@@ -2431,7 +2487,12 @@ const Pieces = () => {
     
                 if (/^pp/.test(piece)) {
                     let arr = []
-                    recordPlayerPawnMoves(i, piece, arr)
+                    
+                    if (color === "black" && !sandbox) {
+                        recordPlayerPawnMovesReverse(i, piece, arr)
+                    } else {
+                        recordPlayerPawnMoves(i, piece, arr)
+                    }
                     store.dispatch({
                         type:"moveSquares",
                         payload: arr
@@ -3219,10 +3280,19 @@ const Pieces = () => {
             gameEndSound.play()
         } 
 
-        store.dispatch({
-            type: "setMoveVar",
-            payload: [num1, num2]
-        })
+        if (color === "black" && !sandbox) {
+            store.dispatch({
+                type: "setMoveVar",
+                payload: [num1 * -1, num2 * -1]
+            })
+        } else {
+            store.dispatch({
+                type: "setMoveVar",
+                payload: [num1, num2]
+            })
+        }
+
+        
 
         if ((color === "white" && toMove === "w") || (color === "black" && toMove === "w")) {
             store.dispatch({
@@ -4342,32 +4412,106 @@ const Pieces = () => {
             payload: [coor1, coor2]
         })
 
-        store.dispatch({
-            type: "oldSquare",
-            payload: rookOldSq
-        })
+        
+        if (color === "black" && sandbox) {
+        
+            if (/or/.test(rookToMove)) {
+                store.dispatch({
+                    type: "oldSquare",
+                    payload: rookOldSq
+                })
+                store.dispatch({
+                    type: "newSquare",
+                    payload: newSqRook - 1
+                })
+            } else {
+                store.dispatch({
+                    type: "oldSquare",
+                    payload: rookOldSq
+                })
+                store.dispatch({
+                    type: "newSquare",
+                    payload: newSqRook - 1
+                })
+            }
 
-        store.dispatch({
-            type: "newSquare",
-            payload: newSqRook
-        })
+            if (rookToMove === "pr1") {
+                playerRook1 = newSqRook - 1
+            }
+            if (rookToMove === "pr2") {
+                playerRook2 = newSqRook - 1
+            }
+            if (rookToMove === "or1") {
+                enemyRook1 = newSqRook - 1
+            }
+            if (rookToMove === "or2") {
+                enemyRook2 = newSqRook - 1
+            }
+        } 
+        else if (color === "black" && !sandbox) {
+            if (/or/.test(rookToMove)) {
+                store.dispatch({
+                    type: "oldSquare",
+                    payload: rookOldSq + 56
+                })
+                store.dispatch({
+                    type: "newSquare",
+                    payload: newSqRook + 56
+                })
+            } else {
+                store.dispatch({
+                    type: "oldSquare",
+                    payload: rookOldSq - 56
+                })
+                store.dispatch({
+                    type: "newSquare",
+                    payload: newSqRook - 56
+                })
+            }
+
+            if (rookToMove === "pr1") {
+                playerRook1 = newSqRook - 56
+            }
+            if (rookToMove === "pr2") {
+                playerRook2 = newSqRook - 56
+            }
+            if (rookToMove === "or1") {
+                enemyRook1 = newSqRook + 56
+            }
+            if (rookToMove === "or2") {
+                enemyRook2 = newSqRook + 56
+            }
+        } 
+        else {
+            console.log("asd")
+
+            store.dispatch({
+                type: "oldSquare",
+                payload: rookOldSq
+            })
+    
+            store.dispatch({
+                type: "newSquare",
+                payload: newSqRook
+            })
+
+            if (rookToMove === "pr1") {
+                playerRook1 = newSqRook
+            }
+            if (rookToMove === "pr2") {
+                playerRook2 = newSqRook
+            }
+            if (rookToMove === "or1") {
+                enemyRook1 = newSqRook
+            }
+            if (rookToMove === "or2") {
+                enemyRook2 = newSqRook
+            }
+        }
 
         store.dispatch({
             type: rookToMove
         })
-
-        if (rookToMove === "pr1") {
-            playerRook1 = newSqRook
-        }
-        if (rookToMove === "pr2") {
-            playerRook2 = newSqRook
-        }
-        if (rookToMove === "or1") {
-            enemyRook1 = newSqRook
-        }
-        if (rookToMove === "or2") {
-            enemyRook2 = newSqRook
-        }
 
         if ((color === "white" && toMove === "w") || (color === "black" && toMove === "b")) {
             store.dispatch({
@@ -4437,12 +4581,12 @@ const Pieces = () => {
             if (/^or/.test(rookToMove)) {
                 store.dispatch({
                     type: "toMove",
-                    payload: "w"
+                    payload: "b"
                 })
             } else {
                 store.dispatch({
                     type: "toMove",
-                    payload: "b"
+                    payload: "w"
                 })
             }
         }
@@ -4456,10 +4600,17 @@ const Pieces = () => {
     }
 
     const animateEnPassant = (coor1, coor2, string, i) => {
-        store.dispatch({
-            type: "setMoveVar",
-            payload: [coor1, coor2]
-        })
+        if (color === "black" && !sandbox) {
+            store.dispatch({
+                type: "setMoveVar",
+                payload: [coor1 * -1, coor2 * -1]
+            })
+        } else {
+            store.dispatch({
+                type: "setMoveVar",
+                payload: [coor1, coor2]
+            })
+        }
 
         let capturedPawn = i
 
