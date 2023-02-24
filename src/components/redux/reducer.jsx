@@ -126,10 +126,16 @@ const initialState = {
     darkTheme: true,
     modalOpen: false,
     newGame: false,
+    endMessage: ""
 }
 
 function boardReducer(state = initialState, action) {
     switch (action.type) {
+        case "endMessage": 
+            return {
+                ...state,
+                endMessage: action.payload
+            }
         case "setBoard": 
             return {
                 ...state,

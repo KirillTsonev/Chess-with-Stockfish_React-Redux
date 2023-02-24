@@ -10,6 +10,7 @@ const Modal = () => {
 
     const darkTheme = useSelector(state => state.darkTheme)
     const gameEnd = useSelector(state => state.gameEnd)
+    const endMessage = useSelector(state => state.endMessage)
 
     const onClose = () => {
         setModal(false)
@@ -40,6 +41,7 @@ const Modal = () => {
                         29.0226 28.0825 28.8385 28.4489 28.4721C29.1837 27.7376 29.1837 26.55 28.4489 25.8155L17.1568 14.5231Z"/>
                     </svg>
                 </div>
+                <div className="modal__message">{endMessage}</div>
                 <div className="modal__new" onClick={() => onNewGame()}>New Game</div>
             </div>
         </div>

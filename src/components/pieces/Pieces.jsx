@@ -3191,6 +3191,20 @@ const Pieces = () => {
                 type: "modalOpen",
                 payload: true
             })
+
+            if (playerKingAttacked) {
+                store.dispatch({
+                    type: "endMessage",
+                    payload: "You've been checkmated."
+                })
+            }
+
+            if (enemyKingAttacked) {
+                store.dispatch({
+                    type: "endMessage",
+                    payload: "You checkmated your opponent."
+                })
+            }
         }
 
         playerRooks.forEach(a => checkArrays(rookMoves.current, a, arrPlayerStalemate, playerSquaresRender, enemySquaresRender, true, true))
@@ -3228,6 +3242,10 @@ const Pieces = () => {
                 type: "modalOpen",
                 payload: true
             })
+            store.dispatch({
+                type: "endMessage",
+                payload: "Game ended due to stalemate."
+            })
         }
 
         for (let i = 0; i < moves.length; i++) {
@@ -3242,6 +3260,10 @@ const Pieces = () => {
                     store.dispatch({
                         type: "modalOpen",
                         payload: true
+                    })
+                    store.dispatch({
+                        type: "endMessage",
+                        payload: "Draw due to threefold repetition."
                     })
             }
         }

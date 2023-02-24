@@ -227,6 +227,10 @@ const Progression = () => {
             type: "modalOpen",
             payload: true
         })
+        store.dispatch({
+            type: "endMessage",
+            payload: "You've resigned."
+        })
         gameEndSound.play()
         setResignConfirm(false)
     }
