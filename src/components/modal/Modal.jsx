@@ -26,8 +26,10 @@ const Modal = () => {
     }
 
     return (
-        <div className={`overlay ${gameEnd && modal ? "activeOverlay" : null}`}>
-            <div className={`modal ${darkTheme ? "bg-dark" : "bg-light"} ${gameEnd && modal ? "activeModal" : null}`}>
+        <div className={`overlay`}
+             style={gameEnd && modal ? {opacity: "1", visibility: "visible"} : {opacity: "0", visibility: "hidden"}}>
+            <div className={`modal ${darkTheme ? "bg-dark" : "bg-light"} `}
+            style={gameEnd && modal ? {opacity: "1", visibility: "visible"} : {opacity: "0", visibility: "hidden"}}>
                 <div className="modal__heading">Game over</div>
                 <div className={`modal__close ${darkTheme ? "bg-dark" : "bg-light"}`} onClick={() => onClose()}>
                     <svg width="29" height="30" viewBox="0 0 29 30" fill="none">

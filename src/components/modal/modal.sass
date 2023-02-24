@@ -1,5 +1,4 @@
 .overlay
-    display: none
     position: absolute
     background: #00000079
     width: 100%
@@ -7,9 +6,10 @@
     top: 0
     left: 0
     overflow: hidden
+    transition: .6s all
     
 .modal
-    display: none
+    transition: .6s all
     position: absolute
     width: 500px
     height: 300px
@@ -60,25 +60,3 @@
         height: 20px
         width: 20px
         fill: black
-
-@keyframes fadeIn
-    0%
-        opacity: 0
-    100%
-        opacity: 1
-
-@keyframes fadeUp
-    0%
-        opacity: 0
-        transform: translateY(300px)
-    100%
-        opacity: 1
-        transform: translateY(0px)        
-
-.activeOverlay
-    display: block
-    animation: fadeIn 1s 1 linear
-
-.activeModal
-    display: block
-    animation: fadeUp 1s 1 linear
