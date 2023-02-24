@@ -74,7 +74,7 @@ const initialState = {
         pkw: [61, "e1"],
         pb2: [62, "f1"],
         ph2: [63, "g1"],
-        pr2: [64, "h1"],
+        pr2: [64, "h1"]
     },
     pawnsFirstMove: {
         pp1: true,
@@ -125,7 +125,7 @@ const initialState = {
     moveVar: [0, 0],
     darkTheme: true,
     modalOpen: false,
-    newGame: false
+    newGame: false,
 }
 
 function boardReducer(state = initialState, action) {

@@ -12,6 +12,8 @@ import "./app.sass"
 function App() {
   const darkTheme = useSelector(state => state.darkTheme)
   const newGame = useSelector(state => state.newGame)
+  const sandbox = useSelector(state => state.sandbox)
+  const color = useSelector(state => state.color)
 
   if (newGame) {
     window.location.reload()
@@ -24,7 +26,7 @@ function App() {
         <div>
           <Behavior></Behavior>
         </div>
-        <div className="threeGrids">
+        <div className={`threeGrids ${color === "black" && !sandbox ? "reverse" : null}`}>
           <Board></Board>
           <Pieces></Pieces>
         </div>
