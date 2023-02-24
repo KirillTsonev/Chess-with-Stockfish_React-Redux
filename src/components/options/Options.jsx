@@ -185,11 +185,11 @@ const Options = () => {
     }
 
     return (
-        <div className="options" style={options ? {opacity: "1"} : {opacity: "0"}}>
-            <div className="options__helpMode" style={helpMode ? {opacity: "1", display: "block"} : {opacity: "0", display: "none"}}>
+        <div className="options" style={options ? {opacity: "1", visibility: "visible"} : {opacity: "0", visibility: "hidden"}}>
+            <div className="options__helpMode" style={helpMode ? {opacity: "1", visibility: "visible"} : {opacity: "0", visibility: "hidden"}}>
                 In sandbox mode you control both the white and the black pieces. Perfect for testing out game logic features.
             </div>
-            <div className="options__helpTime" style={helpTime ? {opacity: "1", display: "block"} : {opacity: "0", display: "none"}}>
+            <div className="options__helpTime" style={helpTime ? {opacity: "1", visibility: "visible"} : {opacity: "0", visibility: "hidden"}}>
                 The options are in "Minutes + increment" format. Increment defines how many seconds are added to the players' timer after they make a move.
             </div>
             <div className="options__outer">
