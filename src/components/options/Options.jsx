@@ -184,7 +184,6 @@ const Options = () => {
 
     return (
         <div className="options" style={options ? {display: "block"} : {display: "none"}}>
-            {/* <div>choose opponent</div> */}
             <div className="options__outer">
                 <div className="options__inner" style={{transform: `translateY(${multiplier * -250}px)`, transition: "all .5s"}}>
                     <div className="options__body">
@@ -223,8 +222,6 @@ const Options = () => {
                     </div>
                 </div>
             </div>
-            {/* <div>choose time</div>
-            <div>choose difficulty</div> */}
         </div>
     )
 }
