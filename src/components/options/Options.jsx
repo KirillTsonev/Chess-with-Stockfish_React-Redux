@@ -187,21 +187,21 @@ const Options = () => {
             <div className="options__outer">
                 <div className="options__inner" style={{transform: `translateY(${multiplier * -250}px)`, transition: "all .5s"}}>
                     <div className="options__body">
-                        <div className="options__qheader">Choose game mode <span className="options__question">?</span></div>
+                        <div className="options__heading">Choose game mode <span className="options__question">?</span></div>
                         <div className="options__container">
                             <div className="options__choice" onClick={() => setGameMode(false)}>Against computer</div>
                             <div className="options__choice" onClick={() => setGameMode(true)}>Sandbox</div>
                         </div>
                     </div>
                     <div className="options__body">
-                        <div className="options__qheader">Choose the color of your pieces</div>
+                        <div className="options__heading">Choose the color of your pieces</div>
                         <div className="options__container">
                             <div className="options__choice" onClick={() => setColor("color/white")}>White</div>
                             <div className="options__choice" onClick={() => setColor("color/black")}>Black</div>
                         </div>
                     </div>
                     <div className="options__body">
-                        <div className="options__qheader">Choose the time control <span className="options__question">?</span></div>
+                        <div className="options__heading">Choose the time control <span className="options__question">?</span></div>
                         <div className="options__container">
                             <div>
                                 <div className="options__choice" onClick={() => setTime(600000, 0)}>10 + 0</div>

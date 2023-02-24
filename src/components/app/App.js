@@ -1,13 +1,14 @@
-import Board from '../board/Board'
-import Pieces from '../pieces/Pieces'
-import Options from '../options/Options'
-import Behavior from '../behavior/Behavior'
-import Progression from '../progression/Progression'
-import Modal from '../modal/Modal'
-
+import React, { Suspense } from 'react';
 import { useSelector } from 'react-redux'
 
 import "./app.sass"
+
+const Modal = React.lazy(() => import('../modal/Modal'))
+const Progression = React.lazy(() => import('../progression/Progression'))
+const Behavior = React.lazy(() => import('../behavior/Behavior'))
+const Pieces = React.lazy(() => import('../pieces/Pieces'))
+const Board = React.lazy(() => import('../board/Board'))
+const Options = React.lazy(() => import('../options/Options'))
 
 function App() {
   const darkTheme = useSelector(state => state.darkTheme)
@@ -21,19 +22,31 @@ function App() {
 
   return (
     <div className="app" style={darkTheme ? {background: "#161512"} : null}>
-      <Options></Options>
+      <Suspense>
+        <Options></Options>
+      </Suspense>
       <div className='visible'>
         <div>
-          <Behavior></Behavior>
+          <Suspense>
+            <Behavior></Behavior>
+          </Suspense>
         </div>
         <div className={`threeGrids ${color === "black" && !sandbox ? "reverse" : null}`}>
-          <Board></Board>
-          <Pieces></Pieces>
+          <Suspense>
+            <Board></Board>
+          </Suspense>
+          <Suspense>
+            <Pieces></Pieces>
+          </Suspense>
         </div>
         <div>
-          <Progression></Progression>
+          <Suspense>
+            <Progression></Progression>
+          </Suspense>
         </div>
-        <Modal></Modal>
+        <Suspense>
+          <Modal></Modal>
+        </Suspense>
       </div>
     </div>
   );
