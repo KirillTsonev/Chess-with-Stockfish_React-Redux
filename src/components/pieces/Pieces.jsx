@@ -210,7 +210,7 @@ const Pieces = () => {
     }, [JSON.stringify(board)])
 
     useEffect(() => {
-        if (((color === "white" && toMove === "b") || (color === "black" && toMove === "w")) && !sandbox) {
+        if (((color === "white" && toMove === "b") || (color === "black" && toMove === "w")) && !sandbox && !pawnPromotes) {
             engineTurn()
         }
     }, [toMove, options])
@@ -532,36 +532,6 @@ const Pieces = () => {
     let stringToSend
 
     const encode = () => {
-        // const fenEncode = (arr) => {
-        //     switch (arr[0]) {
-        //         case "or1": case "or2": case "or3": case "or4": case "or5": case "or6": case "or7": case "or8": case "or9": 
-        //             return arr = "r"
-        //         case "oh1": case "oh2":
-        //             return arr = "n"
-        //         case "ob1": case "ob2":
-        //             return arr = "b"
-        //         case "oqw1": case "oqb1": case "oqw2": case "oqb2": case "oqw3": case "oqb3": case "oqw4": case "oqb4":
-        //             return arr = "q"
-        //         case "okw": case "okb":
-        //             return arr = "k"
-        //         case "op1": case "op2": case "op3": case "op4": case "op5": case "op6": case "op7": case "op8":
-        //             return arr = "p"
-        //         case "pr1": case "pr2":
-        //             return arr = "R"
-        //         case "ph1": case "ph2":
-        //             return arr = "N"
-        //         case "pb1": case "pb2":
-        //             return arr = "B"
-        //         case "pqw1": case "pqb1": case "pqw2": case "pqb2": case "pqw3": case "pqb3": case "pqw4": case "pqb4":
-        //             return arr = "Q"
-        //         case "pkw": case "pkb":
-        //             return arr = "K"
-        //         case "pp1": case "pp2": case "pp3": case "pp4": case "pp5": case "pp6": case "pp7": case "pp8":
-        //             return arr = "P"
-        //         default:
-        //             return arr = 1
-        //     }
-        // }
         const fenEncode = (arr) => {
             switch (arr[0]) {
                 case "or1": case "or2": case "or3": case "or4": case "or5": case "or6": case "or7": case "or8": case "or9": 
@@ -570,7 +540,7 @@ const Pieces = () => {
                     } else {
                         return arr = "R"
                     }
-                case "oh1": case "oh2":
+                case "oh1": case "oh2": case "oh3": case "oh4": case "oh5": case "oh6": case "oh7": case "oh8": case "oh9": 
                     if (color === "white") {
                         return arr = "n"
                     } else {
@@ -1451,6 +1421,7 @@ const Pieces = () => {
         }
 
         setPawnPromotes("")
+        engineTurn()
     }
 
     const renderPieces = () => {
@@ -1505,7 +1476,8 @@ const Pieces = () => {
 
         const renderPlayerPromotion = (pawn, i) => {
             return (
-                <div className="pawnPromotionPlayer" style={pawnPromotes === pawn ? {display: "block"} : {display: "none"}}>
+                <div className={`pawnPromotionPlayer ${color === "black" && !sandbox ? "reversePromotion" : null}`} 
+                        style={pawnPromotes === pawn ? {display: "block"} : {display: "none"}}>
                     <div className="promotionPiece">
                         <img 
                         src={color === "white" ? whiteQueen : blackQueen} 
@@ -2425,7 +2397,6 @@ const Pieces = () => {
     }
 
     function onSquareClick(i, piece) {      
-        checkGameEnd()  
         if (((!moveSquares.includes(i) && moveSquares.length > 0) || activePiece === piece) && 
             ((((color === "white" && toMove === "b") || (color === "black" && toMove === "w")) && !playerSquaresRender.includes(i)) ||
             (((color === "white" && toMove === "w") || (color === "black" && toMove === "b")) && !enemySquaresRender.includes(i)))){
@@ -2487,7 +2458,6 @@ const Pieces = () => {
     
                 if (/^pp/.test(piece)) {
                     let arr = []
-                    
                     if (color === "black" && !sandbox) {
                         recordPlayerPawnMovesReverse(i, piece, arr)
                     } else {
