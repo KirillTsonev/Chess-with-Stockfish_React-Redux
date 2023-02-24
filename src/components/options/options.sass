@@ -5,23 +5,41 @@
     background: url("../../images/bg.jpg") center center / cover no-repeat
     z-index: 10
     &__outer
-        width: 500px
-        height: 250px
+        width: 510px
+        height: 270px
         position: absolute
-        top: calc(50% - 125px)
-        left: calc(50% - 250px)
+        top: calc(50% - 135px)
+        left: calc(50% - 255px)
         overflow: hidden
-    &__body
+        border: 10px solid darkgreen
+    &__body, &__bodyTime
         width: 500px
-        height: 250px
+        height: 251px
         background: green
-        padding: 40px
         display: flex
         flex-direction: column
         justify-content: space-between
+    &__body
+        padding: 40px
+        position: relative
+    &__bodyTime
+        padding: 20px
     &__heading
         text-align: center
+        font-size: 25px
+        font-weight: 600
+    &__question
+        display: inline-block
+        border: 3px solid black
+        border-radius: 100%
+        font-weight: 700
+        width: 35px
+        height: 35px
         font-size: 20px
+        padding: 1px
+        margin-left: 10px
+        user-select: none
+        cursor: pointer
     &__container
         display: flex
         justify-content: space-around
@@ -31,3 +49,48 @@
         user-select: none
         text-align: center
         font-size: 20px
+        transition: all .3s
+        background: #009900
+        padding: 10px
+        margin-top: 5px
+        border-radius: 10px
+        position: relative
+        &:hover
+            transform: translate(5px, -5px)
+            box-shadow: -1px 1px 1px #006400, -2px 2px 1px #006400, -3px 3px 1px #006400, -4px 4px 1px #006400, -5px 5px 1px #006400
+    &__helpMode
+        background: #009900
+        padding: 15px
+        border-radius: 10px
+        position: absolute
+        top: 268px
+        right: 180px
+        width: 430px
+        transition: all .4s
+        z-index: 10
+        &::after
+            content: ""
+            position: absolute
+            top: calc( 50% - 25px )
+            left: -24px
+            border: 25px solid transparent
+            border-left: none
+            border-right-color: #009900
+    &__helpTime
+        background: #009900
+        padding: 15px
+        border-radius: 10px
+        position: absolute
+        top: 239px
+        right: 155px
+        width: 430px
+        transition: all .4s
+        z-index: 10
+        &::after
+            content: ""
+            position: absolute
+            top: calc( 50% - 25px )
+            left: -24px
+            border: 25px solid transparent
+            border-left: none
+            border-right-color: #009900

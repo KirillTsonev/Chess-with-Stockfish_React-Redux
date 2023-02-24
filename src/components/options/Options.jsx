@@ -7,6 +7,8 @@ import "./options.sass"
 
 const Options = () => {
     const [multiplier, setMultipler] = useState(0)
+    const [helpMode, setHelpMode] = useState(false)
+    const [helpTime, setHelpTime] = useState(false)
 
     const options = useSelector(state => state.options)
     const sandbox = useSelector(state => state.sandbox)
@@ -183,13 +185,21 @@ const Options = () => {
     }
 
     return (
-        <div className="options" style={options ? {display: "block"} : {display: "none"}}>
+        <div className="options" style={options ? {opacity: "1"} : {opacity: "0"}}>
+            <div className="options__helpMode" style={helpMode ? {opacity: "1", display: "block"} : {opacity: "0", display: "none"}}>
+                In sandbox mode you control both the white and the black pieces. Perfect for testing out game logic features.
+            </div>
+            <div className="options__helpTime" style={helpTime ? {opacity: "1", display: "block"} : {opacity: "0", display: "none"}}>
+                The options are in "Minutes + increment" format. Increment defines how many seconds are added to the players' timer after they make a move.
+            </div>
             <div className="options__outer">
                 <div className="options__inner" style={{transform: `translateY(${multiplier * -250}px)`, transition: "all .5s"}}>
                     <div className="options__body">
-                        <div className="options__heading">Choose game mode <span className="options__question">?</span></div>
+                        <div className="options__heading">Choose game mode <span onMouseEnter={() => setHelpMode(true)} 
+                                                                                 onMouseLeave={() => setHelpMode(false)}
+                                                                                 className="options__question">?</span></div>
                         <div className="options__container">
-                            <div className="options__choice" onClick={() => setGameMode(false)}>Against computer</div>
+                            <div className="options__choice" onClick={() => setGameMode(false)}>Vs computer</div>
                             <div className="options__choice" onClick={() => setGameMode(true)}>Sandbox</div>
                         </div>
                     </div>
@@ -200,8 +210,10 @@ const Options = () => {
                             <div className="options__choice" onClick={() => setColor("color/black")}>Black</div>
                         </div>
                     </div>
-                    <div className="options__body">
-                        <div className="options__heading">Choose the time control <span className="options__question">?</span></div>
+                    <div className="options__bodyTime">
+                        <div className="options__heading">Choose the time control <span onMouseEnter={() => setHelpTime(true)} 
+                                                                                        onMouseLeave={() => setHelpTime(false)}
+                                                                                        className="options__question">?</span></div>
                         <div className="options__container">
                             <div>
                                 <div className="options__choice" onClick={() => setTime(600000, 0)}>10 + 0</div>
