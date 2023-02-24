@@ -1244,16 +1244,16 @@ const Pieces = () => {
     const attackedByOpponent = () => {
         let arr = []
 
-        enemyRooks.forEach(a => checkArrays(rookMoves.current, a, arr, enemySquaresRender, playerSquaresRender, true, true))
+        // enemyRooks.forEach(a => checkArrays(rookMoves.current, a, arr, enemySquaresRender, playerSquaresRender, true, true))
 
-        enemyKnights.forEach(a => recordKnightMoves(a, arr, enemySquaresRender))
+        // enemyKnights.forEach(a => recordKnightMoves(a, arr, enemySquaresRender))
 
-        enemyBishops.forEach(a => checkArrays(whiteBishopMoves, a, arr, enemySquaresRender, playerSquaresRender, true, true))
-        enemyBishops.forEach(a => checkArrays(blackBishopMoves, a, arr, enemySquaresRender, playerSquaresRender, true, true))
+        // enemyBishops.forEach(a => checkArrays(whiteBishopMoves, a, arr, enemySquaresRender, playerSquaresRender, true, true))
+        // enemyBishops.forEach(a => checkArrays(blackBishopMoves, a, arr, enemySquaresRender, playerSquaresRender, true, true))
 
-        enemyQueens.forEach(a => checkArrays(whiteBishopMoves, a, arr, enemySquaresRender, playerSquaresRender, true, true))
-        enemyQueens.forEach(a => checkArrays(blackBishopMoves, a, arr, enemySquaresRender, playerSquaresRender, true, true))
-        enemyQueens.forEach(a => checkArrays(rookMoves.current, a, arr, enemySquaresRender, playerSquaresRender, true, true))
+        // enemyQueens.forEach(a => checkArrays(whiteBishopMoves, a, arr, enemySquaresRender, playerSquaresRender, true, true))
+        // enemyQueens.forEach(a => checkArrays(blackBishopMoves, a, arr, enemySquaresRender, playerSquaresRender, true, true))
+        // enemyQueens.forEach(a => checkArrays(rookMoves.current, a, arr, enemySquaresRender, playerSquaresRender, true, true))
 
         enemyPawns.forEach(a => recordOpponentPawnAttacks(a, arr))
 
@@ -2241,12 +2241,22 @@ const Pieces = () => {
     function recordOpponentPawnAttacks(i, arrMoves) {
         let arr = []
 
-        if (!knightLimits.current[0].includes(i)) {
-            arr.push(i + 7)
-        }
-
-        if (!knightLimits.current[3].includes(i)) {
-            arr.push(i + 9)
+        if (color === "black" && !sandbox) {
+            if (!knightLimits.current[0].includes(i)) {
+                arr.push(i - 7)
+            }
+    
+            if (!knightLimits.current[3].includes(i)) {
+                arr.push(i - 9)
+            }
+        } else {
+            if (!knightLimits.current[0].includes(i)) {
+                arr.push(i + 7)
+            }
+    
+            if (!knightLimits.current[3].includes(i)) {
+                arr.push(i + 9)
+            }
         }
 
         for (const number of arr) {
@@ -2423,13 +2433,6 @@ const Pieces = () => {
                     payload: []
                 })
 
-                // if (store.getState().activePiece !== piece) {
-                //     store.dispatch({
-                //         type: "activePiece",
-                //         payload: piece
-                //     })
-                // }
-    
                 if (store.getState().oldSquare !== i) {
                     store.dispatch({
                         type: "oldSquare",
@@ -2522,7 +2525,9 @@ const Pieces = () => {
                 if (/^pk/.test(piece)) {
                     attackedByOpponent()
                     let arr = []
+
                     recordPlayerKingMoves(i, arr)
+                    
                     store.dispatch({
                         type:"moveSquares",
                         payload: arr
@@ -2636,7 +2641,6 @@ const Pieces = () => {
                 }
             }
 
-            
         }
 
         if (/^ph/.test(activePiece) && moveSquares.includes(i)) {
@@ -4400,15 +4404,13 @@ const Pieces = () => {
         if (sounds) {
            castlingSound.play()
         }
-
-        store.dispatch({
-            type: "setMoveVar",
-            payload: [coor1, coor2]
-        })
-
         
         if (color === "black" && sandbox) {
-        
+            store.dispatch({
+                type: "setMoveVar",
+                payload: [coor1, coor2]
+            })
+            
             if (/or/.test(rookToMove)) {
                 store.dispatch({
                     type: "oldSquare",
@@ -4441,8 +4443,11 @@ const Pieces = () => {
             if (rookToMove === "or2") {
                 enemyRook2 = newSqRook - 1
             }
-        } 
-        else if (color === "black" && !sandbox) {
+        } else if (color === "black" && !sandbox) {
+            store.dispatch({
+                type: "setMoveVar",
+                payload: [coor1 * -1, coor2 * -1]
+            })
             if (/or/.test(rookToMove)) {
                 store.dispatch({
                     type: "oldSquare",
@@ -4475,9 +4480,11 @@ const Pieces = () => {
             if (rookToMove === "or2") {
                 enemyRook2 = newSqRook + 56
             }
-        } 
-        else {
-            console.log("asd")
+        } else {
+            store.dispatch({
+                type: "setMoveVar",
+                payload: [coor1, coor2]
+            })
 
             store.dispatch({
                 type: "oldSquare",
