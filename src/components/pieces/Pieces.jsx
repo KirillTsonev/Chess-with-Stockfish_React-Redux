@@ -1281,7 +1281,7 @@ const Pieces = () => {
 
         rooks.forEach(a => checkArrays(rookMoves.current, a, arr, oppSquares, ownSquares, true, true))
 
-        knights.forEach(a => recordKnightMoves(a, arr, oppSquares))
+        knights.forEach(a => recordKnightMoves(a, arr, ownSquares))
 
         bishops.forEach(a => checkArrays(whiteBishopMoves, a, arr, oppSquares, ownSquares, true, true))
         bishops.forEach(a => checkArrays(blackBishopMoves, a, arr, oppSquares, ownSquares, true, true))
@@ -1458,7 +1458,10 @@ const Pieces = () => {
         }
 
         setPawnPromotes("")
-        engineTurn()
+
+        if (!sandbox) {
+            engineTurn()
+        }
     }
 
     const renderPieces = () => {
@@ -2448,7 +2451,6 @@ const Pieces = () => {
     }
 
     const onSquareClick = (i, piece) => {     
-        console.log(checkedByOpponentArr.current) 
         if (((!moveSquares.includes(i) && moveSquares.length > 0) || activePiece === piece) 
             && 
             (
@@ -3607,7 +3609,7 @@ const Pieces = () => {
     }
     
     const animatePiece = (i, string, num1, num2) => {   
-        if (moves.length === 1) {
+        if (moves.length === 1 && sounds) {
             gameEndSound.play()
         } 
 
@@ -3970,7 +3972,9 @@ const Pieces = () => {
                 })
 
                 if (checkedByPlayerArr.current.flat().includes(enemyKing)) {
-                    checkSound.play()
+                    if (sounds) {
+                        checkSound.play()
+                    }
 
                     store.dispatch({
                         type: "enemyKingAttacked",
@@ -4302,8 +4306,6 @@ const Pieces = () => {
             type: "recordMoves",
             payload: JSON.stringify(store.getState().board.board)
         })
-
-        console.log(checkedByOpponentArr.current)
 
         checkedByOpponentArr.current = []
         checkedByPlayerArr.current = []
