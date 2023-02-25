@@ -85,7 +85,7 @@ const Board = () => {
                 </div>)}
 
                 {letters.map((a, i) => <div key={i + 9 * 300} className={`${i % 2 !== 0 ? "white" : "black"} 
-                                                                           ${i + 9 === pieceSquare ? "highlight" : null}`}>
+                                                                          ${i + 9 === pieceSquare ? "highlight" : null}`}>
                     {moveSquares.includes(i + 9) && !occupiedSquaresRender.includes(i + 9) 
                         ? <div className="activeSquare"></div> 
                         : null}
