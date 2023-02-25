@@ -4315,7 +4315,7 @@ const Pieces = () => {
         }   
     }
 
-    function movePawn(i, string) {
+    const movePawn = (i, string) => {
         if (i === enPassantSquare.current[0]) {
             switch (pieceSquareForEngine.current - i) {
                 case -9:
