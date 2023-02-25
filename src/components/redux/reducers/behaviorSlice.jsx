@@ -1,6 +1,6 @@
 const initialState = {
     darkTheme: true,
-    // numbers: false,
+    numbers: false,
     animations: "fast",
     coordinates: true,
     sounds: true,
@@ -14,11 +14,11 @@ function behaviorSlice(state = initialState, action) {
                 ...state,
                 darkTheme: action.payload
             }
-        // case "numbers":
-        //     return {
-        //         ...state,
-        //         numbers: action.payload
-        //     }
+        case "numbers":
+            return {
+                ...state,
+                numbers: action.payload
+            }
         case "animationSpeed":
             return {
                 ...state,

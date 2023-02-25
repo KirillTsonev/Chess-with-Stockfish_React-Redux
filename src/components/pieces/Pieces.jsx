@@ -49,7 +49,7 @@ const Pieces = () => {
     const color = useSelector(state => state.options.color)
     const options = useSelector(state => state.options.options)
 
-    // const numbers = useSelector(state => state.behavior.numbers)
+    const numbers = useSelector(state => state.behavior.numbers)
     const animations = useSelector(state => state.behavior.animations)
     const sounds = useSelector(state => state.behavior.sounds)
 
@@ -1884,56 +1884,56 @@ const Pieces = () => {
                 {arr.map((a, i) => <div key={i + 1 * 100} 
                                         onClick={() => onSquareClick(i + 1, boardEntries[i][0])}
                                         className="movementSquare">
-                                            {/* {numbers ? i + 1 : ""} */}
+                                            {numbers ? i + 1 : ""}
                                             {moveSquares.includes(i + 1) ? <div className="highlightSquare"><div></div></div> : null}
                                     </div>)}
                                     
                 {arr.map((a, i) => <div key={i + 9 * 100}
                                         onClick={() => onSquareClick(i + 9, boardEntries[i + 8][0])}
                                         className="movementSquare">
-                                            {/* {numbers ? i + 9 : ""} */}
+                                            {numbers ? i + 9 : ""}
                                             {moveSquares.includes(i + 9) ? <div className="highlightSquare"><div></div></div> : null}
                                     </div>)}
 
                 {arr.map((a, i) => <div key={i + 17 * 100} 
                                         onClick={() => onSquareClick(i + 17, boardEntries[i + 16][0])}
                                         className="movementSquare">
-                                            {/* {numbers ? i + 17 : ""} */}
+                                            {numbers ? i + 17 : ""}
                                             {moveSquares.includes(i + 17) ? <div className="highlightSquare"><div></div></div> : null}
                                     </div>)}
 
                 {arr.map((a, i) => <div key={i + 25 * 100}
                                         onClick={() => onSquareClick(i + 25, boardEntries[i + 24][0])}
                                         className="movementSquare">
-                                            {/* {numbers ? i + 25 : ""} */}
+                                            {numbers ? i + 25 : ""}
                                             {moveSquares.includes(i + 25) ? <div className="highlightSquare"><div></div></div> : null}
                                     </div>)}
 
                 {arr.map((a, i) => <div key={i + 33 * 100} 
                                         onClick={() => onSquareClick(i + 33, boardEntries[i + 32][0])}
                                         className="movementSquare">
-                                            {/* {numbers ? i + 33 : ""} */}
+                                            {numbers ? i + 33 : ""}
                                             {moveSquares.includes(i + 33) ? <div className="highlightSquare"><div></div></div> : null}
                                     </div>)}
 
                 {arr.map((a, i) => <div key={i + 41 * 100}
                                         onClick={() => onSquareClick(i + 41, boardEntries[i + 40][0])}
                                         className="movementSquare">
-                                            {/* {numbers ? i + 41 : ""} */}
+                                            {numbers ? i + 41 : ""}
                                             {moveSquares.includes(i + 41) ? <div className="highlightSquare"><div></div></div> : null}
                                     </div>)}
 
                 {arr.map((a, i) => <div key={i + 49 * 100}
                                         onClick={() => onSquareClick(i + 49, boardEntries[i + 48][0])}
                                         className="movementSquare">
-                                            {/* {numbers ? i + 49 : ""} */}
+                                            {numbers ? i + 49 : ""}
                                             {moveSquares.includes(i + 49) ? <div className="highlightSquare"><div></div></div> : null}
                                     </div>)}
 
                 {arr.map((a, i) => <div key={i + 57 * 100} 
                                         onClick={() => onSquareClick(i + 57, boardEntries[i + 56][0])}
                                         className="movementSquare">
-                                            {/* {numbers ? i + 57 : ""} */}
+                                            {numbers ? i + 57 : ""}
                                             {moveSquares.includes(i + 57) ? <div className="highlightSquare"><div></div></div> : null}
                                     </div>)}
             </div>
@@ -2104,7 +2104,6 @@ const Pieces = () => {
                 arr = arr.filter(a => arrTech.includes(a))
             } else if (playerKingAttacked && !playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
                 arr = arr.filter(a => playerHorseSafetyArr.current.includes(a))
-                
             }
 
             if (enemyKingAttacked 
@@ -2115,7 +2114,6 @@ const Pieces = () => {
                 arr = arr.filter(a => arrTech.includes(a))
             } else if (enemyKingAttacked && !enemyKing8StarArr.current.flat().includes(checkingPiece.current)) {
                 arr = arr.filter(a => enemyHorseSafetyArr.current.includes(a))
-                
             }
 
             for (const number of arr) {
@@ -2449,7 +2447,8 @@ const Pieces = () => {
         }
     }
 
-    const onSquareClick = (i, piece) => {      
+    const onSquareClick = (i, piece) => {     
+        console.log(checkedByOpponentArr.current) 
         if (((!moveSquares.includes(i) && moveSquares.length > 0) || activePiece === piece) 
             && 
             (
@@ -3738,6 +3737,19 @@ const Pieces = () => {
                         payload: false
                     })
                 }
+
+                if (checkedByOpponentArr.current.flat().includes(playerKing)) {
+                    if (sounds) {
+                        checkSound.play()
+                    }
+
+                    store.dispatch({
+                        type: "playerKingAttacked",
+                        payload: true
+                    })
+
+                    checkingPiece.current = i
+                } 
                 
                 if (!checkedByOpponentArr.current.flat().includes(playerKing)) {
                     if (sounds) {
@@ -3956,6 +3968,17 @@ const Pieces = () => {
                 store.dispatch({
                     type: "halfMoveCounter/reset",
                 })
+
+                if (checkedByPlayerArr.current.flat().includes(enemyKing)) {
+                    checkSound.play()
+
+                    store.dispatch({
+                        type: "enemyKingAttacked",
+                        payload: true
+                    })
+                    
+                    checkingPiece.current = i
+                } 
 
                 if (enemyPawns.includes(i)) {
                     store.dispatch({
@@ -4265,9 +4288,6 @@ const Pieces = () => {
             }
         }
 
-        checkedByOpponentArr.current = []
-        checkedByPlayerArr.current = []
-
         store.dispatch({
             type:"moveSquares",
             payload: []
@@ -4282,6 +4302,11 @@ const Pieces = () => {
             type: "recordMoves",
             payload: JSON.stringify(store.getState().board.board)
         })
+
+        console.log(checkedByOpponentArr.current)
+
+        checkedByOpponentArr.current = []
+        checkedByPlayerArr.current = []
     }  
 
     const moveKnight = (i, string) => {

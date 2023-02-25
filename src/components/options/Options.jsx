@@ -28,6 +28,10 @@ const Options = () => {
             payload: color
         })
 
+        store.dispatch({
+            type: "boardReset"
+        })
+
         if (color === "black" && !sandbox) {
             store.dispatch({
                 type: "setBoard",

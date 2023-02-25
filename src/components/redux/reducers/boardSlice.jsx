@@ -113,6 +113,11 @@ const initialState = {
 
 function boardSlice(state = initialState, action) {
     switch (action.type) {
+        case "boardReset":
+            return {
+                ...state,
+                board: initialState.board
+            }
         case "endMessage": 
             return {
                 ...state,

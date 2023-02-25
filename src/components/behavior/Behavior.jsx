@@ -9,7 +9,7 @@ const Behavior = () => {
     const [ballLeft, setBallLeft] = useState(false)
 
     const darkTheme = useSelector(state => state.behavior.darkTheme)
-    // const numbers = useSelector(state => state.behavior.numbers)
+    const numbers = useSelector(state => state.behavior.numbers)
     const animations = useSelector(state => state.behavior.animations)
     const coordinates = useSelector(state => state.behavior.coordinates)
     const sounds = useSelector(state => state.behavior.sounds)
@@ -64,12 +64,12 @@ const Behavior = () => {
         localStorage.setItem("darkTheme", !ballLeft)
     }
 
-    // const onNumbersChoice = (boolean) => {
-    //     store.dispatch({
-    //         type: "numbers",
-    //         payload: boolean
-    //     })
-    // }
+    const onNumbersChoice = (boolean) => {
+        store.dispatch({
+            type: "numbers",
+            payload: boolean
+        })
+    }
 
     const onAnimationChoice = (speed) => {
         store.dispatch({
@@ -118,7 +118,7 @@ const Behavior = () => {
                 <div>🌜</div>
             </div>
 
-            {/* <div className="behavior__container">
+            <div className="behavior__container">
                 <div className="behavior__body">Visible numbers:</div>
 
                 <div className="behavior__option">
@@ -132,7 +132,7 @@ const Behavior = () => {
                                     ${darkTheme ? "option-dark" : "option-light"}`}
                          onClick={() => onNumbersChoice(false)}>Off</div>
                 </div>
-            </div> */}
+            </div>
 
             <div className="behavior__container">
                 <div className="behavior__body">Animation speed:</div>
