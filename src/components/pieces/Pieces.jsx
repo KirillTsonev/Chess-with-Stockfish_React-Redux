@@ -34,15 +34,12 @@ const Pieces = () => {
     const board = useSelector(state => state.board.board)
     const castlingEnemyMoved = useSelector(state => state.board.castlingEnemyMoved)
     const castlingPlayerMoved = useSelector(state => state.board.castlingPlayerMoved)
-    const currentMove = useSelector(state => state.board.currentMove)
     const enemyKingAttacked = useSelector(state => state.board.enemyKingAttacked)
     const gameEnd = useSelector(state => state.board.gameEnd)
     const halfMoveCounter = useSelector(state => state.board.halfMoveCounter)
     const moveCounter = useSelector(state => state.board.moveCounter)
-    const moves = useSelector(state => state.board.moves)
     const moveSquares = useSelector(state => state.board.moveSquares)
     const moveVar = useSelector(state => state.board.moveVar)
-    // const numbers = useSelector(state => state.numbers)
     const pawnsFirstMove = useSelector(state => state.board.pawnsFirstMove)  
     const pieceSquare = useSelector(state => state.board.pieceSquare)
     const playerKingAttacked = useSelector(state => state.board.playerKingAttacked)
@@ -52,8 +49,12 @@ const Pieces = () => {
     const color = useSelector(state => state.options.color)
     const options = useSelector(state => state.options.options)
 
+    // const numbers = useSelector(state => state.behavior.numbers)
     const animations = useSelector(state => state.behavior.animations)
     const sounds = useSelector(state => state.behavior.sounds)
+
+    const moves = useSelector(state => state.progression.moves)
+    const currentMove = useSelector(state => state.progression.currentMove)
     
     let boardEntries = Object.entries(board)
 
@@ -3583,8 +3584,8 @@ const Pieces = () => {
         }
 
         for (let i = 0; i < moves.length; i++) {
-            if (JSON.stringify(store.getState().board.moves[i]) === JSON.stringify(store.getState().board.moves[i + 4]) && 
-                JSON.stringify(store.getState().board.moves[i]) === JSON.stringify(store.getState().board.moves[i + 8])) {
+            if (JSON.stringify(store.getState().progression.moves[i]) === JSON.stringify(store.getState().progression.moves[i + 4]) && 
+                JSON.stringify(store.getState().progression.moves[i]) === JSON.stringify(store.getState().progression.moves[i + 8])) {
                     if (sounds) {
                         gameEndSound.play()
                     }

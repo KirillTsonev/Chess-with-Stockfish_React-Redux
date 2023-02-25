@@ -6,14 +6,16 @@ import "./board.sass"
 
 const Board = () => {
     const board = useSelector(state => state.board.board)
-    const currentMove = useSelector(state => state.board.currentMove)
     const highlightMove = useSelector(state => state.board.highlightMove)
-    const coordinates = useSelector(state => state.board.coordinates)
     const moveSquares = useSelector(state => state.board.moveSquares)
     const pieceSquare = useSelector(state => state.board.pieceSquare)
 
     const sandbox = useSelector(state => state.options.sandbox)
     const color = useSelector(state => state.options.color)
+
+    const coordinates = useSelector(state => state.behavior.coordinates)
+
+    const currentMove = useSelector(state => state.progression.currentMove)
 
     let boardEntries = Object.entries(board)
 

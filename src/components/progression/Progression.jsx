@@ -29,12 +29,6 @@ const Progression = () => {
     const [opponentMiliseconds, setOpponentMiliseconds] = useState("0")
     const [resignConfirm, setResignConfirm] = useState(false)
 
-    const moves = useSelector(state => state.board.moves)
-    const moveNumbers = useSelector(state => state.board.moveNumbers)
-    const currentMove = useSelector(state => state.board.currentMove)
-    const notationArr = useSelector(state => state.board.notationArr)
-    const pieceGainPlayer = useSelector(state => state.board.pieceGainPlayer)
-    const pieceGainOpponent = useSelector(state => state.board.pieceGainOpponent)
     const gameEnd = useSelector(state => state.board.gameEnd)
 
     const color = useSelector(state => state.options.color)
@@ -43,6 +37,13 @@ const Progression = () => {
 
     const milliseconds = useSelector(state => state.behavior.milliseconds)
     const darkTheme = useSelector(state => state.behavior.darkTheme)
+
+    const moves = useSelector(state => state.progression.moves)
+    const moveNumbers = useSelector(state => state.progression.moveNumbers)
+    const currentMove = useSelector(state => state.progression.currentMove)
+    const notationArr = useSelector(state => state.progression.notationArr)
+    const pieceGainPlayer = useSelector(state => state.progression.pieceGainPlayer)
+    const pieceGainOpponent = useSelector(state => state.progression.pieceGainOpponent)
  
     const bottomRef = useRef(null)
     const elapsedPlayer = useRef(0)
