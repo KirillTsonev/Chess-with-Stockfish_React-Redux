@@ -27,7 +27,7 @@ function App() {
       <Suspense>
         <Options></Options>
       </Suspense>
-      <div className='visible'>
+      <div className='visible' style={color ? {opacity: "1"} : {opacity: "0"}}>
         <div>
           <Suspense>
             <Behavior></Behavior>
