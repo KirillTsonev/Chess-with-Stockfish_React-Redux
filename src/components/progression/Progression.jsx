@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import store from "../redux/store"
 import { useSelector } from "react-redux"
 import { useRef, useEffect, useState } from "react"
 
@@ -15,6 +14,8 @@ import lastLight from "../../icons/last-light.png"
 import resignLight from "../../icons/resign-light.png"
 import cancel from "../../icons/x.png"
 
+import store from "../redux/store"
+
 import gameEndSoundFile from "../../sounds/gameEnd.ogg"
 
 import "./progression.sass"
@@ -28,19 +29,21 @@ const Progression = () => {
     const [opponentMiliseconds, setOpponentMiliseconds] = useState("0")
     const [resignConfirm, setResignConfirm] = useState(false)
 
-    const moves = useSelector(state => state.moves)
-    const moveNumbers = useSelector(state => state.moveNumbers)
-    const currentMove = useSelector(state => state.currentMove)
-    const time = useSelector(state => state.time)
-    const color = useSelector(state => state.color)
-    const notationArr = useSelector(state => state.notationArr)
-    const pieceGainPlayer = useSelector(state => state.pieceGainPlayer)
-    const pieceGainOpponent = useSelector(state => state.pieceGainOpponent)
-    const increment = useSelector(state => state.increment)
-    const milliseconds = useSelector(state => state.milliseconds)
-    const darkTheme = useSelector(state => state.darkTheme)
-    const gameEnd = useSelector(state => state.gameEnd)
+    const moves = useSelector(state => state.board.moves)
+    const moveNumbers = useSelector(state => state.board.moveNumbers)
+    const currentMove = useSelector(state => state.board.currentMove)
+    const notationArr = useSelector(state => state.board.notationArr)
+    const pieceGainPlayer = useSelector(state => state.board.pieceGainPlayer)
+    const pieceGainOpponent = useSelector(state => state.board.pieceGainOpponent)
+    const gameEnd = useSelector(state => state.board.gameEnd)
 
+    const color = useSelector(state => state.options.color)
+    const time = useSelector(state => state.options.time)
+    const increment = useSelector(state => state.options.increment)
+
+    const milliseconds = useSelector(state => state.behavior.milliseconds)
+    const darkTheme = useSelector(state => state.behavior.darkTheme)
+ 
     const bottomRef = useRef(null)
     const elapsedPlayer = useRef(0)
     const elapsedOpponent = useRef(0)
@@ -61,14 +64,16 @@ const Progression = () => {
     }, [moves])
 
     useEffect(() => {
-        if ((color === "white" && store.getState().toMove === "b") || (color === "black" && store.getState().toMove === "w")) {
+        if ((color === "white" && store.getState().board.toMove === "b") 
+            || (color === "black" && store.getState().board.toMove === "w")) {
             elapsedPlayer.current -= increment
         }
 
-        if ((color === "white" && store.getState().toMove === "w") || (color === "black" && store.getState().toMove === "b")) {
+        if ((color === "white" && store.getState().board.toMove === "w") 
+            || (color === "black" && store.getState().board.toMove === "b")) {
             elapsedOpponent.current -= increment
         }
-    }, [store.getState().toMove])
+    }, [store.getState().board.toMove])
 
     useEffect(() => {
         let startingTime = time / 1000 / 60
@@ -106,6 +111,7 @@ const Progression = () => {
             const minutes = Math.floor((t / 1000 / 60) % 60)
             const seconds = Math.floor((t / 1000) % 60)
             const miliseconds = Math.floor((t / 10) % 100) / 10
+
             if (t <= 0) {
                 return {
                     "total": 0,
@@ -132,14 +138,15 @@ const Progression = () => {
             setPlayerSeconds(getZero(tPlayer.seconds))
             setPlayerMiliseconds(tPlayer.miliseconds)
 
-            if ((color === "white" && store.getState().toMove === "w") || (color === "black" && store.getState().toMove === "b")) {
+            if ((color === "white" && store.getState().board.toMove === "w") 
+                || (color === "black" && store.getState().board.toMove === "b")) {
                 elapsedPlayer.current += 100
             }
             
-            if (tPlayer.total <= 0 || 
-                (color === "white" && store.getState().toMove === "b") || 
-                (color === "black" && store.getState().toMove === "w") ||
-                store.getState().gameEnd) {
+            if (tPlayer.total <= 0 
+                || (color === "white" && store.getState().board.toMove === "b") 
+                || (color === "black" && store.getState().board.toMove === "w") 
+                || store.getState().board.gameEnd) {
                 clearInterval(timePlayerInterval)
             }
         }
@@ -153,14 +160,15 @@ const Progression = () => {
             setOpponentSeconds(getZero(tOpponent.seconds))
             setOpponentMiliseconds(tOpponent.miliseconds)
 
-            if ((color === "white" && store.getState().toMove === "b") || (color === "black" && store.getState().toMove === "w")) {
+            if ((color === "white" && store.getState().board.toMove === "b") 
+                || (color === "black" && store.getState().board.toMove === "w")) {
                 elapsedOpponent.current += 100
             }
             
-            if (tOpponent.total <= 0 || 
-                (color === "white" && store.getState().toMove === "w") || 
-                (color === "black" && store.getState().toMove === "b") ||
-                store.getState().gameEnd) {
+            if (tOpponent.total <= 0 
+                || (color === "white" && store.getState().board.toMove === "w") 
+                || (color === "black" && store.getState().board.toMove === "b") 
+                || store.getState().board.gameEnd) {
                 clearInterval(timeOpponentInterval)
             }
         }
@@ -174,6 +182,7 @@ const Progression = () => {
             type: "currentMove",
             payload: "0"
         })
+
         counter.current = 0
     }
 
@@ -212,30 +221,27 @@ const Progression = () => {
             type: "currentMove",
             payload: null
         })
-        counter.current = moves.length - 1
-    }
 
-    const onResignClick = () => {
-        setResignConfirm(true)
+        counter.current = moves.length - 1
     }
 
     const onResignConfirm = () => {
         store.dispatch({
             type: "gameEnd"
         })
+
         store.dispatch({
             type: "modalOpen",
             payload: true
         })
+
         store.dispatch({
             type: "endMessage",
             payload: "You've resigned."
         })
-        gameEndSound.play()
-        setResignConfirm(false)
-    }
 
-    const onResignCancel = () => {
+        gameEndSound.play()
+
         setResignConfirm(false)
     }
 
@@ -250,27 +256,38 @@ const Progression = () => {
             <div className="progression__pieceGain">
                 {pieceGainOpponent.sort().reverse().join("")}
             </div>
-            
+
             <div className={`${darkTheme ? "bg-dark" : "bg-light"} progression__timer`}>
-                {opponentMinutes}:{opponentSeconds}<span style={milliseconds ? {display: "inline"} : {display: "none"}}>:{opponentMiliseconds}</span>
+                {opponentMinutes}:{opponentSeconds}
+
+                <span style={milliseconds ? {display: "inline"} : {display: "none"}}>:{opponentMiliseconds}</span>
             </div>
 
             <div className="progression__moves">
                 <div className="progression__moves__numbers">
-                    {moveNumbers.slice(1).map(a => <div className={`${darkTheme ? "bg-dark" : "bg-light"} progression__moves__numbers-body`}>{a - 1}</div>)}
+                    {moveNumbers.slice(1).map(a => 
+                        <div className={`${darkTheme ? "bg-dark" : "bg-light"} 
+                                         progression__moves__numbers-body`}>{a - 1}</div>)}
                 </div>
+
                 <div className="progression__moves__grid">
                     {moves.slice(1).map((a, i) => 
-                        <div className={`${((i === currentMove - 1) || (i + 2 === moves.length && !currentMove)) && darkTheme ? "activeMoveDark" : null}
-                                ${((i === currentMove - 1) || (i + 2 === moves.length && !currentMove)) && !darkTheme ? "activeMoveLight" : null} 
-                                progression__moves__grid-item`} 
+                        <div className={`${((i === currentMove - 1) || (i + 2 === moves.length && !currentMove)) && darkTheme 
+                                            ? "activeMoveDark" 
+                                            : null}
+                                         ${((i === currentMove - 1) || (i + 2 === moves.length && !currentMove)) && !darkTheme 
+                                            ? "activeMoveLight" 
+                                            : null} 
+                                         progression__moves__grid-item`} 
                             onClick={() => onMoveClick(i + 1)}
                             ref={(i + 2 === moves.length && !currentMove) ? bottomRef : null}>{notationArr[i]}</div>)}
                 </div>
             </div>
 
             <div className={`${darkTheme ? "bg-dark" : "bg-light"} progression__timer`}>
-                {playerMinutes}:{playerSeconds}<span style={milliseconds ? {display: "inline"} : {display: "none"}}>:{playerMiliseconds}</span>
+                {playerMinutes}:{playerSeconds}
+
+                <span style={milliseconds ? {display: "inline"} : {display: "none"}}>:{playerMiliseconds}</span>
             </div>
 
             <div className="progression__pieceGain">
@@ -282,14 +299,17 @@ const Progression = () => {
                         alt="First" 
                         className="progression__buttons-button" 
                         onClick={() => onFirstClick()}/>
+
                 <img src={darkTheme ? prevDark : prevLight} 
                         alt="Previous" 
                         className="progression__buttons-button" 
                         onClick={() => onPrevClick()}/>
+
                 <img src={darkTheme ? nextDark : nextLight} 
                         alt="Next" 
                         className="progression__buttons-button" 
                         onClick={() => onNextClick()}/>
+
                 <img src={darkTheme ? lastDark : lastLight} 
                         alt="Last" 
                         className="progression__buttons-button" 
@@ -297,8 +317,12 @@ const Progression = () => {
             </div>
 
             <div className={`${darkTheme ? "bg-dark" : "bg-light"}  progression__resign`}
-                    style={resignConfirm || gameEnd || moves.length === 1 ? {display: "none"} : {display: "block"}}
-                    onClick={() => onResignClick()}
+                    style={resignConfirm 
+                            || gameEnd 
+                            || moves.length === 1 
+                            ? {display: "none"} 
+                            : {display: "block"}}
+                    onClick={() => setResignConfirm(true)}
                     title="Resign">
                 <img src={darkTheme ? resignDark : resignLight} 
                         alt="Resign" 
@@ -314,11 +338,12 @@ const Progression = () => {
                             alt="Resign" 
                             className="progression__resign-img"/>
                 </div>
+
                 <img src={cancel} 
                         alt="Cancel" 
                         style={resignConfirm ? {display: "block"} : {display: "none"}} 
                         className="progression__resign__confirm-cancel"
-                        onClick={() => onResignCancel()}
+                        onClick={() => setResignConfirm(false)}
                         title="Cancel"/>
             </div>
 

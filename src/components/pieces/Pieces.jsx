@@ -20,53 +20,55 @@ import checkSoundFile from "../../sounds/check.ogg"
 import castlingSoundFile from "../../sounds/castling.ogg"
 import gameEndSoundFile from "../../sounds/gameEnd.ogg"
 
-import store from "../redux/store"
-
 import { useSelector } from "react-redux"
 import { useState, useEffect, useRef, useMemo } from "react"
+
+import store from "../redux/store"
 
 import "./pieces.sass"
 
 const Pieces = () => {
     const [pawnPromotes, setPawnPromotes] = useState("")
 
-    const activePiece = useSelector(state => state.activePiece)
-    const animations = useSelector(state => state.animations)
-    const board = useSelector(state => state.board)
-    const castlingEnemyMoved = useSelector(state => state.castlingEnemyMoved)
-    const castlingPlayerMoved = useSelector(state => state.castlingPlayerMoved)
-    const color = useSelector(state => state.color)
-    const currentMove = useSelector(state => state.currentMove)
-    const enemyKingAttacked = useSelector(state => state.enemyKingAttacked)
-    const gameEnd = useSelector(state => state.gameEnd)
-    const halfMoveCounter = useSelector(state => state.halfMoveCounter)
-    const moveCounter = useSelector(state => state.moveCounter)
-    const moves = useSelector(state => state.moves)
-    const moveSquares = useSelector(state => state.moveSquares)
-    const moveVar = useSelector(state => state.moveVar)
-    const numbers = useSelector(state => state.numbers)
-    const options = useSelector(state => state.options)
-    const pawnsFirstMove = useSelector(state => state.pawnsFirstMove)  
-    const pieceSquare = useSelector(state => state.pieceSquare)
-    const playerKingAttacked = useSelector(state => state.playerKingAttacked)
-    const sandbox = useSelector(state => state.sandbox)
-    const sounds = useSelector(state => state.sounds)
-    const toMove = useSelector(state => state.toMove)
+    const activePiece = useSelector(state => state.board.activePiece)
+    const board = useSelector(state => state.board.board)
+    const castlingEnemyMoved = useSelector(state => state.board.castlingEnemyMoved)
+    const castlingPlayerMoved = useSelector(state => state.board.castlingPlayerMoved)
+    const currentMove = useSelector(state => state.board.currentMove)
+    const enemyKingAttacked = useSelector(state => state.board.enemyKingAttacked)
+    const gameEnd = useSelector(state => state.board.gameEnd)
+    const halfMoveCounter = useSelector(state => state.board.halfMoveCounter)
+    const moveCounter = useSelector(state => state.board.moveCounter)
+    const moves = useSelector(state => state.board.moves)
+    const moveSquares = useSelector(state => state.board.moveSquares)
+    const moveVar = useSelector(state => state.board.moveVar)
+    // const numbers = useSelector(state => state.numbers)
+    const pawnsFirstMove = useSelector(state => state.board.pawnsFirstMove)  
+    const pieceSquare = useSelector(state => state.board.pieceSquare)
+    const playerKingAttacked = useSelector(state => state.board.playerKingAttacked)
+    const toMove = useSelector(state => state.board.toMove)
+
+    const sandbox = useSelector(state => state.options.sandbox)
+    const color = useSelector(state => state.options.color)
+    const options = useSelector(state => state.options.options)
+
+    const animations = useSelector(state => state.behavior.animations)
+    const sounds = useSelector(state => state.behavior.sounds)
     
     let boardEntries = Object.entries(board)
 
     let filteredEnemyRender = boardEntries.filter(([key, value]) => /^o/.test(key))
-    let filteredEnemyLive = Object.entries(store.getState().board).filter(([key, value]) => /^o/.test(key))
+    let filteredEnemyLive = Object.entries(store.getState().board.board).filter(([key, value]) => /^o/.test(key))
     let justEnemyRender = Object.fromEntries(filteredEnemyRender)
     let justEnemyLive = Object.fromEntries(filteredEnemyLive)
     
     let filteredPlayerRender = boardEntries.filter(([key, value]) => /^p/.test(key))
-    let filteredPlayerLive = Object.entries(store.getState().board).filter(([key, value]) => /^p/.test(key))
+    let filteredPlayerLive = Object.entries(store.getState().board.board).filter(([key, value]) => /^p/.test(key))
     let justPlayerRender = Object.fromEntries(filteredPlayerRender)
     let justPlayerLive = Object.fromEntries(filteredPlayerLive)
 
     let filteredOccupiedRender = boardEntries.filter(([key, value]) => !/empty/.test(key))
-    let filteredOccupiedLive = Object.entries(store.getState().board).filter(([key, value]) => !/empty/.test(key))
+    let filteredOccupiedLive = Object.entries(store.getState().board.board).filter(([key, value]) => !/empty/.test(key))
     let justOccupiedRender = Object.fromEntries(filteredOccupiedRender)
     let justOccupiedLive = Object.fromEntries(filteredOccupiedLive)
 
@@ -419,17 +421,17 @@ const Pieces = () => {
 
     const recordBoard = () => {
         filteredEnemyRender = boardEntries.filter(([key, value]) => /^o/.test(key))
-        filteredEnemyLive = Object.entries(store.getState().board).filter(([key, value]) => /^o/.test(key))
+        filteredEnemyLive = Object.entries(store.getState().board.board).filter(([key, value]) => /^o/.test(key))
         justEnemyRender = Object.fromEntries(filteredEnemyRender)
         justEnemyLive = Object.fromEntries(filteredEnemyLive)
 
         filteredPlayerRender = boardEntries.filter(([key, value]) => /^p/.test(key))
-        filteredPlayerLive = Object.entries(store.getState().board).filter(([key, value]) => /^p/.test(key))        
+        filteredPlayerLive = Object.entries(store.getState().board.board).filter(([key, value]) => /^p/.test(key))        
         justPlayerRender = Object.fromEntries(filteredPlayerRender)
         justPlayerLive = Object.fromEntries(filteredPlayerLive)
 
         filteredOccupiedRender = boardEntries.filter(([key, value]) => !/empty/.test(key))
-        filteredOccupiedLive = Object.entries(store.getState().board).filter(([key, value]) => !/empty/.test(key))
+        filteredOccupiedLive = Object.entries(store.getState().board.board).filter(([key, value]) => !/empty/.test(key))
         justOccupiedRender = Object.fromEntries(filteredOccupiedRender)
         justOccupiedLive = Object.fromEntries(filteredOccupiedLive)
 
@@ -2495,7 +2497,7 @@ const Pieces = () => {
                     payload: []
                 })
 
-                if (store.getState().oldSquare !== i) {
+                if (store.getState().board.oldSquare !== i) {
                     store.dispatch({
                         type: "oldSquare",
                         payload: i
@@ -2625,7 +2627,7 @@ const Pieces = () => {
                     payload: []
                 })
     
-                if (store.getState().oldSquare !== i) {
+                if (store.getState().board.oldSquare !== i) {
                     store.dispatch({
                         type: "oldSquare",
                         payload: i
@@ -3581,8 +3583,8 @@ const Pieces = () => {
         }
 
         for (let i = 0; i < moves.length; i++) {
-            if (JSON.stringify(store.getState().moves[i]) === JSON.stringify(store.getState().moves[i + 4]) && 
-                JSON.stringify(store.getState().moves[i]) === JSON.stringify(store.getState().moves[i + 8])) {
+            if (JSON.stringify(store.getState().board.moves[i]) === JSON.stringify(store.getState().board.moves[i + 4]) && 
+                JSON.stringify(store.getState().board.moves[i]) === JSON.stringify(store.getState().board.moves[i + 8])) {
                     if (sounds) {
                         gameEndSound.play()
                     }
@@ -4277,7 +4279,7 @@ const Pieces = () => {
 
         store.dispatch({
             type: "recordMoves",
-            payload: JSON.stringify(store.getState().board)
+            payload: JSON.stringify(store.getState().board.board)
         })
     }  
 
@@ -4940,7 +4942,7 @@ const Pieces = () => {
 
         store.dispatch({
             type: "recordMoves",
-            payload: JSON.stringify(store.getState().board)
+            payload: JSON.stringify(store.getState().board.board)
         })
     }
 
@@ -5105,7 +5107,7 @@ const Pieces = () => {
 
         store.dispatch({
             type: "recordMoves",
-            payload: JSON.stringify(store.getState().board)
+            payload: JSON.stringify(store.getState().board.board)
         })
     }
 

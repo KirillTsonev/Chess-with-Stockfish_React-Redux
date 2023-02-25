@@ -8,9 +8,9 @@ import "./modal.sass"
 const Modal = () => {
     const [modal, setModal] = useState(true)
 
-    const darkTheme = useSelector(state => state.darkTheme)
-    const gameEnd = useSelector(state => state.gameEnd)
-    const endMessage = useSelector(state => state.endMessage)
+    const darkTheme = useSelector(state => state.board.darkTheme)
+    const gameEnd = useSelector(state => state.board.gameEnd)
+    const endMessage = useSelector(state => state.board.endMessage)
 
     const onClose = () => {
         setModal(false)

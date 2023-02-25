@@ -5,14 +5,15 @@ import { useEffect } from "react"
 import "./board.sass"
 
 const Board = () => {
-    const board = useSelector(state => state.board)
-    const color = useSelector(state => state.color)
-    const currentMove = useSelector(state => state.currentMove)
-    const highlightMove = useSelector(state => state.highlightMove)
-    const coordinates = useSelector(state => state.coordinates)
-    const moveSquares = useSelector(state => state.moveSquares)
-    const pieceSquare = useSelector(state => state.pieceSquare)
-    const sandbox = useSelector(state => state.sandbox)
+    const board = useSelector(state => state.board.board)
+    const currentMove = useSelector(state => state.board.currentMove)
+    const highlightMove = useSelector(state => state.board.highlightMove)
+    const coordinates = useSelector(state => state.board.coordinates)
+    const moveSquares = useSelector(state => state.board.moveSquares)
+    const pieceSquare = useSelector(state => state.board.pieceSquare)
+
+    const sandbox = useSelector(state => state.options.sandbox)
+    const color = useSelector(state => state.options.color)
 
     let boardEntries = Object.entries(board)
 

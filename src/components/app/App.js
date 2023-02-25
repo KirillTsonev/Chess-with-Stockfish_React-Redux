@@ -11,10 +11,12 @@ const Board = React.lazy(() => import('../board/Board'))
 const Options = React.lazy(() => import('../options/Options'))
 
 function App() {
-  const darkTheme = useSelector(state => state.darkTheme)
-  const newGame = useSelector(state => state.newGame)
-  const sandbox = useSelector(state => state.sandbox)
-  const color = useSelector(state => state.color)
+  const newGame = useSelector(state => state.board.newGame)
+
+  const sandbox = useSelector(state => state.options.sandbox)
+  const color = useSelector(state => state.options.color)
+
+  const darkTheme = useSelector(state => state.behavior.darkTheme)
 
   if (newGame) {
     window.location.reload()

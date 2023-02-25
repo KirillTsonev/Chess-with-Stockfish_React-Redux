@@ -10,8 +10,8 @@ const Options = () => {
     const [helpMode, setHelpMode] = useState(false)
     const [helpTime, setHelpTime] = useState(false)
 
-    const options = useSelector(state => state.options)
-    const sandbox = useSelector(state => state.sandbox)
+    const options = useSelector(state => state.options.options)
+    const sandbox = useSelector(state => state.options.sandbox)
 
     const setGameMode = (boolean) => {
         store.dispatch({
@@ -24,10 +24,11 @@ const Options = () => {
 
     const setColor = (color) => {
         store.dispatch({
-            type: color
+            type: "color",
+            payload: color
         })
 
-        if (color === "color/black" && !sandbox) {
+        if (color === "black" && !sandbox) {
             store.dispatch({
                 type: "setBoard",
                 payload: {
@@ -99,7 +100,7 @@ const Options = () => {
             })
         }
 
-        if (color === "color/black" && sandbox) {
+        if (color === "black" && sandbox) {
             store.dispatch({
                 type: "setBoard",
                 payload: {
@@ -216,8 +217,8 @@ const Options = () => {
                         <div className="options__back" onClick={() => setMultipler(multiplier - 1)}>Back</div>
                         <div className="options__heading">Choose the color of your pieces</div>
                         <div className="options__container">
-                            <div className="options__choice" onClick={() => setColor("color/white")}>White</div>
-                            <div className="options__choice" onClick={() => setColor("color/black")}>Black</div>
+                            <div className="options__choice" onClick={() => setColor("white")}>White</div>
+                            <div className="options__choice" onClick={() => setColor("black")}>Black</div>
                         </div>
                     </div>
                     <div className="options__bodyTime">
