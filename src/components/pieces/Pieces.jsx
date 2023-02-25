@@ -33,25 +33,25 @@ const Pieces = () => {
     const activePiece = useSelector(state => state.activePiece)
     const animations = useSelector(state => state.animations)
     const board = useSelector(state => state.board)
-    const color = useSelector(state => state.color)
-    const numbers = useSelector(state => state.numbers)
-    const pawnsFirstMove = useSelector(state => state.pawnsFirstMove)
-    const castlingPlayerMoved = useSelector(state => state.castlingPlayerMoved)
     const castlingEnemyMoved = useSelector(state => state.castlingEnemyMoved)
-    const moveCounter = useSelector(state => state.moveCounter)
-    const enemyKingAttacked = useSelector(state => state.enemyKingAttacked)
-    const playerKingAttacked = useSelector(state => state.playerKingAttacked)
-    const halfMoveCounter = useSelector(state => state.halfMoveCounter)
-    const sandbox = useSelector(state => state.sandbox)
-    const moves = useSelector(state => state.moves)
+    const castlingPlayerMoved = useSelector(state => state.castlingPlayerMoved)
+    const color = useSelector(state => state.color)
     const currentMove = useSelector(state => state.currentMove)
-    const toMove = useSelector(state => state.toMove)
-    const sounds = useSelector(state => state.sounds)
-    const moveSquares = useSelector(state => state.moveSquares)
-    const pieceSquare = useSelector(state => state.pieceSquare)
-    const moveVar = useSelector(state => state.moveVar)
+    const enemyKingAttacked = useSelector(state => state.enemyKingAttacked)
     const gameEnd = useSelector(state => state.gameEnd)
+    const halfMoveCounter = useSelector(state => state.halfMoveCounter)
+    const moveCounter = useSelector(state => state.moveCounter)
+    const moves = useSelector(state => state.moves)
+    const moveSquares = useSelector(state => state.moveSquares)
+    const moveVar = useSelector(state => state.moveVar)
+    const numbers = useSelector(state => state.numbers)
     const options = useSelector(state => state.options)
+    const pawnsFirstMove = useSelector(state => state.pawnsFirstMove)  
+    const pieceSquare = useSelector(state => state.pieceSquare)
+    const playerKingAttacked = useSelector(state => state.playerKingAttacked)
+    const sandbox = useSelector(state => state.sandbox)
+    const sounds = useSelector(state => state.sounds)
+    const toMove = useSelector(state => state.toMove)
     
     let boardEntries = Object.entries(board)
 
@@ -85,7 +85,8 @@ const Pieces = () => {
     const notInitialRender = useRef(false)
     const checkingPiece = useRef(null)
 
-    const wasmSupported = typeof WebAssembly === 'object' && WebAssembly.validate(Uint8Array.of(0x0, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00))
+    const wasmSupported = typeof WebAssembly === 'object' 
+        && WebAssembly.validate(Uint8Array.of(0x0, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00))
     const stockfish = new Worker(wasmSupported ? 'stockfish.wasm.js' : 'stockfish.js')
 
     const playerPiece = useRef(null)
@@ -171,23 +172,41 @@ const Pieces = () => {
     let enemyRook01 = board.or01 ? board.or01[0] : null
 
     let enemyQueen1
-    color === "white" ? (enemyQueen1 = board.oqb1 ? board.oqb1[0] : null) : (enemyQueen1 = board.oqw1 ? board.oqw1[0] : null)
     let enemyQueen2
-    color === "white" ? (enemyQueen2 = board.oqb2 ? board.oqb2[0] : null) : (enemyQueen2 = board.oqw2 ? board.oqw2[0] : null)
     let enemyQueen3
-    color === "white" ? (enemyQueen3 = board.oqb3 ? board.oqb3[0] : null) : (enemyQueen3 = board.oqw3 ? board.oqw3[0] : null)
     let enemyQueen4
-    color === "white" ? (enemyQueen4 = board.oqb4 ? board.oqb4[0] : null) : (enemyQueen4 = board.oqw4 ? board.oqw4[0] : null)
     let enemyQueen5
-    color === "white" ? (enemyQueen5 = board.oqb5 ? board.oqb5[0] : null) : (enemyQueen5 = board.oqw5 ? board.oqw5[0] : null)
     let enemyQueen6
-    color === "white" ? (enemyQueen6 = board.oqb6 ? board.oqb6[0] : null) : (enemyQueen6 = board.oqw6 ? board.oqw6[0] : null)
     let enemyQueen7
-    color === "white" ? (enemyQueen7 = board.oqb7 ? board.oqb7[0] : null) : (enemyQueen7 = board.oqw7 ? board.oqw7[0] : null)
     let enemyQueen8
-    color === "white" ? (enemyQueen8 = board.oqb8 ? board.oqb8[0] : null) : (enemyQueen8 = board.oqw8 ? board.oqw8[0] : null)
     let enemyQueen9
-    color === "white" ? (enemyQueen9 = board.oqb9 ? board.oqb9[0] : null) : (enemyQueen9 = board.oqw9 ? board.oqw9[0] : null)
+
+    color === "white" ? (enemyQueen1 = board.oqb1 ? board.oqb1[0] : null) 
+                      : (enemyQueen1 = board.oqw1 ? board.oqw1[0] : null)
+    
+    color === "white" ? (enemyQueen2 = board.oqb2 ? board.oqb2[0] : null) 
+                      : (enemyQueen2 = board.oqw2 ? board.oqw2[0] : null)
+    
+    color === "white" ? (enemyQueen3 = board.oqb3 ? board.oqb3[0] : null) 
+                      : (enemyQueen3 = board.oqw3 ? board.oqw3[0] : null)
+    
+    color === "white" ? (enemyQueen4 = board.oqb4 ? board.oqb4[0] : null) 
+                      : (enemyQueen4 = board.oqw4 ? board.oqw4[0] : null)
+    
+    color === "white" ? (enemyQueen5 = board.oqb5 ? board.oqb5[0] : null) 
+                      : (enemyQueen5 = board.oqw5 ? board.oqw5[0] : null)
+    
+    color === "white" ? (enemyQueen6 = board.oqb6 ? board.oqb6[0] : null) 
+                      : (enemyQueen6 = board.oqw6 ? board.oqw6[0] : null)
+    
+    color === "white" ? (enemyQueen7 = board.oqb7 ? board.oqb7[0] : null) 
+                      : (enemyQueen7 = board.oqw7 ? board.oqw7[0] : null)
+    
+    color === "white" ? (enemyQueen8 = board.oqb8 ? board.oqb8[0] : null) 
+                      : (enemyQueen8 = board.oqw8 ? board.oqw8[0] : null)
+    
+    color === "white" ? (enemyQueen9 = board.oqb9 ? board.oqb9[0] : null) 
+                      : (enemyQueen9 = board.oqw9 ? board.oqw9[0] : null)
 
     let enemyKing = board.okw ? board.okw[0] : board.okb[0]
 
@@ -234,23 +253,41 @@ const Pieces = () => {
     let playerRook01 = board.pr01 ? board.pr01[0] : null
 
     let playerQueen1
-    color === "white" ? (playerQueen1 = board.pqw1 ? board.pqw1[0] : null) : (playerQueen1 = board.pqb1 ? board.pqb1[0] : null)
     let playerQueen2
-    color === "white" ? (playerQueen2 = board.pqw2 ? board.pqw2[0] : null) : (playerQueen2 = board.pqb2 ? board.pqb2[0] : null)
     let playerQueen3
-    color === "white" ? (playerQueen3 = board.pqw3 ? board.pqw3[0] : null) : (playerQueen3 = board.pqb3 ? board.pqb3[0] : null)
     let playerQueen4
-    color === "white" ? (playerQueen4 = board.pqw4 ? board.pqw4[0] : null) : (playerQueen4 = board.pqb4 ? board.pqb4[0] : null)
     let playerQueen5
-    color === "white" ? (playerQueen5 = board.pqw5 ? board.pqw5[0] : null) : (playerQueen5 = board.pqb5 ? board.pqb5[0] : null)
     let playerQueen6
-    color === "white" ? (playerQueen6 = board.pqw6 ? board.pqw6[0] : null) : (playerQueen6 = board.pqb6 ? board.pqb6[0] : null)
     let playerQueen7
-    color === "white" ? (playerQueen7 = board.pqw7 ? board.pqw7[0] : null) : (playerQueen7 = board.pqb7 ? board.pqb7[0] : null)
     let playerQueen8
-    color === "white" ? (playerQueen8 = board.pqw8 ? board.pqw8[0] : null) : (playerQueen8 = board.pqb8 ? board.pqb8[0] : null)
     let playerQueen9
-    color === "white" ? (playerQueen9 = board.pqw9 ? board.pqw9[0] : null) : (playerQueen9 = board.pqb9 ? board.pqb9[0] : null)
+
+    color === "white" ? (playerQueen1 = board.pqw1 ? board.pqw1[0] : null) 
+                      : (playerQueen1 = board.pqb1 ? board.pqb1[0] : null)
+    
+    color === "white" ? (playerQueen2 = board.pqw2 ? board.pqw2[0] : null) 
+                      : (playerQueen2 = board.pqb2 ? board.pqb2[0] : null)
+    
+    color === "white" ? (playerQueen3 = board.pqw3 ? board.pqw3[0] : null) 
+                      : (playerQueen3 = board.pqb3 ? board.pqb3[0] : null)
+    
+    color === "white" ? (playerQueen4 = board.pqw4 ? board.pqw4[0] : null) 
+                      : (playerQueen4 = board.pqb4 ? board.pqb4[0] : null)
+    
+    color === "white" ? (playerQueen5 = board.pqw5 ? board.pqw5[0] : null) 
+                      : (playerQueen5 = board.pqb5 ? board.pqb5[0] : null)
+    
+    color === "white" ? (playerQueen6 = board.pqw6 ? board.pqw6[0] : null) 
+                      : (playerQueen6 = board.pqb6 ? board.pqb6[0] : null)
+    
+    color === "white" ? (playerQueen7 = board.pqw7 ? board.pqw7[0] : null) 
+                      : (playerQueen7 = board.pqb7 ? board.pqb7[0] : null)
+    
+    color === "white" ? (playerQueen8 = board.pqw8 ? board.pqw8[0] : null) 
+                      : (playerQueen8 = board.pqb8 ? board.pqb8[0] : null)
+    
+    color === "white" ? (playerQueen9 = board.pqw9 ? board.pqw9[0] : null) 
+                      : (playerQueen9 = board.pqb9 ? board.pqb9[0] : null)
 
     let playerKing = board.pkw ? board.pkw[0] : board.pkb[0]
 
@@ -284,17 +321,101 @@ const Pieces = () => {
     let playerKingSpiderSenseArr = useRef([])
     let enemyKingSpiderSenseArr = useRef([])
 
-    let playerRooks = [playerRook1, playerRook2, playerRook3, playerRook4, playerRook5, playerRook6, playerRook7, playerRook8, playerRook9, playerRook01]
-    let playerKnights = [playerKnight1, playerKnight2, playerKnight3, playerKnight4, playerKnight5, playerKnight6, playerKnight7, playerKnight8, playerKnight9, playerKnight01]
-    let playerBishops = [playerBishop1, playerBishop2, playerBishop3, playerBishop4, playerBishop5, playerBishop6, playerBishop7, playerBishop8, playerBishop9, playerBishop01]
-    let playerQueens = [playerQueen1, playerQueen2, playerQueen3, playerQueen4, playerQueen5, playerQueen6, playerQueen7, playerQueen8, playerQueen9]
-    let playerPawns = [playerPawn1, playerPawn2, playerPawn3, playerPawn4, playerPawn5, playerPawn6, playerPawn7, playerPawn8]
+    let playerRooks = [playerRook1, 
+                       playerRook2, 
+                       playerRook3, 
+                       playerRook4, 
+                       playerRook5, 
+                       playerRook6, 
+                       playerRook7, 
+                       playerRook8, 
+                       playerRook9, 
+                       playerRook01]
+    let playerKnights = [playerKnight1, 
+                         playerKnight2, 
+                         playerKnight3, 
+                         playerKnight4, 
+                         playerKnight5, 
+                         playerKnight6, 
+                         playerKnight7, 
+                         playerKnight8, 
+                         playerKnight9, 
+                         playerKnight01]
+    let playerBishops = [playerBishop1, 
+                         playerBishop2, 
+                         playerBishop3, 
+                         playerBishop4, 
+                         playerBishop5, 
+                         playerBishop6, 
+                         playerBishop7, 
+                         playerBishop8, 
+                         playerBishop9, 
+                         playerBishop01]
+    let playerQueens = [playerQueen1, 
+                        playerQueen2, 
+                        playerQueen3, 
+                        playerQueen4, 
+                        playerQueen5, 
+                        playerQueen6, 
+                        playerQueen7, 
+                        playerQueen8, 
+                        playerQueen9]
+    let playerPawns = [playerPawn1, 
+                       playerPawn2, 
+                       playerPawn3, 
+                       playerPawn4, 
+                       playerPawn5, 
+                       playerPawn6, 
+                       playerPawn7, 
+                       playerPawn8]
 
-    let enemyRooks = [enemyRook1, enemyRook2, enemyRook3, enemyRook4, enemyRook5, enemyRook6, enemyRook7, enemyRook8, enemyRook9, enemyRook01]
-    let enemyKnights = [enemyKnight1, enemyKnight2, enemyKnight3, enemyKnight4, enemyKnight5, enemyKnight6, enemyKnight7, enemyKnight8, enemyKnight9, enemyKnight01]
-    let enemyBishops = [enemyBishop1, enemyBishop2, enemyBishop3, enemyBishop4, enemyBishop5, enemyBishop6, enemyBishop7, enemyBishop8, enemyBishop9, enemyBishop01]
-    let enemyQueens = [enemyQueen1, enemyQueen2, enemyQueen3, enemyQueen4, enemyQueen5, enemyQueen6, enemyQueen7, enemyQueen8, enemyQueen9]
-    let enemyPawns = [enemyPawn1, enemyPawn2, enemyPawn3, enemyPawn4, enemyPawn5, enemyPawn6, enemyPawn7, enemyPawn8]
+    let enemyRooks = [enemyRook1, 
+                      enemyRook2, 
+                      enemyRook3, 
+                      enemyRook4, 
+                      enemyRook5, 
+                      enemyRook6, 
+                      enemyRook7, 
+                      enemyRook8, 
+                      enemyRook9, 
+                      enemyRook01]
+    let enemyKnights = [enemyKnight1, 
+                        enemyKnight2, 
+                        enemyKnight3, 
+                        enemyKnight4, 
+                        enemyKnight5, 
+                        enemyKnight6, 
+                        enemyKnight7, 
+                        enemyKnight8, 
+                        enemyKnight9, 
+                        enemyKnight01]
+    let enemyBishops = [enemyBishop1, 
+                        enemyBishop2, 
+                        enemyBishop3, 
+                        enemyBishop4, 
+                        enemyBishop5, 
+                        enemyBishop6, 
+                        enemyBishop7, 
+                        enemyBishop8, 
+                        enemyBishop9, 
+                        enemyBishop01]
+    let enemyQueens = [enemyQueen1, 
+                       enemyQueen2, 
+                       enemyQueen3, 
+                       enemyQueen4, 
+                       enemyQueen5, 
+                       enemyQueen6, 
+                       enemyQueen7, 
+                       enemyQueen8, 
+                       enemyQueen9]
+    let enemyPawns = [enemyPawn1, 
+                      enemyPawn2, 
+                      enemyPawn3, 
+                      enemyPawn4, 
+                      enemyPawn5, 
+                      enemyPawn6, 
+                      enemyPawn7, 
+                      enemyPawn8]
 
     const recordBoard = () => {
         filteredEnemyRender = boardEntries.filter(([key, value]) => /^o/.test(key))
@@ -323,8 +444,24 @@ const Pieces = () => {
         kingSpiderSense(playerKing, playerSquaresLive, enemySquaresLive, playerKingSpiderSenseArr)
         kingSpiderSense(enemyKing, enemySquaresLive, playerSquaresLive, enemyKingSpiderSenseArr)
 
-        attacked(playerRooks, playerKnights, playerBishops, playerQueens, playerPawns, enemySquaresRender, playerSquaresRender, protectedByPlayerArr, true)
-        attacked(enemyRooks, enemyKnights, enemyBishops, enemyQueens, enemyPawns, playerSquaresRender, enemySquaresRender, protectedByOpponentArr, true)
+        attacked(playerRooks, 
+                 playerKnights,
+                 playerBishops, 
+                 playerQueens, 
+                 playerPawns, 
+                 enemySquaresRender, 
+                 playerSquaresRender, 
+                 protectedByPlayerArr, 
+                 true)
+        attacked(enemyRooks, 
+                 enemyKnights, 
+                 enemyBishops, 
+                 enemyQueens, 
+                 enemyPawns, 
+                 playerSquaresRender, 
+                 enemySquaresRender, 
+                 protectedByOpponentArr, 
+                 true)
 
         king8Star(playerKing, playerSquaresRender, enemySquaresRender, playerKing8StarArr, true)
         king8Star(enemyKing, enemySquaresRender, playerSquaresRender, enemyKing8StarArr, true)
@@ -427,7 +564,10 @@ const Pieces = () => {
     }, [JSON.stringify(board)])
 
     useEffect(() => {
-        if (((color === "white" && toMove === "b") || (color === "black" && toMove === "w")) && !sandbox && !pawnPromotes) {
+        if (((color === "white" && toMove === "b") 
+            || (color === "black" && toMove === "w")) 
+            && !sandbox 
+            && !pawnPromotes) {
             engineTurn()
         }
     }, [toMove, options])
@@ -613,7 +753,16 @@ const Pieces = () => {
 
                 updateStateBoard(engineWhereToMove, enginePieceToMove)
 
-                enemyBishops = [enemyBishop1, enemyBishop2, enemyBishop3, enemyBishop4, enemyBishop5, enemyBishop6, enemyBishop7, enemyBishop8, enemyBishop9, enemyBishop01]
+                enemyBishops = [enemyBishop1, 
+                                enemyBishop2, 
+                                enemyBishop3, 
+                                enemyBishop4, 
+                                enemyBishop5, 
+                                enemyBishop6, 
+                                enemyBishop7, 
+                                enemyBishop8, 
+                                enemyBishop9, 
+                                enemyBishop01]
 
                 moveBishop(engineWhereToMove, enginePieceToMove)
             } 
@@ -658,13 +807,28 @@ const Pieces = () => {
 
                 updateStateBoard(engineWhereToMove, enginePieceToMove)
 
-                enemyKnights = [enemyKnight1, enemyKnight2, enemyKnight3, enemyKnight4, enemyKnight5, enemyKnight6, enemyKnight7, enemyKnight8, enemyKnight9, enemyKnight01]
+                enemyKnights = [enemyKnight1, 
+                                enemyKnight2, 
+                                enemyKnight3, 
+                                enemyKnight4, 
+                                enemyKnight5, 
+                                enemyKnight6, 
+                                enemyKnight7, 
+                                enemyKnight8, 
+                                enemyKnight9, 
+                                enemyKnight01]
 
                 moveKnight(engineWhereToMove, enginePieceToMove)
             } 
             
             if (/^or/.test(enginePieceToMove)) {
-                checkArrays(rookMoves.current, engineWhereToMove, checkedByOpponentArr.current, enemySquaresLive, playerSquaresLive, true, true)
+                checkArrays(rookMoves.current, 
+                            engineWhereToMove, 
+                            checkedByOpponentArr.current, 
+                            enemySquaresLive, 
+                            playerSquaresLive, 
+                            true, 
+                            true)
 
                 switch (enginePieceToMove) {
                     case "or1":
@@ -703,15 +867,42 @@ const Pieces = () => {
 
                 updateStateBoard(engineWhereToMove, enginePieceToMove)
                 
-                enemyRooks = [enemyRook1, enemyRook2, enemyRook3, enemyRook4, enemyRook5, enemyRook6, enemyRook7, enemyRook8, enemyRook9, enemyRook01]
+                enemyRooks = [enemyRook1, 
+                              enemyRook2, 
+                              enemyRook3, 
+                              enemyRook4, 
+                              enemyRook5, 
+                              enemyRook6, 
+                              enemyRook7, 
+                              enemyRook8, 
+                              enemyRook9, 
+                              enemyRook01]
 
                 moveRook(engineWhereToMove, enginePieceToMove)
             } 
             
             if (/^oq/.test(enginePieceToMove)) {
-                checkArrays(whiteBishopMoves, engineWhereToMove, checkedByOpponentArr.current, enemySquaresLive, playerSquaresLive, true, true)
-                checkArrays(blackBishopMoves, engineWhereToMove, checkedByOpponentArr.current, enemySquaresLive, playerSquaresLive, true, true)
-                checkArrays(rookMoves.current, engineWhereToMove, checkedByOpponentArr.current, enemySquaresLive, playerSquaresLive, true, true)
+                checkArrays(whiteBishopMoves, 
+                            engineWhereToMove, 
+                            checkedByOpponentArr.current, 
+                            enemySquaresLive, 
+                            playerSquaresLive, 
+                            true, 
+                            true)
+                checkArrays(blackBishopMoves, 
+                            engineWhereToMove, 
+                            checkedByOpponentArr.current, 
+                            enemySquaresLive, 
+                            playerSquaresLive, 
+                            true, 
+                            true)
+                checkArrays(rookMoves.current, 
+                            engineWhereToMove, 
+                            checkedByOpponentArr.current, 
+                            enemySquaresLive, 
+                            playerSquaresLive, 
+                            true, 
+                            true)
 
                 switch (enginePieceToMove) {
                     case "oqw1": case "oqb1":
@@ -747,7 +938,15 @@ const Pieces = () => {
 
                 updateStateBoard(engineWhereToMove, enginePieceToMove)
 
-                enemyQueens = [enemyQueen1, enemyQueen2, enemyQueen3, enemyQueen4, enemyQueen5, enemyQueen6, enemyQueen7, enemyQueen8, enemyQueen9]
+                enemyQueens = [enemyQueen1, 
+                               enemyQueen2, 
+                               enemyQueen3, 
+                               enemyQueen4, 
+                               enemyQueen5, 
+                               enemyQueen6, 
+                               enemyQueen7, 
+                               enemyQueen8, 
+                               enemyQueen9]
 
                 moveQueen(engineWhereToMove, enginePieceToMove)
             } 
@@ -781,26 +980,30 @@ const Pieces = () => {
     const encode = () => {
         const fenEncode = (arr) => {
             switch (arr[0]) {
-                case "or1": case "or2": case "or3": case "or4": case "or5": case "or6": case "or7": case "or8": case "or9": case "or01": 
+                case "or1": case "or2": case "or3": case "or4": case "or5": 
+                case "or6": case "or7": case "or8": case "or9": case "or01": 
                     if (color === "white") {
                         return arr = "r"
                     } else {
                         return arr = "R"
                     }
-                case "oh1": case "oh2": case "oh3": case "oh4": case "oh5": case "oh6": case "oh7": case "oh8": case "oh9": case "oh01": 
+                case "oh1": case "oh2": case "oh3": case "oh4": case "oh5": 
+                case "oh6": case "oh7": case "oh8": case "oh9": case "oh01": 
                     if (color === "white") {
                         return arr = "n"
                     } else {
                         return arr = "N"
                     }
-                case "ob1": case "ob2": case "ob3": case "ob4": case "ob5": case "ob6": case "ob7": case "ob8": case "ob9": case "ob01": 
+                case "ob1": case "ob2": case "ob3": case "ob4": case "ob5": 
+                case "ob6": case "ob7": case "ob8": case "ob9": case "ob01": 
                     if (color === "white") {
                         return arr = "b"
                     } else {
                         return arr = "B"
                     }
-                case "oqw1": case "oqb1": case "oqw2": case "oqb2": case "oqw3": case "oqb3": case "oqw4": case "oqb4": case "oqb9":
-                case "oqw5": case "oqb5": case "oqw6": case "oqb6": case "oqw7": case "oqb7": case "oqw8": case "oqb8": case "oqw9":
+                case "oqw1": case "oqb1": case "oqw2": case "oqb2": case "oqw3": case "oqb3": 
+                case "oqw4": case "oqb4": case "oqb9": case "oqw5": case "oqb5": case "oqw6": 
+                case "oqb6": case "oqw7": case "oqb7": case "oqw8": case "oqb8": case "oqw9":
                     if (color === "white") {
                         return arr = "q"
                     } else {
@@ -812,32 +1015,37 @@ const Pieces = () => {
                     } else {
                         return arr = "K"
                     }
-                case "op1": case "op2": case "op3": case "op4": case "op5": case "op6": case "op7": case "op8":
+                case "op1": case "op2": case "op3": case "op4": 
+                case "op5": case "op6": case "op7": case "op8":
                     if (color === "white") {
                         return arr = "p"
                     } else {
                         return arr = "P"
                     }
-                case "pr1": case "pr2": case "pr3": case "pr4": case "pr5": case "pr6": case "pr7": case "pr8": case "pr9": case "pr01":
+                case "pr1": case "pr2": case "pr3": case "pr4": case "pr5": 
+                case "pr6": case "pr7": case "pr8": case "pr9": case "pr01":
                     if (color === "white") {
                         return arr = "R"
                     } else {
                         return arr = "r"
                     }
-                case "ph1": case "ph2": case "ph3": case "ph4": case "ph5": case "ph6": case "ph7": case "ph8": case "ph9": case "ph01":
+                case "ph1": case "ph2": case "ph3": case "ph4": case "ph5": 
+                case "ph6": case "ph7": case "ph8": case "ph9": case "ph01":
                     if (color === "white") {
                         return arr = "N"
                     } else {
                         return arr = "n"
                     }
-                case "pb1": case "pb2": case "pb3": case "pb4": case "pb5": case "pb6": case "pb7": case "pb8": case "pb9": case "pb01":
+                case "pb1": case "pb2": case "pb3": case "pb4": case "pb5": 
+                case "pb6": case "pb7": case "pb8": case "pb9": case "pb01":
                     if (color === "white") {
                         return arr = "B"
                     } else {
                         return arr = "b"
                     }
-                case "pqw1": case "pqb1": case "pqw2": case "pqb2": case "pqw3": case "pqb3": case "pqw4": case "pqb4": case "pqb9":
-                case "pqw5": case "pqb5": case "pqw6": case "pqb6": case "pqw7": case "pqb7": case "pqw8": case "pqb8": case "pqw9":
+                case "pqw1": case "pqb1": case "pqw2": case "pqb2": case "pqw3": case "pqb3": 
+                case "pqw4": case "pqb4": case "pqb9": case "pqw5": case "pqb5": case "pqw6": 
+                case "pqb6": case "pqw7": case "pqb7": case "pqw8": case "pqb8": case "pqw9":
                     if (color === "white") {
                         return arr = "Q"
                     } else {
@@ -849,7 +1057,8 @@ const Pieces = () => {
                     } else {
                         return arr = "k"
                     }
-                case "pp1": case "pp2": case "pp3": case "pp4": case "pp5": case "pp6": case "pp7": case "pp8":
+                case "pp1": case "pp2": case "pp3": case "pp4": 
+                case "pp5": case "pp6": case "pp7": case "pp8":
                     if (color === "white") {
                         return arr = "P"
                     } else {
@@ -903,7 +1112,9 @@ const Pieces = () => {
 
         fenString += ` ${toMove} `
 
-        if (castlingPlayerMoved.pk && castlingPlayerMoved.pr1 && castlingPlayerMoved.pr2) {
+        if (castlingPlayerMoved.pk 
+            && castlingPlayerMoved.pr1 
+            && castlingPlayerMoved.pr2) {
             if (color === "white") {
                 fenString += "KQ"
             } else {
@@ -911,7 +1122,9 @@ const Pieces = () => {
             }
         }
 
-        if (castlingPlayerMoved.pk && castlingPlayerMoved.pr1 && !castlingPlayerMoved.pr2) {
+        if (castlingPlayerMoved.pk 
+            && castlingPlayerMoved.pr1 
+            && !castlingPlayerMoved.pr2) {
             if (color === "white") {
                 fenString += "Q"
             } else {
@@ -919,7 +1132,9 @@ const Pieces = () => {
             }
         }
 
-        if (castlingPlayerMoved.pk && !castlingPlayerMoved.pr1 && castlingPlayerMoved.pr2) {
+        if (castlingPlayerMoved.pk 
+            && !castlingPlayerMoved.pr1 
+            && castlingPlayerMoved.pr2) {
             if (color === "white") {
                 fenString += "K"
             } else {
@@ -927,7 +1142,9 @@ const Pieces = () => {
             }
         }
 
-        if (castlingEnemyMoved.ok && castlingEnemyMoved.or1 && castlingEnemyMoved.or2) {
+        if (castlingEnemyMoved.ok 
+            && castlingEnemyMoved.or1 
+            && castlingEnemyMoved.or2) {
             if (color === "white") {
                 fenString += "kq "
             } else {
@@ -935,7 +1152,9 @@ const Pieces = () => {
             }
         }
 
-        if (castlingEnemyMoved.ok && castlingEnemyMoved.or1 && !castlingEnemyMoved.or2) {
+        if (castlingEnemyMoved.ok 
+            && castlingEnemyMoved.or1 
+            && !castlingEnemyMoved.or2) {
             if (color === "white") {
                 fenString += "q "
             } else {
@@ -943,7 +1162,9 @@ const Pieces = () => {
             }
         }
 
-        if (castlingEnemyMoved.ok && !castlingEnemyMoved.or1 && castlingEnemyMoved.or2) {
+        if (castlingEnemyMoved.ok 
+            && !castlingEnemyMoved.or1 
+            && castlingEnemyMoved.or2) {
             if (color === "white") {
                 fenString += "k "
             } else {
@@ -2267,7 +2488,8 @@ const Pieces = () => {
             && activePiece !== piece 
             && !currentMove 
             && !gameEnd) {
-            if (((color === "white" && toMove === "w") || (color === "black" && toMove === "b")) && playerSquaresRender.includes(i)) {
+            if (((color === "white" && toMove === "w") || (color === "black" && toMove === "b")) 
+                && playerSquaresRender.includes(i)) {
                 store.dispatch({
                     type:"moveSquares",
                     payload: []
@@ -2630,8 +2852,6 @@ const Pieces = () => {
         } 
 
         if (/^pb/.test(activePiece) && moveSquares.includes(i)) {
-            
-
             checkArrays(blackBishopMoves, i, checkedByPlayerArr.current, playerSquaresLive, enemySquaresLive, true, true)
             checkArrays(whiteBishopMoves, i, checkedByPlayerArr.current, playerSquaresLive, enemySquaresLive, true, true)
             
@@ -3139,14 +3359,28 @@ const Pieces = () => {
             }
         } 
 
-        // checkGameEnd()
         recordBoard()
-    
     }
 
     const checkGameEnd = () => {
-        attacked(enemyRooks, enemyKnights, enemyBishops, enemyQueens, enemyPawns, enemySquaresRender, playerSquaresRender, attackedByOpponentArr, false)
-        attacked(playerRooks, playerKnights, playerBishops, playerQueens, playerPawns, playerSquaresRender, enemySquaresRender, attackedByPlayerArr, false)
+        attacked(enemyRooks, 
+                 enemyKnights, 
+                 enemyBishops, 
+                 enemyQueens, 
+                 enemyPawns, 
+                 enemySquaresRender, 
+                 playerSquaresRender, 
+                 attackedByOpponentArr, 
+                 false)
+        attacked(playerRooks, 
+                 playerKnights, 
+                 playerBishops, 
+                 playerQueens, 
+                 playerPawns, 
+                 playerSquaresRender, 
+                 enemySquaresRender, 
+                 attackedByPlayerArr, 
+                 false)
 
         let arrPlayerCheckmate = []
         let arrEnemyCheckmate = []
@@ -3156,10 +3390,25 @@ const Pieces = () => {
         recordPlayerKingMoves(playerKing, arrPlayerCheckmate)
         recordEnemyKingMoves(enemyKing, arrEnemyCheckmate)
 
-        if ((playerKingAttacked && !attackedByPlayerArr.current.includes(checkingPiece.current) && arrPlayerCheckmate.length === 0 &&
-            !playerKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat().some(a => attackedByPlayerArr.current.includes(a))) ||
-            (enemyKingAttacked && !attackedByOpponentArr.current.includes(checkingPiece.current) && arrEnemyCheckmate.length === 0 &&
-            !enemyKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat().some(a => attackedByOpponentArr.current.includes(a)))) {
+        if (
+            (
+                playerKingAttacked 
+                && !attackedByPlayerArr.current.includes(checkingPiece.current) 
+                && arrPlayerCheckmate.length === 0 
+                && !playerKing8StarArr.current.filter(a => a.includes(checkingPiece.current))
+                                                            .flat()
+                                                            .some(a => attackedByPlayerArr.current.includes(a))
+            ) 
+                ||
+            (
+                enemyKingAttacked 
+                && !attackedByOpponentArr.current.includes(checkingPiece.current) 
+                && arrEnemyCheckmate.length === 0 
+                && !enemyKing8StarArr.current.filter(a => a.includes(checkingPiece.current))
+                                                           .flat()
+                                                           .some(a => attackedByOpponentArr.current.includes(a))
+            )
+            ) {
             
             if (sounds) {
                 gameEndSound.play()
@@ -3189,37 +3438,130 @@ const Pieces = () => {
             }
         }
 
-        playerRooks.forEach(a => checkArrays(rookMoves.current, a, arrPlayerStalemate, playerSquaresRender, enemySquaresRender, true, true))
+        playerRooks.forEach(a => checkArrays(rookMoves.current, 
+                                             a, 
+                                             arrPlayerStalemate, 
+                                             playerSquaresRender, 
+                                             enemySquaresRender, 
+                                             true, 
+                                             true))
+
         playerKnights.forEach(a => recordKnightMoves(a, arrPlayerStalemate, playerSquaresRender))
-        playerBishops.forEach(a => checkArrays(whiteBishopMoves, a, arrPlayerStalemate, playerSquaresRender, enemySquaresRender, true, true))
-        playerBishops.forEach(a => checkArrays(blackBishopMoves, a, arrPlayerStalemate, playerSquaresRender, enemySquaresRender, true, true))
-        playerQueens.forEach(a => checkArrays(whiteBishopMoves, a, arrPlayerStalemate, playerSquaresRender, enemySquaresRender, true, true))
-        playerQueens.forEach(a => checkArrays(blackBishopMoves, a, arrPlayerStalemate, playerSquaresRender, enemySquaresRender, true, true))
-        playerQueens.forEach(a => checkArrays(rookMoves.current, a, arrPlayerStalemate, playerSquaresRender, enemySquaresRender, true, true))
+
+        playerBishops.forEach(a => checkArrays(whiteBishopMoves, 
+                                               a, 
+                                               arrPlayerStalemate, 
+                                               playerSquaresRender, 
+                                               enemySquaresRender, 
+                                               true, 
+                                               true))
+
+        playerBishops.forEach(a => checkArrays(blackBishopMoves, 
+                                               a, 
+                                               arrPlayerStalemate, 
+                                               playerSquaresRender, 
+                                               enemySquaresRender, 
+                                               true, 
+                                               true))
+
+        playerQueens.forEach(a => checkArrays(whiteBishopMoves, 
+                                               a, 
+                                               arrPlayerStalemate, 
+                                               playerSquaresRender, 
+                                               enemySquaresRender, 
+                                               true, 
+                                               true))
+
+        playerQueens.forEach(a => checkArrays(blackBishopMoves, 
+                                               a, 
+                                               arrPlayerStalemate, 
+                                               playerSquaresRender, 
+                                               enemySquaresRender, 
+                                               true, 
+                                               true))
+
+        playerQueens.forEach(a => checkArrays(rookMoves.current, 
+                                               a, 
+                                               arrPlayerStalemate, 
+                                               playerSquaresRender, 
+                                               enemySquaresRender, 
+                                               true, 
+                                               true))
+
         playerPawns.forEach(a => recordPlayerPawnMoves(a, null, arrPlayerStalemate))
+
         recordPlayerKingMoves(playerKing, arrPlayerStalemate)
 
-        enemyRooks.forEach(a => checkArrays(rookMoves.current, a, arrEnemyStalemate, enemySquaresRender, playerSquaresRender, true, true))
+        enemyRooks.forEach(a => checkArrays(rookMoves.current, 
+                                            a, 
+                                            arrEnemyStalemate, 
+                                            enemySquaresRender, 
+                                            playerSquaresRender, 
+                                            true, 
+                                            true))
+
         enemyKnights.forEach(a => recordKnightMoves(a, arrEnemyStalemate, enemySquaresRender))
-        enemyBishops.forEach(a => checkArrays(whiteBishopMoves, a, arrEnemyStalemate, enemySquaresRender, playerSquaresRender, true, true))
-        enemyBishops.forEach(a => checkArrays(blackBishopMoves, a, arrEnemyStalemate, enemySquaresRender, playerSquaresRender, true, true))
-        enemyQueens.forEach(a => checkArrays(whiteBishopMoves, a, arrEnemyStalemate, enemySquaresRender, playerSquaresRender, true, true))
-        enemyQueens.forEach(a => checkArrays(blackBishopMoves, a, arrEnemyStalemate, enemySquaresRender, playerSquaresRender, true, true))
-        enemyQueens.forEach(a => checkArrays(rookMoves.current, a, arrEnemyStalemate, enemySquaresRender, playerSquaresRender, true, true))
+
+        enemyBishops.forEach(a => checkArrays(whiteBishopMoves, 
+                                              a, 
+                                              arrEnemyStalemate, 
+                                              enemySquaresRender, 
+                                              playerSquaresRender, 
+                                              true, 
+                                              true))
+
+        enemyBishops.forEach(a => checkArrays(blackBishopMoves, 
+                                              a, 
+                                              arrEnemyStalemate, 
+                                              enemySquaresRender, 
+                                              playerSquaresRender, 
+                                              true, 
+                                              true))
+
+        enemyQueens.forEach(a => checkArrays(whiteBishopMoves, 
+                                             a, 
+                                             arrEnemyStalemate, 
+                                             enemySquaresRender,
+                                              playerSquaresRender, 
+                                             true, 
+                                             true))
+
+        enemyQueens.forEach(a => checkArrays(blackBishopMoves, 
+                                             a, 
+                                             arrEnemyStalemate, 
+                                             enemySquaresRender, 
+                                             playerSquaresRender, 
+                                             true, 
+                                             true))
+
+        enemyQueens.forEach(a => checkArrays(rookMoves.current, 
+                                             a, 
+                                             arrEnemyStalemate, 
+                                             enemySquaresRender, 
+                                             playerSquaresRender, 
+                                             true, 
+                                             true))
+
         enemyPawns.forEach(a => recordOpponentPawnMoves(a, null, arrEnemyStalemate))
+
         recordEnemyKingMoves(enemyKing, arrEnemyStalemate)
 
         arrPlayerStalemate = arrPlayerStalemate.filter(a => a > 0 && a < 65)
         arrEnemyStalemate = arrEnemyStalemate.filter(a => a > 0 && a < 65)
 
-        if ((arrPlayerStalemate.length === 0 && !playerKingAttacked) || (arrEnemyStalemate.length === 0 && !enemyKingAttacked) || occupiedSquaresRender.length === 2 || halfMoveCounter === 50) {
+        if ((arrPlayerStalemate.length === 0 && !playerKingAttacked) 
+            || (arrEnemyStalemate.length === 0 && !enemyKingAttacked) 
+            || occupiedSquaresRender.length === 2 
+            || halfMoveCounter === 50) {
  
             if (sounds) {
                 gameEndSound.play()
             }
+
             store.dispatch({
                 type: "gameEnd"
             })
+
             store.dispatch({
                 type: "modalOpen",
                 payload: true
@@ -3236,7 +3578,6 @@ const Pieces = () => {
                     payload: "Game ended due to stalemate."
                 })
             }
-
         }
 
         for (let i = 0; i < moves.length; i++) {
@@ -3245,13 +3586,16 @@ const Pieces = () => {
                     if (sounds) {
                         gameEndSound.play()
                     }
+
                     store.dispatch({
                         type: "gameEnd"
                     })
+
                     store.dispatch({
                         type: "modalOpen",
                         payload: true
                     })
+
                     store.dispatch({
                         type: "endMessage",
                         payload: "Draw due to threefold repetition."
@@ -3277,18 +3621,13 @@ const Pieces = () => {
             })
         }
 
-        
-
         if ((color === "white" && toMove === "w") || (color === "black" && toMove === "w")) {
             store.dispatch({
                 type: "moveNumbers"
             })
         }
 
-     
-
         if (/^o/.test(string)) {
-            
             if (playerSquaresRender.includes(i)){
                 if (playerPawns.includes(i)) {
                     store.dispatch({
@@ -3376,10 +3715,10 @@ const Pieces = () => {
                 }
                 
                 if (enemyKingAttacked) {
-                    
                     if (sounds) {
                         captureSound.play()
                     }
+
                     store.dispatch({
                         type: "enemyKingAttacked",
                         payload: false
@@ -3390,25 +3729,18 @@ const Pieces = () => {
                     if (sounds) {
                         captureSound.play()
                     }
+
                     store.dispatch({
                         type: "enemyKingAttacked",
                         payload: false
                     })
                 }
-
-                // if (checkedByOpponentArr.current.flat().includes(playerKing)) {
-                //     checkSound.play()
-                //     store.dispatch({
-                //         type: "playerKingAttacked",
-                //         payload: true
-                //     })
-                //     checkingPiece.current = i
-                // } 
                 
                 if (!checkedByOpponentArr.current.flat().includes(playerKing)) {
                     if (sounds) {
                         captureSound.play()
                     }
+
                     store.dispatch({
                         type: "playerKingAttacked",
                         payload: false
@@ -3418,10 +3750,11 @@ const Pieces = () => {
                 if ((enemyQueens.some(a => playerKingSpiderSenseArr.current[0].includes(a))
                     || enemyBishops.some(a => playerKingSpiderSenseArr.current[0].includes(a)))
                     && occupiedSquaresLive.filter(a => !enemySquaresLive.includes(a))
-                                            .every(a => !playerKingSpiderSenseArr.current[0].includes(a))) {
+                                          .every(a => !playerKingSpiderSenseArr.current[0].includes(a))) {
                     if (sounds) {
                         checkSound.play()
                     }
+
                     store.dispatch({
                         type: "playerKingAttacked",
                         payload: true
@@ -3431,10 +3764,11 @@ const Pieces = () => {
                 if ((enemyQueens.some(a => playerKingSpiderSenseArr.current[1].includes(a))
                     || enemyRooks.some(a => playerKingSpiderSenseArr.current[1].includes(a)))
                     && occupiedSquaresLive.filter(a => !enemySquaresLive.includes(a))
-                                            .every(a => !playerKingSpiderSenseArr.current[1].includes(a))) {
-                                                if (sounds) {
-                                                    checkSound.play()
-                                                }
+                                          .every(a => !playerKingSpiderSenseArr.current[1].includes(a))) {
+                    if (sounds) {
+                        checkSound.play()
+                    }
+
                     store.dispatch({
                         type: "playerKingAttacked",
                         payload: true
@@ -3491,6 +3825,7 @@ const Pieces = () => {
                     if (sounds) {
                         moveSound.play()
                     }
+
                     store.dispatch({
                         type: "enemyKingAttacked",
                         payload: false
@@ -3501,6 +3836,7 @@ const Pieces = () => {
                     if (sounds) {
                         moveSound.play()
                     }
+
                     store.dispatch({
                         type: "enemyKingAttacked",
                         payload: false
@@ -3511,6 +3847,7 @@ const Pieces = () => {
                     if (sounds) {
                         moveSound.play()
                     }
+                    
                     store.dispatch({
                         type: "enemyKingAttacked",
                         payload: false
@@ -3535,10 +3872,12 @@ const Pieces = () => {
                     if (sounds) {
                         checkSound.play()
                     }
+
                     store.dispatch({
                         type: "playerKingAttacked",
                         payload: true
                     })
+
                     checkingPiece.current = i
                 } 
                 
@@ -3546,6 +3885,7 @@ const Pieces = () => {
                     if (sounds) {
                         moveSound.play()
                     }
+
                     store.dispatch({
                         type: "playerKingAttacked",
                         payload: false
@@ -3555,24 +3895,25 @@ const Pieces = () => {
                 if ((enemyQueens.some(a => playerKingSpiderSenseArr.current[0].includes(a))
                     || enemyBishops.some(a => playerKingSpiderSenseArr.current[0].includes(a)))
                     && occupiedSquaresLive.filter(a => !enemySquaresLive.includes(a))
-                                            .every(a => !playerKingSpiderSenseArr.current[0].includes(a))) {
+                                          .every(a => !playerKingSpiderSenseArr.current[0].includes(a))) {
                     if (sounds) {
                         checkSound.play()
                     }
+
                     store.dispatch({
                         type: "playerKingAttacked",
                         payload: true
                     })
-                    
                 }
 
                 if ((enemyQueens.some(a => playerKingSpiderSenseArr.current[1].includes(a))
                     || enemyRooks.some(a => playerKingSpiderSenseArr.current[1].includes(a)))
                     && occupiedSquaresLive.filter(a => !enemySquaresLive.includes(a))
-                                            .every(a => !playerKingSpiderSenseArr.current[1].includes(a))) {
+                                          .every(a => !playerKingSpiderSenseArr.current[1].includes(a))) {
                     if (sounds) {
                         checkSound.play()
                     }
+
                     store.dispatch({
                         type: "playerKingAttacked",
                         payload: true
@@ -3604,13 +3945,10 @@ const Pieces = () => {
 
             if (/^pp/.test(enPassantSquare.current[1])) {
                 enPassantSquare.current = [0, ""]
-            }
-
-            
+            } 
         }
 
         if (/^p/.test(string)) {
-            
             if (enemySquaresRender.includes(i)) {
                 store.dispatch({
                     type: "halfMoveCounter/reset",
@@ -3706,20 +4044,12 @@ const Pieces = () => {
                 if (/^pp/.test(string) && rookMoves.current[0].includes(i)) {
                     setPawnPromotes(string)
                 }
-                
-                // if (checkedByPlayerArr.current.flat().includes(enemyKing)) {
-                //     checkSound.play()
-                //     store.dispatch({
-                //         type: "enemyKingAttacked",
-                //         payload: true
-                //     })
-                //     checkingPiece.current = i
-                // } 
 
                 if (/^pk/.test(string) && playerKingAttacked) {
                     if (sounds) {
                         captureSound.play()
                     }
+
                     store.dispatch({
                         type: "playerKingAttacked",
                         payload: false
@@ -3730,6 +4060,7 @@ const Pieces = () => {
                     if (sounds) {
                         captureSound.play()
                     }
+
                     store.dispatch({
                         type: "enemyKingAttacked",
                         payload: false
@@ -3739,29 +4070,29 @@ const Pieces = () => {
                 if ((playerQueens.some(a => enemyKingSpiderSenseArr.current[0].includes(a)) 
                     || playerBishops.some(a => enemyKingSpiderSenseArr.current[0].includes(a)))
                     && occupiedSquaresLive.filter(a => !playerSquaresLive.includes(a))
-                                            .every(a => !enemyKingSpiderSenseArr.current[0].includes(a))) {
+                                          .every(a => !enemyKingSpiderSenseArr.current[0].includes(a))) {
                     if (sounds) {
                         checkSound.play()
                     }
+
                     store.dispatch({
                         type: "enemyKingAttacked",
                         payload: true
                     })
-                    
                 }
 
                 if ((playerQueens.some(a => enemyKingSpiderSenseArr.current[1].includes(a)) 
                     || playerRooks.some(a => enemyKingSpiderSenseArr.current[1].includes(a)))
                     && occupiedSquaresLive.filter(a => !playerSquaresLive.includes(a))
-                                            .every(a => !enemyKingSpiderSenseArr.current[1].includes(a))) {
+                                          .every(a => !enemyKingSpiderSenseArr.current[1].includes(a))) {
                     if (sounds) {
                         checkSound.play()
                     }
+
                     store.dispatch({
                         type: "enemyKingAttacked",
                         payload: true
                     })
-                    
                 }
 
                 if (sounds) {
@@ -3828,6 +4159,7 @@ const Pieces = () => {
                     if (sounds) {
                         moveSound.play()
                     }
+
                     store.dispatch({
                         type: "playerKingAttacked",
                         payload: false
@@ -3838,6 +4170,7 @@ const Pieces = () => {
                     if (sounds) {
                         moveSound.play()
                     }
+
                     store.dispatch({
                         type: "playerKingAttacked",
                         payload: false
@@ -3848,6 +4181,7 @@ const Pieces = () => {
                     if (sounds) {
                         moveSound.play()
                     }
+
                     store.dispatch({
                         type: "playerKingAttacked",
                         payload: false
@@ -3858,10 +4192,12 @@ const Pieces = () => {
                     if (sounds) {
                         checkSound.play()
                     }
+
                     store.dispatch({
                         type: "enemyKingAttacked",
                         payload: true
                     })
+
                     checkingPiece.current = i
                 } 
                 
@@ -3869,6 +4205,7 @@ const Pieces = () => {
                     if (sounds) {
                         moveSound.play()
                     }
+
                     store.dispatch({
                         type: "enemyKingAttacked",
                         payload: false
@@ -3878,24 +4215,25 @@ const Pieces = () => {
                 if ((playerQueens.some(a => enemyKingSpiderSenseArr.current[0].includes(a)) 
                     || playerBishops.some(a => enemyKingSpiderSenseArr.current[0].includes(a)))
                     && occupiedSquaresLive.filter(a => !playerSquaresLive.includes(a))
-                                            .every(a => !enemyKingSpiderSenseArr.current[0].includes(a))) {
+                                          .every(a => !enemyKingSpiderSenseArr.current[0].includes(a))) {
                     if (sounds) {
                         checkSound.play()
                     }
+
                     store.dispatch({
                         type: "enemyKingAttacked",
                         payload: true
                     })
-                    
                 }
 
                 if ((playerQueens.some(a => enemyKingSpiderSenseArr.current[1].includes(a)) 
                     || playerRooks.some(a => enemyKingSpiderSenseArr.current[1].includes(a)))
                     && occupiedSquaresLive.filter(a => !playerSquaresLive.includes(a))
-                                            .every(a => !enemyKingSpiderSenseArr.current[1].includes(a))) {
+                                          .every(a => !enemyKingSpiderSenseArr.current[1].includes(a))) {
                     if (sounds) {
                         checkSound.play()
                     }
+
                     store.dispatch({
                         type: "enemyKingAttacked",
                         payload: true
@@ -3931,10 +4269,12 @@ const Pieces = () => {
             type:"moveSquares",
             payload: []
         })
+
         store.dispatch({
             type: "pieceSquare",
             payload: null
         })
+
         store.dispatch({
             type: "recordMoves",
             payload: JSON.stringify(store.getState().board)
@@ -3945,30 +4285,30 @@ const Pieces = () => {
         switch (pieceSquareForEngine.current - i) {
             case -17:
                 animatePiece(i, string, -80, -160)
-                break;
+                break
             case -15:
                 animatePiece(i, string, 80, -160)
-                break;
+                break
             case -10:
                 animatePiece(i, string, -160, -80)
-                break;
+                break
             case -6:
                 animatePiece(i, string, 160, -80)
-                break;
+                break
             case 6:
                 animatePiece(i, string, -160, 80)
-                break;
+                break
             case 10:
                 animatePiece(i, string, 160, 80)
-                break;
+                break
             case 15:
                 animatePiece(i, string, -80, 160)
-                break;
+                break
             case 17:
                 animatePiece(i, string, 80, 160)
-                break;
+                break
             default:
-                break;
+                break
         }   
     }
 
@@ -3977,49 +4317,49 @@ const Pieces = () => {
             switch (pieceSquareForEngine.current - i) {
                 case -9:
                     animateEnPassant(-80, -80, string, i)
-                    break;
+                    break
                 case -7:
                     animateEnPassant(80, -80, string, i)
-                    break;
+                    break
                 case 7:
                     animateEnPassant(-80, 80, string, i)
-                    break;
+                    break
                 case 9:
                     animateEnPassant(80, 80, string, i)
-                    break;
+                    break
                 default:
-                    break;
+                    break
             }
         } else {
             switch (pieceSquareForEngine.current - i) {
                 case 7:
                     animatePiece(i, string, -80, 80)
-                    break;
+                    break
                 case 8:
                     animatePiece(i, string, 0, 80)
-                    break;
+                    break
                 case 9:
                     animatePiece(i, string, 80, 80)
-                    break;
+                    break
                 case 16:
                     enPassantSquare.current = [i + 8, string]
                     animatePiece(i, string, 0, 160)
-                    break;
+                    break
                 case -16: 
                     enPassantSquare.current = [i - 8, string]
                     animatePiece(i, string, 0, -160)
-                    break;
+                    break
                 case -8: 
                     animatePiece(i, string, 0, -80)
-                    break;
+                    break
                 case -7: 
                     animatePiece(i, string, 80, -80)
-                    break;
+                    break
                 case -9: 
                     animatePiece(i, string, -80, -80)
-                    break;
+                    break
                 default:
-                    break;
+                    break
             }
         }
     }
@@ -4028,84 +4368,84 @@ const Pieces = () => {
         switch (pieceSquareForEngine.current - i) {
             case 9:
                 animatePiece(i, string, 80, 80)
-                break;
+                break
             case 18:
                 animatePiece(i, string, 160, 160)
-                break;
+                break
             case 27:
                 animatePiece(i, string, 240, 240)
-                break;
+                break
             case 36:
                 animatePiece(i, string, 320, 320)
-                break;
+                break
             case 45:
                 animatePiece(i, string, 400, 400)
-                break;
+                break
             case 54:
                 animatePiece(i, string, 480, 480)
-                break;
+                break
             case 63:
                 animatePiece(i, string, 560, 560)
-                break;
+                break
             case -9: 
                 animatePiece(i, string, -80, -80)
-                break;
+                break
             case -18:
                 animatePiece(i, string, -160, -160)
-                break;
+                break
             case -27:
                 animatePiece(i, string, -240, -240)
-                break;
+                break
             case -36:
                 animatePiece(i, string, -320, -320)
-                break;
+                break
             case -45:
                 animatePiece(i, string, -400, -400)
-                break;
+                break
             case -54:
                 animatePiece(i, string, -480, -480)
-                break;
+                break
             case -63:
                 animatePiece(i, string, -560, -560)
-                break;
+                break
             case 7:
                 animatePiece(i, string, -80, 80)
-                break;
+                break
             case 14:
                 animatePiece(i, string, -160, 160)
-                break;
+                break
             case 21: 
                 animatePiece(i, string, -240, 240)
-                break;
+                break
             case 28: 
                 animatePiece(i, string, -320, 320)
-                break;
+                break
             case 35: 
                 animatePiece(i, string, -400, 400)
-                break;
+                break
             case 42: 
                 animatePiece(i, string, -480, 480)
-                break;
+                break
             case -7:
                 animatePiece(i, string, 80, -80)
-                break;
+                break
             case -14:
                 animatePiece(i, string, 160, -160)
-                break;
+                break
             case -21: 
                 animatePiece(i, string, 240, -240)
-                break;
+                break
             case -28: 
                 animatePiece(i, string, 320, -320)
-                break;
+                break
             case -35: 
                 animatePiece(i, string, 400, -400)
-                break;
+                break
             case -42: 
                 animatePiece(i, string, 480, -480)
-                break;
+                break
             default:
-                break;
+                break
         }
     }
 
@@ -4113,273 +4453,271 @@ const Pieces = () => {
         switch (pieceSquareForEngine.current - i) {
             case 8:
                 animatePiece(i, string, 0, 80)
-                break;
+                break
             case 16:
                 animatePiece(i, string, 0, 160)
-                break;
+                break
             case 24:
                 animatePiece(i, string, 0, 240)
-                break;
+                break
             case 32:
                 animatePiece(i, string, 0, 320)
-                break;
+                break
             case 40:
                 animatePiece(i, string, 0, 400)
-                break;
+                break
             case 48:
                 animatePiece(i, string, 0, 480)
-                break;
+                break
             case 56:
                 animatePiece(i, string, 0, 560)
-                break;
+                break
             case -8:
                 animatePiece(i, string, 0, -80)
-                break;
+                break
             case -16:
                 animatePiece(i, string, 0, -160)
-                break;
+                break
             case -24:
                 animatePiece(i, string, 0, -240)
-                break;
+                break
             case -32:
                 animatePiece(i, string, 0, -320)
-                break;
+                break
             case -40:
                 animatePiece(i, string, 0, -400)
-                break;
+                break
             case -48:
                 animatePiece(i, string, 0, -480)
-                break;
+                break
             case -56:
                 animatePiece(i, string, 0, -560)
-                break;
+                break
             case 1:
                 animatePiece(i, string, 80, 0)
-                break;
+                break
             case 2:
                 animatePiece(i, string, 160, 0)
-                break;
+                break
             case 3:
                 animatePiece(i, string, 240, 0)
-                break;
+                break
             case 4:
                 animatePiece(i, string, 320, 0)
-                break;
+                break
             case 5:
                 animatePiece(i, string, 400, 0)
-                break;
+                break
             case 6:
                 animatePiece(i, string, 480, 0)
-                break;
+                break
             case 7:
                 animatePiece(i, string, 560, 0)
-                break;
+                break
             case -1:
                 animatePiece(i, string, -80, 0)
-                break;
+                break
             case -2:
                 animatePiece(i, string, -160, 0)
-                break;
+                break
             case -3:
                 animatePiece(i, string, -240, 0)
-                break;
+                break
             case -4:
                 animatePiece(i, string, -320, 0)
-                break;
+                break
             case -5:
                 animatePiece(i, string, -400, 0)
-                break;
+                break
             case -6:
                 animatePiece(i, string, -480, 0)
-                break;
+                break
             case -7:
                 animatePiece(i, string, -560, 0)
-                break;
-
+                break
             default:
-                break;
+                break
         }
     }
 
     const moveQueen = (i, string) => {
         if ((knightLimits.current[0].includes(pieceSquare) || knightLimits.current[3].includes(pieceSquare)) 
-            && 
-            (knightLimits.current[0].includes(i) || knightLimits.current[3].includes(i))) {
+            && (knightLimits.current[0].includes(i) || knightLimits.current[3].includes(i))) {
             switch (pieceSquareForEngine.current - i) {
                 case -7:
                     animatePiece(i, string, -560, 0)
-                    break;
+                    break
                 case 7:
                     animatePiece(i, string, 560, 0)
-                    break;
+                    break
                 default:
-                    break;
+                    break
             }
         } else {
             switch (pieceSquareForEngine.current - i) {
                 case -7:
                     animatePiece(i, string, 80, -80)
-                    break;
+                    break
                 case 7:
                     animatePiece(i, string, -80, 80)
-                    break;
+                    break
                 default:
-                    break;
+                    break
             }
         }
         switch (pieceSquareForEngine.current - i) {                                                   
             case 9:
                 animatePiece(i, string, 80, 80)
-                break;
+                break
             case 18:
                 animatePiece(i, string, 160, 160)
-                break;
+                break
             case 27:
                 animatePiece(i, string, 240, 240)
-                break;
+                break
             case 36:
                 animatePiece(i, string, 320, 320)
-                break;
+                break
             case 45:
                 animatePiece(i, string, 400, 400)
-                break;
+                break
             case 54:
                 animatePiece(i, string, 480, 480)
-                break;
+                break
             case 63:
                 animatePiece(i, string, 560, 560)
-                break;
+                break
             case -9: 
                 animatePiece(i, string, -80, -80)
-                break;
+                break
             case -18:
                 animatePiece(i, string, -160, -160)
-                break;
+                break
             case -27:
                 animatePiece(i, string, -240, -240)
-                break;
+                break
             case -36:
                 animatePiece(i, string, -320, -320)
-                break;
+                break
             case -45:
                 animatePiece(i, string, -400, -400)
-                break;
+                break
             case -54:
                 animatePiece(i, string, -480, -480)
-                break;
+                break
             case -63:
                 animatePiece(i, string, -560, -560)
-                break;
+                break
             case 14:
                 animatePiece(i, string, -160, 160)
-                break;
+                break
             case 21: 
                 animatePiece(i, string, -240, 240)
-                break;
+                break
             case 28: 
                 animatePiece(i, string, -320, 320)
-                break;
+                break
             case 35: 
                 animatePiece(i, string, -400, 400)
-                break;
+                break
             case 42: 
                 animatePiece(i, string, -480, 480)
-                break;
+                break
             case -14:
                 animatePiece(i, string, 160, -160)
-                break;
+                break
             case -21: 
                 animatePiece(i, string, 240, -240)
-                break;
+                break
             case -28: 
                 animatePiece(i, string, 320, -320)
-                break;
+                break
             case -35: 
                 animatePiece(i, string, 400, -400)
-                break;
+                break
             case -42: 
                 animatePiece(i, string, 480, -480)
-                break;
+                break
             case 8:
                 animatePiece(i, string, 0, 80)
-                break;
+                break
             case 16:
                 animatePiece(i, string, 0, 160)
-                break;
+                break
             case 24:
                 animatePiece(i, string, 0, 240)
-                break;
+                break
             case 32:
                 animatePiece(i, string, 0, 320)
-                break;
+                break
             case 40:
                 animatePiece(i, string, 0, 400)
-                break;
+                break
             case 48:
                 animatePiece(i, string, 0, 480)
-                break;
+                break
             case 56:
                 animatePiece(i, string, 0, 560)
-                break;
+                break
             case -8:
                 animatePiece(i, string, 0, -80)
-                break;
+                break
             case -16:
                 animatePiece(i, string, 0, -160)
-                break;
+                break
             case -24:
                 animatePiece(i, string, 0, -240)
-                break;
+                break
             case -32:
                 animatePiece(i, string, 0, -320)
-                break;
+                break
             case -40:
                 animatePiece(i, string, 0, -400)
-                break;
+                break
             case -48:
                 animatePiece(i, string, 0, -480)
-                break;
+                break
             case -56:
                 animatePiece(i, string, 0, -560)
-                break;
+                break
             case 1:
                 animatePiece(i, string, 80, 0)
-                break;
+                break
             case 2:
                 animatePiece(i, string, 160, 0)
-                break;
+                break
             case 3:
                 animatePiece(i, string, 240, 0)
-                break;
+                break
             case 4:
                 animatePiece(i, string, 320, 0)
-                break;
+                break
             case 5:
                 animatePiece(i, string, 400, 0)
-                break;
+                break
             case 6:
                 animatePiece(i, string, 480, 0)
-                break;
+                break
             case -1:
                 animatePiece(i, string, -80, 0)
-                break;
+                break
             case -2:
                 animatePiece(i, string, -160, 0)
-                break;
+                break
             case -3:
                 animatePiece(i, string, -240, 0)
-                break;
+                break
             case -4:
                 animatePiece(i, string, -320, 0)
-                break;
+                break
             case -5:
                 animatePiece(i, string, -400, 0)
-                break;
+                break
             case -6:
                 animatePiece(i, string, -480, 0)
-                break;
+                break
             default:
-                break;
+                break
         }
     }
 
@@ -4417,12 +4755,15 @@ const Pieces = () => {
             if (rookToMove === "pr1") {
                 playerRook1 = newSqRook - 1
             }
+
             if (rookToMove === "pr2") {
                 playerRook2 = newSqRook - 1
             }
+
             if (rookToMove === "or1") {
                 enemyRook1 = newSqRook - 1
             }
+
             if (rookToMove === "or2") {
                 enemyRook2 = newSqRook - 1
             }
@@ -4431,6 +4772,7 @@ const Pieces = () => {
                 type: "setMoveVar",
                 payload: [coor1 * -1, coor2 * -1]
             })
+
             if (/or/.test(rookToMove)) {
                 store.dispatch({
                     type: "oldSquare",
@@ -4454,12 +4796,15 @@ const Pieces = () => {
             if (rookToMove === "pr1") {
                 playerRook1 = newSqRook - 56
             }
+
             if (rookToMove === "pr2") {
                 playerRook2 = newSqRook - 56
             }
+
             if (rookToMove === "or1") {
                 enemyRook1 = newSqRook + 56
             }
+            
             if (rookToMove === "or2") {
                 enemyRook2 = newSqRook + 56
             }
@@ -4482,12 +4827,15 @@ const Pieces = () => {
             if (rookToMove === "pr1") {
                 playerRook1 = newSqRook
             }
+
             if (rookToMove === "pr2") {
                 playerRook2 = newSqRook
             }
+
             if (rookToMove === "or1") {
                 enemyRook1 = newSqRook
             }
+
             if (rookToMove === "or2") {
                 enemyRook2 = newSqRook
             }
@@ -4503,31 +4851,50 @@ const Pieces = () => {
             })
         }
 
-        playerRooks = [playerRook1, playerRook2, playerRook3, playerRook4, playerRook5, playerRook6, playerRook7, playerRook8, playerRook9, playerRook01]
-        enemyRooks = [enemyRook1, enemyRook2, enemyRook3, enemyRook4, enemyRook5, enemyRook6, enemyRook7, enemyRook8, enemyRook9, enemyRook01]
+        playerRooks = [playerRook1, 
+                       playerRook2, 
+                       playerRook3, 
+                       playerRook4, 
+                       playerRook5, 
+                       playerRook6, 
+                       playerRook7, 
+                       playerRook8, 
+                       playerRook9, 
+                       playerRook01]
+        enemyRooks = [enemyRook1, 
+                      enemyRook2, 
+                      enemyRook3, 
+                      enemyRook4, 
+                      enemyRook5, 
+                      enemyRook6, 
+                      enemyRook7, 
+                      enemyRook8, 
+                      enemyRook9, 
+                      enemyRook01]
 
         recordBoard()
 
         if (/^pr/.test(rookToMove)) {
             if ((playerRooks.some(a => enemyKingSpiderSenseArr.current[1].includes(a)))
                 && occupiedSquaresLive.filter(a => !playerSquaresLive.includes(a))
-                                        .every(a => !enemyKingSpiderSenseArr.current[1].includes(a))) {
+                                      .every(a => !enemyKingSpiderSenseArr.current[1].includes(a))) {
                 if (sounds) {
                     checkSound.play()
                 }
+
                 store.dispatch({
                     type: "enemyKingAttacked",
                     payload: true
                 })
             }
         } else {
-
             if ((enemyRooks.some(a => playerKingSpiderSenseArr.current[1].includes(a)))
                 && occupiedSquaresLive.filter(a => !enemySquaresLive.includes(a))
-                                        .every(a => !playerKingSpiderSenseArr.current[1].includes(a))) {
+                                      .every(a => !playerKingSpiderSenseArr.current[1].includes(a))) {
                 if (sounds) {
                     checkSound.play()
                 }
+
                 store.dispatch({
                     type: "playerKingAttacked",
                     payload: true
@@ -4642,10 +5009,11 @@ const Pieces = () => {
             if ((playerQueens.some(a => enemyKingSpiderSenseArr.current[0].includes(a)) 
                 || playerBishops.some(a => enemyKingSpiderSenseArr.current[0].includes(a)))
                 && occupiedSquaresLive.filter(a => !playerSquaresLive.includes(a))
-                                        .every(a => !enemyKingSpiderSenseArr.current[0].includes(a))) {
+                                      .every(a => !enemyKingSpiderSenseArr.current[0].includes(a))) {
                 if (sounds) {
                     checkSound.play()
                 }
+
                 store.dispatch({
                     type: "enemyKingAttacked",
                     payload: true
@@ -4655,10 +5023,11 @@ const Pieces = () => {
             if ((playerQueens.some(a => enemyKingSpiderSenseArr.current[1].includes(a)) 
                 || playerRooks.some(a => enemyKingSpiderSenseArr.current[1].includes(a)))
                 && occupiedSquaresLive.filter(a => !playerSquaresLive.includes(a))
-                                        .every(a => !enemyKingSpiderSenseArr.current[1].includes(a))) {
+                                      .every(a => !enemyKingSpiderSenseArr.current[1].includes(a))) {
                 if (sounds) {
                     checkSound.play()
                 }
+
                 store.dispatch({
                     type: "enemyKingAttacked",
                     payload: true
@@ -4668,10 +5037,11 @@ const Pieces = () => {
             if ((enemyQueens.some(a => playerKingSpiderSenseArr.current[0].includes(a))
                 || enemyBishops.some(a => playerKingSpiderSenseArr.current[0].includes(a)))
                 && occupiedSquaresLive.filter(a => !enemySquaresLive.includes(a))
-                                        .every(a => !playerKingSpiderSenseArr.current[0].includes(a))) {
+                                      .every(a => !playerKingSpiderSenseArr.current[0].includes(a))) {
                 if (sounds) {
                     checkSound.play()
                 }
+
                 store.dispatch({
                     type: "playerKingAttacked",
                     payload: true
@@ -4681,10 +5051,11 @@ const Pieces = () => {
             if ((enemyQueens.some(a => playerKingSpiderSenseArr.current[1].includes(a))
                 || enemyRooks.some(a => playerKingSpiderSenseArr.current[1].includes(a)))
                 && occupiedSquaresLive.filter(a => !enemySquaresLive.includes(a))
-                                        .every(a => !playerKingSpiderSenseArr.current[1].includes(a))) {
+                                    .every(a => !playerKingSpiderSenseArr.current[1].includes(a))) {
                 if (sounds) {
                     checkSound.play()
                 }
+
                 store.dispatch({
                     type: "playerKingAttacked",
                     payload: true
@@ -4695,8 +5066,6 @@ const Pieces = () => {
         if (sounds) {
             captureSound.play()
         }
-        // encode()
-
 
         store.dispatch({
             type:"moveSquares",
@@ -4707,7 +5076,6 @@ const Pieces = () => {
             type: "pieceSquare",
             payload: null
         })
-
 
         if (color === "white") {
             if (/^pp/.test(string)) {
@@ -4734,6 +5102,7 @@ const Pieces = () => {
                 })
             }
         }
+
         store.dispatch({
             type: "recordMoves",
             payload: JSON.stringify(store.getState().board)
@@ -4761,6 +5130,7 @@ const Pieces = () => {
                     break
             }
         }
+
         if (/^ok/.test(string)) {
             switch (pieceSquareForEngine.current - i) {
                 case 2:
@@ -4781,33 +5151,34 @@ const Pieces = () => {
                     break
             }
         }
+
         switch (pieceSquareForEngine.current - i) {
             case 9:
                 animatePiece(i, string, 80, 80)
-                break;
+                break
             case 8:
                 animatePiece(i, string, 0, 80)
-                break;
+                break
             case 7:
                 animatePiece(i, string, -80, 80)
-                break;
+                break
             case 1:
                 animatePiece(i, string, 80, 0)
-                break;
+                break
             case -1:
                 animatePiece(i, string, -80, 0)
-                break;
+                break
             case -7:
                 animatePiece(i, string, 80, -80)
-                break;
+                break
             case -8:
                 animatePiece(i, string, 0, -80)
-                break;
+                break
             case -9:
                 animatePiece(i, string, -80, -80)
-                break;
+                break
             default:
-                break;
+                break
         }
     }
 
