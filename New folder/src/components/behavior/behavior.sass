@@ -1,0 +1,69 @@
+.behavior
+    border: solid green 10px
+    width: 300px
+    padding: 0 20px
+    position: relative
+    height: 530px
+    top: calc( 50% - 265px )
+    display: flex
+    flex-direction: column
+    justify-content: center
+    &__container
+        display: flex
+        justify-content: space-between
+        align-items: center
+        padding: 5px 0
+    &__option
+        display: flex
+        &-body
+            padding: 5px 10px
+            cursor: pointer
+            user-select: none
+            text-align: center
+            margin: 5px 2px 0 2px
+            transition: background .3s
+            &:hover
+                background: orange
+    &__optionAnim
+        width: 98px
+    &__switch
+        position: relative 
+        display: flex
+        width: 55px
+        height: 30px
+        background: green
+        border-radius: 20px
+        line-height: 30px
+        display: flex
+        justify-content: space-between
+        padding: 0 5px
+        cursor: pointer
+        user-select: none
+        margin: 0 auto 10px auto
+        &-ball
+            top: 3px
+            position: absolute
+            background-color: white
+            width: 24px
+            height: 24px
+            border-radius: 100%
+            border: 1px solid black
+            &-right
+                transition: all .4s
+                transform: translateX(0px)
+            &-left
+                transition: all .4s
+                transform: translateX(22px)
+
+.activeOption
+    background: green
+
+.option-dark
+    border: solid 2px white
+
+.option-light
+    border: solid 2px black
+
+.bg-darker
+    background: #262421
+    color: white
