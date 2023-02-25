@@ -18,6 +18,7 @@ const Options = () => {
             type: "sandbox",
             payload: boolean
         })
+
         setMultipler(1)
     }
 
@@ -25,6 +26,7 @@ const Options = () => {
         store.dispatch({
             type: color
         })
+
         if (color === "color/black" && !sandbox) {
             store.dispatch({
                 type: "setBoard",
@@ -96,6 +98,7 @@ const Options = () => {
                 }
             })
         }
+
         if (color === "color/black" && sandbox) {
             store.dispatch({
                 type: "setBoard",
@@ -167,6 +170,7 @@ const Options = () => {
                 }
             })
         }
+
         setMultipler(2)
     }
 
@@ -175,25 +179,26 @@ const Options = () => {
             type: "setTime",
             payload: time
         })
+
         store.dispatch({
             type: "increment",
             payload: increment
         })
+
         store.dispatch({
             type: "optionsOff"
         })
     }
 
-    const onBack = () => {
-        setMultipler(multiplier - 1)
-    }
-
     return (
-        <div className="options" style={options ? {opacity: "1", visibility: "visible"} : {opacity: "0", visibility: "hidden"}}>
-            <div className="options__helpMode" style={helpMode ? {opacity: "1", visibility: "visible"} : {opacity: "0", visibility: "hidden"}}>
+        <div className="options" style={options ? {opacity: "1", visibility: "visible"} 
+                                                : {opacity: "0", visibility: "hidden"}}>
+            <div className="options__helpMode" style={helpMode ? {opacity: "1", visibility: "visible"} 
+                                                               : {opacity: "0", visibility: "hidden"}}>
                 In sandbox mode you control both the white and the black pieces. Perfect for testing out game logic features.
             </div>
-            <div className="options__helpTime" style={helpTime ? {opacity: "1", visibility: "visible"} : {opacity: "0", visibility: "hidden"}}>
+            <div className="options__helpTime" style={helpTime ? {opacity: "1", visibility: "visible"} 
+                                                               : {opacity: "0", visibility: "hidden"}}>
                 The options are in "Minutes + increment" format. Increment defines how many seconds are added to the players' timer after they make a move.
             </div>
             <div className="options__outer">
@@ -208,7 +213,7 @@ const Options = () => {
                         </div>
                     </div>
                     <div className="options__body">
-                        <div className="options__back" onClick={() => onBack()}>Back</div>
+                        <div className="options__back" onClick={() => setMultipler(multiplier - 1)}>Back</div>
                         <div className="options__heading">Choose the color of your pieces</div>
                         <div className="options__container">
                             <div className="options__choice" onClick={() => setColor("color/white")}>White</div>
@@ -216,7 +221,7 @@ const Options = () => {
                         </div>
                     </div>
                     <div className="options__bodyTime">
-                        <div className="options__back" onClick={() => onBack()}>Back</div>
+                        <div className="options__back" onClick={() => setMultipler(multiplier - 1)}>Back</div>
                         <div className="options__heading">Choose the time control <span onMouseEnter={() => setHelpTime(true)} 
                                                                                         onMouseLeave={() => setHelpTime(false)}
                                                                                         className="options__question">?</span></div>
