@@ -540,7 +540,6 @@ const Pieces = () => {
 
     stockfish.addEventListener('message', function(e) {
         if (/^bestmove/.test(e.data)) {
-            console.log(e.data)
             const engineOldSquare = e.data.slice(9, 11)
             const engineNewSquare = e.data.slice(11, 13)
             const enginePieceToMove = boardEntries.filter(([key, value]) => value[1] === engineOldSquare).flat()[0]
