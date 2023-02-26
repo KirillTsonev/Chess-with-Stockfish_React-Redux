@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/Chess-with-Stockfish_React-Redux/static/css/main.2f88106c.css",
+    "main.css": "/Chess-with-Stockfish_React-Redux/static/css/main.44b63851.css",
     "main.js": "/Chess-with-Stockfish_React-Redux/static/js/main.7c1f36c6.js",
     "static/css/520.408cc7d0.chunk.css": "/Chess-with-Stockfish_React-Redux/static/css/520.408cc7d0.chunk.css",
     "static/js/520.df6452d5.chunk.js": "/Chess-with-Stockfish_React-Redux/static/js/520.df6452d5.chunk.js",
@@ -35,7 +35,7 @@
     "static/media/capture.ogg": "/Chess-with-Stockfish_React-Redux/static/media/capture.4c0d6b27175ec63ec634.ogg",
     "static/media/move.ogg": "/Chess-with-Stockfish_React-Redux/static/media/move.5a58dd80a641cfdf5fb0.ogg",
     "index.html": "/Chess-with-Stockfish_React-Redux/index.html",
-    "main.2f88106c.css.map": "/Chess-with-Stockfish_React-Redux/static/css/main.2f88106c.css.map",
+    "main.44b63851.css.map": "/Chess-with-Stockfish_React-Redux/static/css/main.44b63851.css.map",
     "main.7c1f36c6.js.map": "/Chess-with-Stockfish_React-Redux/static/js/main.7c1f36c6.js.map",
     "520.408cc7d0.chunk.css.map": "/Chess-with-Stockfish_React-Redux/static/css/520.408cc7d0.chunk.css.map",
     "520.df6452d5.chunk.js.map": "/Chess-with-Stockfish_React-Redux/static/js/520.df6452d5.chunk.js.map",
@@ -51,7 +51,7 @@
     "633.9636a5eb.chunk.js.map": "/Chess-with-Stockfish_React-Redux/static/js/633.9636a5eb.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.2f88106c.css",
+    "static/css/main.44b63851.css",
     "static/js/main.7c1f36c6.js"
   ]
 }
