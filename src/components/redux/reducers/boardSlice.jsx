@@ -167,7 +167,9 @@ function boardSlice(state = initialState, action) {
         case "gameEnd": 
             return {
                 ...state,
-                gameEnd: true
+                gameEnd: true,
+                moveSquares: [],
+                pieceSquare: null
             }
         case "toMove":
             return {
