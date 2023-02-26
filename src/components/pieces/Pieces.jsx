@@ -422,92 +422,6 @@ const Pieces = () => {
                       enemyPawn7, 
                       enemyPawn8]
 
-    const recordBoard = () => {
-        filteredEnemyRender = boardEntries.filter(([key, value]) => /^o/.test(key))
-        filteredEnemyLive = Object.entries(store.getState().board.board).filter(([key, value]) => /^o/.test(key))
-        justEnemyRender = Object.fromEntries(filteredEnemyRender)
-        justEnemyLive = Object.fromEntries(filteredEnemyLive)
-
-        filteredPlayerRender = boardEntries.filter(([key, value]) => /^p/.test(key))
-        filteredPlayerLive = Object.entries(store.getState().board.board).filter(([key, value]) => /^p/.test(key))        
-        justPlayerRender = Object.fromEntries(filteredPlayerRender)
-        justPlayerLive = Object.fromEntries(filteredPlayerLive)
-
-        filteredOccupiedRender = boardEntries.filter(([key, value]) => !/empty/.test(key))
-        filteredOccupiedLive = Object.entries(store.getState().board.board).filter(([key, value]) => !/empty/.test(key))
-        justOccupiedRender = Object.fromEntries(filteredOccupiedRender)
-        justOccupiedLive = Object.fromEntries(filteredOccupiedLive)
-
-        enemySquaresRender = Object.values(justEnemyRender).map(a => a = a[0])
-        playerSquaresRender =  Object.values(justPlayerRender).map(a => a = a[0])
-        occupiedSquaresRender = Object.values(justOccupiedRender).map(a => a = a[0])
-
-        enemySquaresLive = Object.values(justEnemyLive).map(a => a = a[0])
-        playerSquaresLive =  Object.values(justPlayerLive).map(a => a = a[0])
-        occupiedSquaresLive = Object.values(justOccupiedLive).map(a => a = a[0])
-
-        kingSpiderSense(playerKing, playerSquaresLive, enemySquaresLive, playerKingSpiderSenseArr)
-        kingSpiderSense(enemyKing, enemySquaresLive, playerSquaresLive, enemyKingSpiderSenseArr)
-
-        attacked(playerRooks, 
-                 playerKnights,
-                 playerBishops, 
-                 playerQueens, 
-                 playerPawns, 
-                 enemySquaresRender, 
-                 playerSquaresRender, 
-                 protectedByPlayerArr, 
-                 true)
-        attacked(enemyRooks, 
-                 enemyKnights, 
-                 enemyBishops, 
-                 enemyQueens, 
-                 enemyPawns, 
-                 playerSquaresRender, 
-                 enemySquaresRender, 
-                 protectedByOpponentArr, 
-                 true)
-
-        king8Star(playerKing, playerSquaresRender, enemySquaresRender, playerKing8StarArr, true)
-        king8Star(enemyKing, enemySquaresRender, playerSquaresRender, enemyKing8StarArr, true)
-
-        king8Star(playerKing, playerSquaresRender, enemySquaresRender, playerKing8StarXrayArr, false)
-        king8Star(enemyKing, enemySquaresRender, playerSquaresRender, enemyKing8StarXrayArr, false)
-
-        horseSafety(playerKing, playerSquaresRender, playerHorseSafetyArr)
-        horseSafety(enemyKing, enemySquaresRender, enemyHorseSafetyArr)
-       
-        if (playerKingAttacked) {
-            for (let i = 0; i < 4; i++) {
-                if (enemyQueens.some(a => playerKing8StarArr.current[i].includes(a)) 
-                    || enemyRooks.some(a => playerKing8StarArr.current[i].includes(a))) {
-                    checkingPiece.current = playerKing8StarArr.current[i].filter(a => enemySquaresRender.includes(a))[0]
-                }
-            }
-            for (let i = 4; i < 8; i++) {
-                if (enemyQueens.some(a => playerKing8StarArr.current[i].includes(a)) 
-                    || enemyBishops.some(a => playerKing8StarArr.current[i].includes(a))) {
-                    checkingPiece.current = playerKing8StarArr.current[i].filter(a => enemySquaresRender.includes(a))[0]
-                }
-            }
-        }
-
-        if (enemyKingAttacked) {
-            for (let i = 0; i < 4; i++) {
-                if (playerQueens.some(a => enemyKing8StarArr.current[i].includes(a)) 
-                    || playerRooks.some(a => enemyKing8StarArr.current[i].includes(a))) {
-                    checkingPiece.current = enemyKing8StarArr.current[i].filter(a => playerSquaresRender.includes(a))[0]
-                }
-            }
-            for (let i = 4; i < 8; i++) {
-                if (playerQueens.some(a => enemyKing8StarArr.current[i].includes(a)) 
-                    || playerBishops.some(a => enemyKing8StarArr.current[i].includes(a))) {
-                    checkingPiece.current =enemyKing8StarArr.current[i].filter(a => playerSquaresRender.includes(a))[0]
-                }
-            }
-        }
-    }
-
     useEffect(() => {
         recordBoard()
 
@@ -626,6 +540,7 @@ const Pieces = () => {
 
     stockfish.addEventListener('message', function(e) {
         if (/^bestmove/.test(e.data)) {
+            console.log(e.data)
             const engineOldSquare = e.data.slice(9, 11)
             const engineNewSquare = e.data.slice(11, 13)
             const enginePieceToMove = boardEntries.filter(([key, value]) => value[1] === engineOldSquare).flat()[0]
@@ -965,6 +880,92 @@ const Pieces = () => {
             }
         }
     })
+
+    const recordBoard = () => {
+        filteredEnemyRender = boardEntries.filter(([key, value]) => /^o/.test(key))
+        filteredEnemyLive = Object.entries(store.getState().board.board).filter(([key, value]) => /^o/.test(key))
+        justEnemyRender = Object.fromEntries(filteredEnemyRender)
+        justEnemyLive = Object.fromEntries(filteredEnemyLive)
+
+        filteredPlayerRender = boardEntries.filter(([key, value]) => /^p/.test(key))
+        filteredPlayerLive = Object.entries(store.getState().board.board).filter(([key, value]) => /^p/.test(key))        
+        justPlayerRender = Object.fromEntries(filteredPlayerRender)
+        justPlayerLive = Object.fromEntries(filteredPlayerLive)
+
+        filteredOccupiedRender = boardEntries.filter(([key, value]) => !/empty/.test(key))
+        filteredOccupiedLive = Object.entries(store.getState().board.board).filter(([key, value]) => !/empty/.test(key))
+        justOccupiedRender = Object.fromEntries(filteredOccupiedRender)
+        justOccupiedLive = Object.fromEntries(filteredOccupiedLive)
+
+        enemySquaresRender = Object.values(justEnemyRender).map(a => a = a[0])
+        playerSquaresRender =  Object.values(justPlayerRender).map(a => a = a[0])
+        occupiedSquaresRender = Object.values(justOccupiedRender).map(a => a = a[0])
+
+        enemySquaresLive = Object.values(justEnemyLive).map(a => a = a[0])
+        playerSquaresLive =  Object.values(justPlayerLive).map(a => a = a[0])
+        occupiedSquaresLive = Object.values(justOccupiedLive).map(a => a = a[0])
+
+        kingSpiderSense(playerKing, playerSquaresLive, enemySquaresLive, playerKingSpiderSenseArr)
+        kingSpiderSense(enemyKing, enemySquaresLive, playerSquaresLive, enemyKingSpiderSenseArr)
+
+        attacked(playerRooks, 
+                 playerKnights,
+                 playerBishops, 
+                 playerQueens, 
+                 playerPawns, 
+                 enemySquaresRender, 
+                 playerSquaresRender, 
+                 protectedByPlayerArr, 
+                 true)
+        attacked(enemyRooks, 
+                 enemyKnights, 
+                 enemyBishops, 
+                 enemyQueens, 
+                 enemyPawns, 
+                 playerSquaresRender, 
+                 enemySquaresRender, 
+                 protectedByOpponentArr, 
+                 true)
+
+        king8Star(playerKing, playerSquaresRender, enemySquaresRender, playerKing8StarArr, true)
+        king8Star(enemyKing, enemySquaresRender, playerSquaresRender, enemyKing8StarArr, true)
+
+        king8Star(playerKing, playerSquaresRender, enemySquaresRender, playerKing8StarXrayArr, false)
+        king8Star(enemyKing, enemySquaresRender, playerSquaresRender, enemyKing8StarXrayArr, false)
+
+        horseSafety(playerKing, playerSquaresRender, playerHorseSafetyArr)
+        horseSafety(enemyKing, enemySquaresRender, enemyHorseSafetyArr)
+       
+        if (playerKingAttacked) {
+            for (let i = 0; i < 4; i++) {
+                if (enemyQueens.some(a => playerKing8StarArr.current[i].includes(a)) 
+                    || enemyRooks.some(a => playerKing8StarArr.current[i].includes(a))) {
+                    checkingPiece.current = playerKing8StarArr.current[i].filter(a => enemySquaresRender.includes(a))[0]
+                }
+            }
+            for (let i = 4; i < 8; i++) {
+                if (enemyQueens.some(a => playerKing8StarArr.current[i].includes(a)) 
+                    || enemyBishops.some(a => playerKing8StarArr.current[i].includes(a))) {
+                    checkingPiece.current = playerKing8StarArr.current[i].filter(a => enemySquaresRender.includes(a))[0]
+                }
+            }
+        }
+
+        if (enemyKingAttacked) {
+            for (let i = 0; i < 4; i++) {
+                if (playerQueens.some(a => enemyKing8StarArr.current[i].includes(a)) 
+                    || playerRooks.some(a => enemyKing8StarArr.current[i].includes(a))) {
+                    checkingPiece.current = enemyKing8StarArr.current[i].filter(a => playerSquaresRender.includes(a))[0]
+                }
+            }
+            for (let i = 4; i < 8; i++) {
+                if (playerQueens.some(a => enemyKing8StarArr.current[i].includes(a)) 
+                    || playerBishops.some(a => enemyKing8StarArr.current[i].includes(a))) {
+                    checkingPiece.current =enemyKing8StarArr.current[i].filter(a => playerSquaresRender.includes(a))[0]
+                }
+            }
+        }
+    }
 
     const engineTurn = () => {
         encode()
@@ -1725,42 +1726,42 @@ const Pieces = () => {
                 case "oqb9":
                     return renderRoyals(a, blackQueen, "Black Queen") 
                 case "op1": 
-                    return <div className="pawnContainer" key={i * 90}>
+                    return <div className="pawnContainer" key={i * 100 + "a"}>
                         {renderEachPiece(a, blackPawn, whitePawn, "Black Pawn", "White Pawn")}
                         {renderOpponentPromotion("op1", i)}
                     </div>
                 case "op2": 
-                    return <div className="pawnContainer" key={i * 90}>
+                    return <div className="pawnContainer" key={i * 100 + "a"}>
                         {renderEachPiece(a, blackPawn, whitePawn, "Black Pawn", "White Pawn")}
                         {renderOpponentPromotion("op2", i)}
                     </div>
                 case "op3": 
-                    return <div className="pawnContainer" key={i * 90}>
+                    return <div className="pawnContainer" key={i * 100 + "a"}>
                         {renderEachPiece(a, blackPawn, whitePawn, "Black Pawn", "White Pawn")}
                         {renderOpponentPromotion("op3", i)}
                     </div>
                 case "op4": 
-                    return <div className="pawnContainer" key={i * 90}>
+                    return <div className="pawnContainer" key={i * 100 + "a"}>
                         {renderEachPiece(a, blackPawn, whitePawn, "Black Pawn", "White Pawn")}
                         {renderOpponentPromotion("op4", i)}
                     </div>
                 case "op5": 
-                    return <div className="pawnContainer" key={i * 90}>
+                    return <div className="pawnContainer" key={i * 100 + "a"}>
                         {renderEachPiece(a, blackPawn, whitePawn, "Black Pawn", "White Pawn")}
                         {renderOpponentPromotion("op5", i)}
                     </div>
                 case "op6": 
-                    return <div className="pawnContainer" key={i * 90}>
+                    return <div className="pawnContainer" key={i * 100 + "a"}>
                         {renderEachPiece(a, blackPawn, whitePawn, "Black Pawn", "White Pawn")}
                         {renderOpponentPromotion("op6", i)}
                     </div>
                 case "op7": 
-                    return <div className="pawnContainer" key={i * 90}>
+                    return <div className="pawnContainer" key={i * 100 + "a"}>
                         {renderEachPiece(a, blackPawn, whitePawn, "Black Pawn", "White Pawn")}
                         {renderOpponentPromotion("op7", i)}
                     </div>
                 case "op8":
-                    return <div className="pawnContainer" key={i * 90}>
+                    return <div className="pawnContainer" key={i * 100 + "a"}>
                         {renderEachPiece(a, blackPawn, whitePawn, "Black Pawn", "White Pawn")}
                         {renderOpponentPromotion("op8", i)}
                     </div>
@@ -1865,48 +1866,48 @@ const Pieces = () => {
                 case "pqb9":
                     return renderRoyals(a, blackQueen, "Black Queen")
                 case "pp1":
-                    return <div className="pawnContainer" key={i * 80}>
+                    return <div className="pawnContainer" key={i * 100 + "a"}>
                         {renderEachPiece(a, whitePawn, blackPawn, "White Pawn", "Black Pawn")}
                         {renderPlayerPromotion("pp1", i)}
                     </div>
                 case "pp2": 
-                    return <div className="pawnContainer" key={i * 80}>
+                    return <div className="pawnContainer" key={i * 100 + "a"}>
                         {renderEachPiece(a, whitePawn, blackPawn, "White Pawn", "Black Pawn")}
                         {renderPlayerPromotion("pp2", i)}
                     </div>
                 case "pp3": 
-                    return <div className="pawnContainer" key={i * 80}>
+                    return <div className="pawnContainer" key={i * 100 + "a"}>
                         {renderEachPiece(a, whitePawn, blackPawn, "White Pawn", "Black Pawn")}
                         {renderPlayerPromotion("pp3", i)}
                     </div>
                 case "pp4": 
-                    return <div className="pawnContainer" key={i * 80}>
+                    return <div className="pawnContainer" key={i * 100 + "a"}>
                         {renderEachPiece(a, whitePawn, blackPawn, "White Pawn", "Black Pawn")}
                         {renderPlayerPromotion("pp4", i)}
                     </div>
                 case "pp5": 
-                    return <div className="pawnContainer" key={i * 80}>
+                    return <div className="pawnContainer" key={i * 100 + "a"}>
                         {renderEachPiece(a, whitePawn, blackPawn, "White Pawn", "Black Pawn")}
                         {renderPlayerPromotion("pp5", i)}
                     </div>
                 case "pp6": 
-                    return <div className="pawnContainer" key={i * 80}>
+                    return <div className="pawnContainer" key={i * 100 + "a"}>
                         {renderEachPiece(a, whitePawn, blackPawn, "White Pawn", "Black Pawn")}
                         {renderPlayerPromotion("pp6", i)}
                     </div>
                 case "pp7": 
-                    return <div className="pawnContainer" key={i * 80}>
+                    return <div className="pawnContainer" key={i * 100 + "a"}>
                         {renderEachPiece(a, whitePawn, blackPawn, "White Pawn", "Black Pawn")}
                         {renderPlayerPromotion("pp7", i)}
                     </div>
                 case "pp8":
-                    return <div className="pawnContainer" key={i * 80}>
+                    return <div className="pawnContainer" key={i * 100 + "a"}>
                         {renderEachPiece(a, whitePawn, blackPawn, "White Pawn", "Black Pawn")}
                         {renderPlayerPromotion("pp8", i)}
                     </div>
                 default:
                     return (
-                        <div className="piece" key={i}></div>
+                        <div className="piece" key={i * 100 + "b"}></div>
                     )
             }
         }
@@ -2139,6 +2140,7 @@ const Pieces = () => {
                 if (excArr.includes(number)) {
                     arr = arr.filter(a => a !== number)
                 }
+
                 if (arr2.length > 0) {
                     arr = arr.filter(a => arr2.includes(a))
                 }
@@ -2149,6 +2151,7 @@ const Pieces = () => {
                 && i !== playerKing 
                 && playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
                 let arrTech = playerKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
+
                 arr = arr.filter(a => arrTech.includes(a))
             } else if (playerKingAttacked && !playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
                 arr = arr.filter(a => playerHorseSafetyArr.current.includes(a))
@@ -2159,6 +2162,7 @@ const Pieces = () => {
                 && i !== enemyKing 
                 && enemyKing8StarArr.current.flat().includes(checkingPiece.current)) {
                 let arrTech = enemyKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
+
                 arr = arr.filter(a => arrTech.includes(a))
             } else if (enemyKingAttacked && !enemyKing8StarArr.current.flat().includes(checkingPiece.current)) {
                 arr = arr.filter(a => enemyHorseSafetyArr.current.includes(a))
@@ -2326,21 +2330,23 @@ const Pieces = () => {
     const recordOpponentPawnAttacks = (i, arrMoves) => {
         let arr = []
 
-        if (color === "black" && !sandbox) {
-            if (!knightLimits.current[0].includes(i)) {
-                arr.push(i - 7)
-            }
-    
-            if (!knightLimits.current[3].includes(i)) {
-                arr.push(i - 9)
-            }
-        } else {
-            if (!knightLimits.current[0].includes(i)) {
-                arr.push(i + 7)
-            }
-    
-            if (!knightLimits.current[3].includes(i)) {
-                arr.push(i + 9)
+        if (i) {
+            if (color === "black" && !sandbox) {
+                if (!knightLimits.current[0].includes(i)) {
+                    arr.push(i - 9)
+                }
+        
+                if (!knightLimits.current[3].includes(i)) {
+                    arr.push(i - 7)
+                }
+            } else {
+                if (!knightLimits.current[0].includes(i)) {
+                    arr.push(i + 7)
+                }
+        
+                if (!knightLimits.current[3].includes(i)) {
+                    arr.push(i + 9)
+                }
             }
         }
 
@@ -2352,12 +2358,24 @@ const Pieces = () => {
     const recordPlayerPawnAttacks = (i, arrMoves) => {
         let arr = []
 
-        if (!knightLimits.current[0].includes(i)) {
-            arr.push(i - 9)
-        }
-
-        if (!knightLimits.current[3].includes(i)) {
-            arr.push(i - 7)
+        if (i) {
+            if (color === "black" && !sandbox) {
+                if (!knightLimits.current[3].includes(i)) {
+                    arr.push(i + 9)
+                }
+        
+                if (!knightLimits.current[0].includes(i)) {
+                    arr.push(i + 7)
+                }
+            } else {
+                if (!knightLimits.current[0].includes(i)) {
+                    arr.push(i - 9)
+                }
+        
+                if (!knightLimits.current[3].includes(i)) {
+                    arr.push(i - 7)
+                }
+            }
         }
 
         for (const number of arr) {
@@ -2384,16 +2402,16 @@ const Pieces = () => {
         } else {
             arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9]
         }
-
+   
         for (const number of arr) {
             if (playerSquaresRender.includes(number)) {
                 arr = arr.filter(x => x !== number)
 
-                if (!arr.includes(60) && i === 61) {
+                if ((!arr.includes(60) && i === 61) || playerKingAttacked) {
                     arr = arr.filter(x => x !== 59)
                 }
 
-                if (!arr.includes(62) && i === 61) {
+                if ((!arr.includes(62) && i === 61) || playerKingAttacked) {
                     arr = arr.filter(x => x !== 63)
                 }
 
@@ -2454,11 +2472,11 @@ const Pieces = () => {
             if (enemySquaresRender.includes(number)) {
                 arr = arr.filter(x => x !== number)
 
-                if (!arr.includes(4) && i === 5) {
+                if ((!arr.includes(4) && i === 5) || enemyKingAttacked) {
                     arr = arr.filter(x => x !== 3)
                 }
 
-                if (!arr.includes(6) && i === 5) {
+                if ((!arr.includes(6) && i === 5) || enemyKingAttacked) {
                     arr = arr.filter(x => x !== 7)
                 }
 
@@ -2532,7 +2550,7 @@ const Pieces = () => {
                 payload: null
             })
         }
-        
+
         if (occupiedSquaresRender.includes(i) 
             && activePiece !== piece 
             && !currentMove 
@@ -4981,7 +4999,7 @@ const Pieces = () => {
             type: rookToMove
         })
 
-        if ((color === "white" && toMove === "w") || (color === "black" && toMove === "b")) {
+        if ((color === "white" && toMove === "w") || (color === "black" && toMove === "w")) {
             store.dispatch({
                 type: "moveNumbers"
             })
@@ -5140,13 +5158,15 @@ const Pieces = () => {
             type: string
         })
 
-        recordBoard()
-
-        if (/^pp/.test(string)) {
+        if ((color === "white" && toMove === "w") || (color === "black" && toMove === "w")) {
             store.dispatch({
                 type: "moveNumbers"
             })
+        }
 
+        recordBoard()
+
+        if (/^pp/.test(string)) {
             store.dispatch({
                 type: "notationArr",
                 payload: `${board[string][1].slice(0, 1)}x${playerNewSquareForEngine.current}`
