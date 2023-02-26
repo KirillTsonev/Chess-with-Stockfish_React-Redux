@@ -108,11 +108,23 @@ const initialState = {
     moveVar: [0, 0],
     modalOpen: false,
     newGame: false,
-    endMessage: ""
+    endMessage: "",
+    checkArrPlayer: [],
+    checkArrOpponent: []
 }
 
 function boardSlice(state = initialState, action) {
     switch (action.type) {
+        case "checkArrPlayer":
+            return {
+                ...state,
+                checkArrPlayer: [...state.checkArrPlayer, action.payload]
+            }
+        case "checkArrOpponent":
+            return {
+                ...state,
+                checkArrOpponent: [...state.checkArrOpponent, action.payload]
+            }
         case "boardReset":
             return {
                 ...state,

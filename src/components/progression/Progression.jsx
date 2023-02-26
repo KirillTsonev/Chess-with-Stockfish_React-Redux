@@ -96,12 +96,14 @@ const Progression = () => {
                 type: "currentMove",
                 payload: null
             })
+
             counter.current = moves.length - 1
         } else {
             store.dispatch({
                 type: "currentMove",
                 payload: i
             })
+
             counter.current = i
         }
     }
@@ -190,6 +192,7 @@ const Progression = () => {
     const onPrevClick = () => {
         if (counter.current > 1) {
             counter.current--
+
             store.dispatch({
                 type: "currentMove",
                 payload: counter.current
@@ -199,12 +202,15 @@ const Progression = () => {
                 type: "currentMove",
                 payload: "0"
             })
+
+            counter.current = 0
         }
     }
 
     const onNextClick = () => {
-        if (counter.current < moves.length - 1) {
+        if (counter.current < moves.length - 2) {
             counter.current++
+            
             store.dispatch({
                 type: "currentMove",
                 payload: counter.current

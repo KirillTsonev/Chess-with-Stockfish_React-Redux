@@ -44,6 +44,8 @@ const Pieces = () => {
     const pieceSquare = useSelector(state => state.board.pieceSquare)
     const playerKingAttacked = useSelector(state => state.board.playerKingAttacked)
     const toMove = useSelector(state => state.board.toMove)
+    const checkArrPlayer = useSelector(state => state.board.checkArrPlayer)
+    const checkArrOpponent = useSelector(state => state.board.checkArrOpponent)
 
     const sandbox = useSelector(state => state.options.sandbox)
     const color = useSelector(state => state.options.color)
@@ -1290,7 +1292,7 @@ const Pieces = () => {
         queens.forEach(a => checkArrays(blackBishopMoves, a, arr, oppSquares, ownSquares, true, true))
         queens.forEach(a => checkArrays(rookMoves.current, a, arr, oppSquares, ownSquares, true, true))
 
-        if (/player/.test(pawns)) {
+        if (pawns === playerPawns) {
             pawns.forEach(a => recordPlayerPawnAttacks(a, arr))
         } else {
             pawns.forEach(a => recordOpponentPawnAttacks(a, arr))
@@ -1337,6 +1339,11 @@ const Pieces = () => {
                     type: "enemyKingAttacked",
                     payload: true
                 })
+
+                store.dispatch({
+                    type: "checkArrOpponent",
+                    payload: moves.length
+                })
             }
         }
 
@@ -1351,6 +1358,11 @@ const Pieces = () => {
                 store.dispatch({
                     type: "playerKingAttacked",
                     payload: true
+                })
+
+                store.dispatch({
+                    type: "checkArrPlayer",
+                    payload: moves.length
                 })
             }
         }
@@ -1368,6 +1380,11 @@ const Pieces = () => {
                     type: "enemyKingAttacked",
                     payload: true
                 })
+
+                store.dispatch({
+                    type: "checkArrOpponent",
+                    payload: moves.length
+                })
             }
         }
 
@@ -1383,6 +1400,11 @@ const Pieces = () => {
                 store.dispatch({
                     type: "playerKingAttacked",
                     payload: true
+                })
+
+                store.dispatch({
+                    type: "checkArrPlayer",
+                    payload: moves.length
                 })
             }
         }
@@ -1401,6 +1423,11 @@ const Pieces = () => {
                     type: "enemyKingAttacked",
                     payload: true
                 })
+
+                store.dispatch({
+                    type: "checkArrOpponent",
+                    payload: moves.length
+                })
             }
         }
 
@@ -1417,6 +1444,11 @@ const Pieces = () => {
                 store.dispatch({
                     type: "playerKingAttacked",
                     payload: true
+                })
+
+                store.dispatch({
+                    type: "checkArrPlayer",
+                    payload: moves.length
                 })
             }
         }
@@ -1436,6 +1468,11 @@ const Pieces = () => {
                     type: "enemyKingAttacked",
                     payload: true
                 })
+
+                store.dispatch({
+                    type: "checkArrOpponent",
+                    payload: moves.length
+                })
             }
         }
 
@@ -1453,6 +1490,11 @@ const Pieces = () => {
                 store.dispatch({
                     type: "playerKingAttacked",
                     payload: true
+                })
+
+                store.dispatch({
+                    type: "checkArrPlayer",
+                    payload: moves.length
                 })
             }
         }
@@ -1503,7 +1545,10 @@ const Pieces = () => {
                     <img src={src}
                         key={a}
                         alt={alt}
-                        className={`piece ${(/^ok/.test(a) && enemyKingAttacked) || (/^pk/.test(a) && playerKingAttacked) ? "kingInCheck" : null}`}
+                        className={`piece ${((/^ok/.test(a) && enemyKingAttacked && !currentMove) 
+                                        || (/^ok/.test(a) && checkArrOpponent.some(a => a === currentMove))) 
+                                    || ((/^pk/.test(a) && playerKingAttacked && !currentMove) 
+                                        || (/^pk/.test(a) && checkArrPlayer.some(a => a === currentMove))) ? "kingInCheck" : null}`}
                         style={activePiece === `${a}`
                             ?
                             {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`} 
@@ -3750,6 +3795,11 @@ const Pieces = () => {
                         payload: true
                     })
 
+                    store.dispatch({
+                        type: "checkArrPlayer",
+                        payload: moves.length
+                    })
+
                     checkingPiece.current = i
                 } 
                 
@@ -3776,6 +3826,11 @@ const Pieces = () => {
                         type: "playerKingAttacked",
                         payload: true
                     })
+
+                    store.dispatch({
+                        type: "checkArrPlayer",
+                        payload: moves.length
+                    })
                 }
 
                 if ((enemyQueens.some(a => playerKingSpiderSenseArr.current[1].includes(a))
@@ -3789,6 +3844,11 @@ const Pieces = () => {
                     store.dispatch({
                         type: "playerKingAttacked",
                         payload: true
+                    })
+
+                    store.dispatch({
+                        type: "checkArrPlayer",
+                        payload: moves.length
                     })
                 }
 
@@ -3895,6 +3955,11 @@ const Pieces = () => {
                         payload: true
                     })
 
+                    store.dispatch({
+                        type: "checkArrPlayer",
+                        payload: moves.length
+                    })
+
                     checkingPiece.current = i
                 } 
                 
@@ -3921,6 +3986,11 @@ const Pieces = () => {
                         type: "playerKingAttacked",
                         payload: true
                     })
+
+                    store.dispatch({
+                        type: "checkArrPlayer",
+                        payload: moves.length
+                    })
                 }
 
                 if ((enemyQueens.some(a => playerKingSpiderSenseArr.current[1].includes(a))
@@ -3934,6 +4004,11 @@ const Pieces = () => {
                     store.dispatch({
                         type: "playerKingAttacked",
                         payload: true
+                    })
+
+                    store.dispatch({
+                        type: "checkArrPlayer",
+                        payload: moves.length
                     })
                 }
                 
@@ -3979,6 +4054,11 @@ const Pieces = () => {
                     store.dispatch({
                         type: "enemyKingAttacked",
                         payload: true
+                    })
+
+                    store.dispatch({
+                        type: "checkArrOpponent",
+                        payload: moves.length
                     })
                     
                     checkingPiece.current = i
@@ -4065,6 +4145,7 @@ const Pieces = () => {
                     if (sounds) {
                         captureSound.play()
                     }
+
                     store.dispatch({
                         type: "playerKingAttacked",
                         payload: false
@@ -4109,6 +4190,11 @@ const Pieces = () => {
                         type: "enemyKingAttacked",
                         payload: true
                     })
+
+                    store.dispatch({
+                        type: "checkArrOpponent",
+                        payload: moves.length
+                    })
                 }
 
                 if ((playerQueens.some(a => enemyKingSpiderSenseArr.current[1].includes(a)) 
@@ -4122,6 +4208,11 @@ const Pieces = () => {
                     store.dispatch({
                         type: "enemyKingAttacked",
                         payload: true
+                    })
+
+                    store.dispatch({
+                        type: "checkArrOpponent",
+                        payload: moves.length
                     })
                 }
 
@@ -4228,6 +4319,11 @@ const Pieces = () => {
                         payload: true
                     })
 
+                    store.dispatch({
+                        type: "checkArrOpponent",
+                        payload: moves.length
+                    })
+
                     checkingPiece.current = i
                 } 
                 
@@ -4254,6 +4350,11 @@ const Pieces = () => {
                         type: "enemyKingAttacked",
                         payload: true
                     })
+
+                    store.dispatch({
+                        type: "checkArrOpponent",
+                        payload: moves.length
+                    })
                 }
 
                 if ((playerQueens.some(a => enemyKingSpiderSenseArr.current[1].includes(a)) 
@@ -4267,6 +4368,11 @@ const Pieces = () => {
                     store.dispatch({
                         type: "enemyKingAttacked",
                         payload: true
+                    })
+
+                    store.dispatch({
+                        type: "checkArrOpponent",
+                        payload: moves.length
                     })
                 }
 
@@ -4916,6 +5022,11 @@ const Pieces = () => {
                     type: "enemyKingAttacked",
                     payload: true
                 })
+
+                store.dispatch({
+                    type: "checkArrOpponent",
+                    payload: moves.length
+                })
             }
         } else {
             if ((enemyRooks.some(a => playerKingSpiderSenseArr.current[1].includes(a)))
@@ -4928,6 +5039,11 @@ const Pieces = () => {
                 store.dispatch({
                     type: "playerKingAttacked",
                     payload: true
+                })
+
+                store.dispatch({
+                    type: "checkArrPlayer",
+                    payload: moves.length
                 })
             }
         }
@@ -5048,6 +5164,11 @@ const Pieces = () => {
                     type: "enemyKingAttacked",
                     payload: true
                 })
+
+                store.dispatch({
+                    type: "checkArrOpponent",
+                    payload: moves.length
+                })
             }
 
             if ((playerQueens.some(a => enemyKingSpiderSenseArr.current[1].includes(a)) 
@@ -5061,6 +5182,11 @@ const Pieces = () => {
                 store.dispatch({
                     type: "enemyKingAttacked",
                     payload: true
+                })
+
+                store.dispatch({
+                    type: "checkArrOpponent",
+                    payload: moves.length
                 })
             }
         } else {
@@ -5076,6 +5202,11 @@ const Pieces = () => {
                     type: "playerKingAttacked",
                     payload: true
                 })
+
+                store.dispatch({
+                    type: "checkArrPlayer",
+                    payload: moves.length
+                })
             }
 
             if ((enemyQueens.some(a => playerKingSpiderSenseArr.current[1].includes(a))
@@ -5089,6 +5220,11 @@ const Pieces = () => {
                 store.dispatch({
                     type: "playerKingAttacked",
                     payload: true
+                })
+
+                store.dispatch({
+                    type: "checkArrPlayer",
+                    payload: moves.length
                 })
             }
         }
