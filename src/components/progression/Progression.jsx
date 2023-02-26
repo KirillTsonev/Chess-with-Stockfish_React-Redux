@@ -272,9 +272,10 @@ const Progression = () => {
 
             <div className="progression__moves">
                 <div className="progression__moves__numbers">
-                    {moveNumbers.slice(1).map(a => 
+                    {moveNumbers.slice(1).map((a, i) => 
                         <div className={`${darkTheme ? "bg-dark" : "bg-light"} 
-                                         progression__moves__numbers-body`}>{a - 1}</div>)}
+                                         progression__moves__numbers-body`}
+                             key={i * 100 + "e"}>{a - 1}</div>)}
                 </div>
 
                 <div className="progression__moves__grid">
@@ -287,7 +288,8 @@ const Progression = () => {
                                             : null} 
                                          progression__moves__grid-item`} 
                             onClick={() => onMoveClick(i + 1)}
-                            ref={(i + 2 === moves.length && !currentMove) ? bottomRef : null}>{notationArr[i]}</div>)}
+                            ref={(i + 2 === moves.length && !currentMove) ? bottomRef : null}
+                            key={i * 100 + "d"}>{notationArr[i]}</div>)}
                 </div>
             </div>
 

@@ -1524,9 +1524,9 @@ const Pieces = () => {
                     </img>
                     : 
                     <div className={`${color === "black" && !sandbox ? "reverse" : null}`}
-                         style={{height: "80px"}}>
+                         style={{height: "80px"}}
+                         key={a}>
                         <img src={src2}
-                             key={a}
                              alt={alt2}
                              className="piece"
                              style={activePiece === `${a}`
@@ -1542,9 +1542,9 @@ const Pieces = () => {
         const renderRoyals = (a, src, alt) => {
             return (
                 <div className={`${color === "black" && !sandbox ? "reverse" : null}`}
-                     style={{height: "80px"}}>
+                     style={{height: "80px"}}
+                     key={a}>
                     <img src={src}
-                        key={a}
                         alt={alt}
                         className={`piece ${((/^ok/.test(a) && enemyKingAttacked && !currentMove) 
                                         || (/^ok/.test(a) && checkArrOpponent.some(a => a === currentMove))) 
@@ -1992,87 +1992,89 @@ const Pieces = () => {
     const checkArrays = (arrayChecked, i, arr, ownArr, oppArr, exclude1, exclude2) => {
         let arr2 = []
 
-        if (i !== playerKing && i !== enemyKing) {
-            if (playerSquaresRender.includes(i)) {
-                for (let k = 0; k < 4; k++) {
-                    if (playerKing8StarXrayArr.current[k].includes(i)
-                        && (enemyRooks.some(a => playerKing8StarXrayArr.current[k].includes(a)) 
-                        || enemyQueens.some(a => playerKing8StarXrayArr.current[k].includes(a)))
-                        && playerKing8StarXrayArr.current[k].filter(a => playerSquaresRender.includes(a)).length === 1) {
-                        arr2 = playerKing8StarXrayArr.current[k]
+        if (i) {
+            if (i !== playerKing && i !== enemyKing) {
+                if (playerSquaresRender.includes(i)) {
+                    for (let k = 0; k < 4; k++) {
+                        if (playerKing8StarXrayArr.current[k].includes(i)
+                            && (enemyRooks.some(a => playerKing8StarXrayArr.current[k].includes(a)) 
+                            || enemyQueens.some(a => playerKing8StarXrayArr.current[k].includes(a)))
+                            && playerKing8StarXrayArr.current[k].filter(a => playerSquaresRender.includes(a)).length === 1) {
+                            arr2 = playerKing8StarXrayArr.current[k]
+                        }
+                    }
+    
+                    for (let k = 4; k < 8; k++) {
+                        if (playerKing8StarXrayArr.current[k].includes(i)
+                            && (enemyBishops.some(a => playerKing8StarXrayArr.current[k].includes(a)) 
+                            || enemyQueens.some(a => playerKing8StarXrayArr.current[k].includes(a)))
+                            && playerKing8StarXrayArr.current[k].filter(a => playerSquaresRender.includes(a)).length === 1) {
+                            arr2 = playerKing8StarXrayArr.current[k]
+                        }
                     }
                 }
-
-                for (let k = 4; k < 8; k++) {
-                    if (playerKing8StarXrayArr.current[k].includes(i)
-                        && (enemyBishops.some(a => playerKing8StarXrayArr.current[k].includes(a)) 
-                        || enemyQueens.some(a => playerKing8StarXrayArr.current[k].includes(a)))
-                        && playerKing8StarXrayArr.current[k].filter(a => playerSquaresRender.includes(a)).length === 1) {
-                        arr2 = playerKing8StarXrayArr.current[k]
+    
+                if (enemySquaresRender.includes(i)) {
+                    for (let k = 0; k < 4; k++) {
+                        if (enemyKing8StarXrayArr.current[k].includes(i)
+                            && (playerRooks.some(a => enemyKing8StarXrayArr.current[k].includes(a)) 
+                            || playerQueens.some(a => enemyKing8StarXrayArr.current[k].includes(a)))
+                            && enemyKing8StarXrayArr.current[k].filter(a => enemySquaresRender.includes(a)).length === 1) {
+                            arr2 = enemyKing8StarXrayArr.current[k]
+                        }
+                    }
+    
+                    for (let k = 4; k < 8; k++) {
+                        if (enemyKing8StarXrayArr.current[k].includes(i)
+                            && (playerBishops.some(a => enemyKing8StarXrayArr.current[k].includes(a)) 
+                            || playerQueens.some(a => enemyKing8StarXrayArr.current[k].includes(a)))
+                            && enemyKing8StarXrayArr.current[k].filter(a => enemySquaresRender.includes(a)).length === 1) {
+                            arr2 = enemyKing8StarXrayArr.current[k]
+                        }
                     }
                 }
             }
-
-            if (enemySquaresRender.includes(i)) {
-                for (let k = 0; k < 4; k++) {
-                    if (enemyKing8StarXrayArr.current[k].includes(i)
-                        && (playerRooks.some(a => enemyKing8StarXrayArr.current[k].includes(a)) 
-                        || playerQueens.some(a => enemyKing8StarXrayArr.current[k].includes(a)))
-                        && enemyKing8StarXrayArr.current[k].filter(a => enemySquaresRender.includes(a)).length === 1) {
-                        arr2 = enemyKing8StarXrayArr.current[k]
-                    }
-                }
-
-                for (let k = 4; k < 8; k++) {
-                    if (enemyKing8StarXrayArr.current[k].includes(i)
-                        && (playerBishops.some(a => enemyKing8StarXrayArr.current[k].includes(a)) 
-                        || playerQueens.some(a => enemyKing8StarXrayArr.current[k].includes(a)))
-                        && enemyKing8StarXrayArr.current[k].filter(a => enemySquaresRender.includes(a)).length === 1) {
-                        arr2 = enemyKing8StarXrayArr.current[k]
-                    }
-                }
-            }
-        }
-
-        for (const subArr of arrayChecked) {
-            if (subArr.includes(i)) {
-                for (let j = i + 1; j <= Math.max(...subArr); j++) {
-                    if (subArr.includes(j) && arr2.length === 0) {
-                        if (ownArr.includes(j) && exclude1) {
-                            break
-                        } else if (oppArr.includes(j) 
-                            && j !== playerKing
-                            && j !== enemyKing 
-                            && exclude2) {
-                            arr.push(j)
-                            break
-                        } else {
+    
+            for (const subArr of arrayChecked) {
+                if (subArr.includes(i)) {
+                    for (let j = i + 1; j <= Math.max(...subArr); j++) {
+                        if (subArr.includes(j) && arr2.length === 0) {
+                            if (ownArr.includes(j) && exclude1) {
+                                break
+                            } else if (oppArr.includes(j) 
+                                && j !== playerKing
+                                && j !== enemyKing 
+                                && exclude2) {
+                                arr.push(j)
+                                break
+                            } else {
+                                arr.push(j)
+                            }
+                        } else if (subArr.includes(j) 
+                            && arr2.includes(j) 
+                            && !ownArr.includes(j)) {
                             arr.push(j)
                         }
-                    } else if (subArr.includes(j) 
-                        && arr2.includes(j) 
-                        && !ownArr.includes(j)) {
-                        arr.push(j)
                     }
-                }
-
-                for (let j = i - 1; j >= Math.min(...subArr); j--) {
-                    if (subArr.includes(j) && arr2.length === 0) {
-                        if (ownArr.includes(j) && exclude1) {
-                            break
-                        } else if (oppArr.includes(j) 
-                            && j !== playerKing 
-                            && j !== enemyKing 
-                            && exclude2) {
-                            arr.push(j)
-                            break
-                        } else {
+    
+                    for (let j = i - 1; j >= Math.min(...subArr); j--) {
+                        if (subArr.includes(j) && arr2.length === 0) {
+                            if (ownArr.includes(j) && exclude1) {
+                                break
+                            } else if (oppArr.includes(j) 
+                                && j !== playerKing 
+                                && j !== enemyKing 
+                                && exclude2) {
+                                arr.push(j)
+                                break
+                            } else {
+                                arr.push(j)
+                            }
+                        } else if (subArr.includes(j) 
+                            && arr2.includes(j)
+                            && !ownArr.includes(j)) {
                             arr.push(j)
                         }
-                    } else if (subArr.includes(j) 
-                        && arr2.includes(j)
-                        && !ownArr.includes(j)) {
-                        arr.push(j)
                     }
                 }
             }
