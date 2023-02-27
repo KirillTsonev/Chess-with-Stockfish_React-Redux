@@ -545,7 +545,7 @@ const Pieces = () => {
             stockfish.addEventListener('message', function(e) {
                 if (/^bestmove/.test(e.data)) {
                     engineData.current = e.data
-                }
+                } 
             })
         } catch (error) {
 
