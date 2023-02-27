@@ -15,6 +15,7 @@ function App() {
 
   const sandbox = useSelector(state => state.options.sandbox)
   const color = useSelector(state => state.options.color)
+  const time = useSelector(state => state.options.time)
 
   const darkTheme = useSelector(state => state.behavior.darkTheme)
 
@@ -27,7 +28,7 @@ function App() {
       <Suspense>
         <Options></Options>
       </Suspense>
-      <div className='visible' style={color ? {opacity: "1"} : {opacity: "0"}}>
+      <div className='visible' style={time ? {opacity: "1"} : {opacity: "0"}}>
         <div>
           <Suspense>
             <Behavior></Behavior>
