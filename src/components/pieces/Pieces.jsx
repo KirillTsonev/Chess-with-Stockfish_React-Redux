@@ -21,7 +21,7 @@ import castlingSoundFile from "../../sounds/castling.ogg"
 import gameEndSoundFile from "../../sounds/gameEnd.ogg"
 
 import { useSelector } from "react-redux"
-import { useState, useEffect, useRef, useMemo, useCallback } from "react"
+import { useState, useEffect, useRef, useMemo } from "react"
 
 import store from "../redux/store"
 
