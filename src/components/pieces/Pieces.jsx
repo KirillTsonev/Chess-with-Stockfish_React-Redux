@@ -428,16 +428,20 @@ const Pieces = () => {
 
     useEffect(() => {
         recordBoard()
-
-        store.dispatch({
-            type: "recordMoves",
-            payload: JSON.stringify(board)
-        })
-
+        
         stockfish.postMessage('uci')
         stockfish.postMessage('isready')
         stockfish.postMessage('ucinewgame')
     }, [])
+
+    useEffect(() => {
+        if (!store.getState().options.options) {
+            store.dispatch({
+                type: "recordMoves",
+                payload: JSON.stringify(board)
+            })
+        }  
+    }, [!store.getState().options.options]);
 
     useEffect(() => {
         recordBoard()
@@ -3710,7 +3714,7 @@ const Pieces = () => {
         }
     }
     
-    const animatePiece = (i, string, num1, num2) => {   
+    const animatePiece = (i, string, num1, num2) => { 
         if (moves.length === 1 && sounds) {
             gameEndSound.play()
         } 
