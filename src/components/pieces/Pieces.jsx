@@ -2176,7 +2176,7 @@ const Pieces = () => {
                 && !playerKing8StarArr.current.flat().includes(checkingPiece.current)
                 && arr.includes(checkingPiece.current)) {
                 arr = [checkingPiece.current]
-            } else if (playerKingAttacked ) {
+            } else if (playerKingAttacked) {
                 arr = []
             }
 
@@ -2191,7 +2191,7 @@ const Pieces = () => {
                 && !enemyKing8StarArr.current.flat().includes(checkingPiece.current)
                 && arr.includes(checkingPiece.current)) {
                 arr = [checkingPiece.current]
-            } else if (enemyKing) {
+            } else if (enemyKingAttacked) {
                 arr = []
             }
 
@@ -2571,7 +2571,6 @@ const Pieces = () => {
     }
 
     const onSquareClick = (i, piece) => {   
-        // console.log(checkingPiece.current)
         if (((!moveSquares.includes(i) && moveSquares.length > 0) || activePiece === piece) 
             && 
             (
