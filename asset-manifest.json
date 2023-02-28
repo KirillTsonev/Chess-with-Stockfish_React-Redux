@@ -1,19 +1,19 @@
 {
   "files": {
     "main.css": "/Chess-with-Stockfish_React-Redux/static/css/main.44b63851.css",
-    "main.js": "/Chess-with-Stockfish_React-Redux/static/js/main.26c9e522.js",
-    "static/css/520.408cc7d0.chunk.css": "/Chess-with-Stockfish_React-Redux/static/css/520.408cc7d0.chunk.css",
+    "main.js": "/Chess-with-Stockfish_React-Redux/static/js/main.a3e2925d.js",
+    "static/css/520.23b6235b.chunk.css": "/Chess-with-Stockfish_React-Redux/static/css/520.23b6235b.chunk.css",
     "static/js/520.df6452d5.chunk.js": "/Chess-with-Stockfish_React-Redux/static/js/520.df6452d5.chunk.js",
-    "static/css/854.bb876a01.chunk.css": "/Chess-with-Stockfish_React-Redux/static/css/854.bb876a01.chunk.css",
+    "static/css/854.c10e7e04.chunk.css": "/Chess-with-Stockfish_React-Redux/static/css/854.c10e7e04.chunk.css",
     "static/js/854.f15a9175.chunk.js": "/Chess-with-Stockfish_React-Redux/static/js/854.f15a9175.chunk.js",
     "static/css/823.d126d8b6.chunk.css": "/Chess-with-Stockfish_React-Redux/static/css/823.d126d8b6.chunk.css",
     "static/js/823.4de3d91b.chunk.js": "/Chess-with-Stockfish_React-Redux/static/js/823.4de3d91b.chunk.js",
     "static/css/344.3fa919ed.chunk.css": "/Chess-with-Stockfish_React-Redux/static/css/344.3fa919ed.chunk.css",
-    "static/js/344.c1cfedb5.chunk.js": "/Chess-with-Stockfish_React-Redux/static/js/344.c1cfedb5.chunk.js",
+    "static/js/344.5d9c102b.chunk.js": "/Chess-with-Stockfish_React-Redux/static/js/344.5d9c102b.chunk.js",
     "static/css/935.8733275f.chunk.css": "/Chess-with-Stockfish_React-Redux/static/css/935.8733275f.chunk.css",
     "static/js/935.9a7f38ad.chunk.js": "/Chess-with-Stockfish_React-Redux/static/js/935.9a7f38ad.chunk.js",
-    "static/css/633.6478500c.chunk.css": "/Chess-with-Stockfish_React-Redux/static/css/633.6478500c.chunk.css",
-    "static/js/633.d54ce7f7.chunk.js": "/Chess-with-Stockfish_React-Redux/static/js/633.d54ce7f7.chunk.js",
+    "static/css/633.728565a6.chunk.css": "/Chess-with-Stockfish_React-Redux/static/css/633.728565a6.chunk.css",
+    "static/js/633.72391d05.chunk.js": "/Chess-with-Stockfish_React-Redux/static/js/633.72391d05.chunk.js",
     "static/media/bg.jpg": "/Chess-with-Stockfish_React-Redux/static/media/bg.f3b48737fc71a32fcc26.jpg",
     "static/media/first-dark.png": "/Chess-with-Stockfish_React-Redux/static/media/first-dark.a6ec3cf7af594571327b.png",
     "static/media/last-dark.png": "/Chess-with-Stockfish_React-Redux/static/media/last-dark.e32fef326a1a30d952be.png",
@@ -36,22 +36,22 @@
     "static/media/move.ogg": "/Chess-with-Stockfish_React-Redux/static/media/move.5a58dd80a641cfdf5fb0.ogg",
     "index.html": "/Chess-with-Stockfish_React-Redux/index.html",
     "main.44b63851.css.map": "/Chess-with-Stockfish_React-Redux/static/css/main.44b63851.css.map",
-    "main.26c9e522.js.map": "/Chess-with-Stockfish_React-Redux/static/js/main.26c9e522.js.map",
-    "520.408cc7d0.chunk.css.map": "/Chess-with-Stockfish_React-Redux/static/css/520.408cc7d0.chunk.css.map",
+    "main.a3e2925d.js.map": "/Chess-with-Stockfish_React-Redux/static/js/main.a3e2925d.js.map",
+    "520.23b6235b.chunk.css.map": "/Chess-with-Stockfish_React-Redux/static/css/520.23b6235b.chunk.css.map",
     "520.df6452d5.chunk.js.map": "/Chess-with-Stockfish_React-Redux/static/js/520.df6452d5.chunk.js.map",
-    "854.bb876a01.chunk.css.map": "/Chess-with-Stockfish_React-Redux/static/css/854.bb876a01.chunk.css.map",
+    "854.c10e7e04.chunk.css.map": "/Chess-with-Stockfish_React-Redux/static/css/854.c10e7e04.chunk.css.map",
     "854.f15a9175.chunk.js.map": "/Chess-with-Stockfish_React-Redux/static/js/854.f15a9175.chunk.js.map",
     "823.d126d8b6.chunk.css.map": "/Chess-with-Stockfish_React-Redux/static/css/823.d126d8b6.chunk.css.map",
     "823.4de3d91b.chunk.js.map": "/Chess-with-Stockfish_React-Redux/static/js/823.4de3d91b.chunk.js.map",
     "344.3fa919ed.chunk.css.map": "/Chess-with-Stockfish_React-Redux/static/css/344.3fa919ed.chunk.css.map",
-    "344.c1cfedb5.chunk.js.map": "/Chess-with-Stockfish_React-Redux/static/js/344.c1cfedb5.chunk.js.map",
+    "344.5d9c102b.chunk.js.map": "/Chess-with-Stockfish_React-Redux/static/js/344.5d9c102b.chunk.js.map",
     "935.8733275f.chunk.css.map": "/Chess-with-Stockfish_React-Redux/static/css/935.8733275f.chunk.css.map",
     "935.9a7f38ad.chunk.js.map": "/Chess-with-Stockfish_React-Redux/static/js/935.9a7f38ad.chunk.js.map",
-    "633.6478500c.chunk.css.map": "/Chess-with-Stockfish_React-Redux/static/css/633.6478500c.chunk.css.map",
-    "633.d54ce7f7.chunk.js.map": "/Chess-with-Stockfish_React-Redux/static/js/633.d54ce7f7.chunk.js.map"
+    "633.728565a6.chunk.css.map": "/Chess-with-Stockfish_React-Redux/static/css/633.728565a6.chunk.css.map",
+    "633.72391d05.chunk.js.map": "/Chess-with-Stockfish_React-Redux/static/js/633.72391d05.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.44b63851.css",
-    "static/js/main.26c9e522.js"
+    "static/js/main.a3e2925d.js"
   ]
 }
