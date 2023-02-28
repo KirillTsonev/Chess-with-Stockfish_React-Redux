@@ -1350,7 +1350,7 @@ const Pieces = () => {
 
         store.dispatch({
             type: "pawnPromotion",
-            payload: {pawn, pieceToPromoteTo}
+            payload: {pieceToPromoteTo, i}
         })
 
         if (/^ph/.test(pieceToPromoteTo)) {

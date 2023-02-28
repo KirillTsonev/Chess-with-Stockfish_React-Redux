@@ -118,7 +118,7 @@ const Behavior = () => {
                 <div>🌜</div>
             </div>
 
-            <div className="behavior__container">
+            {/* <div className="behavior__container">
                 <div className="behavior__body">Visible numbers:</div>
 
                 <div className="behavior__option">
@@ -132,7 +132,7 @@ const Behavior = () => {
                                     ${darkTheme ? "option-dark" : "option-light"}`}
                          onClick={() => onNumbersChoice(false)}>Off</div>
                 </div>
-            </div>
+            </div> */}
 
             <div className="behavior__container">
                 <div className="behavior__body">Animation speed:</div>

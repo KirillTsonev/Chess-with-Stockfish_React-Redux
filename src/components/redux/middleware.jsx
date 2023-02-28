@@ -1,3 +1,13 @@
+let playerQueenCounter = 2
+let playerKnightCounter = 2
+let playerBishopCounter = 2
+let playerRookCounter = 2
+
+let opponentQueenCounter = 2
+let opponentKnightCounter = 2
+let opponentBishopCounter = 2
+let opponentRookCounter = 2
+
 const swapAndEditBoard = store => next => action => {
     const func = (action) => {
         const board = store.getState().board.board
@@ -103,25 +113,51 @@ const checkCastlingMoved = store => next => action => {
 
 const pawnPromotion = store => next => action => {
     const func = (action) => {
-        const board = store.getState().board.board
-        let asArray = Object.entries(board)
-        const pawn = action.payload.pawn
+        let asArray = Object.entries(store.getState().board.board)
         let piece = action.payload.pieceToPromoteTo
-        const reg = new RegExp(piece.slice(0, 2))
 
-        piece += asArray.filter(([key, value]) => reg.test(key)).length + 1
-        
-        delete Object.assign(board, {[piece]: board[pawn]})[pawn]
-        asArray = Object.entries(board)
+        switch (piece.slice(0, 2)) {
+            case "pq":
+                playerQueenCounter++
+                piece += playerQueenCounter
+                break
+            case "pr":
+                playerRookCounter++
+                piece += playerRookCounter
+                break
+            case "pb":
+                playerBishopCounter++
+                piece += playerBishopCounter
+                break
+            case "ph":
+                playerKnightCounter++
+                piece += playerKnightCounter
+                break
+            case "oq":
+                opponentQueenCounter++
+                piece += opponentQueenCounter
+                break;
+            case "or":
+                opponentRookCounter++
+                piece += opponentRookCounter
+                break
+            case "ob":
+                opponentBishopCounter++
+                piece += opponentBishopCounter
+                break
+            case "oh":
+                opponentKnightCounter++
+                piece += opponentKnightCounter
+                break
+            default:
+                break
+        }
 
-        const arr = asArray.filter(([key, value]) => key === piece)
-        const slice = arr[0][1][0] - 1
-        const finalArr = asArray.slice(0, slice).concat(arr).concat(asArray.slice(slice)).slice(0, 64)
-        const obj = Object.fromEntries(finalArr)
+        asArray[action.payload.i][0] = piece
 
         return {
             ...action,
-            payload: obj
+            payload: Object.fromEntries(asArray)
         }
     }
 
