@@ -19,7 +19,26 @@ const Options = () => {
             payload: boolean
         })
 
-        setMultipler(1)
+        setMultipler(multiplier + 1)
+    }
+
+    const setDifficulty = (skillLevel, depth, milliseconds) => {
+        store.dispatch({
+            type: "skillLevel",
+            payload: skillLevel
+        })
+
+        store.dispatch({
+            type: "depth",
+            payload: depth
+        })
+
+        store.dispatch({
+            type: "milliseconds",
+            payload: milliseconds
+        })
+
+        setMultipler(multiplier + 1)
     }
 
     const setColor = (color) => {
@@ -180,7 +199,7 @@ const Options = () => {
             })
         }
 
-        setMultipler(2)
+        setMultipler(multiplier + 1)
     }
 
     const setTime = (time, increment) => {
@@ -206,50 +225,87 @@ const Options = () => {
                                                                : {opacity: "0", visibility: "hidden"}}>
                 In sandbox mode you control both the white and the black pieces. Perfect for testing out game logic features.
             </div>
+
             <div className="options__helpTime" style={helpTime ? {opacity: "1", visibility: "visible"} 
                                                                : {opacity: "0", visibility: "hidden"}}>
                 The options are in "Minutes + increment" format. Increment defines how many seconds are added to the players' timer after they make a move.
             </div>
+
             <div className="options__outer">
                 <div className="options__inner" style={{transform: `translateY(${multiplier * -250}px)`, transition: "all .5s"}}>
                     <div className="options__body">
                         <div className="options__heading">Choose game mode <span onMouseEnter={() => setHelpMode(true)} 
                                                                                  onMouseLeave={() => setHelpMode(false)}
                                                                                  className="options__question">?</span></div>
+
                         <div className="options__container">
-                            <div className="options__choice" onClick={() => setGameMode(false)}>Vs computer</div>
-                            <div className="options__choice" onClick={() => setGameMode(true)}>Sandbox</div>
+                            <div className="options__choice hover-computer" onClick={() => setGameMode(false)}>Vs computer</div>
+                            <div className="options__choice hover-sandbox" onClick={() => setGameMode(true)}>Sandbox</div>
                         </div>
                     </div>
+
+                    <div className="options__bodyDifficulty" style={sandbox ? {display: "none"} : {display: "block"}}>
+                        <div className="options__backDifficulty" onClick={() => setMultipler(multiplier - 1)}>Back</div>
+
+                        <div className="options__heading">Choose difficulty level</div>
+
+                        <div className="options__container difficulty">
+                            <div>
+                                <div className="options__choice 
+                                                difficulty__option 
+                                                hover-beginner" onClick={() => setDifficulty(-9, 5, 100)}>Beginner</div>
+                                <div className="options__choice 
+                                                difficulty__option 
+                                                hover-intermediate" onClick={() => setDifficulty(3, 5, 200)}>Intermediate</div>
+                            </div>
+
+                            <div>
+                                <div className="options__choice 
+                                                difficulty__option 
+                                                hover-advanced" onClick={() => setDifficulty(11, 8, 400)}>Advanced</div>
+                                <div className="options__choice 
+                                                difficulty__option 
+                                                hover-master" onClick={() => setDifficulty(20, 22, 1000)}>Master</div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div className="options__body">
                         <div className="options__back" onClick={() => setMultipler(multiplier - 1)}>Back</div>
+
                         <div className="options__heading">Choose the color of your pieces</div>
+
                         <div className="options__container">
-                            <div className="options__choice" onClick={() => setColor("white")}>White</div>
-                            <div className="options__choice" onClick={() => setColor("black")}>Black</div>
-                            <div className="options__choice" onClick={() => setColor("random")}>Random</div>
+                            <div className="options__choice hover-white" onClick={() => setColor("white")}>White</div>
+                            <div className="options__choice hover-random" onClick={() => setColor("random")}>Random</div>
+                            <div className="options__choice hover-black" onClick={() => setColor("black")}>Black</div>
                         </div>
                     </div>
+
                     <div className="options__bodyTime">
                         <div className="options__back" onClick={() => setMultipler(multiplier - 1)}>Back</div>
+
                         <div className="options__heading">Choose the time control <span onMouseEnter={() => setHelpTime(true)} 
                                                                                         onMouseLeave={() => setHelpTime(false)}
                                                                                         className="options__question">?</span></div>
+
                         <div className="options__container">
                             <div>
-                                <div className="options__choice" onClick={() => setTime(600000, 0)}>10 + 0</div>
-                                <div className="options__choice" onClick={() => setTime(300000, 0)}>5 + 0</div>
-                                <div className="options__choice" onClick={() => setTime(180000, 0)}>3 + 0</div>
+                                <div className="options__choice hover-ten" onClick={() => setTime(600000, 0)}>10 + 0</div>
+                                <div className="options__choice hover-five" onClick={() => setTime(300000, 0)}>5 + 0</div>
+                                <div className="options__choice hover-three" onClick={() => setTime(180000, 0)}>3 + 0</div>
                             </div>
+
                             <div>
-                                <div className="options__choice" onClick={() => setTime(600000, 3000)}>10 + 3</div>
-                                <div className="options__choice" onClick={() => setTime(300000, 3000)}>5 + 3</div>
-                                <div className="options__choice" onClick={() => setTime(180000, 3000)}>3 + 3</div>
+                                <div className="options__choice hover-ten" onClick={() => setTime(600000, 3000)}>10 + 3</div>
+                                <div className="options__choice hover-five" onClick={() => setTime(300000, 3000)}>5 + 3</div>
+                                <div className="options__choice hover-three" onClick={() => setTime(180000, 3000)}>3 + 3</div>
                             </div>
+
                             <div>
-                                <div className="options__choice" onClick={() => setTime(600000, 5000)}>10 + 5</div>
-                                <div className="options__choice" onClick={() => setTime(300000, 5000)}>5 + 5</div>
-                                <div className="options__choice" onClick={() => setTime(180000, 5000)}>3 + 5</div>
+                                <div className="options__choice hover-ten" onClick={() => setTime(600000, 5000)}>10 + 5</div>
+                                <div className="options__choice hover-five" onClick={() => setTime(300000, 5000)}>5 + 5</div>
+                                <div className="options__choice hover-three" onClick={() => setTime(180000, 5000)}>3 + 5</div>
                             </div>
                         </div>
                     </div>

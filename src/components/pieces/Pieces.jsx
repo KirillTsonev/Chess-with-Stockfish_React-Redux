@@ -50,6 +50,9 @@ const Pieces = () => {
     const sandbox = useSelector(state => state.options.sandbox)
     const color = useSelector(state => state.options.color)
     const options = useSelector(state => state.options.options)
+    const skillLevel = useSelector(state => state.options.skillLevel)
+    const depth = useSelector(state => state.options.depth)
+    const milliseconds = useSelector(state => state.options.milliseconds)
 
     const numbers = useSelector(state => state.behavior.numbers)
     const animations = useSelector(state => state.behavior.animations)
@@ -326,9 +329,9 @@ const Pieces = () => {
 
     const playerKingSpiderSenseArr = useRef([])
     const enemyKingSpiderSenseArr = useRef([])
-
-    const pawnKingArrPlayer = useRef([])
-    const pawnKingArrOpponent = useRef([])
+    
+    const playerKingArr = useRef([])
+    const opponentKingArr = useRef([])
 
     let playerRooks = [playerRook1, 
                        playerRook2, 
@@ -428,10 +431,12 @@ const Pieces = () => {
 
     useEffect(() => {
         recordBoard()
-        
-        stockfish.postMessage('uci')
-        stockfish.postMessage('isready')
-        stockfish.postMessage('ucinewgame')
+
+        if (stockfish) {
+            stockfish.postMessage('uci')
+            stockfish.postMessage('isready')
+            stockfish.postMessage('ucinewgame')
+        }
     }, [])
 
     useEffect(() => {
@@ -441,7 +446,7 @@ const Pieces = () => {
                 payload: JSON.stringify(board)
             })
         }  
-    }, [!store.getState().options.options]);
+    }, [!store.getState().options.options])
 
     useEffect(() => {
         recordBoard()
@@ -934,7 +939,8 @@ const Pieces = () => {
                  enemySquaresRender, 
                  playerSquaresRender, 
                  protectedByPlayerArr, 
-                 true)
+                 true,
+                 false)
         attacked(enemyRooks, 
                  enemyKnights, 
                  enemyBishops, 
@@ -943,7 +949,8 @@ const Pieces = () => {
                  playerSquaresRender, 
                  enemySquaresRender, 
                  protectedByOpponentArr, 
-                 true)
+                 true,
+                 false)
 
         king8Star(playerKing, playerSquaresRender, enemySquaresRender, playerKing8StarArr, true)
         king8Star(enemyKing, enemySquaresRender, playerSquaresRender, enemyKing8StarArr, true)
@@ -991,16 +998,20 @@ const Pieces = () => {
         let string = `position fen ${stringToSend} moves ${playerPiece.current}${playerNewSquareForEngine.current}`
 
         if (moves.length === 1) {
+            stockfish.postMessage(`setoption name Skill Level value ${skillLevel}`)
             stockfish.postMessage("position startpos")
-            stockfish.postMessage("go movetime 500")
+            stockfish.postMessage(`go movetime ${milliseconds} depth ${depth}`)
         } else {
+            if (moves.length === 3) {
+                stockfish.postMessage(`setoption name Skill Level value ${skillLevel}`)
+            }
             stockfish.postMessage(string)
-            stockfish.postMessage("go movetime 500")
+            stockfish.postMessage(`go movetime ${milliseconds} depth ${depth}`)
         }
 
         setTimeout(() => {
             listener(engineData.current)
-        }, 1000);
+        }, 1500);
     }
 
     const encode = () => {
@@ -1291,7 +1302,7 @@ const Pieces = () => {
         arrRes.current = arr
     }
 
-    const attacked = (rooks, knights, bishops, queens, pawns, oppSquares, ownSquares, arrRes, protect, pawn = true) => {
+    const attacked = (rooks, knights, bishops, queens, pawns, oppSquares, ownSquares, arrRes, protect, coverCheck) => {
         let arr = []
         let arrPawn = []
 
@@ -1306,17 +1317,17 @@ const Pieces = () => {
         queens.forEach(a => checkArrays(blackBishopMoves, a, arr, oppSquares, ownSquares, true, true))
         queens.forEach(a => checkArrays(rookMoves.current, a, arr, oppSquares, ownSquares, true, true))
 
-        if (pawns === playerPawns) {
-            pawns.forEach(a => recordPlayerPawnAttacks(a, arrPawn))
-        } else {
-            pawns.forEach(a => recordOpponentPawnAttacks(a, arrPawn))
-        }
-
-        if (pawn) {
+        if (coverCheck) {
             if (pawns === playerPawns) {
-                arrPawn = arrPawn.filter(a => enemySquaresRender.includes(a))
+                pawns.forEach(a => recordPlayerPawnMoves(a, "", arrPawn))
             } else {
-                arrPawn = arrPawn.filter(a => playerSquaresRender.includes(a))
+                pawns.forEach(a => recordOpponentPawnMoves(a, "", arrPawn))
+            }
+        } else {
+            if (pawns === playerPawns) {
+                pawns.forEach(a => recordPlayerPawnAttacks(a, arrPawn))
+            } else {
+                pawns.forEach(a => recordOpponentPawnAttacks(a, arrPawn))
             }
         }
 
@@ -2171,34 +2182,38 @@ const Pieces = () => {
                 }
             }
 
-            if (playerKingAttacked 
-                && playerSquaresRender.includes(i) 
-                && i !== playerKing 
-                && playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
-                let arrTech = playerKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
-                
-                arr = arr.filter(a => arrTech.includes(a))
-            } else if (playerKingAttacked 
-                && !playerKing8StarArr.current.flat().includes(checkingPiece.current)
-                && arr.includes(checkingPiece.current)) {
-                arr = [checkingPiece.current]
-            } else if (playerKingAttacked) {
-                arr = []
+            if (playerKnights.includes(i)) {
+                if (playerKingAttacked 
+                    && playerSquaresRender.includes(i) 
+                    && i !== playerKing 
+                    && playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
+                    let arrTech = playerKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
+                    
+                    arr = arr.filter(a => arrTech.includes(a))
+                } else if (playerKingAttacked 
+                    && !playerKing8StarArr.current.flat().includes(checkingPiece.current)
+                    && arr.includes(checkingPiece.current)) {
+                    arr = [checkingPiece.current]
+                } else if (playerKingAttacked) {
+                    arr = []
+                }
             }
 
-            if (enemyKingAttacked 
-                && enemySquaresRender.includes(i) 
-                && i !== enemyKing 
-                && enemyKing8StarArr.current.flat().includes(checkingPiece.current)) {
-                let arrTech = enemyKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
-
-                arr = arr.filter(a => arrTech.includes(a))
-            } else if (enemyKingAttacked 
-                && !enemyKing8StarArr.current.flat().includes(checkingPiece.current)
-                && arr.includes(checkingPiece.current)) {
-                arr = [checkingPiece.current]
-            } else if (enemyKingAttacked) {
-                arr = []
+            if (enemyKnights.includes(i)) {
+                if (enemyKingAttacked 
+                    && enemySquaresRender.includes(i) 
+                    && i !== enemyKing 
+                    && enemyKing8StarArr.current.flat().includes(checkingPiece.current)) {
+                    let arrTech = enemyKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
+    
+                    arr = arr.filter(a => arrTech.includes(a))
+                } else if (enemyKingAttacked 
+                    && !enemyKing8StarArr.current.flat().includes(checkingPiece.current)
+                    && arr.includes(checkingPiece.current)) {
+                    arr = [checkingPiece.current]
+                } else if (enemyKingAttacked) {
+                    arr = []
+                }
             }
 
             for (const number of arr) {
@@ -2285,18 +2300,18 @@ const Pieces = () => {
             arr = arr.filter(a => arr2.includes(a))
         } 
 
-        if (playerKingAttacked && playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
+        if (store.getState().board.playerKingAttacked && playerKing8StarArr.current.flat().includes(checkingPiece.current)) {
             let arrTech = playerKing8StarArr.current.filter(a => a.includes(checkingPiece.current)).flat()
             
             arr = arr.filter(a => arrTech.includes(a))
-        } else if (playerKingAttacked 
+        } else if (store.getState().board.playerKingAttacked
             && !playerKing8StarArr.current.flat().includes(checkingPiece.current) 
             && arr.includes(checkingPiece.current)) {
             arr = [checkingPiece.current]
-        } else if (playerKingAttacked) {
+        } else if (store.getState().board.playerKingAttacked) {
             arr = []
         }
-        
+
         for (const number of arr) {
             arrMoves.push(number)
         }
@@ -2427,19 +2442,18 @@ const Pieces = () => {
     const recordPlayerKingMoves = (i, arrMoves) => {
         let arr = []
         let arr2 = []
-
         recordEnemyKingAttacks(enemyKing, arr2)
 
         attacked(enemyRooks, 
-            enemyKnights, 
-            enemyBishops, 
-            enemyQueens, 
-            enemyPawns, 
-            enemySquaresRender, 
-            playerSquaresRender, 
-            pawnKingArrPlayer, 
-            false,
-            false)
+                 enemyKnights, 
+                 enemyBishops, 
+                 enemyQueens, 
+                 enemyPawns, 
+                 enemySquaresRender, 
+                 playerSquaresRender, 
+                 playerKingArr, 
+                 false,
+                 false)
 
         if (castlingPlayerMoved.pk && castlingPlayerMoved.pr2 && castlingPlayerMoved.pr1) {
             arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9, i + 2, i - 2]
@@ -2459,20 +2473,20 @@ const Pieces = () => {
             if (playerSquaresRender.includes(number)) {
                 arr = arr.filter(x => x !== number)
 
-                if ((!arr.includes(60) && i === 61) || (playerKingAttacked && pawnKingArrPlayer.current.includes(59))) {
+                if ((!arr.includes(60) && i === 61) || (playerKingAttacked && playerKingArr.current.includes(59))) {
                     arr = arr.filter(x => x !== 59)
                 }
 
-                if ((!arr.includes(62) && i === 61) || (playerKingAttacked && pawnKingArrPlayer.current.includes(63))) {
+                if ((!arr.includes(62) && i === 61) || (playerKingAttacked && playerKingArr.current.includes(63))) {
                     arr = arr.filter(x => x !== 63)
                 }
 
-                arr = arr.filter(a => !pawnKingArrPlayer.current.includes(a))
+                arr = arr.filter(a => !playerKingArr.current.includes(a))
                          .filter(a => !protectedByOpponentArr.current.includes(a))
                          .filter(a => !arr2.includes(a))
                          .filter(a => a > 0 && a < 65)
             } else {
-                arr = arr.filter(a => !pawnKingArrPlayer.current.includes(a))
+                arr = arr.filter(a => !playerKingArr.current.includes(a))
                          .filter(a => !protectedByOpponentArr.current.includes(a))
                          .filter(a => !arr2.includes(a))
                          .filter(a => a > 0 && a < 65)
@@ -2507,15 +2521,15 @@ const Pieces = () => {
         recordPlayerKingAttacks(playerKing, arr2)
 
         attacked(playerRooks, 
-            playerKnights, 
-            playerBishops, 
-            playerQueens, 
-            playerPawns, 
-            playerSquaresRender, 
-            enemySquaresRender, 
-            pawnKingArrOpponent, 
-            false,
-            false) 
+                 playerKnights, 
+                 playerBishops, 
+                 playerQueens, 
+                 playerPawns, 
+                 playerSquaresRender, 
+                 enemySquaresRender, 
+                 opponentKingArr, 
+                 false,
+                 false) 
 
         if (castlingEnemyMoved.ok && castlingEnemyMoved.or2 && castlingEnemyMoved.or1) {
             arr = [i - 9, i - 8, i - 7, i - 1, i + 1, i + 7, i + 8, i + 9, i + 2, i - 2]
@@ -2535,20 +2549,20 @@ const Pieces = () => {
             if (enemySquaresRender.includes(number)) {
                 arr = arr.filter(x => x !== number)
 
-                if ((!arr.includes(4) && i === 5) || (enemyKingAttacked && pawnKingArrOpponent.current.includes(3))) {
+                if ((!arr.includes(4) && i === 5) || (enemyKingAttacked && opponentKingArr.current.includes(3))) {
                     arr = arr.filter(x => x !== 3)
                 }
 
-                if ((!arr.includes(6) && i === 5) || (enemyKingAttacked && pawnKingArrOpponent.current.includes(7))) {
+                if ((!arr.includes(6) && i === 5) || (enemyKingAttacked && opponentKingArr.current.includes(7))) {
                     arr = arr.filter(x => x !== 7)
                 }
 
-                arr = arr.filter(a => !pawnKingArrOpponent.current.includes(a))
+                arr = arr.filter(a => !opponentKingArr.current.includes(a))
                          .filter(a => !protectedByPlayerArr.current.includes(a))
                          .filter(a => !arr2.includes(a))
                          .filter(a => a > 0 && a < 65)
             } else {
-                arr = arr.filter(a => !pawnKingArrOpponent.current.includes(a))
+                arr = arr.filter(a => !opponentKingArr.current.includes(a))
                          .filter(a => !protectedByPlayerArr.current.includes(a))
                          .filter(a => !arr2.includes(a))
                          .filter(a => a > 0 && a < 65)
@@ -2613,7 +2627,7 @@ const Pieces = () => {
                 payload: null
             })
         }
-
+    
         if (occupiedSquaresRender.includes(i) 
             && activePiece !== piece 
             && !currentMove 
@@ -3123,8 +3137,7 @@ const Pieces = () => {
         } 
 
         if (/^pk/.test(activePiece) 
-            && moveSquares.includes(i) 
-            && !attackedByOpponentArr.current.includes(i)) {
+            && moveSquares.includes(i)) {
             playerKing = i
 
             updateStateBoard(i, activePiece)
@@ -3396,8 +3409,7 @@ const Pieces = () => {
         } 
 
         if (/^ok/.test(activePiece) 
-            && moveSquares.includes(i)
-            && !attackedByPlayerArr.current.includes(i)) {
+            && moveSquares.includes(i)) {
             enemyKing = i
 
             updateStateBoard(i, activePiece)
@@ -3473,6 +3485,11 @@ const Pieces = () => {
     }
 
     const checkGameEnd = () => {
+        let arrPlayerCheckmate = []
+        let arrEnemyCheckmate = []
+        let arrPlayerStalemate = []
+        let arrEnemyStalemate = []
+        
         attacked(enemyRooks, 
                  enemyKnights, 
                  enemyBishops, 
@@ -3481,7 +3498,8 @@ const Pieces = () => {
                  enemySquaresRender, 
                  playerSquaresRender, 
                  attackedByOpponentArr, 
-                 false)
+                 false,
+                 true)
         attacked(playerRooks, 
                  playerKnights, 
                  playerBishops, 
@@ -3490,12 +3508,8 @@ const Pieces = () => {
                  playerSquaresRender, 
                  enemySquaresRender, 
                  attackedByPlayerArr, 
-                 false)
-
-        let arrPlayerCheckmate = []
-        let arrEnemyCheckmate = []
-        let arrPlayerStalemate = []
-        let arrEnemyStalemate = []
+                 false,
+                 true)
         
         recordPlayerKingMoves(playerKing, arrPlayerCheckmate)
         recordEnemyKingMoves(enemyKing, arrEnemyCheckmate)
@@ -4476,8 +4490,6 @@ const Pieces = () => {
 
         checkedByOpponentArr.current = []
         checkedByPlayerArr.current = []
-
-        
     }  
 
     const moveKnight = (i, string) => {

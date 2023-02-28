@@ -1,5 +1,8 @@
 const initialState = {
     sandbox: null,
+    skillLevel: null,
+    depth: null,
+    milliseconds: null,
     color: "",
     time: 0,
     increment: 0,
@@ -12,6 +15,21 @@ function optionsSlice(state = initialState, action) {
             return {
                 ...state,
                 sandbox: action.payload
+            }
+        case "skillLevel":
+            return {
+                ...state,
+                skillLevel: action.payload
+            }
+        case "depth":
+            return {
+                ...state,
+                depth: action.payload
+            }
+        case "milliseconds":
+            return {
+                ...state,
+                milliseconds: action.payload
             }
         case "color":
             return {

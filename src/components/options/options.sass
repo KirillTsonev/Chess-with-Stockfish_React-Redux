@@ -13,7 +13,7 @@
         left: calc(50% - 255px)
         overflow: hidden
         border: 10px solid darkgreen
-    &__body, &__bodyTime
+    &__body, &__bodyTime, &__bodyDifficulty
         width: 500px
         height: 251px
         background: green
@@ -24,13 +24,17 @@
         padding: 40px
         position: relative
     &__bodyTime
+        position: relative
         padding: 20px
-    &__back
+    &__bodyDifficulty
+        position: relative
+        padding: 30px 0
+    &__back, &__backDifficulty
         position: absolute
         font-size: 17px
         cursor: pointer
-        bottom: 220px
         left: 10px
+        top: 10px
         user-select: none
     &__heading
         text-align: center
@@ -57,9 +61,11 @@
         user-select: none
         text-align: center
         font-size: 20px
-        transition: all .3s
+        transition: transform .4s, box-shadow .4s, background .3s
         background: #009900
-        padding: 10px
+        line-height: 45px
+        height: 45px
+        padding: 0 15px
         margin-top: 5px
         border-radius: 10px
         position: relative
@@ -102,3 +108,49 @@
             border: 25px solid transparent
             border-left: none
             border-right-color: #009900
+
+.difficulty
+    width: 375px
+    margin: 0 auto
+    &__option
+        width: 140px
+        margin-top: 25px
+
+.hover
+    &-computer
+        &:hover
+            background: #a600ff
+    &-sandbox
+        &:hover
+            background: #249dff
+    &-beginner
+        &:hover
+            background: #249dff
+    &-intermediate
+        &:hover
+            background: #d0c900
+    &-advanced
+        &:hover
+            background: #d08b00
+    &-master
+        &:hover
+            background: #a82700
+    &-white
+        &:hover
+            background: #ffffff
+    &-random
+        &:hover
+            background: linear-gradient(45deg, rgba(255,255,255,1) 0%, rgba(0,0,0,1) 100%)
+    &-black
+        &:hover
+            background: #000000
+            color: white
+    &-ten
+        &:hover
+            background: #c132ff
+    &-five
+        &:hover
+            background: #32a6ff
+    &-three
+        &:hover
+            background: #32ffb0
