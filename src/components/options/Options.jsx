@@ -23,6 +23,10 @@ const Options = () => {
     }
 
     const setColor = (color) => {
+        if (color === "random") {
+            Math.floor(Math.random() * 100) > 49  ? color = "white" : color = "black"
+        }
+
         store.dispatch({
             type: "color",
             payload: color
@@ -223,6 +227,7 @@ const Options = () => {
                         <div className="options__container">
                             <div className="options__choice" onClick={() => setColor("white")}>White</div>
                             <div className="options__choice" onClick={() => setColor("black")}>Black</div>
+                            <div className="options__choice" onClick={() => setColor("random")}>Random</div>
                         </div>
                     </div>
                     <div className="options__bodyTime">
